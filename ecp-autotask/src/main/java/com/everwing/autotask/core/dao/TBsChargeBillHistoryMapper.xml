@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.everwing.autotask.core.dao.TBsChargeBillHistoryMapper">
+    <resultMap type="TBsChargeBillHistory" id="BaseResultMap">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="chargeTotalId" column="charge_total_id" jdbcType="VARCHAR"/>
+        <result property="projectId" column="project_id" jdbcType="VARCHAR"/>
+        <result property="buildingCode" column="building_code" jdbcType="VARCHAR"/>
+        <result property="fullName" column="full_name" jdbcType="VARCHAR"/>
+        <result property="lastBillFee" column="last_bill_fee" jdbcType="DOUBLE"/>
+        <result property="lastPayed" column="last_payed" jdbcType="DOUBLE"/>
+        <result property="currentFee" column="current_fee" jdbcType="DOUBLE"/>
+        <result property="lateFee" column="late_fee" jdbcType="DOUBLE"/>
+        <result property="currentBillFee" column="current_bill_fee" jdbcType="DOUBLE"/>
+        <result property="accountBalance" column="account_balance" jdbcType="DOUBLE"/>
+        <result property="billingTime" column="billing_time" jdbcType="TIMESTAMP"/>
+        <result property="lastBillId" column="last_bill_id" jdbcType="VARCHAR"/>
+        <result property="isUsed" column="is_used" jdbcType="TINYINT"/>
+        <result property="shareFee" column="share_fee" jdbcType="DOUBLE"/>
+        <result property="commonDesummoney" column="common_desummoney" jdbcType="DOUBLE"/>
+        <result property="noCommonDesummoney" column="no_common_desummoney" jdbcType="DOUBLE"/>
+        <result property="tax" column="tax" jdbcType="DOUBLE"/>
+        <result property="createId" column="create_id" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="modifyId" column="modify_id" jdbcType="VARCHAR"/>
+        <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+        <result property="feeItemDetail" column="fee_item_detail" jdbcType="VARCHAR"/>
+        <result property="lastOwedInfo" column="last_owed_info" jdbcType="VARCHAR"/>
+        <result property="currentKqAmount" column="current_kq_amount" jdbcType="DOUBLE"/>
+        <result property="isZipComplete" column="is_zip_complete" jdbcType="TINYINT"/>
+        <result property="aduitStatus" column="aduit_status" jdbcType="TINYINT"/>
+        <result property="temporaryBill" column="temporary_bill" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap type="TBsChargeBillHistory" id="assembleMap" extends="BaseResultMap">
+        <result property="type" column="type" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <select id="findAllByTotalId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT *
+        FROM t_bs_charge_bill_history
+        WHERE charge_total_id = #{0}
+        AND is_used = 0
+        <!-- 		and aduit_status !=1 -->
+    </select>
+    <select id="findNextHistory" parameterType="TBsChargeBillHistory" resultMap="BaseResultMap">
+        select *
+        from t_bs_charge_bill_history
+        where last_bill_id = #{id}
+        and is_used = 0
+    </select>
+    <select id="findCurrentBillByBuildingCode" parameterType="String" resultMap="assembleMap">
+        select t1.* ,t2.type
+        from t_bs_charge_bill_history t1,
+        t_bs_charge_bill_total t2
+        where t1.building_code = #{0}
+        and t1.charge_total_id = t2.id
+        and t1.is_used = 0
+        and DATE_FORMAT(t1.billing_time,'%Y-%m') = DATE_FORMAT(sysdate(),"%Y-%m")
+        order by t2.type
+    </select>
+    <select id="findNotZipByObj" parameterType="TBsChargeBillHistory" resultType="Integer">
+        SELECT count(1)
+        FROM t_bs_charge_bill_history t1
+        LEFT JOIN (
+        SELECT `position` FROM tc_water_meter where meter_level = 12 and `position` is not null
+        UNION ALL
+        SELECT `position` FROM tc_electricity_meter where meter_level = 12 and `position` is not null
+        ) t2 on t1.building_code = t2.`position`
+        WHERE t1.project_id = #{projectId}
+        AND t1.is_zip_complete = 0
+        AND DATE_FORMAT(t1.billing_time,'%Y-%m') = DATE_FORMAT(#{billingTime},'%Y-%m')
+        AND t2.`position` is null;
+    </select>
+    <select id="findLastBillTime" resultType="java.util.Date">
+        SELECT billing_time FROM  t_bs_charge_bill_total where id= (
+        SELECT last_total_id
+        FROM t_bs_charge_bill_total
+        WHERE id = (
+        SELECT charge_total_id
+        FROM t_bs_charge_bill_history
+        WHERE id = #{id}
+        )
+        )
+    </select>
+    <select id="findCurrentDetailBill" parameterType="TBsChargeBillHistory" resultMap="BaseResultMap">
+        SELECT *
+        FROM t_bs_charge_bill_history
+        WHERE project_id = #{projectId}
+        AND building_code = #{buildingCode}
+        AND charge_total_id = #{chargeTotalId}
+        AND is_used = 0
+        AND billing_time IS NULL
+    </select>
+    <update id="updateChargeHistoryForShare" parameterType="TBsChargeBillHistory">
+        UPDATE t_bs_charge_bill_history SET share_fee=#{shareFee} WHERE charge_total_id =#{chargeTotalId}
+        <if test=" null != buildingCode ">
+            AND	building_code = #{buildingCode}
+        </if>
+        AND is_used=0
+    </update>
+
+    <update id="updateLateFeeByProjectId" parameterType="String">
+        UPDATE t_bs_charge_bill_history t
+            LEFT JOIN (SELECT SUM(t1.total_late_fee) aa, t2.building_code
+                       FROM t_bs_owed_history t1,
+                           t_bs_asset_account t2
+                       WHERE t1.is_used = 0
+                             AND t1.account_id = t2.id
+                       GROUP BY t2.building_code) tt on t.building_code = tt.building_code
+        SET t.late_fee = tt.aa
+        WHERE t.charge_total_id = (
+            SELECT id
+            FROM t_bs_charge_bill_total t1
+            WHERE TYPE = 1
+                  AND billing_time IS NULL
+                  AND project_id = #{0}
+            ORDER BY id, create_time DESC
+            LIMIT 0,1
+        )
+              AND t.billing_time IS NULL;
+    </update>
+
+    <update id="updateZipCompleteByObj" parameterType="TBsChargeBillHistory">
+        UPDATE t_bs_charge_bill_history
+        SET is_zip_complete = #{isZipComplete}
+        WHERE project_id = #{projectId}
+              AND DATE_FORMAT(billing_time,'%Y-%m') = DATE_FORMAT(#{billingTime},'%Y-%m')
+              AND building_code in (
+            select * from(		SELECT
+                                      d.building_code
+                                  FROM
+                                      tc_building a
+                                      LEFT JOIN tc_building b ON a.building_code = b.pid
+                                      LEFT JOIN tc_building c ON b.building_code = c.pid
+                                      LEFT JOIN tc_building d ON c.building_code = d.pid
+                                  WHERE
+                                      a.building_type = 'dongzuo'
+                                      AND d.id IS NOT NULL
+                                      AND a.building_code = #{buildingCode}
+                         ) e UNION ALL (
+                SELECT
+                    c.building_code
+                FROM
+                    tc_building a
+                    LEFT JOIN tc_building b ON a.building_code = b.pid
+                    LEFT JOIN tc_building c ON b.building_code = c.pid
+                WHERE
+                    a.building_type = 'dongzuo'
+                    AND c.id IS NOT NULL
+                    AND a.building_code = #{buildingCode}
+            )
+        )
+    </update>
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO t_bs_charge_bill_history
+        (
+        id,
+        charge_total_id,
+        project_id,
+        building_code,
+        full_name,
+        last_bill_fee,
+        last_payed,
+        current_fee,
+        late_fee,
+        current_bill_fee,
+        account_balance,
+        billing_time,
+        last_bill_id,
+        is_used,
+        share_fee,
+        common_desummoney,
+        no_common_desummoney,
+        create_id,
+        create_time,
+        modify_id,
+        modify_time,
+        fee_item_detail,
+        last_owed_info,
+        current_kq_amount,
+        is_zip_complete,
+        tax,
+        aduit_status,
+        temporary_bill
+        )
+        values
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.id},
+            #{item.chargeTotalId},
+            #{item.projectId},
+            #{item.buildingCode},
+            #{item.fullName},
+            #{item.lastBillFee},
+            #{item.lastPayed},
+            #{item.currentFee},
+            #{item.lateFee},
+            #{item.currentBillFee},
+            #{item.accountBalance},
+            #{item.billingTime},
+            #{item.lastBillId},
+            #{item.isUsed},
+            0.0,
+            #{item.commonDesummoney},
+            #{item.noCommonDesummoney},
+            #{item.createId},
+            #{item.createTime},
+            #{item.modifyId},
+            #{item.modifyTime},
+            #{item.feeItemDetail},
+            #{item.lastOwedInfo},
+            #{item.currentKqAmount},
+            0,
+            #{item.tax},
+            0,
+            #{item.temporaryBill}
+            )
+        </foreach>
+    </insert>
+    <update id="batchUpdate" parameterType="java.util.List">
+        <foreach collection="list" separator=";" item="item" index="index">
+            update t_bs_charge_bill_history
+            <set>
+                <if test="null != item.fullName">
+                    full_name = #{item.fullName},
+                </if>
+                <if test="null != item.buildingCode">
+                    building_code = #{item.buildingCode},
+                </if>
+                <if test="null != item.lastBillFee">
+                    last_bill_fee = #{item.lastBillFee},
+                </if>
+                <if test="null != item.lastPayed">
+                    last_payed = #{item.lastPayed},
+                </if>
+                <if test="null != item.currentFee">
+                    current_fee = #{item.currentFee},
+                </if>
+                <if test="null != item.lateFee">
+                    late_fee = #{item.lateFee},
+                </if>
+                <if test="null != item.currentBillFee">
+                    current_bill_fee = #{item.currentBillFee},
+                </if>
+                <if test="null != item.accountBalance">
+                    account_balance = #{item.accountBalance},
+                </if>
+                <if test="null != item.billingTime">
+                    billing_time = #{item.billingTime},
+                </if>
+                <if test="null != item.lastBillId">
+                    last_bill_id = #{item.lastBillId},
+                </if>
+                <if test="null != item.isUsed">
+                    is_used = #{item.isUsed},
+                </if>
+                <if test="null != item.modifyId">
+                    modify_id = #{item.modifyId},
+                </if>
+                <if test="null != item.feeItemDetail">
+                    fee_item_detail = #{item.feeItemDetail},
+                </if>
+                <if test="null != item.lastOwedInfo">
+                    last_owed_info = #{item.lastOwedInfo},
+                </if>
+                <if test="null != item.currentKqAmount">
+                    current_kq_amount = #{item.currentKqAmount},
+                </if>
+                <if test="null != item.isZipComplete">
+                    is_zip_complete = #{item.isZipComplete},
+                </if>
+                <if test="null != item.tax">
+                    tax = #{item.tax},
+                </if>
+                <if test="item.aduitStatus !=null">
+                    aduit_status= #{item.aduitStatus},
+                </if>
+                <if test="item.temporaryBill !=null">
+                    temporary_bill=#{item.temporaryBill},
+                </if>
+                modify_time = sysdate()
+            </set>
+            where id = #{item.id}
+        </foreach>
+    </update>
+</mapper>

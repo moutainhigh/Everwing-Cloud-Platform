@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!-- 常用线程池（公共的线程池，如果是某个业务需要单独开一个线程组，请自己复制配置重新配置一个） -->
+    <bean id="threadPoolTaskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"  scope="singleton" lazy-init="true">
+        <!-- 核心线程大小，不能小于1 -->
+        <property name="corePoolSize" value="${threadpool.threadPoolTaskExecutor.corePoolSize}"/>
+        <!-- 缓冲队列大小 -->
+        <property name="queueCapacity" value="${threadpool.threadPoolTaskExecutor.queueCapacity}"/>
+        <!-- 高峰期的最高线程数量 -->
+        <property name="maxPoolSize" value="${threadpool.threadPoolTaskExecutor.maxPoolSize}"/>
+        <!-- 允许线程的空闲时间 -->
+        <property name="keepAliveSeconds" value="${threadpool.threadPoolTaskExecutor.keepAliveSeconds}"/>
+        <!-- 拒绝策略 -->
+        <property name="rejectedExecutionHandler">
+            <bean class="${threadpool.threadPoolTaskExecutor.rejectedExecutionHandler}"/>
+        </property>
+        <!-- 线程名称前缀 -->
+        <property name="threadNamePrefix" value="${threadpool.threadPoolTaskExecutor.threadNamePrefix}"/>
+    </bean>
+
+    <!-- 带有频率（延迟或定时执行）的线程池（公共的线程池，如果是某个业务需要单独开一个线程组，请自己复制配置重新配置一个，譬如有的业务知心的延迟时间和频率不一样，就得自己配置一个线程池来做该业务） -->
+    <bean id="threadPoolTaskScheduler" class="org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler" scope="singleton" lazy-init="true">
+        <!-- 线程池大小，不能小于1 -->
+        <property name="poolSize" value="${threadpool.threadPoolTaskScheduler.poolSize}"/>
+        <!-- 拒绝策略 -->
+        <property name="rejectedExecutionHandler">
+            <bean class="${threadpool.threadPoolTaskScheduler.rejectedExecutionHandler}"/>
+        </property>
+        <!-- 线程名称前缀 -->
+        <property name="threadNamePrefix" value="${threadpool.threadPoolTaskScheduler.threadNamePrefix}"/>
+    </bean>
+</beans>

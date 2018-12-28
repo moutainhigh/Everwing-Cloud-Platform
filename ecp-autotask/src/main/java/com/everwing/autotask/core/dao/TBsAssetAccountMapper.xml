@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.autotask.core.dao.TBsAssetAccountMapper">
+    <resultMap type="TBsAssetAccount" id="BaseResultMap">
+        <id column="id" property="id"/>
+        <result column="building_code" property="buildingCode"/>
+        <result column="type" property="type"/>
+        <result column="account_balance" property="accountBalance"/>
+        <result column="use_status" property="useStatus"/>
+        <result column="project_id" property="projectId"/>
+        <result column="project_name" property="projectName"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_id" property="createId"/>
+        <result column="create_name" property="createName"/>
+        <result column="modify_id" property="modifyId"/>
+        <result column="modify_name" property="modifyName"/>
+        <result column="full_name" property="fullName"/>
+        <result column="modify_time" property="modifyTime"/>
+    </resultMap>
+
+    <sql id="Sqlfield">
+        id,building_code,type,account_balance,use_status,project_id,project_name,
+        create_time,create_id,create_name,modify_id,modify_name,full_name,modify_time
+    </sql>
+
+    <!-- 根据建筑编号和账户类型查找 -->
+    <select id="lookupByBuildCodeAndType" parameterType="String" resultMap="BaseResultMap">
+        select
+        <include refid="Sqlfield" />
+        from  t_bs_asset_account
+        where building_code=#{0}
+        and type=#{1}
+    </select>
+
+    <insert id="singleInsert" parameterType="TBsAssetAccount">
+        INSERT INTO t_bs_asset_account
+        VALUES (
+        <if test="null == id">UUID(),</if>
+        <if test="null != id">#{id},</if>
+        #{buildingCode},
+        #{type},
+        #{accountBalance},
+        #{useStatus},
+        #{projectId},
+        #{projectName},
+        NOW(),
+        #{createId},
+        #{createName},
+        #{modifyId},
+        #{modifyName},
+        #{fullName},
+        #{modifyTime}
+        )
+    </insert>
+
+    <insert id="batchInsert"  parameterType="java.util.List">
+        INSERT INTO t_bs_asset_account
+        VALUES
+        <foreach collection="list" item="item" index="index" separator="," >
+            (
+            <if test="null != item.id">#{item.id}, </if>
+            <if test="null == item.id">UUID(),</if>
+            #{item.buildingCode},
+            #{item.type},
+            #{item.accountBalance},
+            #{item.useStatus},
+            #{item.projectId},
+            #{item.projectName},
+            NOW(),
+            #{item.createId},
+            #{item.createName},
+            #{item.modifyId},
+            #{item.modifyName},
+            #{item.fullName},
+            #{item.modifyTime}
+            )
+        </foreach>
+    </insert>
+
+    <update id="update" parameterType="TBsAssetAccount">
+        update t_bs_asset_account
+        <set>
+            <if test="null != accountBalance">
+                account_balance = #{accountBalance},
+            </if>
+            <if test="null != useStatus">
+                use_status = #{useStatus},
+            </if>
+            <if test="null != modifyId">
+                modify_id = #{modifyId},
+            </if>
+            modify_time = sysdate()
+        </set>
+        where id = #{id}
+    </update>
+
+    <sql id="batchUpdateField">
+        <set>
+            <if test="item.buildingCode !=null">
+                building_code=#{item.buildingCode},
+            </if>
+            <if test="item.type !=null">
+                type=#{item.type},
+            </if>
+            <if test="item.accountBalance !=null">
+                account_balance=#{item.accountBalance},
+            </if>
+            <if test="item.useStatus !=null">
+                use_status=#{item.useStatus},
+            </if>
+            <if test="item.projectId !=null">
+                project_id=#{item.projectId},
+            </if>
+            <if test="item.projectName !=null">
+                project_name=#{item.projectName},
+            </if>
+            <if test="item.fullName !=null">
+                full_name=#{item.fullName},
+            </if>
+            <if test="item.modifyId !=null">
+                modify_id=#{item.modifyId},
+            </if>
+            <if test="item.modifyName !=null">
+                modify_name=#{item.modifyName},
+            </if>
+            modify_time=sysdate()
+        </set>
+    </sql>
+    <update id="addLateFee">
+        update t_bs_asset_account
+        set account_balance = (account_balance - #{lateFee,jdbcType=DOUBLE})
+        where id = #{accountId}
+    </update>
+    <update id="batchUpdate" parameterType="TBsAssetAccount">
+        <foreach collection="list" separator=";" item="item" index="index">
+            update t_bs_asset_account <include refid="batchUpdateField"/>
+            where id=#{item.id}
+        </foreach>
+    </update>
+</mapper>

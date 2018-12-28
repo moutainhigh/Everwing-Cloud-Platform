@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modulegroup id="9de493a4-4f23-45fb-905e-b9c6f2db5edf" name="" desc="">
+	<!--<module id="9e16a94c-83eb-11e7-80c8-0050568e00c5" name="Order Management1" desc="工单管理" order="1" page="order1" url="index.projectManagement.view.order">
+	</module>-->
+	<!--<module id="98ac8ff3-82e7-11e7-80c8-0050568e00c5" name="Product Management" desc="产品管理" order="5" page="product4project" url="index.projectManagement.view.product">
+		<operation id="1ebc50b6-cf68-11e7-80c8-0050568e00c5" name="Search" desc="查询" url="*"/>
+		<operation id="290c6587-ce9d-11e7-80c8-0050568e00c5" name="Add" desc="新建" url="*"/>
+		<operation id="2daf0d23-ce9d-11e7-80c8-0050568e00c5" name="Add2shopping" desc="加入购物车" url="*"/>
+		<operation id="320a7c07-ce9d-11e7-80c8-0050568e00c5" name="Shelve" desc="上架" url="*"/>
+		<operation id="366bc3a4-ce9d-11e7-80c8-0050568e00c5" name="normalOffShelve" desc="下架" url="*"/>
+		<operation id="3a63fab5-ce9d-11e7-80c8-0050568e00c5" name="Modify" desc="编辑" url="*"/>
+		<operation id="3e5e4206-ce9d-11e7-80c8-0050568e00c5" name="Delete" desc="删除" url="*"/>
+	</module>-->
+	<!--<module id="c1aa10d7-82e5-11e7-80c8-0050568e00c5" name="Deposit Management" desc="押金管理" order="8" page="deposit4project" url="index.projectManagement.view.deposit">
+		<operation id="5fe16d4b-dbec-11e7-80c8-0050568e00c5" name="Search" desc="查询" url="*"/>
+		<operation id="676d49a1-dbec-11e7-80c8-0050568e00c5" name="RollBackDeposit" desc="退押金" url="*"/>
+	</module>
+	<module id="19e9ee2f-5ea3-44fe-9433-08105df6dfa9" name="Change Property" desc="产权变更" order="11" page="propertyChanging" url="index.projectManagement.view.propertyChanging">
+		<operation id="2ff3787b-cf68-11e7-80c8-0050568e00c5" name="Search" desc="查询" url="*"/>
+		<operation id="83a5dc4b-ce9e-11e7-80c8-0050568e00c5" name="Add" desc="新建" url="*"/>
+	</module>
+	<module id="193a7718-78c5-11e7-80c8-0050568e00c5" name="Property Management" desc="资产管理" order="14" page="property" url="index.projectManagement.view.property">
+		<operation id="2883b47e-cf68-11e7-80c8-0050568e00c5" name="Search" desc="查询" url="*"/>
+		<operation id="62c65315-ce9e-11e7-80c8-0050568e00c5" name="Modify" desc="编辑" url="*"/>
+	</module>-->
+	<module id="7d652265-7ff8-4b56-8c8d-a4823bb36173" name="Building Customer Management" desc="建筑客户管理" order="23" page="managementTabComponent" url="./buildingCustomerManagement">
+		<operation id="579263f6-f11d-11e8-8fb4-0050568e0e15" name="anon" desc="anon" permission="anon" url="/project/TcBuildingController/syncBuildingTree"/>
+		<operation id="7fb10df6-9db0-468d-a298-29922e66a7ea" name="anon" desc="anon" permission="anon" url="/project/TcBuildingController/loadBuildingByProjectId/*"/>
+		<operation id="ca261bab-bfaf-4709-9ddc-25ecdad4c35a" name="anon" desc="anon" permission="anon" url="/project/TcBuildingController/collectAssetInfo"/>
+		<operation id="2ae0addb-7382-436b-be13-dcfb7fea3d28" name="anon" desc="anon" permission="anon" url="/project/TcBuildingController/getBuildingTreeWithProjectCode/*"/>
+		<operation id="6286fb42-d379-4e7f-8d01-cc4be8eb212a" name="anon" desc="anon" permission="anon" url="/system/TSysProjectController/listPage"/>
+
+		<modulegroup id="c2c12a1f-f11a-11e8-8fb4-0050568e0e15" name="Building Customer Management" desc="建筑客户管理">
+			<module id="47923585-f11b-11e8-8fb4-0050568e0e15" order="1" name="Building Management" desc="建筑管理" page="buildingListComponent" url="">
+				<operation id="5c6bad37-0217-433b-b26a-17581cea284c" name="anon" desc="anon" permission="anon" url="/project/TcBuildingController/listPage"/>
+				<operation id="3816fbcc-54cb-4b26-839e-80719c4bd52b" name="Add" desc="新建" url="/project/TcBuildingController/add"/>
+				<operation id="b55a0375-76e4-4ab8-846c-5a7d5dbbaaa6" name="Modify"  desc="编辑" url="/project/TcBuildingController/modify"/>
+				<operation id="642e5950-c4c8-4a40-8750-4f95c987874f" name="Delete"  desc="删除" url="/project/TcBuildingController/delete/*"/>
+				<operation id="e277ca14-f28a-40f5-975d-30573513fdc9" name="Export"  desc="导出" url="/project/TcBuildingController/listPage"/>
+				<operation id="2568011a-498d-4105-bbe1-15ba674ba718" name="Import"  desc="导入" url="/project/TcBuildingController/importBuilding"/>
+
+				<operation id="9a92a308-d7b4-4fdb-b017-9e2f923f6f56" name="anon" desc="anon" permission="anon" url="/project/TcBuildingController/initaccount/*/*"/>
+			</module>
+			<!--
+			如果需要更细粒度控制建筑客户管理下面的菜单，就放开此注释
+			<module id="53f3e152-f11c-11e8-8fb4-0050568e0e15" order="2" name="Customer Asset Management" desc="客户资产管理" page="managementCustomListComponent" url="">
+			</module>
+			<module id="589fd6f7-f11c-11e8-8fb4-0050568e0e15" order="3" name="Operation Log" desc="操作日志" page="managementHandleLogComponent" url="">
+			</module>
+			-->
+		</modulegroup>
+	</module>
+	<!--<module id="49c34665-7b7a-11e8-af29-0050568e0e15" name="Lease Management" desc="租赁管理" order="30" page="leaseManagement" url="">
+	</module>
+	<module id="506402a4-7b7a-11e8-af29-0050568e0e15" name="Relation Management" desc="关系管理" order="33" page="relation" url="">
+	</module>
+	<module id="55687600-7b7a-11e8-af29-0050568e0e15" name="Third Party Property Management" desc="第三方资产管理" order="36" page="thirdPartyProperty" url="">
+	</module>
+	<module id="596075ee-7b7a-11e8-af29-0050568e0e15" name="Engineering Construction Management" desc="工程施工" order="40" page="engineeringConstruction" url="">
+	</module>-->
+</modulegroup>

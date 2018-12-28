@@ -1,0 +1,490 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.gating.GatingMapper" >
+  <resultMap type="Gating" id="GatingResult" >
+    <id column="id" property="id"  />
+    <result column="gating_code" property="gatingCode"  />
+    <result column="equipment_num" property="equipmentNum"  />
+    <result column="account_name" property="accountName"/>
+    <result column="equipment_name" property="equipmentName"  />
+    <result column="equipment_model" property="equipmentModel"  />
+    <result column="equipment_sn" property="equipmentSn"  />
+    <result column="batch_nummer" property="batchNummer"  />
+    <result column="Manufacture_date" property="manufactureDate" />
+    <result column="quality_time_start" property="qualityTimeStart" />
+    <result column="scrap_time" property="scrapTime" />
+    <result column="scrap_cause" property="scrapCause"  />
+    <result column="quality_term" property="qualityTerm"  />
+    <result column="employ_term" property="employTerm"  />
+    <result column="facility_state" property="facilityState" />
+    <result column="market_id" property="marketId"  />
+    <result column="purchase_id" property="purchaseId"  />
+    <result column="production_firm" property="productionFirm"  />
+    <result column="production_site" property="productionSite"  />
+    <result column="district" property="district"  />
+    <result column="open_gating_state" property="openGatingState"  />
+    <result column="is_wall_gating" property="isWallGating" />
+    <result column="statenum" property="statenum" />
+    <result column="employ_project" property="employProject" />
+    <result column="quality_time_end" property="qualityTimeEnd"/>
+    <result column="project_id" property="projectId"/>
+    <result column="company_id" property="companyId"/>
+    <result column="online_state" property="onlineState" />
+    <result column="videos_state" property="videosState" />
+    <result column="version" property="version" jdbcType="VARCHAR"/>
+  </resultMap>
+
+    <resultMap id="projectGatingDTOResult" type="com.everwing.coreservice.common.wy.dto.ProjectGatingDTO">
+        <result column="totalCount" property="mkCount"  />
+        <result column="projectId" property="projectId"  />
+        <result column="projectName" property="projectName"  />
+        <result column="projectAddress" property="projectAddress"  />
+        <result column="onlinecount" property="mkOnLineCount"  />
+    </resultMap>
+
+    <resultMap id="gatingDTOResult" type="com.everwing.coreservice.common.wy.dto.GatingDTO">
+        <result column="password" property="password"  />
+        <result column="account_name" property="accountName"  />
+        <result column="gating_code" property="gatingCode"  />
+        <result column="online_state" property="online"  />
+        <result column="district" property="address"  />
+        <result column="id" property="gatingId"  />
+        <result column="version" property="version"  />
+    </resultMap>
+
+    <resultMap id="gatingLogStatisticsDTOResult" type="com.everwing.coreservice.common.wy.dto.GatingLogStatisticsDTO">
+        <result column="logDate" property="logDate"  />
+        <result column="invitationCount" property="invitationCount"  />
+        <result column="passwordCount" property="passwordCount"  />
+        <result column="scanCount" property="scanCount"  />
+        <result column="callCount" property="callCount"  />
+        <result column="onekeyCount" property="onekeyCount"  />
+        <result column="totalCount" property="totalCount"  />
+    </resultMap>
+
+
+  <select id="isGatingByequipmentId" parameterType="String" resultType="int">
+  	select count(*) from tb_gating where equipment_num=#{0}
+  </select>
+  
+  <insert id="insertGating" parameterType="Gating">
+      insert into tb_gating (id, equipment_num, gating_code, account_name,
+      equipment_name, equipment_model, equipment_sn, batch_nummer, 
+      Manufacture_date, quality_time_start, scrap_time, 
+      scrap_cause, quality_term, employ_term, 
+      facility_state, market_id, purchase_id, 
+      production_firm, production_site, district, 
+      two_dimension_code, open_gating_state, is_wall_gating,employ_project,company_id,project_id)
+    values (#{id,jdbcType=VARCHAR}, #{equipmentNum,jdbcType=VARCHAR}, #{gatingCode,jdbcType=VARCHAR}, #{accountName,jdbcType=VARCHAR},
+      #{equipmentName,jdbcType=VARCHAR}, #{equipmentModel,jdbcType=VARCHAR}, #{equipmentSn,jdbcType=VARCHAR}, #{batchNummer,jdbcType=VARCHAR}, 
+      #{manufactureDate,jdbcType=DATE}, #{qualityTimeStart,jdbcType=DATE}, #{scrapTime,jdbcType=DATE}, 
+      #{scrapCause,jdbcType=VARCHAR}, #{qualityTerm,jdbcType=INTEGER}, #{employTerm,jdbcType=INTEGER}, 
+      #{facilityState,jdbcType=VARCHAR}, #{marketId,jdbcType=VARCHAR}, #{purchaseId,jdbcType=VARCHAR}, 
+      #{productionFirm,jdbcType=VARCHAR}, #{productionSite,jdbcType=VARCHAR}, #{district,jdbcType=VARCHAR}, 
+      #{twoDimensionCode,jdbcType=VARCHAR}, #{openGatingState,jdbcType=BIT}, #{isWallGating,jdbcType=TINYINT}, 
+      #{employProject,jdbcType=VARCHAR},#{companyId,jdbcType=VARCHAR},#{projectId,jdbcType=VARCHAR})
+  </insert>
+  
+  <select id="isWallGating" parameterType="java.lang.String" resultType="java.lang.Integer">
+  	select is_wall_gating from tb_gating where equipment_num=#{0}
+  </select>
+  
+  <select id="getGatingByEquipmentId" resultMap="GatingResult" parameterType="String">
+	select * from tb_gating  where equipment_num = #{id}
+  </select>
+  
+  <!-- 后台查询门控机基本信息列表 -->
+  <select id="listAllGating" resultMap="GatingResult" parameterType="String">
+	select * from tb_gating  order by quality_time_start
+  </select>
+  
+  <!-- 后台根据搜索关键字查询门控机基本信息列表 -->
+  <select id="listAllGatingByKey" resultMap="GatingResult" parameterType="Gating">
+	select * from tb_gating  
+	where
+	1=1
+	<if test="employProject != null and employProject != '' ">
+        and employ_project = #{employProject}
+     </if>
+     <if test="equipmentName != null and equipmentName != '' " >
+       	and equipment_name like #{equipmentName}
+     </if>
+     <if test="equipmentModel != null and equipmentModel != '' " >
+        and equipment_model = #{equipmentModel}
+     </if>
+     <if test="employTerm != null and employTerm != '' " >
+        and employ_term = #{employTerm}
+     </if>
+     order by quality_time_start
+  </select>
+  
+  <update id="updateGating" parameterType="Gating">
+  	update tb_gating 
+  		<set>
+			<if test="equipmentModel != null">
+				equipment_model = #{equipmentModel},
+			</if>
+			<if test="equipmentName != null">
+				equipment_name = #{equipmentName},
+			</if>
+			<if test="equipmentSn != null">
+				equipment_sn = #{equipmentSn},
+			</if>
+			<if test="qualityTerm != null">
+				quality_term = #{qualityTerm},
+			</if>
+			<if test="qualityTimeStart != null">
+				quality_time_start = #{qualityTimeStart},
+			</if>
+			<if test="null != district">
+				district = #{district},
+			</if>
+			<if test="null != isWallGating">
+				is_wall_gating = #{isWallGating},
+			</if>
+		</set>
+		where id = #{id}
+  </update>
+  
+  <delete id="deleteGating" parameterType="String">
+  	delete from tb_gating where id = #{id}
+  </delete>
+    <delete id="deleteWhiteList">
+        DELETE  FROM t_whitelist WHERE user_id=#{userId}
+    </delete>
+
+    <!-- 后台查根据关键字获取门控机信息 -->
+  <select id="getGatingByKey" parameterType="String" resultMap="GatingResult">
+	select count(id) as statenum from tb_gating  where facility_state=#{0}
+  </select>
+  
+  <!-- 后台查根据关键字获取门控机信息 -->
+  <select id="getLoginGating" resultMap="GatingResult">
+	select g.equipment_name,  g.facility_state, a.district as district,a.id as accountId from tb_account a left join tb_gating g on a.id=g.account_id 
+  </select>
+  	
+  <select id="backgroundGetGatingByid" resultMap="GatingResult" parameterType="String">
+      select * from tb_gating where id=#{0}
+  </select>
+  
+  <select id="listPageGating" resultMap="GatingResult" parameterType="Gating">
+  	SELECT id,
+  	       account_name,
+  		   equipment_name,
+  		   gating_code,
+  		   equipment_model,
+  		   quality_time_start, 
+  		   DATE_ADD(quality_time_start, INTERVAL quality_term YEAR) AS quality_time_end ,
+  		   quality_term, 
+  		   project_id,
+  		   employ_project,
+  		   district,
+  		   facility_state,
+  		   equipment_sn ,
+  		   company_id,
+	  	   online_state,
+	       videos_state,
+	       version
+  	FROM tb_gating
+  	where 1 = 1
+  	<if test="null != projectId">
+  		and project_id = #{projectId,jdbcType=VARCHAR}
+  	</if>
+  	<if test="null != equipmentName">
+  		and equipment_name like CONCAT("%",#{equipmentName,jdbcType=VARCHAR},"%")
+  	</if>
+  	<if test="null != equipmentModel">
+  		and equipment_model like CONCAT("%",#{equipmentModel,jdbcType=VARCHAR},"%")
+  	</if>
+  	<if test="null != accountName">
+  		and account_name like CONCAT("%",#{accountName,jdbcType=VARCHAR},"%")
+  	</if>
+  	order by account_name desc
+  </select>
+  
+  <!-- 根据条件及门控机状态查询门控机总数 -->
+  <select id="selectGatingState" parameterType="Gating" resultType="Integer">
+  	select count(*) from tb_gating 
+	where facility_state=#{facilityState}
+	<if test="projectId!=null and projectId!=''">
+		and project_id=#{projectId}
+	</if>
+	<if test="equipmentName!=null and equipmentName!=''">
+		and equipment_name like "%"#{equipmentName}"%"
+	</if>
+	<if test="equipmentModel!=null and equipmentModel!=''">
+		and equipment_model like "%"#{equipmentModel}"%"
+	</if>
+	<if test="employTerm!=null and employTerm!=''">
+		and employ_term = ${employTerm}
+	</if> 
+  </select>
+  
+  <!-- 设备绑定账号 -->
+  <update id="updateGatingAccount" parameterType="Gating">
+  	update tb_gating 
+  	set equipment_num=#{equipmentNum},
+  		account_id=#{accountId},
+  		facility_state=#{facilityState},
+  		district=#{district},
+  		employ_project=#{employProject},
+  		is_wall_gating=#{isWallGating} 
+  		where id=#{id}
+  </update>
+  
+  <!-- 修改门控机当前状态为未使用 -->
+  <update id="updateGatingFacilityState">
+  	update tb_gating set facility_state='未使用' 
+  	where id in 
+	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+		#{item}
+	</foreach>
+  </update>
+  
+  <!-- 通过id修改门控使用状态为运行中 -->
+  <update id="updateGaetById" parameterType="java.lang.String">
+  	update tb_gating set facility_state='运行中'
+  	where id=#{0}
+  </update>
+  
+  <!-- 通过id修改门控使用状态为未使用 -->
+  <update id="updateGaetNotUserById" parameterType="java.lang.String">
+  	update tb_gating set facility_state='未使用'
+  	where id=#{0}
+  </update>
+  
+  <!-- 移除账号与设备的绑定关系 -->
+  <update id="updateGateNotBinding" parameterType="java.lang.String">
+  	update tb_gating set equipment_num = null, account_id = null, facility_state='未使用', district = null, employ_project = null
+  	where id=#{0}
+  </update>
+  
+  <select id="getHouseAccount" parameterType="java.util.Map" resultType="String">
+  	select code from ${dbName}.tc_building_structure where id in
+  	<foreach item="item" index="index" collection="list"   open="(" separator="," close=")">  
+                       #{item.houseId}  
+    </foreach> 
+  </select>
+
+	<select id="selectLoginGating" parameterType="java.lang.String" resultType="map">
+		SELECT g.id gatingId,g.gating_code gatingCode,g.company_id companyId,g.project_id projectId,g.employ_project projectName,g.district gatingAddress
+		FROM tb_gating g  WHERE g.account_name=#{accountName}
+	</select>
+
+	<select id="selectBuildingGating" parameterType="java.lang.String" resultType="map">
+		SELECT DISTINCT g.project_id projectId,b.id buildingId,b.building_code buildingCode,b.building_full_name buildingFullName,g.company_id companyId,
+		g.employ_project projectName
+		FROM tc_building b LEFT JOIN tb_building_gate bg ON b.id=bg.building_id LEFT JOIN tb_gating g ON bg.gate_id=g.id
+		where b.building_code=#{buildingCode}
+	</select>
+
+	<update id="updateStatus" parameterType="Gating">
+		UPDATE tb_gating
+		<trim prefix="set" suffixOverrides=",">
+			<if test="onlineState!=null">
+				online_state=#{onlineState},
+			</if>
+			<if test="version!=null and version!=''">
+				version=#{version},
+			</if>
+			<if test="videosState!=null">
+				videos_state=#{videosState},
+			</if>
+		</trim>
+		 where gating_code=#{gatingCode}
+	</update>
+
+    <select id="queryProjectGating" resultMap="projectGatingDTOResult">
+        SELECT count(id) as totalCount,t.project_id as projectId,t.employ_project as projectName, t1.address as projectAddress,
+        count(CASE WHEN online_state = 0 THEN 1 ELSE NULL END ) as onlinecount
+        FROM tb_gating t LEFT JOIN  t_sys_project t1 on t.project_id = t1.code
+        where t.project_id IS NOT NULL   GROUP BY  projectId
+    </select>
+
+    <select id="queryByProjectId" resultMap="gatingDTOResult">
+        select t1.password, t.account_name,t.gating_code,t.online_state,t.district,
+        t.id,t.version from tb_gating t
+        LEFT JOIN platform_db.account t1 ON t.gating_code = t1.account_code
+        where t.project_id = #{projectId}
+    </select>
+
+    <select id="queryLogStatistics" resultMap="gatingLogStatisticsDTOResult">
+        select
+        date(create_time) logDate,
+        count(CASE WHEN type = -1 THEN 1 ELSE NULL END ) as invitationCount,
+        count(CASE WHEN type = 0 THEN 1 ELSE NULL END )  as passwordCount,
+        count(CASE WHEN type = 1 THEN 1 ELSE NULL END )  as scanCount,
+        count(CASE WHEN type = 2 THEN 1 ELSE NULL END )  as callCount,
+        count(CASE WHEN type = 3 THEN 1 ELSE NULL END )  as onekeyCount,
+        count(CASE WHEN type <![CDATA[ < ]]> 4 THEN 1 ELSE NULL END )   as totalCount
+        from mkj_log where gating_account = #{mkAccountName} GROUP BY date(create_time) ORDER BY logDate DESC
+    </select>
+    <select id="countSelectByCondition" resultType="java.lang.Integer">
+        SELECT count(1) FROM (
+            SELECT * FROM tb_gating t1
+            <where>
+                t1.company_id=#{companyId}
+                <if test="projectId!=null and projectId!=''">
+                    AND t1.project_id=#{projectId}
+                </if>
+                <if test="projectIds!=null">
+                    AND t1.project_id in
+                    <foreach collection="projectIds" index="index"  item="pId" open="(" close=")" separator=",">
+                        #{pId}
+                    </foreach>
+                </if>
+                AND t1.gating_code NOT IN (
+                SELECT gating_code FROM t_whitelist t2 WHERE t2.user_id=#{userId} AND t2.company_id=#{companyId}
+                <if test="projectId!=null and projectId!=''">
+                    AND t2.project_id=#{projectId}
+                </if>
+                <if test="projectIds!=null">
+                    AND t2.project_id in
+                    <foreach collection="projectIds" index="index"  item="pId" open="(" close=")" separator=",">
+                        #{pId}
+                    </foreach>
+                </if>
+                )
+                <if test="equipmentName!=null">
+                    and t1.equipment_name like concat(concat('%',#{equipmentName}),'%')
+                </if>
+                <if test="accountName!=null">
+                    and t1.account_name like concat(concat('%',#{accountName}),'%')
+                </if>
+            </where>
+        ) a
+    </select>
+    <select id="selectByCondition" resultMap="GatingResult">
+        SELECT * FROM  tb_gating t1
+        <where>
+            t1.company_id=#{companyId}
+            <if test="projectId!=null and projectId!=''">
+                AND t1.project_id=#{projectId}
+            </if>
+            <if test="projectIds!=null">
+                AND t1.project_id in
+                <foreach collection="projectIds" index="index"  item="pId" open="(" close=")" separator=",">
+                    #{pId}
+                </foreach>
+            </if>
+            AND t1.gating_code NOT IN (
+              SELECT gating_code FROM t_whitelist t2 WHERE t2.user_id=#{userId} AND t2.company_id=#{companyId}
+                <if test="projectId!=null and projectId!=''">
+                    AND t2.project_id=#{projectId}
+                </if>
+                <if test="projectIds!=null">
+                    AND t2.project_id in
+                    <foreach collection="projectIds" index="index"  item="pId" open="(" close=")" separator=",">
+                        #{pId}
+                    </foreach>
+                </if>
+            )
+            <if test="equipmentName!=null">
+                and t1.equipment_name like concat(concat('%',#{equipmentName}),'%')
+            </if>
+            <if test="accountName!=null">
+                and t1.account_name like concat(concat('%',#{accountName}),'%')
+            </if>
+        </where>
+        limit #{start},#{page.showCount}
+    </select>
+    <select id="getGatingStruct" resultType="java.util.Map">
+        SELECT
+	      gatingCode,
+	      gatingAddress,
+	      gatingId,
+	      gatingAccount,
+	      gatingPassword,
+	      gatingType,
+	      apartmentId,
+	      apartmentName,
+	      ridgepoleId,
+	      ridgepoleName,
+	      areaId,
+	      areaName,
+	      tb.id stageId,
+	      tb.building_name stageName
+       FROM
+	      tc_building tb
+       INNER JOIN (
+	      SELECT
+		      gatingCode,
+		      gatingAddress,
+		      gatingId,
+		      gatingAccount,
+	          gatingPassword,
+		      gatingType,
+		      apartmentId,
+		      apartmentName,
+		      ridgepoleId,
+		      ridgepoleName,
+		      tb.id areaId,
+		      tb.building_name areaName,
+		      tb.pid
+	      FROM
+		      tc_building tb
+	   INNER JOIN (
+		  SELECT
+			  gatingCode,
+			  gatingAddress,
+			  gatingId,
+			  gatingAccount,
+	          gatingPassword,
+			  gatingType,
+			  apartmentId,
+			  apartmentName,
+			  tb.id ridgepoleId,
+			  tb.building_name ridgepoleName,
+			  tb.pid
+		  FROM
+			  tc_building tb
+	   INNER JOIN (
+		  SELECT
+			  ga.gating_code gatingCode,
+			  ga.district gatingAddress,
+			  ga.id gatingId,
+			  ga.account_name gatingAccount,
+			  '' gatingPassword,
+			  case is_wall_gating when 0 then '0' else  '1' end gatingType,
+			  tb.id apartmentId,
+			  tb.building_name apartmentName,
+			  tb.pid
+		  FROM
+			  tb_gating ga
+	   INNER JOIN tb_building_gate bg ON ga.id = bg.gate_id
+	   INNER JOIN tc_building tb ON bg.building_id = tb.id
+			WHERE
+				ga.company_id = #{companyId}
+			AND ga.project_id = #{projectId}
+			AND tb.building_type = 'danyuanrukou'
+	    	) ceng ON building_code = ceng.pid
+	      ) qu ON building_code = qu.pid
+        ) qi ON building_code = qi.pid
+
+    </select>
+    <select id="getBuildingsByApartmentId" resultType="java.util.Map">
+        SELECT
+	      hu.Id buildingsId,
+	      hu.building_full_name buildingFullName
+        FROM
+	      (
+		  SELECT
+			ceng.*
+		  FROM
+			tc_building dang
+		  LEFT JOIN tc_building ceng ON dang.building_code = ceng.pid
+		  WHERE
+			dang.id = #{apartmentId}
+			and dang.company_id = #{companyId}
+			and dang.project_id = #{projectId}
+	      )ceng
+		LEFT JOIN tc_building hu ON ceng.building_code = hu.pid
+    </select>
+    <select id="getGatingDataByBuildingId" resultType="java.util.Map">
+       select ga.gating_code gatingCode,district gateingAddress from tb_gating ga
+	     LEFT JOIN tb_building_gate tbg on ga.id = tbg.gate_id
+	     where tbg.building_id = #{buildingId};
+    </select>
+
+
+</mapper>

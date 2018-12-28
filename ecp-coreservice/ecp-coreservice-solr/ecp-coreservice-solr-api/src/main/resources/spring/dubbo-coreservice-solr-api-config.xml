@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-3.1.xsd"
+	default-lazy-init="false">
+
+	<description>wy coreservice dubbo client</description>
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <array>
+                <value>file:/app/coreservice/solr/dubbo/dubbo-api-solr.properties</value>
+            </array>
+        </property>
+        <property name="ignoreResourceNotFound" value="true" />
+        <property name="ignoreUnresolvablePlaceholders" value="true" />
+        <property name="properties" ref="solrApiProperties" />
+    </bean>
+
+    <bean name="solrApiProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <array>
+                <value>classpath:/config/dubbo-api-solr.properties</value>
+            </array>
+        </property>
+    </bean>
+	
+	<context:component-scan base-package="com.everwing.coreservice.solr.api" />
+	<import resource="classpath:spring/spring-dubbo-api-solr.xml"/>
+</beans>

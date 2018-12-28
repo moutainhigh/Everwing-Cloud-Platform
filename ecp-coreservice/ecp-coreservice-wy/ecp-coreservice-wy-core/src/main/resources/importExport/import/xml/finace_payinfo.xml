@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<excel id="finance_payinfo">
+    <sheet index="0">
+        <list index="0" startRow="1" class="com.everwing.coreservice.common.wy.entity.account.pay.TBsPayInfoImport">
+            <field index="0" property="houseCode" required="true"></field>
+            <field index="1" property="address" required="true"></field>
+            <field index="2" property="wy" type="Double" required="true" regex="([1-9]+[0-9]*|0)(\\.[\\d]+)?" regexErrMsg="只能输入整数或两位小数点以内的数字"></field>
+            <field index="3" property="bt" type="Double" required="true" regex="([1-9]+[0-9]*|0)(\\.[\\d]+)?" regexErrMsg="只能输入整数或两位小数点以内的数字"></field>
+            <field index="4" property="water" type="Double" required="true" regex="([1-9]+[0-9]*|0)(\\.[\\d]+)?" regexErrMsg="只能输入整数或两位小数点以内的数字"></field>
+            <field index="5" property="elect" type="Double" required="true" regex="([1-9]+[0-9]*|0)(\\.[\\d]+)?" regexErrMsg="只能输入整数或两位小数点以内的数字"></field>
+            <field index="6" property="total" type="Double" required="true" regex="([1-9]+[0-9]*|0)(\\.[\\d]+)?" regexErrMsg="只能输入整数或两位小数点以内的数字"></field>
+            <field index="7" property="payWy" type="Double" required="true" regex="([1-9]+[0-9]*|0)(\\.[\\d]+)?" regexErrMsg="只能输入整数或两位小数点以内的数字"></field>
+            <field index="8" property="payBt" type="Double" required="true" regex="([1-9]+[0-9]*|0)(\\.[\\d]+)?" regexErrMsg="只能输入整数或两位小数点以内的数字"></field>
+            <field index="9" property="payWater" type="Double" required="true" regex="([1-9]+[0-9]*|0)(\\.[\\d]+)?" regexErrMsg="只能输入整数或两位小数点以内的数字"></field>
+            <field index="10" property="payele" type="Double" required="true" regex="([1-9]+[0-9]*|0)(\\.[\\d]+)?" regexErrMsg="只能输入整数或两位小数点以内的数字"></field>
+            <field index="10" property="payAmont" type="Double" required="true" regex="([1-9]+[0-9]*|0)(\\.[\\d]+)?" regexErrMsg="只能输入整数或两位小数点以内的数字"></field>
+            <field index="11" property="payName" required="true"></field>
+        </list>
+    </sheet>
+</excel>

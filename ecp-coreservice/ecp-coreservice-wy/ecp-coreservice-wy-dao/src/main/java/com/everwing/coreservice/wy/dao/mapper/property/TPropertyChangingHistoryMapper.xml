@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.property.TPropertyChangingHistoryMapper">
+    <resultMap id="BaseResultMap" type="TPropertyChangingHistory">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="building_code" property="buildingCode" jdbcType="VARCHAR"/>
+        <result column="building_type" property="buildingType" jdbcType="VARCHAR"/>
+        <result column="old_holder" property="oldHolder" jdbcType="VARCHAR"/>
+        <result column="new_holder" property="newHolder" jdbcType="VARCHAR"/>
+        <result column="old_holder_name" property="oldHolderName" jdbcType="VARCHAR"/>
+        <result column="new_holder_name" property="newHolderName" jdbcType="VARCHAR"/>
+        <result column="building_certificate" property="buildingCertificate" jdbcType="VARCHAR"/>
+        <result column="subscribed_date" property="subscribedDate" jdbcType="DATE"/>
+        <result column="cust_from" property="custFrom" jdbcType="VARCHAR"/>
+        <result column="project_id" property="projectId" jdbcType="VARCHAR"/>
+        <result column="creater_id" property="createrId" jdbcType="VARCHAR"/>
+        <result column="creater_name" property="createrName" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap id="ListResultMap" type="TPropertyChangingHistoryList" extends="BaseResultMap">
+        <result column="building_full_name" property="buildingFullName" jdbcType="VARCHAR"/>
+        <result column="building_type_name" property="buildingTypeName" jdbcType="VARCHAR"/>
+        <result column="property_code" property="propertyCode" jdbcType="VARCHAR"/>
+        <result column="upload_file_id" property="uploadFileId" jdbcType="VARCHAR"/>
+        <result column="annex_name" property="annexName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="ListResultProprietorInfoMap" type="ProprietorInfo">
+        <result column="old_holder" property="oldHolder" jdbcType="VARCHAR"/>
+        <result column="old_holder_name" property="oldHolderName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="ListResultCustMap" type="CustomerList">
+        <result column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="cust_from" property="custFrom" jdbcType="VARCHAR"/>
+        <result column="card_type_name" property="cardTypeName" jdbcType="VARCHAR"/>
+        <result column="card_num" property="cardNum" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="listPage" resultMap="ListResultMap" parameterType="TPropertyChangingHistorySearch">
+        SELECT
+            b.building_full_name,
+            (SELECT li.`name` FROM t_sys_lookup_item li WHERE li.parent_code = 'buildingType' AND li.`code` = b.building_type) as building_type_name,
+            CASE b.building_type
+                WHEN 'house'
+                THEN (SELECT h.house_code FROM tc_house h WHERE h.building_code = pch.building_code)
+                WHEN 'store'
+                THEN (SELECT sr.store_code FROM tc_store sr WHERE sr.building_code = pch.building_code)
+                WHEN 'parkspace'
+                THEN (SELECT s.stall_code FROM tc_stall s WHERE s.building_code = pch.building_code)
+                ELSE 'Non'
+            END AS property_code,
+             pch.*,
+            annex.upload_file_id,
+						annex.annex_name
+        FROM t_property_changing_history pch LEFT JOIN tc_building b ON pch.building_code = b.building_code 
+                                             LEFT JOIN ts_annex annex on pch.id=annex.relation_id
+        WHERE 1=1
+        <if test="projectId != null and projectId != ''">
+            AND b.project_id = #{projectId}
+        </if>
+        <if test="buildingCode != null and buildingCode != ''">
+            AND b.building_code = #{buildingCode}
+        </if>
+        <if test="buildingType != null and buildingType != ''">
+            AND b.building_type = #{buildingType}
+        </if>
+        <if test="buildingFullName != null and buildingFullName != ''">
+            AND b.building_full_name LIKE CONCAT('%',#{buildingFullName},'%')
+        </if>
+        <if test="newHolder !=null and newHolder !=''">
+        	and pch.new_holder = #{newHolder}
+        </if>
+    </select>
+
+
+    <select id="findByCondition" resultMap="ListResultMap" parameterType="TPropertyChangingHistorySearch">
+        SELECT * FROM t_property_changing_history t WHERE 1=1
+        <if test="projectId != null and projectId != ''">
+            AND t.project_id = #{projectId}
+        </if>
+        <if test="buildingCode != null and buildingCode != ''">
+            AND t.building_code = #{buildingCode}
+        </if>
+    </select>
+
+    <select id="getProprietorInfoByBuildingCode" resultMap="ListResultProprietorInfoMap" parameterType="String">
+        SELECT
+            IF(pb.cust_id != '',pb.cust_id,pb.enterprise_id) AS old_holder,
+            IF(pb.cust_id != '',(SELECT pc.`name` FROM tc_person_cust pc WHERE pc.cust_id = pb.cust_id),(SELECT ec.enterprise_name FROM tc_enterprise_cust ec WHERE ec.enterprise_id = pb.enterprise_id)) AS old_holder_name
+        FROM tc_person_building pb WHERE  pb.building_code = #{0}
+    </select>
+
+
+    <select id="listPageCustomerInEntery" resultType="Map" parameterType="CustomerSearch">
+		SELECT DISTINCT t2.id, t2.image, t2.name, 
+		( SELECT li.`name` FROM t_sys_lookup_item li WHERE li.parent_code = 'documentType' AND li.`code` =  t2.cardTypeTemp), 
+		t2.cardNum, t2.registerPhone, t2.custType, t2.projectId
+		FROM
+			(
+				SELECT 
+					pc.cust_id AS id,
+					pc.upload_image AS image,
+					pc.`name` AS name,
+					pc.card_type AS cardTypeTemp,
+					pc.card_num AS cardNum,
+					pc.register_phone AS registerPhone,
+					'person' AS custType,
+					b.house_code AS houseNum,
+					pc.project_id AS projectId,
+					b.building_full_name AS buildingAddress
+				FROM
+					tc_building b
+					JOIN tc_person_building pb ON pb.building_id = b.id
+					RIGHT JOIN tc_person_cust pc ON pb.cust_id = pc.cust_id
+					<where>
+				        <if test="@com.everwing.coreservice.common.utils.CommonUtils@notBlank(personName)">
+			            	AND pc.`name` LIKE CONCAT('%',#{personName},'%')
+				        </if>
+				        <if test="@com.everwing.coreservice.common.utils.CommonUtils@notBlank(registerPhone)">
+			            	AND pc.register_phone LIKE CONCAT('%',#{registerPhone},'%')
+				        </if>
+				        <if test="@com.everwing.coreservice.common.utils.CommonUtils@notBlank(cardNum)">
+			            	AND pc.card_num LIKE CONCAT('%',#{cardNum},'%')
+				        </if>
+				        <if test="@com.everwing.coreservice.common.utils.CommonUtils@notBlank(buildingAddress)">
+			            	AND b.building_full_name LIKE CONCAT('%',#{buildingAddress},'%')
+				        </if>
+				        <if test="@com.everwing.coreservice.common.utils.CommonUtils@notBlank(houseNum)">
+			            	AND b.house_code = #{houseNum}
+				        </if>
+					</where>
+				
+				UNION ALL
+				
+				SELECT 
+					ec.enterprise_id AS id,
+					'' AS image,
+					ec.enterprise_name AS name,
+					'' AS cardType,
+					ec.trading_number AS cardNum,
+					ec.office_phone AS registerPhone,
+					'enterprise' AS cardTypeTemp,
+					b.house_code AS houseNum,
+					ec.project_id AS projectId,
+					b.building_full_name AS buildingAddress
+				FROM
+					tc_building b
+					JOIN tc_person_building pb ON pb.building_id = b.id
+					RIGHT JOIN tc_enterprise_cust ec ON pb.enterprise_id = ec.enterprise_id
+					<where>
+				        <if test="@com.everwing.coreservice.common.utils.CommonUtils@notBlank(personName)">
+			            	AND ec.enterprise_name LIKE CONCAT('%',#{personName},'%')
+				        </if>
+				        <if test="@com.everwing.coreservice.common.utils.CommonUtils@notBlank(registerPhone)">
+			            	AND ec.office_phone LIKE CONCAT('%',#{registerPhone},'%')
+				        </if>
+				        <if test="@com.everwing.coreservice.common.utils.CommonUtils@notBlank(cardNum)">
+			            	AND ec.trading_number LIKE CONCAT('%',#{cardNum},'%')
+				        </if>
+				        <if test="@com.everwing.coreservice.common.utils.CommonUtils@notBlank(buildingAddress)">
+			            	AND b.building_full_name LIKE CONCAT('%',#{buildingAddress},'%')
+				        </if>
+				        <if test="@com.everwing.coreservice.common.utils.CommonUtils@notBlank(houseNum)">
+			            	AND b.house_code = #{houseNum}
+				        </if>
+					</where>
+			) t2
+    </select>
+    
+    <insert id="insert" parameterType="TPropertyChangingHistory">
+        insert into t_property_changing_history
+        (
+            id,
+            building_code,
+            building_type,
+            old_holder,
+            new_holder,
+            old_holder_name,
+            new_holder_name,
+            building_certificate,
+            subscribed_date,
+            cust_from,
+            project_id,
+            creater_id,
+            creater_name,
+            create_time
+        )
+        values (
+            #{id,jdbcType=VARCHAR},
+            #{buildingCode,jdbcType=VARCHAR},
+            #{buildingType,jdbcType=VARCHAR},
+            #{oldHolder,jdbcType=VARCHAR},
+            #{newHolder,jdbcType=VARCHAR},
+            #{oldHolderName,jdbcType=VARCHAR},
+            #{newHolderName,jdbcType=VARCHAR},
+            #{buildingCertificate,jdbcType=VARCHAR},
+            #{subscribedDate,jdbcType=DATE},
+            #{custFrom},
+            #{projectId,jdbcType=VARCHAR},
+            #{createrId,jdbcType=VARCHAR},
+            #{createrName,jdbcType=VARCHAR},
+            sysdate()
+        )
+    </insert>
+</mapper>

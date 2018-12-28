@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.coreservice.platform.dao.mapper.cust.personbuilding.PersonBuildingExtraMapper">
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.admin.entity.cust.personbuilding.PersonBuilding">
+    <id column="person_building_id" jdbcType="VARCHAR" property="personBuildingId" />
+    <result column="cust_id" property="custId"  jdbcType="VARCHAR" />
+    <result column="enterprise_id" property="enterpriseId"  jdbcType="VARCHAR" />
+    <result column="building_id" property="buildingId"  jdbcType="VARCHAR" />
+    <result column="building_code" property="buildingCode" jdbcType="VARCHAR"/>
+    <result column="state" property="state"  jdbcType="TINYINT" />
+    <result column="relation_date" property="relationDate"  jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <insert id="add" parameterType="com.everwing.coreservice.common.admin.entity.cust.personbuilding.PersonBuilding">
+  		insert into person_building (person_building_id,cust_id,enterprise_id,building_id,building_code,state,relation_date)	
+  		values (
+  			#{personBuildingId},
+  			#{custId},
+  			#{enterpriseId},
+  			#{buildingId},
+  			#{buildingCode},
+  			#{state},
+  			#{relationDate}
+  		)
+  </insert>
+  
+  <delete id="del" parameterType="com.everwing.coreservice.common.admin.entity.cust.personbuilding.PersonBuilding">
+  		delete from person_building where person_building_id = #{personBuildingId}
+  </delete>
+  
+  <insert id="batchAdd" parameterType="java.util.List">
+  		insert into person_building (person_building_id,cust_id,enterprise_id,building_id,building_code,state,relation_date)	
+  		values
+  		<foreach collection="list" item="item" separator="," index="index">
+  			(
+	  			#{item.personBuildingId},
+	  			#{item.custId},
+	  			#{item.enterpriseId},
+	  			#{item.buildingId},
+	  			#{item.buildingCode},
+	  			#{item.state},
+	  			#{item.relationDate}
+  			)
+  		</foreach>
+  </insert>
+  
+  <delete id="batchDel" parameterType="java.util.Map">
+  		delete from person_building
+		where building_id = #{buildingId}
+		<if test="1 == flag">
+			and cust_id in 
+			<foreach collection="buildingList" item="item" open="(" separator="," close=")">
+				#{item.custId}
+			</foreach>
+		</if>
+		<if test="2 == flag">
+			and enterprise_id in 
+			<foreach collection="buildingList" item="item" open="(" separator="," close=")">
+				#{item.enterpriseId}
+			</foreach>
+		</if>
+  </delete>
+  
+  
+</mapper>

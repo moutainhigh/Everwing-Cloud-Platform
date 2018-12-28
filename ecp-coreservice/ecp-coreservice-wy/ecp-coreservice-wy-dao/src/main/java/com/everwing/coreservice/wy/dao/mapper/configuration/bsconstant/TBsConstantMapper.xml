@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.configuration.bsconstant.TBsConstantMapper">
+	
+	<resultMap type="TBsConstant" id="constantMap">
+		<id column="id" property="id"/>
+		<result column="bill_constant_name" property="billConstantName"/>
+		<result column="bill_constant_value" property="billConstantValue"/>
+		<result column="constant_type" property="constantType"/>
+		<result column="project_id" property="projectId"/>
+		<result column="project_name" property="projectName"/>
+		<result column="create_id" property="createId"/>
+		<result column="create_name" property="createName"/>
+		<result column="create_time" property="createTime"/>
+		<result column="last_update_id" property="lastUpdateId"/>
+		<result column="last_update_name" property="lastUpdateName"/>
+		<result column="last_update_time" property="lastUpdateTime"/>
+	</resultMap>
+
+	<sql id="fieldSql">
+		id,bill_constant_name,bill_constant_value,constant_type,project_id,project_name,
+		create_id,create_name,create_time,last_update_id,last_update_name,last_update_time
+	</sql>
+	<!-- 根据常量名称查询 -->
+	<select id="getTBsConByName" parameterType="String" resultMap="constantMap">
+		select 
+		<include refid="fieldSql"/>
+		from t_bs_constant
+		where bill_constant_name=#{0} and project_id=#{1}
+	</select>
+	
+	<!-- 分页查询 -->
+	<select id="listPageConstants" parameterType="TBsConstant" resultMap="constantMap">
+		select 
+		<include refid="fieldSql"/> 
+		from t_bs_constant
+		where 1=1
+		<if test="id != null">
+			and id =#{id}
+		</if>
+		<if test="billConstantName != null">
+			and bill_constant_name like concat(concat('%',#{billConstantName}),'%')
+		</if>
+		<if test="billConstantValue !=null">
+			and bill_constant_value=#{billConstantValue}
+		</if>
+		<if test="projectId !=null">
+			and project_id=#{projectId}
+		</if>
+		<if test="constantType !=null">
+			and constant_type=#{constantType}
+		</if>
+		
+	</select>
+
+	<!-- 单个新增 -->
+	<insert id="singleAdd" parameterType="TBsConstant">
+		INSERT INTO t_bs_constant
+		VALUES (
+			UUID(),
+			#{billConstantName},
+			#{billConstantValue},
+			#{constantType},
+			#{projectId},
+			#{projectName},
+			#{createId},
+			#{createName},
+			#{createTime},
+			#{lastUpdateId},
+			#{lastUpdateName},
+			#{lastUpdateTime}
+		)
+	</insert>
+	
+	<sql id="updateSql">
+		<if test="billConstantName !=null">
+			,bill_constant_name=#{billConstantName}
+		</if>
+		<if test="billConstantValue !=null">
+			,bill_constant_value=#{billConstantValue}
+		</if>
+	</sql>
+	
+	<!-- 更新 -->
+	<update id="updateConstant" parameterType="TBsConstant">
+		update t_bs_constant 
+		<set>
+			project_name=#{projectName},
+			project_id=#{projectId},
+			last_update_id=#{lastUpdateId},
+			last_update_name=#{lastUpdateName},
+			last_update_time=#{lastUpdateTime}
+			<include refid="updateSql"/>
+		</set>
+		 where id=#{id}
+	</update>
+	
+	<!-- 删除 -->
+	<delete id="delConstant" parameterType="String">
+		delete from t_bs_constant where id=#{0}
+	</delete>
+	
+	<!-- 根据表类型和项目编号查询 -->
+	<select id="getConstantsByProIdAndType" parameterType="TBsConstant" resultMap="constantMap">
+		select 
+		<include refid="fieldSql"/> 
+		from t_bs_constant
+		where 1=1
+		<if test="id != null">
+			and id =#{id}
+		</if>
+		<if test="billConstantName != null">
+			and bill_constant_name like concat(concat('%',#{billConstantName}),'%')
+		</if>
+		<if test="billConstantValue !=null">
+			and bill_constant_value=#{billConstantValue}
+		</if>
+		<if test="projectId !=null">
+			and project_id=#{projectId}
+		</if>
+		<if test="constantType !=null">
+			and constant_type=#{constantType}
+		</if>
+	</select>
+</mapper>

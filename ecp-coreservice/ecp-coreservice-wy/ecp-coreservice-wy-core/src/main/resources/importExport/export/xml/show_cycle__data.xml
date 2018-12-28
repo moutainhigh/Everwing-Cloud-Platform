@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<excel id="show_cycle__data">
+    <sheet label="周期性计费收入">
+        <list>
+            <sql id="1c4e5478-7f2a-11e8-b69d-0050568e00c5">
+                <![CDATA[
+                    select
+                    c.house_code as houseCode,
+                    c.building_full_name as buildingFull,
+                   (case a.account_type
+                    when 1 then '物业管理费'
+                   when 2 then '本体基金'
+                   when 3 then '水费'
+                   when 4 then '电费'
+                   when 5 then '污水处理费'
+                   when 6 then '垃圾费'
+                    end) as aT ,
+
+                   (case a.charge_type
+                   when 1 then '前台收费'
+                   when 2 then '托收收费'
+                   when 3 then '线上收费'
+                   end ) as cT
+                   ,
+                  (case b.pay_type
+                   when 1 then '现金'
+                   when 2 then '微信支付'
+                   when 3 then '刷卡'
+                   when 4 then '混合支付'
+                   when 5 then  '银行托收'
+                   when 6 then '银行收款'
+                   when 7 then '支付宝'
+                   end) as pT,
+                    a.amount as moneyZ,
+                    a.rate_after as rateAfter,
+                    a.rate as rate,
+                    a.rate_fee as rateFee,
+                    a.create_time as createTime
+
+                      from t_project_cycle_detail a  left join  t_bs_pay_info b on a.business_opera_detail =b.batch_no
+                        left join tc_building c on a.house_code_new=c.house_code
+                        where a.cycle_id in(
+                        select id from t_project_cycle_account
+                        where project_account_id =
+                        (select id from t_project_account
+                            where  project_id='${projectId}' )
+                           )
+                        <#if accountType?? >
+                          AND  a.account_type='${accountType}'
+                        </#if>
+                        <#if chargeType?? >
+                          AND a.charge_type='${chargeType}'
+                       </#if>
+                        <#if payType?? >
+                             and a.business_opera_detail in(
+                            select batch_no FROM t_bs_pay_info where pay_type= '${payType}')
+                        </#if>
+                        <#if startTime?? && startTime !="">
+                         and a.create_time >='${startTime}'
+                        </#if>
+
+                        <#if endTime?? && endTime != "" >
+                        and a.create_time <= '${endTime}'
+                        </#if>
+
+              ]]>
+            </sql>
+            <field column="houseCode" label="房屋编号"></field>
+            <field column="buildingFull" label="房屋地址"></field>
+            <field column="aT" label="计费项"></field>
+            <field column="cT" label="收费类型"></field>
+            <field column="pT" label="支付方式"></field>
+            <field column="moneyZ" label="金额" type="Double" format="0.00"></field>
+            <field column="rateAfter" label="税后" type="Double" format="0.00"></field>
+            <field column="rate" label="税率" type="Double" format="0.00"></field>
+            <field column="rateFee" label="税金" type="Double" format="0.00"></field>
+            <field column="createTime" label="时间" type="Date" format="yyyy-MM-dd HH:mm:ss"></field>
+
+        </list>
+    </sheet>
+</excel>

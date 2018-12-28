@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.autotask.core.dao.AcLateFeeBillInfoMapper">
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.fee.entity.AcLateFeeBillInfo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="project_id" jdbcType="VARCHAR" property="projectId" />
+    <result column="project_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="is_singleinterest" jdbcType="INTEGER" property="isSingleinterest" />
+    <result column="rate" jdbcType="DECIMAL" property="rate" />
+    <result column="overdue_days" jdbcType="INTEGER" property="overdueDays" />
+    <result column="account_type" jdbcType="SMALLINT" property="accountType" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="is_used" jdbcType="INTEGER" property="isUsed" />
+  </resultMap>
+  
+  <!-- 根据项目查询使用中的违约金计费规则 -->
+  <select id="getAcLateFeeBillInfoByProject" resultMap = "BaseResultMap">
+  		SELECT * FROM t_ac_late_fee_bill_info 
+  			WHERE  is_used = 0 AND project_id = #{projectId} and account_type = #{accountType}
+  </select>
+  
+  
+</mapper>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.charge.dao.mapper.TJfChargingSchemeMapper" >
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.charging.entity.TJfChargingScheme" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="scheme_name" property="schemeName" jdbcType="VARCHAR" />
+    <result column="scheme_type" property="schemeType" jdbcType="INTEGER" />
+    <result column="is_used" property="isUsed" jdbcType="INTEGER" />
+    <result column="charging_type" property="chargingType" jdbcType="INTEGER" />
+    <result column="proportion" property="proportion" jdbcType="DECIMAL" />
+    <result column="start_using_date" property="startUsingDate" jdbcType="TIMESTAMP" />
+    <result column="end_using_date" property="endUsingDate" jdbcType="TIMESTAMP" />
+    <result column="overdue_start_dates" property="overdueStartDates" jdbcType="INTEGER" />
+    <result column="calculation_type" property="calculationType" jdbcType="INTEGER" />
+    <result column="frequency" property="frequency" jdbcType="INTEGER" />
+    <result column="charge_data" property="chargeData" jdbcType="INTEGER" />
+    <result column="project_id" property="projectId" jdbcType="VARCHAR" />
+    <result column="project_name" property="projectName" jdbcType="VARCHAR" />
+    <result column="create_id" property="createId" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_jf_charging_scheme
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.everwing.coreservice.common.wy.charging.entity.TJfChargingScheme" >
+    <selectKey resultType="java.lang.String" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_jf_charging_scheme (scheme_name, scheme_type, is_used, 
+      charging_type, proportion, start_using_date, 
+      end_using_date, overdue_start_dates, calculation_type, 
+      frequency, charge_data, project_id, 
+      project_name, create_id, create_time
+      )
+    values (#{schemeName,jdbcType=VARCHAR}, #{schemeType,jdbcType=INTEGER}, #{isUsed,jdbcType=INTEGER}, 
+      #{chargingType,jdbcType=INTEGER}, #{proportion,jdbcType=DECIMAL}, #{startUsingDate,jdbcType=TIMESTAMP}, 
+      #{endUsingDate,jdbcType=TIMESTAMP}, #{overdueStartDates,jdbcType=INTEGER}, #{calculationType,jdbcType=INTEGER}, 
+      #{frequency,jdbcType=INTEGER}, #{chargeData,jdbcType=INTEGER}, #{projectId,jdbcType=VARCHAR}, 
+      #{projectName,jdbcType=VARCHAR}, #{createId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="com.everwing.coreservice.common.wy.charging.entity.TJfChargingScheme" >
+    update t_jf_charging_scheme
+    set scheme_name = #{schemeName,jdbcType=VARCHAR},
+      scheme_type = #{schemeType,jdbcType=INTEGER},
+      is_used = #{isUsed,jdbcType=INTEGER},
+      charging_type = #{chargingType,jdbcType=INTEGER},
+      proportion = #{proportion,jdbcType=DECIMAL},
+      start_using_date = #{startUsingDate,jdbcType=TIMESTAMP},
+      end_using_date = #{endUsingDate,jdbcType=TIMESTAMP},
+      overdue_start_dates = #{overdueStartDates,jdbcType=INTEGER},
+      calculation_type = #{calculationType,jdbcType=INTEGER},
+      frequency = #{frequency,jdbcType=INTEGER},
+      charge_data = #{chargeData,jdbcType=INTEGER},
+      project_id = #{projectId,jdbcType=VARCHAR},
+      project_name = #{projectName,jdbcType=VARCHAR},
+      create_id = #{createId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select id, scheme_name, scheme_type, is_used, charging_type, proportion, start_using_date, 
+    end_using_date, overdue_start_dates, calculation_type, frequency, charge_data, project_id, 
+    project_name, create_id, create_time
+    from t_jf_charging_scheme
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, scheme_name, scheme_type, is_used, charging_type, proportion, start_using_date, 
+    end_using_date, overdue_start_dates, calculation_type, frequency, charge_data, project_id, 
+    project_name, create_id, create_time
+    from t_jf_charging_scheme
+  </select>
+</mapper>

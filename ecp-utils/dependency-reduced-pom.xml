@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <artifactId>Everwing-Cloud-Platform</artifactId>
+    <groupId>com.everwing</groupId>
+    <version>1.0.0</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>ecp-utils</artifactId>
+  <build>
+    <resources>
+      <resource>
+        <targetPath>src/main/resources/</targetPath>
+        <directory>src/main/resources/</directory>
+        <includes>
+          <include>fastdfs-client-java-1.27.SNAPSHOT.jar</include>
+        </includes>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>org.csource</groupId>
+      <artifactId>fastdfs-client-java</artifactId>
+      <version>1.27-SNAPSHOT</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/src/main/resources/fastdfs-client-java-1.27-SNAPSHOT.jar</systemPath>
+    </dependency>
+  </dependencies>
+  <properties>
+    <spring-framework-version>4.3.7.RELEASE</spring-framework-version>
+  </properties>
+</project>
+

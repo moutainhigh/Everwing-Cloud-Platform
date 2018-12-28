@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+
+
+
+
+	http://code.alibabatech.com/schema/dubbo
+	http://code.alibabatech.com/schema/dubbo/dubbo.xsd"
+       default-lazy-init="false">
+	
+	<dubbo:application name="${platform-coreservice.dubbo.application.name}" />
+
+	<dubbo:registry address="${platform-coreservice.dubbo.registry.address}" protocol="zookeeper" file="${catalina.home}/dubbo-registry/dubbo-registry.properties" />
+
+	<dubbo:protocol name="${platform-coreservice.dubbo.protocol.name}"
+                    port="${platform-coreservice.dubbo.protocol.port}"
+	/>
+
+    <dubbo:service interface="com.everwing.coreservice.common.service.PlatformAccountService" ref="platformAccountService" timeout="50000" retries="3"/>
+    <dubbo:service interface="com.everwing.coreservice.common.platform.service.AccountService" ref="accountServiceImpl" timeout="50000" retries="3"/>
+	<dubbo:service interface="com.everwing.coreservice.common.platform.service.InformationService" ref="informationImpl" timeout="50000" retries="3"/>
+    <dubbo:service interface="com.everwing.coreservice.common.platform.service.CommonService" ref="commonServiceImpl" timeout="50000" retries="3"/>
+    <dubbo:service interface="com.everwing.coreservice.common.platform.service.other.SmsService" ref="smsServiceImpl"  timeout="50000" retries="3"/>
+    <dubbo:service interface="com.everwing.coreservice.common.platform.service.AccountAndHouseService" ref="accountAndHouseServiceImpl"  timeout="50000" retries="3"/>
+	<dubbo:service interface="com.everwing.coreservice.common.platform.service.IdGenService" ref="idGenServiceImpl" timeout="50000" retries="3"/>
+	<dubbo:service interface="com.everwing.coreservice.common.platform.service.FastDFSService" ref="fastDFSServiceImpl" timeout="50000" retries="3" />
+	<dubbo:service interface="com.everwing.coreservice.common.platform.service.IdentityService" ref="identityServiceImpl" timeout="50000" retries="3" />
+	<dubbo:service interface="com.everwing.coreservice.common.platform.service.BuildingService" ref="buildingServiceImpl" timeout="50000" retries="3" />
+	<dubbo:service interface="com.everwing.coreservice.common.platform.service.PlatformGatingService" ref="platformGatingServiceImpl" timeout="50000" retries="3" />
+	<dubbo:service interface="com.everwing.coreservice.common.platform.service.AuthorizationService" ref="authorizationServiceImpl" timeout="50000" retries="3" />
+	<dubbo:service interface="com.everwing.coreservice.common.platform.service.LinPhoneService" ref="linPhoneServiceImpl" timeout="50000" retries="3" />
+	<dubbo:service interface="com.everwing.coreservice.common.platform.service.ProjectService" ref="projectServiceImpl" timeout="50000" retries="3" />
+</beans>

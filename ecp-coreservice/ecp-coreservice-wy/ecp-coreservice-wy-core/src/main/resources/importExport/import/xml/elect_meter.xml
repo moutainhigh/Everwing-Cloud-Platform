@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<excel id="elect_meter">
+    <sheet index="0">
+        <list index="0" startRow="1" class="com.everwing.coreservice.common.wy.entity.business.electmeter.ElectMeterImport">
+            <field index="0" property="code" required="true" ></field>
+            <field index="1" property="electricitymetername" required="true"></field>
+            <field index="2" property="locationName" required="true"></field>
+            <field index="3" property="meterLevel" required="true" type="Map" format="1:一级表;2:二级表;3:三级表;4:四级表;5:五级表;6:六级表;7:七级表;8:八级表;9:九级表;10:十级表;11:M级表;12:C级表"></field>
+            <field index="4" property="state" type="Map" required="true" format="0:启用;1:停用" ></field>
+            <field index="5" property="electricitymeterType" required="true" type="Map" format="0:普通表;1:分时表"></field>
+            <field index="6" property="iscycle" required="true" type="Map" format="0:是;1:否"></field>
+            <field index="7" property="type" required="true" type="Map" format="0:室内;1:室外;2:远程"></field>
+            <field index="8" property="usertype" required="true" type="Map" format="0:商用;1:民用;2:管理处"></field>
+            <field index="9" property="isbilling" required="true" type="Map" format="0:是;1:否"></field>
+            <field index="10" property="ispublic" required="true" type="Map" format="0:是;1:否"></field>
+            <field index="11" property="minamount" type="Double" required="true" regex="^[0-9]\d{0,5}(\.\d{1,2}?)$|^[0-9]\d{0,5}$" regexErrMsg="该项只能输入两位小数六位整数"></field>
+            <field index="12" property="maxamount" type="Double" required="true" regex="^[0-9]\d{0,5}(\.\d{1,2}?)$|^[0-9]\d{0,5}$" regexErrMsg="该项只能输入两位小数六位整数"></field>
+            <field index="13" property="initamount" type="Double" required="true" regex="^[0-9]\d{0,5}(\.\d{1,2}?)$|^[0-9]\d{0,5}$" regexErrMsg="该项只能输入两位小数六位整数"></field>
+            <field index="14" property="initpeakvalue" type="Double" required="true" regex="^[0-9]\d{0,5}(\.\d{1,2}?)$|^[0-9]\d{0,5}$" regexErrMsg="该项只能输入两位小数六位整数"></field>
+            <field index="15" property="initvalleyvalue" type="Double" required="true" regex="^[0-9]\d{0,5}(\.\d{1,2}?)$|^[0-9]\d{0,5}$" regexErrMsg="该项只能输入两位小数六位整数"></field>
+            <field index="16" property="initaveragevalue" type="Double" required="true" regex="^[0-9]\d{0,5}(\.\d{1,2}?)$|^[0-9]\d{0,5}$" regexErrMsg="该项只能输入两位小数六位整数"></field>
+            <field index="17" property="assetno" required="true" regex="^[0-9_]{0,14}+$" regexErrMsg="该项只能输入数字且长度只能有15位"></field>
+            <field index="18" property="rate" type="Float" required="true" regex="^(?:[1-9]\d*|0)(?:\.\d{1,2})?$" regexErrMsg="该项只能输入是数字"></field>
+            <field index="19" property="maxValleyValue" type="Float" required="true" regex="^[0-9]\d{0,5}(\.\d{1,2}?)$|^[0-9]\d{0,5}$" regexErrMsg="该项只能输入两位小数六位整数"></field>
+            <field index="20" property="maxAverageValue" type="Float" required="true" regex="^[0-9]\d{0,5}(\.\d{1,2}?)$|^[0-9]\d{0,5}$" regexErrMsg="该项只能输入两位小数六位整数"></field>
+            <field index="21" property="maxPeakValue" type="Float" required="true" regex="^[0-9]\d{0,5}(\.\d{1,2}?)$|^[0-9]\d{0,5}$" regexErrMsg="该项只能输入两位小数六位整数"></field>
+            <field index="22" property="relationbuildingName"></field>
+            <field index="23" property="assembleperson"></field>
+            <field index="24" property="brand"></field>
+            <field index="25" property="specs"></field>
+            <field index="26" property="provider"></field>
+            <field index="27" property="providerphone"></field>
+            <field index="28" property="parentcode"></field>
+            <field index="29" property="mastercode"></field>
+        </list>
+    </sheet>
+</excel>

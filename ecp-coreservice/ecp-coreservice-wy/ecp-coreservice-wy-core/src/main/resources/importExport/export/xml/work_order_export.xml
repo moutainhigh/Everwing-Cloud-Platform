@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<excel id="work_order_export">
+    <sheet label="工单列表">
+        <list>
+            <sql id="43ab6f32-6389-4ca3-9ee4-ea385726fcb5">
+                <![CDATA[
+                    SELECT
+					DISTINCT o.order_code orderCode,
+					pc.`name` AS custName,
+					if(o.cust_type='person','个人客户','企业客户') custType,
+					pc.register_phone AS custPhoneNum,
+					b.building_full_name AS buildingFullName,
+					ot1.`name` AS typeName1,
+						ot2.`name` AS typeName2,
+						ot3.`name` AS typeName3,
+					o.description,
+					su.staff_name AS principalName,
+					sd.name deptName,
+					if(o.is_urgent=1,'紧急','一般') isUrgent,
+					if(o.need_callback=1,'需要','不需要') needCallback,
+					o.callback_content callbackContent,
+					if(o.status=1,'处理中','完成') status,
+					  csu.staff_name AS createUser,
+						o.create_time createTime,
+						o.finish_time finishTime
+					FROM
+						tc_order o
+					left JOIN tc_order_type ot1 ON o.order_type_id_1 = ot1.tc_order_type_id
+					left JOIN tc_order_type ot2 ON o.order_type_id_2 = ot2.tc_order_type_id
+					left JOIN tc_order_type ot3 ON o.order_type_id_3 = ot3.tc_order_type_id
+					left JOIN tc_building b ON o.building_code = b.building_code and b.project_id='${projectId}'
+					left JOIN tc_person_cust pc ON pc.cust_id = o.cust_id
+					left JOIN t_sys_user su ON o.principal_sys_user_id = su.user_id
+				  LEFT JOIN t_sys_organization tso ON su.staff_number=tso.code
+				  LEFT JOIN t_sys_organization tso1 ON tso.pid=tso1.organization_id
+				  LEFT JOIN t_sys_organization tso2 ON tso1.pid=tso2.organization_id
+				  LEFT JOIN t_sys_organization tso3 ON tso2.pid=tso3.organization_id
+				  LEFT JOIN t_sys_department sd ON tso2.code=sd.department_id
+					left JOIN t_sys_user csu on o.create_by=csu.user_id
+				  where 1=1
+				<#if buildingCode??>
+					and o.building_code = '${buildingCode}'
+				</#if>
+				<#if custId??>
+					and o.cust_id = '${custId}'
+				</#if>
+				<#if orderTypeId1??>
+					and o.order_type_id_1 = '${orderTypeId1}'
+				</#if>
+				<#if  projectId??>
+					and b.project_id = '${projectId}'
+				</#if>
+				<#if  status??>
+					and o.status = '${status}'
+				</#if>
+				<#if  searchDataStartTime?? && searchDataEndTime??>
+					and (o.create_time between '${searchDataStartTime}' and '${searchDataEndTime}')
+				</#if>
+				<#if  description??>
+					and o.description like CONCAT("%",TRIM('${description}'),"%")
+				</#if>
+				<#if  registerPhone??>
+					AND pc.register_phone like CONCAT("%",TRIM('${registerPhone}'),"%")
+				</#if>
+				<#if  houseCode??>
+					AND b.house_code = '${hoseCode}'
+				</#if>
+				<#if  createBy??>
+					AND csu.user_id = '${createBy}'
+				</#if>
+				ORDER BY o.create_time desc
+                ]]>
+            </sql>
+            <!-- 查询结果字段和excel表头标题的映射，column的值一定要和SQL语句的AS别名一致 -->
+             <field column="orderCode" label="工单号" type="String"></field>
+			 <field column="custName" label="客户名称" type="String"></field>
+			 <field column="custType" label="客户类型" type="String"></field>
+			 <field column="buildingFullName" label="建筑名称" type="String"></field>
+			 <field column="typeName1" label="工单类型" type="String"></field>
+			 <field column="typeName2" label="工单分类" type="String"></field>
+			 <field column="typeName3" label="工单分类" type="String"></field>
+			 <field column="description" label="工单描述" type="String"></field>
+			 <field column="principalName" label="负责人" type="String"></field>
+			 <field column="deptName" label="部门" type="String"></field>
+			 <field column="isUrgent" label="是否紧急" type="String"></field>
+			 <field column="needCallback" label="需要回访" type="String"></field>
+			 <field column="callbackContent" label="回访内容" type="String"></field>
+			 <field column="status" label="状态" type="String"></field>
+			 <field column="createUser" label="创建人" type="String"></field>
+			 <field column="createTime" label="创建时间" type="Date" format="yyyy-MM-dd HH:mm:ss"></field>
+			 <field column="finishTime" label="完成时间" type="Date" format="yyyy-MM-dd HH:mm:ss"></field>
+        </list>
+    </sheet>
+</excel>

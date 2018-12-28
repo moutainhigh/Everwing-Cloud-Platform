@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<excel id="elect_meter_reading">
+	<sheet index="0">
+		 <list index="0" startRow="1" class="com.everwing.coreservice.common.wy.entity.business.meterdata.TcMeterData">
+		 	<field index="0" property="meterCode" required="true"></field>
+		 	<field index="1" property="lastPeakReading"></field>
+		 	<field index="2" property="peakReading" type="Double" required="true" regex="^[0-9]\d{0,5}(\.\d{1,2}?)$|^[0-9]\d{0,5}$" regexErrMsg="该项只能输入两位小数六位整数"></field>
+		 	<field index="3" property="lastVallyReading"></field>
+		 	<field index="4" property="vallyReading" type="Double" required="true" regex="^[0-9]\d{0,5}(\.\d{1,2}?)$|^[0-9]\d{0,5}$" regexErrMsg="该项只能输入两位小数六位整数"></field>
+		 	<field index="5" property="lastCommonReading"></field>
+		 	<field index="6" property="commonReading" type="Double" required="true" regex="^[0-9]\d{0,5}(\.\d{1,2}?)$|^[0-9]\d{0,5}$" regexErrMsg="该项只能输入两位小数六位整数"></field>
+		 	<field index="7" property="lastTotalReading"></field>
+		 	<field index="8" property="totalReading" type="Double" required="true" regex="^[0-9]\d{0,5}(\.\d{1,2}?)$|^[0-9]\d{0,5}$" regexErrMsg="该项只能输入两位小数六位整数"></field>
+		 	<field index="9" property="remark"></field>
+		 </list>
+	</sheet>
+</excel>

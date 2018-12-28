@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<excel id="pay_info_toll_dayKnot">
+    <sheet label="收费日结导出">
+        <list>
+            <sql id="3c9d4c7c-f215-11e8-9a3f-0050568e00c5">
+                <![CDATA[
+
+
+					select t1.order_number  orderl,
+                    t2.pay_deposit_datetime payTime,
+                    redeem_deposi_amount tuikuan ,
+                    redeem_deposi_amount - IFNULL(deduct_amount,0) shitui
+                    ,name
+                    ,redeem_deposit_datetime  tuiyaTime,
+                     t1.description beizhu,
+
+                   (case t3.pay_type
+                   when 'cash' then '现金支付'
+                   when 'charge' then '刷卡'
+                   when 'alipay' then '支付宝'
+                   when 'weixinpay' then '微信支付'
+                   when 'bank' then  '银行收款'
+
+                   end) as type,
+
+                    t3.creater_name createName,
+
+                    (
+                        select house_code from tc_building where building_code =(
+                            select building_code from t_product_order_detail
+                                where order_id =(
+                                    select id  from t_product_order where batch_no=t1.order_number)) )AS houseCode,
+                    (select building_full_name from t_product_order_detail
+                        where order_id =(
+                      select id  from t_product_order where batch_no=t1.order_number)) AS adress
+
+						from  t_deposit_detail t1 , t_deposit t2 ,t_product_payment_detail t3
+			where t1.deposit_id=t2.id and t3.deposit_detail_id=t1.id
+					<#if projectId ??>
+                      AND t2.project_id =(select project_id from t_sys_project where code= '${projectId}')
+                  	</#if>
+					<#if startTime ??>
+						AND redeem_deposit_datetime >= '${startTime}'
+					</#if>
+					<#if endTime ??>
+						AND redeem_deposit_datetime <= '${endTime}'
+					</#if>
+					<#if oneDay ??>
+						AND DATE_FORMAT(redeem_deposit_datetime,'%Y-%m-%d') = '${oneDay}'
+					</#if>
+
+					<#if createId ??>
+						AND modify_id = '${createId}'
+					</#if>
+
+                ]]>
+            </sql>
+            <!-- 查询结果字段和excel表头标题的映射，column的值一定要和SQL语句的AS别名一致 -->
+             <field column="orderl" label="订单号" type="String"></field>
+            <field column="payTime" label="订单时间" type="Date" format="yyyy-MM-dd HH:mm:ss"></field>
+            <field column="name" label="项目名称" type="String"></field>
+			<field column="tuikuan" label="可退金额" type="Double" format="0.00"></field>
+			 <field column="shitui" label="实退金额" type="Double" format="0.00"></field>
+            <field column="tuiyaTime" label="退款时间" type="Date" format="yyyy-MM-dd HH:mm:ss"></field>
+            <field column="houseCode" label="资产编号" type="String"></field>
+            <field column="adress" label="资产地址" type="String"></field>
+            <field column="createName" label="操作人" type="String"></field>
+            <field column="type" label="退款方式" type="String"></field>
+			<field column="beizhu" label="备注" type="String"></field>
+        </list>
+    </sheet>
+</excel>

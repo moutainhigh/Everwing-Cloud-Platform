@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.coreservice.platform.dao.mapper.extra.AccountAndHouseExtraMapper">
+
+	
+	<delete id="delete" parameterType="com.everwing.coreservice.common.platform.entity.generated.AccountAndHouse">
+		DELETE
+		FROM account_and_house
+		WHERE account_id = #{accountId}
+		AND   house_id = #{houseId}
+	</delete>
+	
+	<delete id="deleteByAccountId">
+		DELETE
+		FROM account_and_house
+		WHERE account_id = #{accountId}
+	</delete>
+
+	<insert id="batchInsert" parameterType="java.util.List">
+	    insert into account_and_house (
+	    	<include refid="com.everwing.coreservice.platform.dao.mapper.generated.AccountAndHouseMapper.Base_Column_List" />
+	    )
+	    values 
+	    <foreach collection ="list" item="accountAndHouse" index= "index" separator =",">
+		  (
+			  #{accountAndHouse.accountId,jdbcType=BIGINT}, #{accountAndHouse.houseId,jdbcType=BIGINT}
+	      )
+	    </foreach>
+	
+	</insert>
+	
+	<delete id="batchDelete"  parameterType="java.util.List">
+		DELETE
+		FROM
+			account_and_house
+		WHERE
+		    <foreach collection ="list" item="accountAndHouse" separator ="or">
+			(
+				account_id = #{accountAndHouse.accountId,jdbcType=BIGINT}
+				AND house_id = #{accountAndHouse.houseId,jdbcType=BIGINT}
+			)
+			</foreach>
+	</delete>
+</mapper>

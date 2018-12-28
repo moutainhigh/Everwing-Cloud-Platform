@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.configuration.project.TBsShareRelatedTaskMapper">
+	<resultMap type="TBsShareRelatedTask" id="BaseResultMap">
+		<result property="id" column="id" jdbcType="VARCHAR"/>
+		<result property="shareBasicsId" column="share_basics_id"  jdbcType="VARCHAR"/>
+		<result property="shareTaskName" column="share_task_name"  jdbcType="VARCHAR"/>
+		<result property="shareAmountFormula" column="share_amount_formula"  jdbcType="VARCHAR"/>
+		<result property="shareAmount" column="share_amount"  jdbcType="DOUBLE"/>
+		<result property="shareMoney" column="share_money"  jdbcType="DOUBLE"/>
+		<result property="sharePrice" column="share_price"  jdbcType="DOUBLE"/>
+		<result property="shareType" column="share_type"  jdbcType="TINYINT"/>
+	</resultMap>
+	
+	<resultMap type="TBsShareBuildingRelation" id="ShareBuildingRelationMap">
+		<result property="id" column="id" jdbcType="VARCHAR"/>
+		<result property="shareTaskId" column="share_task_id"  jdbcType="VARCHAR"/>
+		<result property="relationBuildingCode" column="relation_building_code"  jdbcType="VARCHAR"/>
+		<result property="useAmount" column="use_amount"  jdbcType="DOUBLE"/>
+	</resultMap>
+	
+	<!-- 根据分摊id查询分摊下面的任务信息，目前只有一个必填条件，可自行添加条件 -->
+	<select id="listPageShareTask" parameterType="TBsShareRelatedTask" resultMap="BaseResultMap">
+		SELECT * FROM t_bs_share_related_task WHERE share_basics_id=#{shareBasicsId}
+	</select>
+
+	<!-- 插入方案关联收费类型数据信息 -->
+	<insert id="insertShareTask" parameterType="TBsShareRelatedTask">
+		INSERT INTO t_bs_share_related_task
+			VALUES
+			  (
+			  	#{id},
+			  	#{shareBasicsId},
+			  	#{shareTaskName},
+			  	#{shareAmountFormula},
+			  	#{shareAmount},
+			  	#{shareMoney},
+			  	#{shareType},
+			  	#{sharePrice}
+			  )
+	</insert>
+
+	<!-- 修改sql片段 -->
+	<sql id="sqlForUpdate">
+		 <if test=" null != shareTaskName  and '' != shareTaskName ">
+	        share_task_name = #{shareTaskName},
+	     </if>
+	     <if test=" null != shareType and '' != shareType">
+	        share_type = #{shareType},
+	      </if>
+	     <if test=" null != shareMoney and '' != shareMoney ">
+	         share_money = #{shareMoney},
+	      </if>
+	      <if test=" null != shareAmount and '' != shareAmount ">
+	         share_amount = #{shareAmount},
+	      </if>
+	      <if test=" null != shareAmountFormula and '' != shareAmountFormula">   
+	      	share_amount_formula = #{shareAmountFormula}
+	      </if>
+	</sql>
+
+	<!-- 修改，编辑创建好的分摊信息 -->
+	<update id="updateShareTask" parameterType="TBsShareRelatedTask">
+		UPDATE t_bs_share_related_task  
+		<set>
+			<include refid="sqlForUpdate"></include>
+	    </set>
+		    WHERE  id = #{id}
+	</update>
+	
+	<select id="selectTaskByBasicId" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT * FROM t_bs_share_related_task WHERE share_task_name=#{1} AND share_basics_id=#{0}
+	</select>
+
+	<select id="getShareTaskByIds" parameterType="java.util.List" resultMap="BaseResultMap">
+		SELECT * FROM t_bs_share_related_task WHERE share_basics_id IN
+		<foreach collection="list" item="item" open="(" close=")" separator=",">
+			#{item.id}
+		</foreach>
+	</select>
+	
+
+	<!-- 根据公式查询需要分摊的水电总使用量 -->
+	<select id="getTotalUsedAmount" parameterType="java.lang.String" resultType="java.lang.Double">
+		SELECT 
+			  (
+			    md1.total_reading - 
+			    (SELECT 
+			      md2.total_reading 
+			    FROM
+			      tc_meter_data md2 
+			    WHERE md2.audit_status = 1 
+			      AND md2.is_used = 0 
+			      AND md2.ex_status = 1 
+			      AND md2.meter_type=#{2}
+			      AND md2.meter_code =  #{1} 
+			    ORDER BY md2.modify_time DESC 
+			    LIMIT 1)
+			  ) AS shareAmount 
+			FROM
+			  tc_meter_data md1 
+			WHERE md1.audit_status = 1 
+			  AND md1.is_used = 0 
+			  AND md1.ex_status = 1 
+			  AND md1.meter_type=#{meterType}
+			  AND md1.meter_code = #{0} 
+			ORDER BY md1.modify_time DESC 
+			LIMIT 1 
+	</select>
+
+	<!-- 查询需要进行分摊的关联建筑信息 -->
+	<select id="getRightBuilingInfos" parameterType="java.lang.String" resultMap="ShareBuildingRelationMap">
+		SELECT relation_building_code FROM t_bs_share_building_relation br WHERE  share_task_id=#{shareTaskId}
+            AND EXISTS(SELECT * FROM tc_water_meter WHERE state=0 AND is_billing=0 AND br.relation_building_code=relation_building)
+	</select>
+
+	<!-- 根据分摊任务关联建筑查询关联建筑的水使用量 -->
+	<select id="getUseAmountByBuilding" parameterType="java.lang.String" resultMap="ShareBuildingRelationMap">
+		SELECT 
+		  SUM(md.use_count) AS useAmount,
+		  aa.relationBuilding relationBuildingCode
+		FROM
+		  tc_meter_data md,
+		  (SELECT 
+		    wm.code,
+		    wm.relation_building relationBuilding 
+		  FROM
+		    tc_water_meter wm 
+		  WHERE EXISTS 
+		    (SELECT 
+		      1 
+		    FROM
+		      t_bs_share_building_relation 
+		    WHERE relation_building_code = wm.relation_building 
+		      AND share_task_id = #{0})) aa 
+		WHERE md.meter_code = aa.code 
+		  AND md.audit_status = 1 
+		  AND md.is_used = 0 
+		  AND md.ex_status = 1 
+		  AND md.meter_type = 0
+		  AND SYSDATE() > reading_time 
+		  AND reading_time > SUBSTRING(
+		    DATE_SUB(SYSDATE(), INTERVAL #{1} MONTH),
+		    1,
+		    7
+		  ) 
+		GROUP BY aa.relationBuilding 
+	</select>
+	
+	<!-- 根据分摊任务关联建筑查询关联建筑的电使用量 -->
+	<select id="getUseAmountByBuildingForElect" parameterType="java.lang.String" resultMap="ShareBuildingRelationMap">
+		SELECT 
+		  SUM(md.use_count) AS useAmount,
+		   aa.relationBuilding relationBuildingCode 
+		FROM
+		  tc_meter_data md,
+		  (SELECT 
+		    wm.code,
+		    wm.relation_building relationBuilding 
+		  FROM
+		    tc_electricity_meter wm 
+		  WHERE EXISTS 
+		    (SELECT 
+		      1 
+		    FROM
+		      t_bs_share_building_relation 
+		    WHERE relation_building_code = wm.relation_building 
+		      AND share_task_id = #{0})) aa 
+		WHERE md.meter_code = aa.code 
+		  AND md.audit_status = 1 
+		  AND md.is_used = 0 
+		  AND md.ex_status = 1 
+		  AND md.meter_type = 1
+		  AND SYSDATE() > reading_time 
+		  AND reading_time > SUBSTRING(
+		    DATE_SUB(SYSDATE(), INTERVAL #{1} MONTH),
+		    1,
+		    7
+		  ) 
+		GROUP BY aa.relationBuilding 
+	</select>
+	
+	
+	<select id="getTotalUseAmountByTaskId" parameterType="java.lang.String" resultType="java.lang.Double">
+		SELECT 
+		  TRUNCATE(SUM(md.use_count),2) AS totalUseAmount 
+		FROM
+		  tc_meter_data md,
+		  (SELECT 
+		    wm.code,
+		    wm.relation_building relationBuilding 
+		  FROM
+		    tc_water_meter wm 
+		  WHERE EXISTS 
+		    (SELECT 
+		      1 
+		    FROM
+		      t_bs_share_building_relation 
+		    WHERE relation_building_code = wm.relation_building 
+		      AND share_task_id = #{0})) aa 
+		WHERE md.meter_code = aa.code 
+		  AND md.audit_status = 1 
+		  AND md.is_used = 0 
+		  AND md.ex_status = 1 
+		  AND md.meter_type = #{1} 
+		  AND SYSDATE() > reading_time 
+		  AND reading_time > SUBSTRING(
+		    DATE_SUB(SYSDATE(), INTERVAL #{2} MONTH),
+		    1,
+		    7
+		  )
+	</select>
+
+	<!-- 电表和水表的字段稍微有点区别，这里只能分开写 -->
+	<select id="getElectTotalUseAmountByTaskId" parameterType="java.lang.String" resultType="java.lang.Double">
+		SELECT 
+		  TRUNCATE(SUM(md.use_count),2) AS totalUseAmount 
+		FROM
+		  tc_meter_data md,
+		  (SELECT 
+		    wm.code,
+		    wm.relation_building relationBuilding 
+		  FROM
+		    tc_electricity_meter wm 
+		  WHERE EXISTS 
+		    (SELECT 
+		      1 
+		    FROM
+		      t_bs_share_building_relation 
+		    WHERE relation_building_code = wm.relation_building 
+		      AND share_task_id = #{0})) aa 
+		WHERE md.meter_code = aa.code 
+		  AND md.audit_status = 1 
+		  AND md.is_used = 0 
+		  AND md.ex_status = 1 
+		  AND md.meter_type = #{1}
+		  AND SYSDATE() > reading_time 
+		  AND reading_time > SUBSTRING(
+		    DATE_SUB(SYSDATE(), INTERVAL #{2} MONTH),
+		    1,
+		    7
+		  )
+	</select>
+	
+	
+	<delete id="deleteTaskByShareId" parameterType="java.lang.String">
+		DELETE FROM t_bs_share_related_task WHERE share_basics_id=#{shareId}
+	</delete>
+
+	<delete id="deleteTaskById" parameterType="java.lang.String">
+		DELETE FROM t_bs_share_related_task WHERE id = #{id}
+	</delete>
+
+</mapper>

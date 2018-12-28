@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.everwing.autotask.core.dao.TBsChargeBillTotalMapper">
+    <resultMap type="TBsChargeBillTotal" id="BaseResultMap">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="projectId" column="project_id" jdbcType="VARCHAR"/>
+        <result property="lastTotalId" column="last_total_id" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="TINYINT"/>
+        <result property="schemeId" column="scheme_id" jdbcType="VARCHAR"/>
+        <result property="billingTime" column="billing_time" jdbcType="DOUBLE"/>
+        <result property="currentFee" column="current_fee" jdbcType="DOUBLE"/>
+        <result property="lastOwedFee" column="last_owed_fee" jdbcType="DOUBLE"/>
+        <result property="totalFee" column="total_fee" jdbcType="DOUBLE"/>
+        <result property="chargingType" column="charging_type" jdbcType="TINYINT"/>
+        <result property="isRebilling" column="is_rebilling" jdbcType="TINYINT"/>
+        <result property="auditStatus" column="audit_status" jdbcType="TINYINT"/>
+        <result property="cmacIsBilling" column="cmac_is_billing" jdbcType="TINYINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="createId" column="create_id" jdbcType="VARCHAR"/>
+        <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+        <result property="modifyId" column="modify_id" jdbcType="VARCHAR"/>
+        <result property="billStatus" column="bill_status" jdbcType="TINYINT"/>
+        <result property="sunStatus" column="sun_status" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <insert id="insertChargeBillTotal" parameterType="TBsChargeBillTotal">
+        INSERT INTO t_bs_charge_bill_total
+        (
+        id,
+        project_id,
+        last_total_id,
+        `type`,
+        scheme_id,
+        billing_time,
+        current_fee,
+        last_owed_fee,
+        total_fee,
+        charging_type,
+        is_rebilling,
+        audit_status,
+        cmac_is_billing,
+        create_time,
+        create_id,
+        modify_time,
+        modify_id,
+        bill_status,
+        sun_status
+        )
+        values(
+        #{id},
+        #{projectId},
+        #{lastTotalId},
+        #{type},
+        #{schemeId},
+        #{billingTime},
+        #{currentFee},
+        #{lastOwedFee},
+        #{totalFee},
+        #{chargingType},
+        #{isRebilling},
+        #{auditStatus},
+        #{cmacIsBilling},
+        #{createTime},
+        #{createId},
+        #{modifyTime},
+        #{modifyId},
+        #{billStatus},
+        #{sunStatus}
+        )
+    </insert>
+    <select id="findCmacCanbilling" parameterType="TBsChargeBillTotal" resultMap="BaseResultMap">
+        SELECT *
+        FROM t_bs_charge_bill_total
+        WHERE DATE_FORMAT(billing_time,'%Y-%m') = DATE_FORMAT(#{billingTime},'%Y-%m')
+        AND project_id = #{projectId}
+        AND cmac_is_billing = 0
+        and audit_status = 1
+        <if test="null != type">
+            and `type` = #{type}
+        </if>
+    </select>
+    
+    <select id="findByObj" parameterType="TBsChargeBillTotal" resultMap="BaseResultMap">
+		SELECT * 
+		  FROM t_bs_charge_bill_total 
+		 WHERE DATE_FORMAT(billing_time,'%Y-%m') = DATE_FORMAT(#{billingTime},'%Y-%m')
+		   AND project_id = #{projectId}
+	</select>
+    
+
+    <select id="getAuditedCountByProjectIdAndTypes" resultType="Integer">
+        SELECT COUNT(id)
+        FROM t_bs_charge_bill_total
+        WHERE project_id = #{projectId}
+        AND audit_status = 1
+        AND DATE_FORMAT(billing_time,'%Y-%m') = DATE_FORMAT(SYSDATE(),'%Y-%m')
+        AND TYPE IN
+        <foreach collection="types" item="type" open="(" close=")" separator=",">
+            #{type}
+        </foreach>
+    </select>
+
+    <select id="findCurrentBillTotal" parameterType="TBsChargeBillTotal" resultMap="BaseResultMap">
+        SELECT *
+        FROM t_bs_charge_bill_total
+        WHERE project_id = #{projectId}
+        AND `type`=#{type}
+        <if test="null != chargingType">
+            and charging_type = #{chargingType}
+        </if>
+        AND (billing_time IS NULL or (bill_status !=1))
+    </select>
+
+    <select id="findCurrentBillTotalForShare" parameterType="TBsChargeBillTotal" resultMap="BaseResultMap">
+        SELECT *
+        FROM t_bs_charge_bill_total
+        WHERE project_id = #{projectId}
+        AND type=#{type}
+        AND billing_time IS NULL
+        ORDER BY create_time DESC LIMIT 1
+    </select>
+
+    <select id="selectById" parameterType="String" resultMap="BaseResultMap">
+        select * from t_bs_charge_bill_total where id = #{0}
+    </select>
+
+    <select id="findTbsTotalbyId" parameterType="String" resultMap="BaseResultMap">
+        SELECT * from t_bs_charge_bill_total where id=#{0}
+    </select>
+
+    <update id="update" parameterType="TBsChargeBillTotal">
+        update t_bs_charge_bill_total
+        <set>
+            <if test="null != schemeId">
+                scheme_id = #{schemeId},
+            </if>
+            <if test="null != billingTime">
+                billing_time = #{billingTime},
+            </if>
+            <if test="null != currentFee">
+                current_fee = #{currentFee},
+            </if>
+            <if test="null != lastOwedFee">
+                last_owed_fee = #{lastOwedFee},
+            </if>
+            <if test="null != totalFee">
+                total_fee = #{totalFee},
+            </if>
+            <if test="null != chargingType">
+                charging_type = #{chargingType},
+            </if>
+            <if test="null != isRebilling">
+                is_rebilling = #{isRebilling},
+            </if>
+            <if test="null != auditStatus">
+                audit_status = #{auditStatus},
+            </if>
+            <if test="null != cmacIsBilling">
+                cmac_is_billing = #{cmacIsBilling},
+            </if>
+            <if test="null != modifyId">
+                modify_id = #{modifyId},
+            </if>
+            <if test="billStatus !=null">
+                bill_status=#{billStatus},
+            </if>
+            <if test="sunStatus !=null">
+                sun_status = #{sunStatus},
+            </if>
+            modify_time=sysdate()
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

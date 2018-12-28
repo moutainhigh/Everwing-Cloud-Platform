@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.configuration.project.TBsChargeTypeMapper">
+	<resultMap type="TBsChargeType" id="BaseResultMap">
+		<result property="id" column="id" jdbcType="VARCHAR"/>
+		<result property="unit" column="unit"  jdbcType="VARCHAR"/>
+		<result property="formulaInfo" column="formula_info"  jdbcType="VARCHAR"/>
+		<result property="chargingRuleId" column="charging_rule_id"  jdbcType="VARCHAR"/>
+		<result property="chargingName" column="charging_name"  jdbcType="VARCHAR"/>
+		<result property="projectId" column="project_id"  jdbcType="VARCHAR"/>
+		<result property="projectName" column="project_name"  jdbcType="VARCHAR"/>
+		<result property="createTime" column="create_time"  jdbcType="TIMESTAMP"/>
+		<result property="createBy" column="create_by"  jdbcType="VARCHAR"/>
+		<result property="formulaInfoValue" column="formula_info_value" jdbcType="VARCHAR"/>
+		<result property="chargingId" column="charging_id" jdbcType="VARCHAR"/>
+		<result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+		<result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+		<result property="minCriticalpoint" column="min_criticalpoint"/>
+		<result property="maxCriticalpoint" column="max_criticalpoint"/>
+	</resultMap>
+
+	
+	<sql id="sqlFeild">
+		id,unit,formula_info_value,formula_info,charging_rule_id,charging_name,
+		charging_id,project_id,project_name,create_time,create_by,update_time,update_by,min_criticalpoint,
+		max_criticalpoint
+	</sql>
+	
+	<!-- 分页查询 -->
+	<select id="listPageChargingType" parameterType="TBsChargeType" resultMap="BaseResultMap">
+		select 
+		<include refid="sqlFeild"/>
+		from t_bs_charge_type
+		where 1=1
+		<if test="id != null">
+			and id =#{id}
+		</if>
+		<if test="unit != null">
+			and unit=#{unit}
+		</if>
+		<if test="chargingRuleId != null">
+			and charging_rule_id =#{chargingRuleId}
+		</if>
+		<if test="chargingName != null">
+			and charging_name=#{chargingName}
+		</if>
+		<if test="projectId !=null">
+			and project_id =#{projectId}
+		</if>
+	</select>
+	
+	
+	<!-- 根据规则ID和收费细项名称查询 -->
+	<select id="getByRuleIdAndName" parameterType="String" resultMap="BaseResultMap">
+		select 
+		<include refid="sqlFeild"/>
+		from t_bs_charge_type
+		where charging_rule_id=#{0}
+		and charging_name=#{1}
+	</select>
+
+	<!-- 插入方案关联收费类型数据信息 -->
+	<insert id="insert" parameterType="TBsChargeType">
+		INSERT INTO t_bs_charge_type
+		values(
+				UPPER(UUID()),
+				#{unit},
+				#{formulaInfoValue},
+				#{formulaInfo},
+				#{chargingRuleId},
+				#{chargingId},
+				#{chargingName},
+				#{projectId},
+				#{projectName},
+				NOW(),
+				#{createBy},
+				#{updateTime},
+				#{updateBy},
+				#{minCriticalpoint},
+				#{maxCriticalpoint}
+		)
+	</insert>
+
+	<!-- 根据方案类型查询此方案的具体收费类型详情 -->
+	<select id="selectChargeType" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT 
+		  * 
+		FROM
+		  t_bs_charge_type 
+		WHERE charging_rule_id = #{ruleId}
+	</select>
+
+	<!-- 修改sql片段 -->
+	<sql id="sqlForUpdate">
+		 <if test=" null != unit  and '' != unit ">
+	        unit = #{unit},
+	     </if>
+	     <if test=" null != formulaInfo and '' != formulaInfo">
+	        formula_info = #{formulaInfo},
+	      </if>
+	     <if test=" null != chargingName and '' != chargingName ">
+	         charging_name = #{chargingName},
+	      </if>
+	      
+	      <if test="formulaInfoValue !=null and '' !=formulaInfoValue">
+	      	formula_info_value=#{formulaInfoValue},
+	      </if>
+	      
+	      <if test="minCriticalpoint !=null">
+	      	min_criticalpoint = #{minCriticalpoint},
+	      </if>
+	      
+	      <if test="maxCriticalpoint !=null">
+	      	max_criticalpoint =#{maxCriticalpoint},
+	      </if>
+	</sql>
+
+	<update id="updateChargeType" parameterType="TBsChargeType">
+		UPDATE t_bs_charge_type
+		<set>
+			<include refid="sqlForUpdate"></include>
+			update_by=#{updateBy}
+	    </set>
+		    WHERE  id = #{id}
+	</update>
+
+
+	<!-- 用户多选进行删除操作 -->
+	<delete id="batchDel" parameterType="java.util.List">
+		DELETE FROM t_bs_charge_type WHERE id IN
+		<foreach collection="list" item="id" open="(" close=")" separator=",">
+			(#{id})
+		</foreach>
+	</delete>
+
+	<delete id="deleteByRuleId" parameterType="java.lang.String">
+		DELETE FROM t_bs_charge_type WHERE charging_rule_id=#{ruleId}
+	</delete>
+	
+
+	<!-- 根据规则ID批量删除 -->
+	<delete id="delByRuleId" parameterType="java.util.List">
+		DELETE FROM t_bs_charge_type WHERE charging_rule_id IN
+		<foreach collection="list" item="ruleId" open="(" close=")" separator=",">
+			(#{ruleId})
+		</foreach>
+	</delete>
+	
+	<!-- 根据总单Id,项目编码，关联建筑编码查询收费项 -->
+	<select id="findBytoIdAndBuildCodeAndProId" parameterType="String" resultMap="BaseResultMap">
+		select chargetype.*
+		from 
+		     t_bs_charge_bill_total  total,
+		     t_bs_charging_scheme sch,
+		     t_bs_charging_rules rules,
+		     t_bs_rule_building_relation  relation,
+		     t_bs_charge_type  chargetype
+		where total.scheme_id = sch.id
+		and   rules.charging_scheme_id =sch.id
+		and   relation.charging_rule_id=rules.id
+		and   chargetype.charging_rule_id=rules.id
+		and   total.id=#{0}
+		and   total.project_id=#{2}
+		and   relation.relation_building_code=#{1}
+	</select>
+</mapper>

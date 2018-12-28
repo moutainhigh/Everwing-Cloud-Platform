@@ -1,0 +1,663 @@
+/*
+
+NAME: 王双玲
+用途: 公用样式表
+创建时间：2015-07-10
+版本号：V0.1
+修改时间：2015-07-17
+
+目录列表;
+    1、全局样式
+    2、字体样式
+    3、颜色样式
+    4、连接样式
+    5、ICON样式
+    6、按钮样式
+    7、标签样式
+    8、图片样式
+    9、边框
+    10、圆角
+    11、滚动条样式
+    12、投影
+    13、左右浮动
+    14、透明背景
+    15、线条样式
+    16、padding集合
+
+
+*/
+/*======================================================================================================================
+                                                  1、全局样式
+======================================================================================================================*/
+*, ul, li , p, h1, h2, h3, h4, h5, span,{
+    margin: 0;
+    padding: 0;
+}
+
+a:link, a:visited{
+    text-decoration: none;
+}
+a:hover, a:active{
+    text-decoration: none;
+}
+ul, li{
+    list-style-type: none;
+}
+.clear{
+    clear:both;
+}
+
+section{
+    background: #ddd;
+    border: 1px solid #bbb;
+}
+/*span, input{
+    display: block;
+    float: left;
+    height: 25px;
+    line-height: 25px;
+    margin: 0;
+    padding: 0;
+}*/
+.clear{
+    clear: both;
+}
+input,
+select{
+    height: 25px;
+    line-height: 25px;
+    border: 1px solid #ddd;
+}
+.listtitle a.btn{
+    -moz-border-radius:0;
+    -webkit-border-radius:0;
+    border-radius:0;
+}
+
+
+
+
+/*======================================================================================================================
+                                                  2、字体样式
+======================================================================================================================*/
+
+.font_14{
+    font-size: 14px;
+}
+.font_16{
+    font-size: 16px;
+}
+.font_18{
+    font-size: 18px;
+}
+.font_20{
+    font-size: 20px;
+}
+.font_22{
+    font-size: 22px;
+}
+.font_24{
+    font-size: 24px;
+}
+.font_26{
+    font-size: 26px;
+}
+.font_28{
+    font-size: 28px;
+}
+.font_30{
+    font-size: 30px;
+}
+.font_bold{
+    font-weight: bold;
+}
+.text_center{
+    text-align: center;
+}
+.text_left{
+    text-align: left;
+}
+.text_right{
+    text-align: right;
+}
+.font_underline{
+    text-decoration: underline;
+}
+.line_height_18{
+    line-height: 18px;
+}
+.line_height_20{
+    line-height: 20px;
+}
+.line_height_22{
+    line-height: 22px;
+}
+.line_height_16{
+    line-height: 16px;
+}
+.title{
+
+
+}
+
+.word-wrap{
+    word-break:break-all; /*支持IE，chrome，FF不支持*/
+    word-wrap:break-word;/*支持IE，chrome，FF*/
+}
+
+/*======================================================================================================================
+                                                  3、颜色样式
+======================================================================================================================*/
+.red{
+    color: red;
+}
+.yellow{
+    color: yellow;
+}
+.orange{
+    color: #f49c34;
+}
+.green{
+    color: green;
+}
+.white{
+    color: white;
+}
+.blue{
+    color: #029ff0;
+}
+.back_red{
+    background: red;
+}
+.back_yellow{
+    background: yellow;
+}
+.back_orange{
+    background: #f49c34;
+}
+.back_white{
+    background:white;
+}
+.back_blue{
+    background: #029ff0;
+}
+.back_grey{
+    background: #ccc;
+}
+.back_col_grey{
+    background: #ddd;
+}
+.back_f5_grey{
+    background: #f5f5f5;
+}
+.back_dark_grey{
+    background: #939393;
+}
+.back_black{
+    background: black;
+}
+.back_dark_black{
+    background: #313131;
+}
+/*======================================================================================================================
+                                                  4、连接样式
+======================================================================================================================*/
+a{
+    color: #313131;
+}
+a:hover{
+    color: #313131;
+}
+a.grey{
+    color: #313131;
+}
+a.grey:hover{
+    color: #313131;
+}
+a.blue{
+    color: #029ff0;
+}
+a.blue:hover{
+    color: #313131;
+}
+a.white{
+    color: #fff;
+}
+a.white:hover{
+    color: #ddd;
+}
+
+/*======================================================================================================================
+                                                 5、ICON样式
+======================================================================================================================*/
+.icon{
+    display: block;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    line-height: 25px;
+    float: left;
+    cursor: pointer;
+}
+.table_icon{
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    line-height: 25px;
+    cursor: pointer;
+}
+.user_icon{
+    display: block;
+    width: 30px;
+    height: 30px;
+    float: left;
+}
+.block{
+    width: 15px;
+    height: 15px;
+    float: left;
+}
+/*======================================================================================================================
+                                                 6、按钮样式
+======================================================================================================================*/
+.button_min{
+    display: block;
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    float: left;
+    border: none;
+    color: #fff;
+    background: #313131;
+}
+.button{
+    color: #929292;
+}
+.button:hover{
+    color: #313131;
+}
+.button_min:hover{
+    color:#313131;
+    background: #939393;
+}
+.button_bule{
+    display: block;
+    cursor: pointer;
+    float: left;
+    color: #fff;
+    text-align: center;
+    background: #029ff0;
+    border: none;
+}
+.button_bule:hover{
+    background: #969696;
+    color: #fff;
+    border: none;
+}
+.button_orange{
+    display: block;
+    cursor: pointer;
+    float: left;
+    color: #fff;
+    text-align: center;
+    background: #f49c34;
+    border: none;
+}
+.button_orange:hover{
+    background: #969696;
+    border: none;
+}
+.button_grey{
+    display: block;
+    cursor: pointer;
+    float: left;
+    color: #fff;
+    text-align: center;
+    background: #c3c0b9;
+    border: none;
+}
+.button_grey:hover{
+    background: #969696;
+    border: none;
+}
+.button_red{
+    display: block;
+    cursor: pointer;
+    float: left;
+    color: #fff;
+    text-align: center;
+    background:red;
+    border: none;
+}
+.button_red:hover{
+    background: #969696;
+    border: none;
+}
+
+.fast{
+    display: block;
+    cursor: pointer;
+    width: 120px;
+    height: 25px;
+    margin-right: 5px;
+    background: #f1f1f1;
+}
+.fast_active{
+    display: block;
+    cursor: pointer;
+    width: 120px;
+    height: 25px;
+    background: #ddd;
+    margin-right: 5px;
+}
+.fast:hover{
+    background: #ddd;
+}
+.quick_max{
+    display: block;
+    width:55px;
+    height: 55px;
+}
+.quick_mid{
+    display: block;
+    width:35px;
+    height: 35px;
+}
+.block_50{
+    display: block;
+    width: 50px;
+    height: 50px;
+    margin: 0 auto;
+    line-height: 100px;
+    cursor: pointer;
+}
+.block_50:hover{
+    color: #ddd;
+}
+
+
+/*======================================================================================================================
+                                                 7、标签样式
+======================================================================================================================*/
+a.label{
+    display: block;
+    cursor: pointer;
+    float: left;
+    padding: 10px;
+    margin-left: 5px;
+    background: #fff;
+    border: #ddd;
+}
+a.label_active{
+    display: block;
+    cursor: pointer;
+    float: left;
+    padding: 10px;
+    margin-left: 5px;
+    background: #ddd;
+    border: #fff;
+}
+/*======================================================================================================================
+                                                  8、图片样式
+======================================================================================================================*/
+/*img{
+    width: 100%;
+    height: 100%;
+}*/
+.userimg{
+    border: 2px solid #fff;
+    -moz-box-shadow: 1px 1px 3px #999999;
+    -webkit-box-shadow: 1px 1px 3px #999999;
+    box-shadow: 1px 1px 3px #999999;
+}
+.logo{
+    width:126px;
+    height:50px;
+}
+/*======================================================================================================================
+                                                 9、边框
+======================================================================================================================*/
+.boder{
+    border: 1px solid #bbb;
+}
+.boder_white{
+    border:1px solid white;
+}
+.boder_left{
+    border-left: 1px solid #bbb;
+}
+.border_top{
+    border-top: 1px solid #bbb;
+}
+.border_right{
+    border-right: 1px solid #bbb;
+}
+.border_bottom{
+    border-bottom: 1px solid #bbb;
+}
+.border_none{
+    border: none;
+}
+.border_botton_orange{
+    border-bottom: 3px solid #f49c34;
+}
+.border_ddd{
+    border: 1px solid #ddd;
+}
+/*======================================================================================================================
+                                                 10、圆角
+======================================================================================================================*/
+.radius{
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    border-radius:5px;
+}
+.radius_all{
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    border-radius:5px;
+}
+.radius_10{
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    border-radius:10px;
+}
+.radius_15{
+    -moz-border-radius:15px;
+    -webkit-border-radius:15px;
+    border-radius:15px;
+}
+.radius_20{
+    -moz-border-radius:20px;
+    -webkit-border-radius:20px;
+    border-radius:20px;
+}
+.radius_25{
+    -moz-border-radius:25px;
+    -webkit-border-radius:25px;
+    border-radius:25px;
+}
+.radius_30{
+    -moz-border-radius:30px;
+    -webkit-border-radius:30px;
+    border-radius:30px;
+}
+.radius_35{
+    -moz-border-radius:35px;
+    -webkit-border-radius:35px;
+    border-radius:35px;
+}
+.radius_40{
+    -moz-border-radius:40px;
+    -webkit-border-radius:40px;
+    border-radius:40px;
+}
+.radius_top{
+    -moz-border-radius:5px 5px 0 0;
+    -webkit-border-radius:5px 5px 0 0;
+    border-radius:5px 5px 0 0;
+}
+.radius_bottom{
+    -moz-border-radius:0 0 5px 5px ;
+    -webkit-border-radius:0 0 5px 5px ;
+    border-radius:0 0 5px 5px ;
+}
+.radius_left{
+    -moz-border-radius:5px 0 0 0;
+    -webkit-border-radius:5px 0 0 0;
+    border-radius:5px 0 0 0;
+}
+.radius_left_bottom{
+    -moz-border-radius:0 0 0 5px;
+    -webkit-border-radius:0 0 0 5px;
+    border-radius:0 0 0 5px;
+}
+.radius_right{
+    -moz-border-radius:0 5px 0 0;
+    -webkit-border-radius:0 5px 0 0;
+    border-radius:0 5px 0 0;
+}
+.radius_right_bottom{
+    -moz-border-radius:0 0 5px 0;
+    -webkit-border-radius:0 0 5px 0;
+    border-radius:0 0 5px 0;
+}
+/*======================================================================================================================
+                                                 11、滚动条样式
+======================================================================================================================*/
+.overflow{
+    overflow: auto;
+}
+.overflow_x{
+    overflow: auto;
+    overflow-y: hidden;
+}
+.overflow_y{
+    overflow: auto;
+    overflow-x: hidden;
+}
+/*======================================================================================================================
+                                                12、投影
+======================================================================================================================*/
+.box-shadow_grey{
+    -moz-box-shadow: 1px 1px 3px #999999;
+    -webkit-box-shadow: 1px 1px 3px #999999;
+    box-shadow: 1px 1px 3px #999999;
+}
+.box-shadow_orange{
+    -moz-box-shadow: 1px 1px 3px #e88c1f;
+    -webkit-box-shadow: 1px 1px 3px #e88c1f;
+    box-shadow: 1px 1px 3px #e88c1f;
+}
+
+/*======================================================================================================================
+                                                13、左右浮动
+======================================================================================================================*/
+/*.left{
+    display: block;
+    float: left;
+}
+.right{
+    display: block;
+    float: right;
+}*/
+.span_left{
+    float: left;
+}
+.span_right {
+    float: right;
+    text-align: right;
+}
+.span_text_right{
+    float: right;
+    text-align: right;
+}
+.span_text_left{
+    float: left;
+}
+
+/*======================================================================================================================
+                                                14、透明背景
+======================================================================================================================*/
+.ransparent{
+    background:rgba(0,0,0,0.5);
+    filter:progid:DXImageTransform.Microsoft.gradient(startcolorstr=#7F000000,endcolorstr=#7F000000);
+}
+
+.ransparent_red{
+    background:rgba(255,0,0,0.5);
+    filter:progid:DXImageTransform.Microsoft.gradient(startcolorstr=#7F000000,endcolorstr=#7F000000);
+}
+
+.ransparent_orange{
+    background:rgba(244,156,52,0.5);
+    filter:progid:DXImageTransform.Microsoft.gradient(startcolorstr=#7F000000,endcolorstr=#7F000000);
+}
+.ransparent_blue{
+    background:rgba(2,159,240,0.5);
+    filter:progid:DXImageTransform.Microsoft.gradient(startcolorstr=#7F000000,endcolorstr=#7F000000);
+}
+
+/*======================================================================================================================
+                                                15、线条样式
+======================================================================================================================*/
+.line_blue{
+    display: block;
+    border-bottom: 2px dashed #029ff0;
+}
+.line_grey{
+    display: block;
+    border-bottom: 2px dashed #ccc;
+}
+
+/*======================================================================================================================
+                                                16、padding集合
+======================================================================================================================*/
+.notice-panner1{padding:10px 10px 0 10px;}
+.notice-panner2{padding:5px 10px 0 45px;}
+.notice-panner3{padding:0 14px 0 14px;}
+.navpadding{padding:0 15px 0}
+.rightpadding{padding:10px 10px 0 25px;}
+.rightpadding2{padding:0 0 0 25px;}
+.inside_padding{padding:10px 16px 0 25px;}
+.user_padding{ padding:0 30px 0 15px;}
+.historicalpadding{padding:10px 0 0 25px;}
+.contractpadding{ padding:0 10px 0 10px;}
+.contractpadding_1{ padding:0 10px 0 10px; }
+.table-padding{ padding: 10px 35px 10px 35px;}
+.scope-padding{ padding:10px 25px 0 45px;}
+.create-padding{ padding:10px 45px 0 45px;}
+.seartable-padding{ padding: 10px 30px 10px 30px;}
+.contract_img_padding{ padding: 10px 50px 10px 10px;}
+.scope-search-padding{padding: 10px 5px 10px 0;}
+.architecture_padding{ padding: 0 15px 0 15px;}
+.architecture_table_padding{ padding: 10px 15px 0 0;}
+.architecture_table_attribute_padding{ padding:10px 30px 10px 10px; }
+.architecturepadding{ padding: 10px; }
+.padding15{ padding: 15px; }
+.padding_table{
+    padding: 10px 15px 0 40px;
+}
+.padding_lease{
+    padding: 0 15px 0 6px;
+}
+
+
+
+
+
+
+/*0610新增*/
+.configuration_padding{	padding:0px;}
+
+/*0609新增*/
+.building_padding{padding:10px;}
+.building_padding_area{ padding: 5px;}
+.acreage_padding{	padding:10px 32px;}
+
+.buddinga_padding{
+    padding: 0 0 0 5px;
+}
+.budding_table_padding{
+    padding: 5px;
+}

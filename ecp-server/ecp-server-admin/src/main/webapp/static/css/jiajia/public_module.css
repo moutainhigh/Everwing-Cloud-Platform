@@ -1,0 +1,780 @@
+/*
+
+NAME: 佘冰
+用途: 公用模块表
+创建时间：2015-07-10
+版本号：V0.1
+修改时间：2015-07-20
+修改人：王双玲
+
+目录列表;
+    1、小块模版
+    2、表格
+    3、头部导航
+    4、中间导航
+    5、面板导航
+    6、弹出框
+    7、表单-行3
+    8、表单-行2
+    9、保存、取消按钮
+	10、进度条
+	11、FORM表单项项二列
+	12、FORM表单项项三列
+	13、FORM表单项项四列
+
+*/
+.clear{
+    clear:both;
+}
+/*======================================================================================================================
+                                                  1、小块模版
+======================================================================================================================*/
+.pannel_box{
+    width:400px;
+    height:250px;
+}
+/***************小块模版开始***************/
+.pannel{
+    width:100%;
+    height:100%;
+    border:1px solid #CCCCCC;
+}
+.pannel_head{
+    padding:5px 0 5px 20px;
+    background:#CACACA;
+}
+.pannel_head span{
+    width:20px;
+    height:20px;
+    float:right;
+    line-height:20px;
+    margin-right:10px;
+    text-align:center;
+    color:#FFFFFF;
+    background:#959595;
+}
+.pannel_body{
+    background:#DBDBDB;
+}
+/***************小块模版结束***************/
+
+.text_pannel{
+    padding: 10px;
+}
+.text_pannel span{
+    display: block;
+    width: 33%;
+    float: left;
+}
+/*======================================================================================================================
+                                                  2、表格
+======================================================================================================================*/
+.table{
+    width: 100%;
+}
+.table_box{
+    width:800px;
+    height:auto;
+    margin-top:30px;
+}
+/***************表格开始***************/
+.table table{
+    border-top:1px solid #ddd;
+    border-right:1px solid #ddd;
+}
+.table td{
+    text-align:center;
+    border-left:1px solid #ddd;
+    border-bottom:1px solid #ddd;
+}
+.table select,
+.table input{
+    width: 90%;
+    height: 25px;
+    line-height: 25px;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    border-radius:5px;
+    border: 1px solid #ddd;
+}
+.table input.del{
+    width: 22px ;
+    height: 22px;
+    background: url("../images/0602/del.png") center top no-repeat;
+    background-size: 100% 100%;
+    text-indent: -10000px;
+    border: none;
+}
+.table input.modify{
+    width: 22px ;
+    height: 22px;
+    background: url("../images/0602/modify.png") center top no-repeat;
+    background-size: 100% 100%;
+    text-indent: -10000px;
+    border: none;
+    margin: 0 5px;
+}
+.table input.checkbox,
+.table input.radio {
+    float: left;
+    width: 15px;
+    height: 15px;
+}
+.table input.checkbox_info,
+.table input.radio_info {
+    width: 15px;
+    height: 15px;
+}
+.table span{
+    float: left;
+    display: block;
+    line-height: 25px;
+}
+.table_nav{
+    height:40px;
+    background:#ddd;
+}
+.table_nav td{
+    border-bottom:3px solid #f49c34;
+}
+.table td a{
+    margin:0 10px;
+}
+
+/***************表格结束***************/
+
+
+/*======================================================================================================================
+                                                  3、头部导航
+======================================================================================================================*/
+.head_nav_box{
+    width:90%;
+    height:auto;
+    margin-top:20px;
+}
+/***************头部导航开始***************/
+.head_nav_header{
+    width:100%;
+    height:auto;
+}
+.head_nav_header a{
+    display:block;
+    width:120px;
+    height:35px;
+    padding-top:4px;
+    text-align:center;
+    color:#FFFFFF;
+    background:#939393;
+    text-decoration:none;
+    border-top:4px solid #939393;
+}
+.head_nav_header a:hover{
+    color:#333333;
+    background:#ddd;
+    border-top:4px solid #f49c34;
+}
+
+/***************头部导航结束***************/
+
+
+
+/*======================================================================================================================
+                                                  4、中部导航
+======================================================================================================================*/
+.medium_nav_box{
+    width:100%;
+    height:auto;
+    margin-top:20px;
+    background:#00CCFF;
+}
+/***************中部导航开始***************/
+.medium_nav{
+    width:100%;
+    padding:10px 0 10px 30px;
+    height:auto;
+}
+.medium_nav a{
+    float:left;
+    display:block;
+    width:100px;
+    height:30px;
+    margin-right:30px;
+
+    color:#FFFFFF;
+    background:#949494;
+    line-height:30px;
+    text-align:center;
+    text-decoration:none;
+}
+.medium_nav a:hover{
+    color:#333333;
+    text-decoration:blink;
+}
+/***************中部导航结束***************/
+
+
+/*======================================================================================================================
+                                                  5、面板导航
+======================================================================================================================*/
+.pannel_nav_box{
+    width:90%;
+    margin-top:20px;
+    height:auto;
+}
+/***************面板导航开始***************/
+.pannel_nav{
+    width:100%;
+    height:auto;
+}
+.pannel_nav_header a{
+    position:relative;
+    display:block;
+    float:left;
+    width:100px;
+    height:40px;
+    margin-right:5px;
+    color:#666666;
+    background:#FFFFFF;
+    line-height:40px;
+    text-align:center;
+    border-top:1px solid #CCCCCC;
+    border-left:1px solid #CCCCCC;
+    border-right:1px solid #CCCCCC;
+    z-index:1;
+}
+.pannel_nav_header a:hover{
+    color:#333333;
+    text-decoration:blink;
+    z-index:10;
+}
+.pannel_nav_header_this{
+    color:#333333;
+    position:relative;
+    z-index:10;
+}
+.pannel_nav_body{
+    position:relative;
+    margin-top:-2px;
+    padding:10px;
+    background:#FFFFFF;
+    border:1px solid #CCC;
+    border-top:2px solid #CCC;
+    z-index:5;
+}
+/***************面板导航结束***************/
+
+
+/*======================================================================================================================
+                                                  6、弹出框
+======================================================================================================================*/
+.pop_box{
+    width:300px;
+    height:auto;
+    margin-top:20px;
+}
+/***************弹出框开始***************/
+.pop{
+    width:100%;
+    height:auto;
+}
+.pop_header{
+    padding:5px 0;
+    background:#CACACA;
+    text-align:center;
+    border-bottom:3px solid #f49c34;
+}
+.pop_body{
+    padding:10px;
+    border:1px solid #CCCCCC;
+}
+/***************弹出框结束***************/
+
+
+
+
+/*======================================================================================================================
+                                                  7、表单-行3
+======================================================================================================================*/
+.form_col3_box{
+    width:100%;
+    height:auto;
+    margin-top:20px;
+}
+/***************表单-行3开始***************/
+.form_col3{
+    width:100%;
+}
+.form_col3 li{
+    float:left;
+    width:30%;
+}
+.form_col3 input{
+    width:70%;
+    height:25px;
+    border:1px solid #CCCCCC;
+}
+/***************表单-行3结束***************/
+
+
+/*======================================================================================================================
+                                                  8、表单-行2
+======================================================================================================================*/
+.form_col2_box{
+    width:100%;
+    height:auto;
+    margin-top:20px;
+}
+/***************表单-行2开始***************/
+.form_col2{
+    width:100%;
+}
+.form_col2 li{
+    float:left;
+    width:50%;
+}
+.form_col2 input{
+    width:50%;
+    height:25px;
+    border:1px solid #CCCCCC;
+}
+/***************表单-行2结束***************/
+
+
+
+
+
+/*======================================================================================================================
+                                                  9、保存、取消按钮
+======================================================================================================================*/
+.save_concel_botton_box{
+    width:100%;
+    height:auto;
+    margin-top:20px;
+}
+/***************保存、取消按钮开始***************/
+.save_concel_botton a{
+    margin-left:10px;
+    color:#FFFFFF;
+    padding:5px 20px 5px 20px;
+    background:#009DEE;
+}
+/***************保存、取消按钮结束***************/
+
+
+
+/*======================================================================================================================
+                                                  10.空板块
+======================================================================================================================*/
+.pannel_blank_box{
+    width:300px;
+    height:auto;
+    margin-top:20px;
+}
+/***************空板块开始***************/
+.pannel_blank{
+    width:100%;
+    height:auto;
+}
+.pannel_blank_header{
+    padding:5px 0 5px 20px;
+    background:#CACACA;
+}
+.pannel_blank_body{
+    padding:10px;
+    background:#F5F5F5;
+}
+/***************空板块结束***************/
+
+
+/*======================================================================================================================
+                                                  10.进度条
+======================================================================================================================*/
+.progress_bar{
+    width:100%;
+}
+.progress_bar a{
+    display:block;
+    float:left;
+}
+.progress_bar span{
+    display:block;
+    float:left;
+    width:50px;
+    height:14px;
+}
+/*======================================================================================================================
+                                                 11、FORM表单项项二列
+======================================================================================================================*/
+.form_list{
+    width: 100%;
+}
+.form_list ul{
+    margin-top: -20px;
+    margin-left: -15px;
+}
+.form_list li{
+    float: left;
+    width: 100%;
+    padding: 5px 0;
+    text-align: left;
+}
+.form_list li a{
+    margin-left: 5px;
+}
+.form_list li span,
+.form_list li input,
+.form_list li select{
+    height: 25px;
+    line-height: 25px;
+}
+.form_list li span{
+    float: left;
+    display: block;
+    width: 100px;
+}
+.form_list li b{
+    float: left;
+    display: block;
+}
+.form_list li span.text{
+    float: left;
+    display: block;
+    text-align: center;
+    width: 50px;
+}
+.form_list li input,
+.form_list li select{
+    float: left;
+    margin-left: 15px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+.form_list li.merge{
+    width: 100%;
+}
+.form_list li.merge p{
+    display: block;
+    width: 16.5%;
+    height: 25px;
+    line-height: 25px;
+    float: left;
+}
+.form_list li.merge select{
+    float: left;
+    margin-left: 15px;
+    width: 50%;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+.form_list li input.checkbox,
+.form_list li input.radio{
+    float: left;
+    width: 15px;
+    height: 15px;
+}
+.form_list li.merge p input{
+    width: 60%;
+    float: left;
+}
+.form_list li.merge textarea{
+    width: 75%;
+    height: 100px;
+    margin-left: 15px;
+    text-align: left;
+}
+.form_list li div.width40{
+    float: left;
+    height: 260px;
+    width: 31%;
+    margin-left: 15px;
+}
+.form_list li div.width20{
+    float: left;
+    height: 260px;
+    width: 10%;
+    margin-left: 15px;
+    text-align: center;
+}
+.form_list li.merge select.merge{
+    display: block;
+    width: 50%;
+    float: left;
+}
+.form_list input.input_width{
+    width: 18%;
+}
+
+
+/*======================================================================================================================
+                                                 12、FORM表单项项三列
+======================================================================================================================*/
+.form_list_three{
+    width: 100%;
+}
+.form_list_three ul{   margin-top: -5px;
+    margin-left: -15px;
+}
+.form_list_three li{
+    float: left;
+    width: 33%;
+    padding: 5px 0;
+    line-height: 25px;
+}
+.form_list_three li input{
+    margin-left:10px;
+    border-radius:5px;
+    border: 1px solid #bbb;
+}
+.form_list_three li.one{
+    width: 10%;
+}
+.form_list_three li a{
+    margin-left: 5px;
+}
+.form_list_three li.two{
+    width: 45%;
+}
+.form_list_three li.three{
+    width: 30%;
+}
+.form_list_three li.one input{
+    float: left;
+}
+.form_list_three li.one span{
+    margin-left: 5px;
+    float: left;
+}
+.form_list_three li span{
+    float: left;
+    display: block;
+}
+.form_list_three li span{
+    float: left;
+    display: block;
+}
+.form_list_three li.one p{
+    float: left;
+    margin-left: 5px;
+    width: 20px;
+    height: 20px;
+}
+.form_list_three li.two input{
+    float: left;
+    width: 25%;
+    height: 25px;
+    line-height: 25px;
+}
+.form_list_three li.two span{
+    margin-left: 5px;
+    float: left;
+    height: 25px;
+    line-height: 25px;
+    width: 100px;
+}
+.form_list_three li.two span.text{
+    width: 30px;
+}
+.form_list_three li.two select{
+    float: left;
+    width: 25%;
+    height: 25px;
+    line-height: 25px;
+}
+.form_list_three li.two select.merge,
+.form_list_three li.two input.merge{
+    width: 58%;
+}
+.form_list_three li.three input{
+    float: left;
+    width: 45%;
+    height: 25px;
+    line-height: 25px;
+}
+.form_list_three li.three span{
+    margin-left: 5px;
+    float: left;
+    height: 25px;
+    line-height: 25px;
+    width: 100px;
+}
+.form_list_three li.three span.text{
+    width: 30px;
+}
+.form_list_three li.three select{
+    float: left;
+    width: 45%;
+    height: 25px;
+    line-height: 25px;
+}
+.form_list_three li.three select.merge,
+.form_list_three li.three input.merge{
+    width: 58%;
+}
+.form_list_three li.merge{
+    width: 90%;
+}
+.form_list_three li.merge span{
+    float: left;
+    width: 100px;
+    margin-left: 5px;
+}
+.form_list_three li.merge input,
+.form_list_three li.merge select{
+    float: left;
+    width: 10%;
+    height: 25px;
+    line-height: 25px;
+}
+.form_list_three li.merge span.min_text{
+    width: 50px;
+    text-align: center;
+}
+.form_list_three li span.mid_text{
+    width: 80px;
+}
+
+/*======================================================================================================================
+                                                 13、FORM表单项项四列
+======================================================================================================================*/
+.form_list_four{
+    width: 100%;
+}
+.form_list_four ul{
+    margin-left: -20px;
+}
+.form_list_four li{
+    float: left;
+    width: 25%;
+    padding: 5px 0;
+}
+.form_list_four li span,
+.form_list_four li input,
+.form_list_four li select{
+    height: 25px;
+    line-height: 25px;
+}
+.form_list_four li span{
+    float: left;
+    display: block;
+    line-height: 25px;
+}
+.form_list_four li span.text{
+    float: left;
+    display: block;
+    width: 30px;
+}
+.form_list_four li span.text_mid{
+    float: left;
+    display: block;
+    width: 70px;
+}
+.form_list_four li a{
+    margin-left: 5px;
+}
+.form_list_four li input,
+.form_list_four li select{
+    float: left;
+    margin-left: 15px;
+    width: 50%;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+.form_list_four li.merge{
+    width: 100%;
+}
+.form_list_four li.merge select{
+    display: block;
+    width: 15%;
+    float: left;
+}
+.form_list_four li input.checkbox,
+.form_list_four li input.radio{
+    float: left;
+    width: 15px;
+    height: 15px;
+}
+.form_list_four li.merge2{
+    width: 50%;
+    float: left;
+}
+.form_list_four li.merge2 span{
+    width: 50px;
+}
+.form_list_four li.merge2 input{
+    width: 70%;
+}
+
+/*======================================================================================================================
+                                                 14、下拉菜单
+======================================================================================================================*/
+.pull-down_menu {
+
+}
+.pull-down_menu li span.icon{
+    float: right;
+}
+.pull-down_menu li{
+    text-align: right;
+    position: relative;
+    width: 80px;
+}
+.pull-down_menu li ul{
+    display: none;
+}
+
+.pull-down_menu li:hover ul{
+    display: block;
+    position: absolute;
+    z-index: 10;
+    right: 0;
+    top:25px;
+}
+.pull-down_menu li:hover ul li{
+    text-align: center;
+    padding: 5px;
+    background: #939393;
+    color:#fff;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+.pull-down_menu li:hover ul li:hover{
+    background:#f49c34;
+}
+
+/*======================================================================================================================
+                                                 14、下拉菜单
+======================================================================================================================*/
+.pull-down_menu {
+
+}
+.pull-down_menu li span.icon{
+    float: right;
+}
+.pull-down_menu li{
+    text-align: right;
+    position: relative;
+    width: 80px;
+}
+.pull-down_menu li ul{
+    display: none;
+}
+
+.pull-down_menu li:hover ul{
+    display: block;
+    position: absolute;
+    z-index: 10;
+    right: 0;
+    top:25px;
+}
+.pull-down_menu li:hover ul li{
+    text-align: center;
+    padding: 5px;
+    background: #939393;
+    color:#fff;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+.pull-down_menu li:hover ul li:hover{
+    background:#f49c34;
+
+}

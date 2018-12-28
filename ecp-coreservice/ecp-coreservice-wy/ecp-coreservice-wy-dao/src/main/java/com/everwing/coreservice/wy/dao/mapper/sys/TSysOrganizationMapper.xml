@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.sys.TSysOrganizationMapper">
+    <resultMap id="baseResultMap" type="TSysOrganization">
+        <result property="organizationId" column="organization_id"/>
+        <result property="type" column="type"/>
+        <result property="code" column="code"/>
+        <result property="pid" column="pid"/>
+        <result property="description" column="description"/>
+        <result property="createrId" column="creater_id"/>
+        <result property="createrName" column="creater_name"/>
+        <result property="modifyId" column="modify_id"/>
+        <result property="modifyName" column="modify_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+
+    <resultMap id="listResultMap" type="TSysOrganizationList" extends="baseResultMap">
+
+    </resultMap>
+
+    <select id="findOrganizationTree" parameterType="TSysOrganizationSearch" resultMap="listResultMap">
+        SELECT t1.* FROM
+        (
+            SELECT
+                t.organization_id,
+                t.pid,
+                t.`code`,
+                t.type,
+                CASE t.type
+                WHEN 'company' THEN (SELECT CONCAT('公司|',c.name) FROM t_sys_company c WHERE c.company_id = t.`code`)
+                WHEN 'department' THEN (SELECT CONCAT('部门|',d.name) FROM t_sys_department d WHERE d.department_id = t.`code`)
+                WHEN 'project' THEN (SELECT CONCAT('项目|',p.name) FROM t_sys_project p WHERE p.project_id = t.`code`)
+                WHEN 'role' THEN (SELECT CONCAT('岗位|',r.role_name) FROM t_sys_role r WHERE r.role_id = t.`code`)
+                WHEN 'staff' THEN (SELECT CONCAT('员工|',u.staff_name,'(',u.staff_number,')') FROM t_sys_user u WHERE u.staff_number = t.`code`)
+                ELSE '*'
+                END AS description
+            FROM t_sys_organization t
+        )t1
+        WHERE 1=1
+        <if test="code != null and code !=  ''">
+            AND t1.code = #{code}
+        </if>
+        <if test="type != null and type !=  ''">
+            AND t1.type = #{type}
+        </if>
+        <if test="pid != null and pid != ''">
+            AND t1.pid = #{pid}
+        </if>
+        ORDER BY t1.description
+    </select>
+
+    <select id="findByCondition" parameterType="TSysOrganizationSearch" resultMap="listResultMap">
+        SELECT * FROM t_sys_organization t WHERE 1=1
+        <if test="organizationId != null and organizationId !=  ''">
+            AND t.organization_id = #{organizationId}
+        </if>
+        <if test="code != null and code !=  ''">
+            AND t.code = #{code}
+        </if>
+        <if test="type != null and type !=  ''">
+            AND t.type = #{type}
+        </if>
+        <if test="pid != null and pid != ''">
+            AND t.pid = #{pid}
+        </if>
+    </select>
+
+
+    <select id="findRolesByStaffNumber" parameterType="String" resultMap="listResultMap">
+        SELECT t.code FROM t_sys_organization t WHERE t.type = 'role' AND t.organization_id IN(SELECT t1.pid FROM t_sys_organization t1 WHERE t1.type = 'staff' AND t1.code = #{0})
+    </select>
+
+
+    <insert id="insert" parameterType="TSysOrganization">
+        INSERT INTO t_sys_organization (
+            organization_id,
+            code,
+            pid,
+            description,
+            type,
+            creater_id,
+            creater_name,
+            create_time
+        )
+        VALUES (
+            #{organizationId},
+            #{code},
+            #{pid},
+            #{description},
+            #{type},
+            #{createrId},
+            #{createrName},
+        sysdate()
+        )
+    </insert>
+
+    <update id="modify" parameterType="TSysOrganization">
+        UPDATE t_sys_organization
+        <set>
+            code = #{code},
+            pid = #{pid},
+            description = #{description},
+            type = #{type},
+            modify_id = #{modifyId},
+            modify_name = #{modifyName},
+            modify_time = sysdate()
+        </set>
+        WHERE 1=1
+        <if test="organizationId != null and organizationId != ''">
+            AND organization_id = #{organizationId}
+        </if>
+    </update>
+
+    <delete id="delete" parameterType="TSysOrganization">
+        delete from t_sys_organization where 1=1
+        <if test="organizationId != null and organizationId != ''">
+            AND organization_id = #{organizationId}
+        </if>
+        <if test="type != null and type != ''">
+            AND type = #{type}
+        </if>
+        <if test="code != null and code != ''">
+            AND code = #{code}
+        </if>
+    </delete>
+
+    <select id="selectByCAndP" resultType="Map">
+        SELECT so.organization_id organizationId,sd.name
+        FROM t_sys_organization so
+          LEFT JOIN t_sys_department sd ON so.code=sd.department_id
+        WHERE so.pid=(
+          SELECT organization_id
+          FROM t_sys_organization
+          WHERE type = 'project'  AND  code=#{projectId})
+    </select>
+</mapper>

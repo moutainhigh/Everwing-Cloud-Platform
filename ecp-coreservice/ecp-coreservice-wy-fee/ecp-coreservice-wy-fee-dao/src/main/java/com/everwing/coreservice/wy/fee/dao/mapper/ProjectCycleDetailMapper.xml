@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.coreservice.wy.fee.dao.mapper.ProjectCycleDetailMapper">
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.fee.entity.ProjectCycleDetail">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="cycle_id" jdbcType="VARCHAR" property="cycleId" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="account_type" jdbcType="INTEGER" property="accountType" />
+    <result column="charge_type" jdbcType="INTEGER" property="chargeType" />
+    <result column="business_type" jdbcType="INTEGER" property="businessType" />
+    <result column="pay_channel" jdbcType="INTEGER" property="payChannel" />
+    <result column="house_code_new" jdbcType="VARCHAR" property="houseCodeNew" />
+    <result column="business_opera_detail" jdbcType="VARCHAR" property="businessOperaDetail" />
+    <result column="rate_after" jdbcType="DECIMAL" property="rateAfter" />
+    <result column="rate" jdbcType="DECIMAL" property="rate" />
+    <result column="rate_fee" jdbcType="DECIMAL" property="rateFee" />
+    <result column="pay_way" jdbcType="INTEGER" property="payWay" />
+  </resultMap>
+  <resultMap id="hasScheduleInfoResultMap" extends="BaseResultMap" type="com.everwing.coreservice.common.wy.fee.entity.AccountAddCycleParameter">
+    <result column="pay_type" jdbcType="INTEGER" property="payType" />
+    <result column="building_full_name" jdbcType="VARCHAR" property="buildingFullName" />
+    <result column="countId" jdbcType="INTEGER" property="countId" />
+    <result column="accountMoney" jdbcType="DECIMAL" property="accountMoney" />
+    <result column="afterTaxAmountTotal" jdbcType="DECIMAL" property="afterTaxAmountTotal" />
+    <result column="taxAmountTotal" jdbcType="DECIMAL" property="taxAmountTotal" />
+    <result column="house_code" jdbcType="VARCHAR" property="houseCode" />
+  </resultMap>
+
+
+  <sql id="Base_Column_List">
+    id, cycle_id, amount, create_time, create_by, description, account_type, charge_type, business_type,pay_channel,
+    house_code_new, business_opera_detail, rate_after, rate, rate_fee
+  </sql>
+
+  <sql id="Base_If">
+    <if test="srcType != null and srcType != ''">
+      AND src_type = #{srcType}
+    </if>
+   </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_project_cycle_detail
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="counCycleDetailAmount" resultMap="hasScheduleInfoResultMap">
+    select count(id) countId,ifnull(SUM(amount),0) accountMoney,ifnull(SUM(rate_after),0) afterTaxAmountTotal,ifnull(SUM(rate_fee),0) taxAmountTotal
+    from t_project_cycle_detail a
+    WHERE cycle_id in(
+    select id from t_project_cycle_account
+    where project_account_id =
+    (select id from t_project_account
+    where  company_id=#{companyId} and project_id=#{projectId} )
+    )
+    <if test="accountType != null and accountType != ''">
+      AND account_type=#{accountType}
+    </if>
+    <if test="chargeType != null and chargeType  != ''">
+      AND charge_Type=#{chargeType }
+    </if>
+    <if test="startTime != null and startTime != ''">
+      AND  DATE_FORMAT(#{startTime},'%Y-%m-%d %H:%i:%S') <![CDATA[ <= ]]>  DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i:%S')
+    </if>
+    <if test="endTime != null and endTime != ''">
+      AND  DATE_FORMAT(#{endTime},'%Y-%m-%d %H:%i:%S') <![CDATA[ >= ]]>  DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i:%S')
+    </if>
+    <if test="payType != null and payType != ''">
+      and business_opera_detail in(
+      select batch_no FROM t_bs_pay_info where pay_type= #{payType})
+    </if>
+  </select>
+  <select id="selectByOperaIdAndType"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_project_cycle_detail
+    where  business_opera_detail=#{businessOperaDetail}
+  </select>
+  <select id="listPageSelectByAllDetailAndIdAll" resultMap="hasScheduleInfoResultMap">
+    select
+    a.*,c.building_full_name,b.pay_type,c.house_code
+    from t_project_cycle_detail a  left join  t_bs_pay_info b on a.business_opera_detail =b.batch_no
+    left join tc_building c on a.house_code_new=c.house_code
+    where a.cycle_id in(
+    select id from t_project_cycle_account
+    where project_account_id =
+    (select id from t_project_account
+    where  company_id=#{companyId} and project_id=#{projectId} )
+    )
+
+    <if test="accountType != null and accountType != ''">
+      AND  a.account_type=#{accountType}
+    </if>
+    <if test="chargeType != null and chargeType != ''">
+      AND charge_type=#{chargeType}
+    </if>
+    <if test="startTime != null and startTime != ''">
+          AND  DATE_FORMAT(#{startTime},'%Y-%m-%d %H:%i:%S') <![CDATA[ <= ]]>  DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i:%S')
+    </if>
+    <if test="endTime != null and endTime != ''">
+      AND  DATE_FORMAT(#{endTime},'%Y-%m-%d %H:%i:%S') <![CDATA[ >= ]]>  DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i:%S')
+    </if>
+    <if test="payType != null and payType != ''">
+      and business_opera_detail in(
+      select batch_no FROM t_bs_pay_info where pay_type= #{payType})
+    </if>
+  </select>
+  <select id="selectByAllDetailAndIdAll" resultMap="hasScheduleInfoResultMap">
+    select
+      <include refid="Base_Column_List"/>,c.building_full_name,b.pay_type
+    from t_project_cycle_detail a,t_bs_pay_info b,bs_building c
+    where a.cycle_id= #{cycleId}
+    and a.business_opera_detail =b.id
+    and a.house_code_new=c.building_code
+    <if test="accountType != null and accountType != ''">
+      AND account_type=#{accountType}
+    </if>
+    <if test="chargeType != null and changType != ''">
+      AND charge_Type=#{chargeType}
+    </if>
+    <if test="startTime != null and startTime != ''">
+      AND  DATE_FORMAT(#{startTime},'%Y-%m-%d %H:%i:%S') <![CDATA[ >= ]]>  DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%S')
+    </if>
+    <if test="endTime != null and endTime != ''">
+      AND  DATE_FORMAT(#{endTime},'%Y-%m-%d %H:%i:%S') <![CDATA[ <= ]]>  DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%S')
+    </if>
+    <if test="payType != null and payType != ''">
+      and business_opera_detail in(
+      select id FROM t_bs_pay_info where pay_type= #{payType})
+    </if>
+
+
+
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_project_cycle_detail
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="ProjectCycleDetail">
+    insert into t_project_cycle_detail (id, cycle_id, amount, 
+      create_time, create_by, description, 
+      account_type, charge_type,business_type,pay_channel, house_code_new,
+      business_opera_detail, rate_after, rate, 
+      rate_fee)
+    values (#{id,jdbcType=VARCHAR}, #{cycleId,jdbcType=VARCHAR}, #{amount,jdbcType=DECIMAL}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{accountType,jdbcType=INTEGER}, #{chargeType,jdbcType=INTEGER},#{businessType,jdbcType=INTEGER},#{payChannel,jdbcType=INTEGER}, #{houseCodeNew,jdbcType=VARCHAR},
+      #{businessOperaDetail,jdbcType=VARCHAR}, #{rateAfter,jdbcType=DECIMAL}, #{rate,jdbcType=DECIMAL}, 
+      #{rateFee,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="ProjectCycleDetail">
+    insert into t_project_cycle_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="cycleId != null">
+        cycle_id,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="accountType != null">
+        account_type,
+      </if>
+      <if test="chargeType != null">
+        charge_type,
+      </if>
+      <if test="businessType != null">
+        business_type,
+      </if>
+      <if test="payChannel != null">
+        pay_channel,
+      </if>
+      <if test="houseCodeNew != null">
+        house_code_new,
+      </if>
+      <if test="businessOperaDetail != null">
+        business_opera_detail,
+      </if>
+      <if test="rateAfter != null">
+        rate_after,
+      </if>
+      <if test="rate != null">
+        rate,
+      </if>
+      <if test="rateFee != null">
+        rate_fee,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="cycleId != null">
+        #{cycleId,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="accountType != null">
+        #{accountType,jdbcType=INTEGER},
+      </if>
+      <if test="chargeType != null">
+        #{chargeType,jdbcType=INTEGER},
+      </if>
+      <if test="businessType != null">
+        #{businessType,jdbcType=INTEGER},
+      </if>
+      <if test="payChannel != null">
+        #{payChannel,jdbcType=INTEGER},
+      </if>
+      <if test="houseCodeNew != null">
+        #{houseCodeNew,jdbcType=VARCHAR},
+      </if>
+      <if test="businessOperaDetail != null">
+        #{businessOperaDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="rateAfter != null">
+        #{rateAfter,jdbcType=DECIMAL},
+      </if>
+      <if test="rate != null">
+        #{rate,jdbcType=DECIMAL},
+      </if>
+      <if test="rateFee != null">
+        #{rateFee,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="ProjectCycleDetail">
+    update t_project_cycle_detail
+    <set>
+      <if test="cycleId != null">
+        cycle_id = #{cycleId,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="accountType != null">
+        account_type = #{accountType,jdbcType=INTEGER},
+      </if>
+      <if test="chargeType != null">
+        charge_type = #{chargeType,jdbcType=INTEGER},
+      </if>
+      <if test="businessType != null">
+        business_type=#{businessType,jdbcType=INTEGER},
+      </if>
+      <if test="payChannel != null">
+        pay_channel=#{payChannel,jdbcType=INTEGER},
+      </if>
+      <if test="houseCodeNew != null">
+        house_code_new = #{houseCodeNew,jdbcType=VARCHAR},
+      </if>
+      <if test="businessOperaDetail != null">
+        business_opera_detail = #{businessOperaDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="rateAfter != null">
+        rate_after = #{rateAfter,jdbcType=DECIMAL},
+      </if>
+      <if test="rate != null">
+        rate = #{rate,jdbcType=DECIMAL},
+      </if>
+      <if test="rateFee != null">
+        rate_fee = #{rateFee,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="ProjectCycleDetail">
+    update t_project_cycle_detail
+    set cycle_id = #{cycleId,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      account_type = #{accountType,jdbcType=INTEGER},
+      charge_type = #{chargeType,jdbcType=INTEGER},
+      business_type=#{businessType,jdbcType=INTEGER},
+      pay_channel=#{payChannel,jdbcType=INTEGER},
+      house_code_new = #{houseCodeNew,jdbcType=VARCHAR},
+      business_opera_detail = #{businessOperaDetail,jdbcType=VARCHAR},
+      rate_after = #{rateAfter,jdbcType=DECIMAL},
+      rate = #{rate,jdbcType=DECIMAL},
+      rate_fee = #{rateFee,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

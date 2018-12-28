@@ -1,0 +1,111 @@
+/*======================================================================================================================
+                                                 查询条件列表
+======================================================================================================================*/
+.form_list {
+	width: 100%;
+}
+
+.form_list {
+	width: 100%;
+}
+
+.form_list ul {
+	margin-top: 0px;
+	margin-left: 15px;
+}
+
+.form_list ul li {
+	list-style: none;
+}
+
+.form_list li {
+	float: left;
+	width: 80%;
+	padding: 5px 0;
+	text-align: left;
+}
+
+.form_list li input,.form_list li select {
+	height: 25px;
+	line-height: 25px;
+	float: left;
+	margin-left: 15px;
+	border-radius: 5px;
+	border: 1px solid #ddd;
+	width: 250px
+}
+
+input#addpassword{
+	width: 240px;
+	height: 21px;
+	margin-bottom:0px;
+}
+
+.form_list li span {
+	height: 25px;
+	line-height: 25px;
+	float: left;
+	display: block;
+	width: 100px;
+}
+
+/* ============================================================= */
+.form_list_three {
+	width: 100%;
+}
+
+.form_list_three ul {
+	margin-top: 0px;
+	margin-left: 15px;
+}
+
+.form_list_three ul li {
+	list-style: none;
+}
+
+.form_list_three li {
+	float: left;
+	width: 30%;
+	padding: 5px 0;
+	text-align: left;
+}
+
+.form_list_three li input,.form_list_three li select {
+	height: 25px;
+	line-height: 25px;
+	float: left;
+	margin-left: 15px;
+	border-radius: 5px;
+	border: 1px solid #ddd;
+	width: 150px
+}
+
+.form_list_three li span {
+	height: 25px;
+	line-height: 25px;
+	float: left;
+	display: block;
+	width: 80px;
+}
+
+.form_list_button {
+	margin-left: 25px;
+}
+
+.table-body {
+	position: relative;
+	max-height: 700px;
+	width: 99%;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.chart-margin {
+	margin-left: 60px;
+	margin-right: 40px;
+}
+
+.content-height {
+	height: 850px;
+}
+

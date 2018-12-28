@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.delivery.TJgStaffGropMapper">
+	<resultMap id="BaseResultMap" type="TJgStaffGrop">
+		<result column="id" 			property="id" 			jdbcType="VARCHAR" />
+		<result column="user_id" 		property="userId" 		jdbcType="VARCHAR" />
+		<result column="staff_name" 	property="staffName" 	jdbcType="VARCHAR" />
+		<result column="role_name" 		property="roleName" 	jdbcType="VARCHAR" />
+		<result column="role_level" 	property="roleLevel" 	jdbcType="TINYINT"/>
+		<result column="pid" 			property="pid" 			jdbcType="VARCHAR" />
+		<result column="create_time" 	property="createTime" 	jdbcType="TIMESTAMP" />
+		<result column="create_user" 	property="createUser" 	jdbcType="VARCHAR" />
+		<result column="project_id" 	property="projectId" 	jdbcType="VARCHAR"/>
+		<result column="project_name" 	property="projectName" 	jdbcType="VARCHAR"/>
+	</resultMap>
+
+	<insert id ="addStaffGrop" parameterType="TJgStaffGrop">
+		INSERT INTO t_jg_staff_grop 
+		VALUES(
+			#{id},
+			#{userId},
+			#{staffName},
+			#{roleName},
+			#{roleLevel},
+			#{pid},
+			SYSDATE(),
+			#{createUser},
+			#{projectId},
+			#{projectName}
+		)
+	</insert>
+	
+	<select id="getPidInfoByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT
+		  user_id AS userId,
+		  role_name AS roleName,
+		  staff_name AS staffName,
+		  role_level AS roleLevel
+		FROM
+		  t_jg_staff_grop
+		WHERE id =
+		  (SELECT
+		    pid
+		  FROM
+		    t_jg_staff_grop
+		  WHERE user_id = #{0} AND project_id=#{1})
+	</select>
+	
+	<delete id="deleteById" parameterType="String">
+		delete from t_jg_staff_grop
+		where id = #{id}
+	</delete>
+
+	<select id="getMyselfInfoByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT id,staff_name,role_name,role_level FROM t_jg_staff_grop WHERE user_id= #{0} AND project_id=#{1}
+	</select>
+	
+	<select id="getStaffGroupInfo" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT
+		  t1.staff_name shouYin,
+		  t2.staff_name zuZhang,
+		  t3.staff_name chuNa,
+		  t4.staff_name kuaiJi
+		FROM
+		  t_jg_staff_grop t1
+		  LEFT JOIN t_jg_staff_grop t2
+		    ON t1.pid = t2.id
+		  LEFT JOIN t_jg_staff_grop t3
+		    ON t2.pid = t3.id
+		  LEFT JOIN t_jg_staff_grop t4
+		    ON t3.pid = t4.id
+		WHERE t1.user_id = #{0}
+		  AND t1.project_id = #{1}
+	</select>
+	
+	<select id="getProjectListForRole" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT 
+			project_id,
+			project_name,
+			role_level,
+			role_name 
+		FROM t_jg_staff_grop WHERE user_id=#{userId}
+	</select>
+	
+	
+	<select id="findCListStr" parameterType="TJgStaffGrop" resultType="String">
+         SELECT fun_find_group_childrens_by_id(#{id}) AS rslt FROM dual
+    </select>
+	
+	<select id="findByIds" parameterType="java.util.List" resultMap="BaseResultMap">
+		select * from t_jg_staff_grop
+		where 1 != 1
+		or 
+		id in 
+		<foreach collection="list" open="(" item="id" separator="," close=")">
+			#{id}
+		</foreach>
+	</select>
+	
+	<select id="findParentByObj" parameterType="TJgStaffGrop" resultMap="BaseResultMap">
+			SELECT t1.* FROM t_jg_staff_grop t1, t_jg_staff_grop t2
+			WHERE t1.project_id = #{projectId} 
+			AND t1.project_id = t2.project_id
+			AND t2.id = #{id}
+			AND t2.pid = t1.id
+	</select>
+	
+	<select id="findByObj" parameterType="TJgStaffGrop" resultMap="BaseResultMap">
+		select * from t_jg_staff_grop 
+		where 1 = 1
+		<if test="null != id">
+			and id = #{id}
+		</if>
+		<if test="null != projectId">
+			and project_id = #{projectId}
+		</if>
+	</select>
+
+	<select id="findChildrenByObj"  parameterType="TJgStaffGrop" resultMap="BaseResultMap">
+		select * from t_jg_staff_grop
+		where pid = #{id}
+		  and project_id = #{projectId}
+	</select>
+	
+	<select id="loadInfosToTree" parameterType="String" resultMap="BaseResultMap">
+		SELECT * FROM t_jg_staff_grop WHERE project_id = #{projectId} OR project_id IS null
+	</select>
+	
+	<select id="findFirstNode" resultMap="BaseResultMap">
+		select * from t_jg_staff_grop where pid is null
+	</select>
+	
+	<delete id="batchDel" parameterType="java.util.List">
+		delete from t_jg_staff_grop
+		where id in 
+		<foreach collection="list" item="id" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<select id="findCanPayRole" parameterType="String" resultMap="BaseResultMap">
+		select * from t_jg_staff_grop
+		where user_id = #{0}
+		  and role_level in (3,4)
+	</select>
+	
+	<select id="notExistsInOtherProject" resultType="String">
+		select project_id 
+		  from t_jg_staff_grop 
+		 where user_id = #{userId} 
+		   and project_id != #{projectId} 
+		   and role_level in (3,4)
+		 order by create_time desc 
+		 limit 0,1
+	</select>
+
+
+	<select id="getTJgStaffGropByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
+
+		SELECT * from t_jg_staff_grop WHERE pid in  (
+
+		select id  from t_jg_staff_grop  WHERE user_id = #{0} AND project_id=#{1}
+
+		)
+
+	</select>
+</mapper>

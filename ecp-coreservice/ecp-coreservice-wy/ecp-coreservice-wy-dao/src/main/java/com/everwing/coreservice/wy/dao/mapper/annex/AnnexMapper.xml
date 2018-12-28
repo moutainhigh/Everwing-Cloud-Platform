@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.annex.AnnexMapper" >
+  <resultMap id="BaseResultMap" type="Annex" >
+    <id column="annex_id" property="annexId" jdbcType="VARCHAR" />
+    <result column="relation_id" property="relationId" jdbcType="VARCHAR" />
+    <result column="annex_type" property="annexType" jdbcType="TINYINT" />
+    <result column="annex_address" property="annexAddress" jdbcType="VARCHAR" />
+    <result column="annex_name" property="annexName" jdbcType="VARCHAR" />
+    <result column="annex_time" property="annexTime" jdbcType="TIMESTAMP" />
+    <result column="pact_id" property="pactId" jdbcType="VARCHAR" />
+    <result column="is_main" property="isMain" jdbcType="VARCHAR"/>
+    <result column="file_type" property="fileType" jdbcType="VARCHAR"/>
+    <result column="is_used" property="isUsed" jdbcType="TINYINT"/>
+    <result column="md5" property="md5" jdbcType="VARCHAR"/>
+    <result column="upload_file_id" property="uploadFileId" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  
+  <resultMap type="java.util.Map" id="dataResultMap">
+			<result property="columnName" column="column_name" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <!-- 年月查询ID -->
+  <select id="selectIdPerYear" parameterType="Annex" resultMap="dataResultMap">
+  	SELECT 
+				"annex_id" AS "column_name",
+				MAX(IF(month_str = "01", IFNULL(annex_id,0),"")) AS January,
+				MAX(IF(month_str = "02", IFNULL(annex_id,0),"")) AS February,
+				MAX(IF(month_str = "03", IFNULL(annex_id,0),"")) AS March,
+				MAX(IF(month_str = "04", IFNULL(annex_id,0),"")) AS April,
+				MAX(IF(month_str = "05", IFNULL(annex_id,0),"")) AS May,
+				MAX(IF(month_str = "06", IFNULL(annex_id,0),"")) AS June,
+				MAX(IF(month_str = "07", IFNULL(annex_id,0),"")) AS July,
+				MAX(IF(month_str = "08", IFNULL(annex_id,0),"")) AS August,
+				MAX(IF(month_str = "09", IFNULL(annex_id,0),"")) AS September,
+				MAX(IF(month_str = "10", IFNULL(annex_id,0),"")) AS October,
+				MAX(IF(month_str = "11", IFNULL(annex_id,0),"")) AS November,
+				MAX(IF(month_str = "12", IFNULL(annex_id,0),"")) AS December
+			FROM 
+			( 
+				SELECT * FROM (
+					SELECT *, DATE_FORMAT(annex_time,'%m') AS month_str
+					FROM ts_annex 
+					WHERE DATE_FORMAT(annex_time,'%Y') = #{annexTime}
+					and relation_id=#{relationId}
+					and is_used=0
+					GROUP BY DATE_FORMAT(annex_time,'%m') DESC 
+				) tt
+			) t
+  </select>
+  <!-- 查询附件名 -->
+  <select id="selectBillTypePerYear" parameterType="Annex" resultMap="dataResultMap">
+  	SELECT 
+				"物业管理费/本体基金/电费/水费" AS "column_name",
+				MAX(IF(month_str = "01", IFNULL(CONCAT(annex_name,'.',file_type),0),"")) AS January,
+				MAX(IF(month_str = "02", IFNULL(CONCAT(annex_name,'.',file_type),0),"")) AS February,
+				MAX(IF(month_str = "03", IFNULL(CONCAT(annex_name,'.',file_type),0),"")) AS March,
+				MAX(IF(month_str = "04", IFNULL(CONCAT(annex_name,'.',file_type),0),"")) AS April,
+				MAX(IF(month_str = "05", IFNULL(CONCAT(annex_name,'.',file_type),0),"")) AS May,
+				MAX(IF(month_str = "06", IFNULL(CONCAT(annex_name,'.',file_type),0),"")) AS June,
+				MAX(IF(month_str = "07", IFNULL(CONCAT(annex_name,'.',file_type),0),"")) AS July,
+				MAX(IF(month_str = "08", IFNULL(CONCAT(annex_name,'.',file_type),0),"")) AS August,
+				MAX(IF(month_str = "09", IFNULL(CONCAT(annex_name,'.',file_type),0),"")) AS September,
+				MAX(IF(month_str = "10", IFNULL(CONCAT(annex_name,'.',file_type),0),"")) AS October,
+				MAX(IF(month_str = "11", IFNULL(CONCAT(annex_name,'.',file_type),0),"")) AS November,
+				MAX(IF(month_str = "12", IFNULL(CONCAT(annex_name,'.',file_type),0),"")) AS December
+				
+			FROM 
+			( 
+				SELECT * FROM (
+					SELECT *, DATE_FORMAT(annex_time,'%m') AS month_str
+					FROM ts_annex 
+					WHERE DATE_FORMAT(annex_time,'%Y') = #{annexTime}
+					and relation_id=#{relationId}
+					and is_used=0
+					GROUP BY DATE_FORMAT(annex_time,'%m') DESC 
+				) tt
+			) t
+  </select>
+  <sql id="QueryField">
+  	annex_id,relation_id,annex_type,annex_address,annex_name,annex_time,pact_id,is_main,file_type,is_used,md5,upload_file_id
+  </sql>
+  
+  <!-- 分页查询 -->
+  <select id="listPageEnclosure" parameterType="Annex" resultMap="BaseResultMap">
+  	select 
+  	<include refid="QueryField" /> 
+	  	from ts_annex
+	  	where 1=1
+  	<if test="relationId !='' and relationId !=null">
+  		AND relation_id=#{relationId}
+  	</if>
+  	<if test="annexType !='' and annexType != null">
+  		and annex_type=#{annexType}
+  	</if>
+  	<if test="annexAddress !='' and annexAddress !=null">
+  	  and annex_address=#{annexAddress}
+  	</if>
+  	<if test="annexName !='' and annexName !=null">
+  	   and	annex_name=#{annexName}
+  	</if>
+  	<if test="pactId !=null and pactId !=''">
+  		and pact_id=#{pactId}
+  	</if>
+  	<if test="isMain !=null and isMain !=''">
+  		and is_main=#{isMain}
+  	</if>
+  	<if test="fileType !=null and fileType !=''">
+  		and file_type=#{fileType}
+  	</if>
+  	<if test="isUsed !=null and isUsed !=''">
+  		and is_used=#{isUsed}
+  	</if>
+  	<if test="null != md5">
+  		and md5 = #{md5}
+  	</if>
+  </select>
+  
+  <select id="getUploadFileId" parameterType="java.lang.String" resultType="java.lang.String">
+  		SELECT upload_file_id uploadFileId
+		FROM ts_annex WHERE annex_id=#{0}
+  </select>
+  
+  
+  <!-- 根据关联编号和附件名称查询 -->
+  <select id="getListAnnexByReIdAndName" parameterType="String" resultMap="BaseResultMap">
+  		select 
+  		<include refid="QueryField" />
+  		from ts_annex where relation_id=#{0} and annex_name=#{1} and file_type=#{2}
+  </select>
+  
+  <delete id="deleteAnnex" parameterType="String">
+      delete from ts_annex where pact_id=#{0}
+  </delete>
+  
+  <!-- 根据附件编号组查询 -->
+  <select id="getByAnnexIds" parameterType="java.util.List" resultMap="BaseResultMap">
+  	select 
+  	<include refid="QueryField"/>
+  	from ts_annex
+  	where annex_id in 
+  	<foreach collection="list" separator="," item="annexId" index="index" open="(" close=")">
+  		(#{annexId})
+  	</foreach>
+  </select>
+  
+  <!-- 根据附件编号组删除 -->
+  <delete id="delByAnnexIds" parameterType="java.util.List">
+  	delete from ts_annex  where annex_id in 
+  	<foreach collection="list" separator="," item="annexId" index="index" open="(" close=")">
+  		(#{annexId})
+  	</foreach>
+  </delete>
+  
+  <insert id="insertAnnex" parameterType="Annex" >      
+      insert into ts_annex (annex_id, file_type,relation_id, annex_type, annex_address,annex_name,annex_time,pact_id,is_main,is_used,md5,upload_file_id)
+    values (
+    <if test="null == annexId">
+    	UUID(),
+    </if>
+    <if test="null != annexId">
+    	#{annexId},
+    </if>
+    #{fileType},#{relationId,jdbcType=VARCHAR}, #{annexType,jdbcType=TINYINT}, #{annexAddress,jdbcType=VARCHAR}, 
+      #{annexName,jdbcType=VARCHAR},#{annexTime,jdbcType=TIMESTAMP},#{pactId,jdbcType=VARCHAR},#{isMain,jdbcType=VARCHAR},#{isUsed,jdbcType=TINYINT},#{md5},#{uploadFileId})
+  </insert>
+  
+  <insert id="insertAnnexUUID" parameterType="Annex" >      
+      insert into ts_annex (
+	      	annex_id, 
+	      	file_type,
+	      	relation_id, 
+	      	annex_type, 
+	      	annex_address,
+	      	annex_name,
+	      	annex_time,
+	      	pact_id,
+	      	is_main
+	      	is_used,
+	      	md5
+      	)
+    values (
+	    	#{annexId,jdbcType=VARCHAR},
+	    	#{fileType},
+	    	#{relationId,jdbcType=VARCHAR}, 
+	    	#{annexType,jdbcType=TINYINT}, 
+	    	#{annexAddress,jdbcType=VARCHAR}, 
+	        #{annexName,jdbcType=VARCHAR},
+	        #{annexTime,jdbcType=TIMESTAMP},
+	        #{pactId},
+	        #{isMain},
+	        #{isUsed},
+	        #{md5}
+        )
+  </insert>
+  
+  <select id="getAnnexbyRelationId" parameterType="String" resultMap="BaseResultMap">
+  	select * from ts_annex where relation_id = #{0} ORDER BY annex_time desc
+  </select>
+  
+  <select id="findAnnexByRelationIdAndPactId" parameterType="String" resultMap="BaseResultMap">
+  	select * from ts_annex where relation_id = #{0} and annex_address = #{1}
+  </select>
+  
+  <update id="updateAnnex" parameterType="Annex" >
+  	update ts_annex
+  		<set>
+  			<if test="null != annexType">
+  				annex_type = #{annexType,jdbcType=TINYINT},
+  			</if>
+  			<if test="null != annexAddress">
+  				annex_address = #{annexAddress,jdbcType=VARCHAR},
+  			</if>
+  			<if test="null != annexName">
+  				annex_name = #{annexName,jdbcType=VARCHAR},
+  			</if>
+  			<if test="null != annexTime">
+  				annex_time = #{annexTime,jdbcType=TIMESTAMP},
+  			</if>
+  			<if test="null != pactId">
+  				pact_id = #{pactId},
+  			</if>
+  			<if test="null != isMain">
+  				is_main = #{isMain},
+  			</if>
+  			<if test="null != isUsed">
+  				is_used = #{isUsed},	
+  			</if>
+  			<if test="null != md5">
+  				md5 = #{md5},
+  			</if>
+  		</set>
+  		where 1 = 1 
+  		<if test="null != annexId">
+	  		and annex_id = #{annexId,jdbcType=VARCHAR} 
+  		</if>
+  		<if test="null != relationId">
+	  		and relation_id = #{relationId,jdbcType=VARCHAR}
+  		</if>
+  		<if test="null != annexTime">
+  			and DATE_FORMAT(annex_time,"%Y-%m") = DATE_FORMAT(STR_TO_DATE(#{annexTime},"%Y-%m"),"%Y-%m")
+  		</if>
+  </update>
+  <delete id="deleteAnnexByRelationId" parameterType="String">
+  	delete from ts_annex where relation_id=#{0}
+  </delete>
+  
+  <select id="getAnnexByPactId" parameterType="String" resultMap="BaseResultMap">
+  	select * from ts_annex where pact_id = #{pactId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="findById" parameterType="String" resultMap="BaseResultMap">
+  	select * from ts_annex where annex_id = #{0}
+  </select>
+  
+  <select id="findCurrentAnnexByRleationId" parameterType="String" resultMap="BaseResultMap">
+	  	SELECT * 
+	  	  FROM ts_annex 
+	  	 WHERE relation_id = #{0} 
+	  	   AND is_used = 0 
+	  	 ORDER BY annex_time DESC 
+	  	 LIMIT 0,1
+  </select>
+  
+  <select id="findByMd5" parameterType="String" resultMap="BaseResultMap">
+  		select * from ts_annex where UPPER(md5) = UPPER(#{0})
+  </select>
+  
+  <insert id="batchAdd" parameterType="Annex" >      
+      insert into ts_annex (
+	      	annex_id, 
+	      	file_type,
+	      	relation_id, 
+	      	annex_type, 
+	      	annex_address,
+	      	annex_name,
+	      	annex_time,
+	      	pact_id,
+	      	is_main
+	      	is_used,
+	      	md5
+      	)
+    values 
+    <foreach collection="list" item="item" separator="," close="" open="">
+	    (
+		    	UUID(),
+		    	#{item.fileType},
+		    	#{item.relationId,jdbcType=VARCHAR}, 
+		    	#{item.annexType,jdbcType=TINYINT}, 
+		    	#{item.annexAddress,jdbcType=VARCHAR}, 
+		        #{item.annexName,jdbcType=VARCHAR},
+		        #{item.annexTime,jdbcType=TIMESTAMP},
+		        #{item.pactId},
+		        #{item.isMain},
+		        #{item.isUsed},
+		        #{item.md5}
+	     )
+    </foreach>
+  </insert>
+  
+</mapper>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.gating.buildinggate.BuildingGateMapper" >
+  <resultMap id="BaseResultMap" type="BuildingGate" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="building_id" property="buildingId" jdbcType="VARCHAR" />
+    <result column="gate_id" property="gateId" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="listPageBuildingGate" resultMap="BaseResultMap" parameterType="BuildingGate" >
+    select * from tb_building_gate
+  </select>
+  
+  <select id="listAllBuildingGate" resultMap="BaseResultMap">
+    select * from tb_building_gate
+  </select>
+  
+  <select id="getBuildingGateByBuildingId" parameterType="String" resultMap="BaseResultMap">
+    select * from tb_building_gate where building_id = #{0}
+  </select>
+  
+  <select id="listBuildingGateByGateId" parameterType="String" resultMap="BaseResultMap">
+  	 select * from tb_building_gate where gate_id=#{0}
+  </select>
+  
+  <select id="getBuildingGateById" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select * from tb_building_gate where id=#{0}
+  </select>
+  
+  <select id="getGateIdByBuildingId" resultType="String">
+  	SELECT hg.gate_id FROM tb_building_gate hg WHERE hg.building_id IN 
+  	<foreach collection="list" index="index" item="item"  open="(" separator="," close=")" >
+  		#{item}
+  	</foreach>
+  </select>
+  
+  <delete id="deleteBuildingGate" parameterType="java.lang.String" >
+    delete from tb_building_gate
+    where id = #{0,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insertBuildingGate" parameterType="BuildingGate" >
+    insert into tb_building_gate (id, building_id, gate_id
+      )
+    values (UUID(), #{buildingId,jdbcType=VARCHAR}, #{gateId,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  <insert id="BuildingGateBinding">
+  	insert into tb_building_gate(id,building_id,gate_id)
+  	values
+  	<foreach collection="array" separator="," item="items">
+  		(UUID(),#{items},#{gateId})
+  	</foreach>
+  </insert>
+  
+  <delete id="BuildingGateUnwrap">
+  	delete  from tb_building_gate
+  	where gate_id=#{gateId} 
+  	and building_id in <foreach collection="array" open="(" close=")" separator="," item="items">
+  		#{items}
+  	</foreach>
+  </delete>
+  
+  <update id="UpdateBuildingGate" parameterType="BuildingGate" >
+    update tb_building_gate
+    set building_id = #{buildingId,jdbcType=VARCHAR},
+      gate_id = #{gateId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <insert id="batchInsertBuildingGate" parameterType="java.util.List">
+  	INSERT INTO tb_building_gate (id,building_id,gate_id)
+  	values
+  	
+  	<foreach collection="list" item="item" index="index" separator="," >  
+        (uuid(),#{item.buildingId},#{item.gateId})  
+    </foreach> 
+  </insert>
+  
+  <delete id="deleteBuildingGateByGateCode">
+  		delete from tb_building_gate where gate_id = #{0}
+  </delete>
+   
+  
+</mapper>

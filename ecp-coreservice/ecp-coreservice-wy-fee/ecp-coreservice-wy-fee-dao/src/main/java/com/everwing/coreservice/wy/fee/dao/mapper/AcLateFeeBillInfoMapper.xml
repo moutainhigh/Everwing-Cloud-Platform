@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.coreservice.wy.fee.dao.mapper.AcLateFeeBillInfoMapper">
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.fee.entity.AcLateFeeBillInfo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="project_id" jdbcType="VARCHAR" property="projectId" />
+    <result column="project_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="is_singleinterest" jdbcType="INTEGER" property="isSingleinterest" />
+    <result column="rate" jdbcType="DECIMAL" property="rate" />
+    <result column="overdue_days" jdbcType="INTEGER" property="overdueDays" />
+    <result column="account_type" jdbcType="INTEGER" property="accountType" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="is_used" jdbcType="INTEGER" property="isUsed" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, project_id, project_name, description, is_singleinterest, rate, overdue_days, 
+    account_type, update_time, update_by
+  </sql>
+  
+  
+  <!-- 根据主键id进行查询 -->
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_ac_late_fee_bill_info
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  
+  
+  <!-- 根据主键id删除 -->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_ac_late_fee_bill_info
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  
+  <!-- 根据当前计算违约金的 规则查询是否已存在-->
+  <select id="getLateFeeBillInfoByContent" parameterType = "AcLateFeeBillInfo" resultMap = "BaseResultMap">
+  		SELECT * FROM t_ac_late_fee_bill_info 
+  			WHERE is_singleinterest = #{isSingleinterest} AND rate = #{rate} AND overdue_days = #{overdueDays} AND is_used = 0 AND project_id = #{projectId}
+  </select>
+  
+  <!-- 根据项目查询使用中的违约金计费规则 -->
+  <select id="getAcLateFeeBillInfoByProject" resultMap = "BaseResultMap">
+  		SELECT * FROM t_ac_late_fee_bill_info 
+  			WHERE  is_used = 0 AND project_id = #{projectId} and account_type = #{accountType} limit 1
+  </select>
+  
+  <select id = "getNewestPrincipalByHouseCode" resultType = "java.lang.Double" >
+		SELECT
+			IFNULL(SUM(IFNULL(charge_amount, 0)),0.0)
+		FROM
+			t_ac_current_charge_detail
+		WHERE
+			create_time IN (
+				SELECT
+					MAX(create_time)
+				FROM
+					t_ac_current_charge_detail
+				WHERE
+					house_code_new = #{houseCodeNew}
+				AND account_type = #{accountType}
+				AND audit_time &lt;= #{deadLine}
+				GROUP BY
+					audit_time
+			)
+		AND house_code_new = #{houseCodeNew}
+		AND account_type = #{accountType}
+  </select>
+  
+  <!-- 插入操作 -->
+  <insert id="insert" parameterType="AcLateFeeBillInfo">
+    insert into t_ac_late_fee_bill_info (id, project_id, project_name, 
+      description, is_singleinterest, rate, 
+      overdue_days, account_type, update_time, 
+      update_by)
+    values (#{id,jdbcType=VARCHAR}, #{projectId,jdbcType=VARCHAR}, #{projectName,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{isSingleinterest,jdbcType=INTEGER}, #{rate,jdbcType=DECIMAL}, 
+      #{overdueDays,jdbcType=INTEGER}, #{accountType,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP},
+      #{updateBy,jdbcType=VARCHAR})
+  </insert>
+  
+  
+  <!-- 根据参数动态插入 -->
+  <insert id="insertSelective" parameterType="AcLateFeeBillInfo">
+    insert into t_ac_late_fee_bill_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="projectId != null">
+        project_id,
+      </if>
+      <if test="projectName != null">
+        project_name,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="isSingleinterest != null">
+        is_singleinterest,
+      </if>
+      <if test="rate != null">
+        rate,
+      </if>
+      <if test="overdueDays != null">
+        overdue_days,
+      </if>
+      <if test="accountType != null">
+        account_type,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updateBy != null">
+        update_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="projectId != null">
+        #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="isSingleinterest != null">
+        #{isSingleinterest,jdbcType=INTEGER},
+      </if>
+      <if test="rate != null">
+        #{rate,jdbcType=DECIMAL},
+      </if>
+      <if test="overdueDays != null">
+        #{overdueDays,jdbcType=INTEGER},
+      </if>
+      <if test="accountType != null">
+        #{accountType,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  
+  <!-- 根据主键id进行修改 -->
+  <update id="updateByPrimaryKeySelective" parameterType="AcLateFeeBillInfo">
+    update t_ac_late_fee_bill_info
+    <set>
+      <if test="projectId != null">
+        project_id = #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        project_name = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="isSingleinterest != null">
+        is_singleinterest = #{isSingleinterest,jdbcType=INTEGER},
+      </if>
+      <if test="rate != null">
+        rate = #{rate,jdbcType=DECIMAL},
+      </if>
+      <if test="overdueDays != null">
+        overdue_days = #{overdueDays,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  
+  <update id="updateIsUsedToNo" parameterType = "java.lang.String">
+  		update t_ac_late_fee_bill_info set is_used = 1 where project_id = #{projectId} and is_used = 0 
+  </update>
+
+
+
+</mapper>

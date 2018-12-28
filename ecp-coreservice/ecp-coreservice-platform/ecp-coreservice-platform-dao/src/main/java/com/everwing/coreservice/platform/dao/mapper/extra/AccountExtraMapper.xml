@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.coreservice.platform.dao.mapper.extra.AccountExtraMapper">
+
+
+
+<insert id="batchInsert" parameterType="java.util.List">
+    insert into account (
+    	<include refid="com.everwing.coreservice.platform.dao.mapper.generated.AccountMapper.Base_Column_List" />
+    )
+    values 
+    <foreach collection ="list" item="account" separator =",">
+	  (
+		  #{account.accountId,jdbcType=BIGINT}, #{account.accountName,jdbcType=VARCHAR}, #{account.password,jdbcType=VARCHAR}, 
+	      #{account.type,jdbcType=INTEGER}, #{account.accountCode,jdbcType=VARCHAR}, #{account.createTime,jdbcType=TIMESTAMP}, 
+	      #{account.updateTime,jdbcType=TIMESTAMP}, #{account.state,jdbcType=INTEGER}, #{account.parentId,jdbcType=BIGINT}, 
+	      #{account.sourceId,jdbcType=BIGINT}
+      )
+    </foreach>
+      
+</insert>
+
+<update id="batchCancel"  parameterType="java.util.List">
+	UPDATE account a
+	SET a.state = 0
+	WHERE
+	    <foreach collection ="list" item="account" separator ="or">
+		(
+			a.account_code = #{account.accountCode,jdbcType=VARCHAR}
+			AND a.password = #{account.password,jdbcType=VARCHAR}
+		)
+		</foreach>
+</update>
+
+<select id="checkAccountNames" resultType="Integer">
+	SELECT
+		count(0)
+	FROM
+		account
+	WHERE
+		account_name IN (
+			<foreach collection ="accountList" item="account" separator =",">#{account.accountName,jdbcType=VARCHAR}</foreach>
+		)
+	AND type = #{type}
+</select>
+
+</mapper>

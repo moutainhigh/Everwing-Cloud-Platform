@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modulegroup id="47003b7e-8f9e-475a-b76b-dae2e2efb558" name="" desc="">
+    <module id="cbfbbd78-bf9b-11e7-80c8-0050568e00c5" name="Order Management" desc="工单管理" order="1" page="orderManagement" url="index.orderManagement" img="img/menu/user.png">
+        <operation id="d97d41d4-dbec-11e7-80c8-0050568e00c6" name="add" desc="新建" url="/order/newOrders"/>
+        <operation id="deaa1b01-dbec-11e7-80c8-0050568e00c7" name="delete" desc="删除" url="/order/updateOrder"/>
+        <operation id="d97d41d4-dbec-11e7-80c8-0050568e00c8" name="finish" desc="完成" url="/order/finish"/>
+        <operation id="deaa1b01-dbec-11e7-80c8-0050568e00c8" name="export" desc="导出" url="/system/ImportExportController/export"/>
+        <operation id="deaa1b01-dbec-11e7-80c8-0050568e00c9" name="anon" desc="anon" permission="anon" url="/orderType/subTypeList"/>
+        <operation id="55cc8423-2586-4c96-b748-70ec4a1ee2f7" name="anon" desc="anon" permission="anon" url="/project/TcBuildingController/loadBuildingByPickUpTree"/>
+        <operation id="1696e5d6-f339-4e56-bba7-4f3b5b48859a" name="anon" desc="anon" permission="anon" url="/PersonBuildingNew/findBuildingByCustId"/>
+    </module>
+</modulegroup>

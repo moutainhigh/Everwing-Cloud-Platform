@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.autotask.core.dao.CompanyDao">
+    <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.platform.entity.generated.Company">
+        <id column="company_id" jdbcType="VARCHAR" property="companyId" />
+        <result column="jdbc_url" jdbcType="VARCHAR" property="jdbcUrl" />
+        <result column="jdbc_username" jdbcType="VARCHAR" property="jdbcUsername" />
+        <result column="jdbc_password" jdbcType="VARCHAR" property="jdbcPassword" />
+        <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+        <result column="company_location" jdbcType="VARCHAR" property="companyLocation" />
+        <result column="company_address" jdbcType="VARCHAR" property="companyAddress" />
+        <result column="biz_registry_license_num" jdbcType="VARCHAR" property="bizRegistryLicenseNum" />
+        <result column="logo_file_id" jdbcType="VARCHAR" property="logoFileId" />
+        <result column="biz_sale_license_file_id" jdbcType="VARCHAR" property="bizSaleLicenseFileId" />
+        <result column="org_code_file_id" jdbcType="VARCHAR" property="orgCodeFileId" />
+        <result column="tax_license_file_id" jdbcType="VARCHAR" property="taxLicenseFileId" />
+        <result column="property_cert_file_id" jdbcType="VARCHAR" property="propertyCertFileId" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        company_id, jdbc_url, jdbc_username, jdbc_password, company_name, company_location,
+        company_address, biz_registry_license_num, logo_file_id, biz_sale_license_file_id,
+        org_code_file_id, tax_license_file_id, property_cert_file_id
+    </sql>
+
+    <select id="selectAllCompany"  resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from company
+    </select>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from company
+        where company_id=#{companyId}
+    </select>
+</mapper>

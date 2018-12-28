@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.delivery.TJgTotalCalculationMapper">
+	
+	<resultMap id="BaseResultMap" type="TJgTotalCalculation">
+		<result column="id" property="id" jdbcType="VARCHAR" />
+		<result column="opr_id" property="oprId" jdbcType="VARCHAR" />
+		<result column="opr_name" property="oprName" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+		<result column="cash_total" property="cashTotal" jdbcType="DOUBLE" />
+		<result column="cash_gaven" property="cashGaven" jdbcType="DOUBLE" />
+		<result column="cash_not_give" property="cashNotGive" jdbcType="DOUBLE" />
+		<result column="wx_total" property="wxTotal" jdbcType="DOUBLE" />
+		<result column="wx_gaven" property="wxGaven" jdbcType="DOUBLE" />
+		<result column="wx_not_give" property="wxNotGive" jdbcType="DOUBLE" />
+		<result column="alipay_total" property="alipayTotal" jdbcType="DOUBLE" />
+		<result column="alipay_gaven" property="alipayGaven" jdbcType="DOUBLE" />
+		<result column="alipay_not_give" property="alipayNotGive" jdbcType="DOUBLE" />
+		<result column="union_total" property="unionTotal" jdbcType="DOUBLE" />
+		<result column="union_gaven" property="unionGaven" jdbcType="DOUBLE" />
+		<result column="union_not_give" property="unionNotGive" jdbcType="DOUBLE" />
+		<result column="bank_receipts_total" property="bankReceiptsTotal" jdbcType="DOUBLE" />
+		<result column="bank_receipts_gaven" property="bankReceiptsGaven" jdbcType="DOUBLE" />
+		<result column="bank_receipts_not_give" property="bankReceiptsNotGive" jdbcType="DOUBLE" />
+		<result column="project_id" property="projectId" jdbcType="VARCHAR" />
+		<result column="project_name" property="projectName" jdbcType="VARCHAR" />
+		<result column="receive_id" property="receiveId" jdbcType="VARCHAR" />
+		<result column="receive_name" property="receiveName" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="total_id" property="totalId" jdbcType="VARCHAR" />
+		<result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+		<result column="total_num" property="totalNum" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<insert id="addTotalCalculation" parameterType="TJgTotalCalculation">
+		INSERT INTO t_jg_total_calculation 
+		VALUES (
+			#{id},
+			#{oprId},
+			#{oprName},
+			#{status},
+			#{cashTotal},
+			#{cashGaven},
+			#{cashNotGive},
+			#{wxTotal},
+			#{wxGaven},
+			#{wxNotGive},
+			#{alipayTotal},
+			#{alipayGaven},
+			#{alipayNotGive},
+			#{unionTotal},
+			#{unionGaven},
+			#{unionNotGive},
+			#{bankReceiptsTotal},
+			#{bankReceiptsGaven},
+			#{bankReceiptsNotGive},
+			#{projectId},
+			#{projectName},
+			#{receiveId},
+			#{receiveName},
+			SYSDATE(),
+			#{totalId},
+			#{endTime},
+			#{totalNum}
+		)
+	</insert>
+	
+	<!-- 以接收人身份查询结算账单信息 -->
+	<select id="listPageTotalCaculation" parameterType="TJgTotalCalculation" resultMap="BaseResultMap">
+		SELECT 
+				id,
+				opr_id,
+				opr_name,
+				STATUS,
+				IFNULL(cash_total,0.00) cashTotal,
+				IFNULL(cash_gaven,0.00) cashGaven,
+				IFNULL(cash_not_give,0.00) cashNotGive,
+				IFNULL(wx_total,0.00) wxTotal,
+				IFNULL(union_total,0.00) unionTotal,
+				IFNULL(alipay_total,0.00) alipayTotal,
+				IFNULL(bank_receipts_total,0.00) bankReceiptsTotal,
+				receive_id,
+				create_time,
+				total_id,
+				end_time,total_num
+ 			FROM t_jg_total_calculation WHERE receive_id=#{receiveId} AND project_id=#{projectId} 
+ 			<if test=" null != oprName ">
+ 				AND opr_name  LIKE CONCAT('%',#{oprName},'%') 
+ 			</if>
+ 			<if test=" null != status and '' != status ">
+ 				AND status = #{status}
+ 			</if>
+ 			
+ 			ORDER BY create_time DESC
+	</select>
+	
+	<update id="returnOrConfirmTotalInfo" parameterType="java.util.Map">
+			UPDATE t_jg_total_calculation SET STATUS=#{status} ,end_time=NOW()  WHERE receive_id=#{receiveId} AND project_id=#{projectId} 
+			AND status=1
+			AND id IN 
+			<foreach collection="list" item="id" open="(" close=")" separator=",">
+	  			#{id}
+	  		</foreach>
+	</update>
+	
+	<!-- 以提交结算者身份查询自己的结算信息     ex：收银组长提交交账给出纳 -->
+	<select id="listPageTotalCaculationForSelf" parameterType="TJgTotalCalculation" resultMap="BaseResultMap">
+		SELECT 
+				id,
+				opr_id,
+				opr_name,
+				STATUS,
+				cash_total,
+				cash_gaven,
+				cash_not_give,
+				wx_total,
+				union_total,
+				alipay_total,
+				bank_receipts_total,
+				receive_id,
+				create_time,
+				total_num,
+				total_id,
+				end_time
+ 			FROM t_jg_total_calculation WHERE opr_id=#{oprId} AND project_id=#{projectId} 
+ 			AND opr_id != receive_id
+ 			ORDER BY create_time DESC
+	</select>
+	
+	<!-- 汇总收银组长交账信息 -->
+	<select id="summaryAccountForInfo" parameterType="TJgTotalCalculation" resultType="java.util.Map">
+		SELECT
+		  (
+		    CASE
+		      WHEN SUM(IFNULL(cash_total,0.0)) IS NULL
+		      THEN 0
+		      ELSE SUM(IFNULL(cash_total,0.0))
+		    END
+		  ) cashTotal,
+		  (
+		    CASE
+		      WHEN SUM(IFNULL(wx_total,0.0)) IS NULL
+		      THEN 0
+		      ELSE SUM(wx_total)
+		    END
+		  ) wxTotal,
+		  (
+		    CASE
+		      WHEN SUM(IFNULL(alipay_total,0.0) ) IS NULL
+		      THEN 0
+		      ELSE SUM(IFNULL(alipay_total,0.0))
+		    END
+		  ) alipayTotal,
+			(
+		    CASE
+		      WHEN SUM(IFNULL(bank_receipts_total,0.0) ) IS NULL
+		      THEN 0
+		      ELSE SUM(IFNULL(bank_receipts_total,0.0))
+		    END
+		  ) bankReceiptsTotal,
+		  (
+		    CASE
+		      WHEN SUM(IFNULL(union_total,0.0)) IS NULL
+		      THEN 0
+		      ELSE SUM(IFNULL(union_total,0.0))
+		    END
+		  ) unionTotal,
+		(
+		    CASE
+		      WHEN SUM(IFNULL(cash_gaven,0.0)) IS NULL
+		      THEN 0
+		      ELSE SUM(IFNULL(cash_gaven,0.0))
+		    END
+		  ) cashGaven,
+		  (
+			  CASE
+			    WHEN (
+			      SUM(IFNULL(cash_not_give,0.0)) + SUM(IFNULL(wx_not_give,0.0)) + SUM(IFNULL(union_not_give,0.0))
+			      +SUM(IFNULL(bank_receipts_not_give,0.0)) + SUM(IFNULL(alipay_total,0.0))
+			    ) IS NULL
+			    THEN 0
+			    ELSE (
+			      SUM(IFNULL(cash_not_give,0.0)) + SUM(IFNULL(wx_not_give,0.0)) + SUM(IFNULL(union_not_give,0.0))
+			      + SUM(IFNULL(bank_receipts_not_give,0.0)) + SUM(IFNULL(alipay_total,0.0))
+			    )
+			  END
+			) notGive
+ 
+		FROM
+		  t_jg_total_calculation
+		WHERE receive_id = #{oprId}
+		  AND project_id = #{projectId}
+		  AND STATUS = '3'
+		  AND total_id IS NULL
+	</select>
+	
+	
+	<update id="updateTotalCaculation" parameterType="java.lang.String">
+		 UPDATE t_jg_total_calculation  SET total_id=#{0},end_time=NOW() WHERE total_id IS NULL AND STATUS=3 AND receive_id=#{1} AND project_id = #{2}
+	</update>
+	
+	
+	<select id="listPageSettlementDetails" parameterType="TJgTotalCalculation" resultMap="BaseResultMap">
+		SELECT 
+			id,
+			opr_id,
+			opr_name,
+			STATUS,
+			cash_total,
+			cash_gaven,
+			cash_not_give,
+			wx_total,
+			union_total,
+			alipay_total,
+			bank_receipts_total,
+			receive_id,
+			create_time,
+			total_id,
+			total_num,
+			end_time
+		 FROM t_jg_total_calculation WHERE total_id=#{totalId} AND  STATUS != 2
+	
+	</select>
+	
+	<select id="listPageSettlementDetailsByOpr" parameterType="TJgTotalCalculation" resultMap="BaseResultMap">
+		SELECT 
+			id,
+			opr_id,
+			opr_name,
+			STATUS,
+			cash_total,
+			cash_gaven,
+			cash_not_give,
+			wx_total,
+			union_total,
+			alipay_total,
+			bank_receipts_total,
+			receive_id,
+			create_time,
+			total_id,
+			total_num,
+			end_time
+		FROM t_jg_total_calculation WHERE total_id IS NULL AND receive_id =#{oprId} AND STATUS =3 AND project_id=#{projectId}
+	
+	</select>
+	
+	<!-- 查询 组长交账时的系统现金和其他现金 -->
+	<select id="getSysCashInfo" parameterType="TJgTotalCalculation" resultType="java.lang.Double">
+		SELECT
+				( CASE WHEN SUM(opr_amount) IS NULL THEN 0 ELSE SUM(opr_amount) END ) oprAmount
+			FROM
+				t_jg_give_account_detail t1,
+				t_jg_total_calculation t2
+			WHERE
+				t2.id = t1.total_id
+			AND t1. STATUS = 3
+			AND t1.receive_id = #{oprId}
+			AND t2.total_id IS NULL
+			AND t1.type = 2
+	</select>
+	
+	
+	<update id="changeStatusByTotalId" parameterType="java.util.List">
+		UPDATE t_jg_total_calculation SET total_id = NULL 
+		WHERE total_id IN
+		<foreach collection="list" item="id" open="(" close=")" separator=",">
+  			#{id}
+  		</foreach>
+	</update>
+	
+	
+	
+</mapper>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd  
+    http://www.springframework.org/schema/tx  
+    http://www.springframework.org/schema/tx/spring-tx.xsd  
+
+
+
+
+    http://www.springframework.org/schema/aop  
+    http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<array>
+				<value>file:/app/coreservice/wy/dao/jdbc.properties</value>
+			</array>
+		</property>
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+		<property name="properties" ref="defaultUserServiceClientProperties" />
+	</bean>
+
+	<bean name="defaultUserServiceClientProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="locations">
+			<array>
+				<value>classpath:jdbc.properties</value>
+			</array>
+		</property>
+		<property name="ignoreResourceNotFound" value="true"/>
+	</bean>
+
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="username" value="${wy.jdbc.username}" />
+		<property name="password" value="${wy.jdbc.password}" />
+		<property name="url" value="${wy.jdbc.url}" />
+	</bean>
+
+	<!-- 动态数据源 -->
+	<bean id="dynamicDataSource" class="com.everwing.coreservice.common.wy.datasource.DynamicDataSource">
+		<property name="defaultTargetDataSource" ref="dataSource"></property>
+		<property name="targetDataSources">
+			<map></map>
+		</property>
+	</bean>
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dynamicDataSource" />
+		<property name="configLocation" value="classpath:mybatis.xml" />
+		<property name="mapperLocations" value="classpath:com/everwing/coreservice/wy/fee/dao/mapper/*Mapper.xml"/>
+	</bean>
+
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.everwing.coreservice.wy.fee.dao.mapper" />
+	</bean>
+
+	<bean name="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    	<property name="dataSource" ref="dynamicDataSource"/>
+		<property name="globalRollbackOnParticipationFailure" value="false" />
+ 	</bean>
+
+	<!-- 6, 配置通知-->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<!-- 所有以query开头的方法是只读的 -->
+			<tx:method name="query*" read-only="true"/>
+			<tx:method name="select*" read-only="true"/>
+			<tx:method name="list*" read-only="true"/>
+			<!-- 其他方法使用默认的事务设置 -->
+			<tx:method name="*" propagation="REQUIRES_NEW" rollback-for="java.lang.Exception"/>
+		</tx:attributes>
+	</tx:advice>
+
+	<!-- 7, 启用以上的事务通知-->
+	<aop:config>
+		<!-- 运行被定义在Impl包下的任意方法 -->
+		<aop:pointcut expression="execution(* com.everwing.coreservice.wy.fee.core.service.impl.*.*(..))" id="aopCut"/>
+		<!-- 将切入点与通知编织在一起 -->
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="aopCut"/>
+	</aop:config>
+
+	<tx:annotation-driven  transaction-manager="transactionManager" />
+</beans>

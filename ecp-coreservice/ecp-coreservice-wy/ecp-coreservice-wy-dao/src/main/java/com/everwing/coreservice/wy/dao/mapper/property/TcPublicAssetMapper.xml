@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.property.TcPublicAssetMapper">
+    <resultMap id="BaseResultMap" type="TcPublicAsset">
+        <result property="id" column="id"/>
+        <result property="buildingCode" column="building_code"/>
+        <result property="houseCodeNew" column="house_code_new"/>
+        <result property="buildingFullName" column="building_full_name"/>
+        <result property="description" column="description"/>
+        <result property="address" column="address"/>
+        <result property="location" column="location"/>
+        <result property="amount" column="amount"/>
+        <result property="unit" column="unit"/>
+        <result property="isHold" column="is_hold"/>
+        <result property="purpose" column="purpose"/>
+        <result property="isManage" column="is_manage"/>
+        <result property="isBilling" column="is_billing"/>
+        <result property="isWater" column="is_water"/>
+        <result property="isElectricity" column="is_electricity"/>
+        <result property="unitWyPrice" column="unit_wy_price"/>
+        <result property="unitBtPrice" column="unit_bt_price"/>
+        <result property="waterAmount" column="water_amount"/>
+        <result property="electricityAmount" column="electricity_amount"/>
+        <result property="projectId" column="project_id"/>
+        <result property="createrId" column="creater_id"/>
+        <result property="createrName" column="creater_name"/>
+        <result property="modifyId" column="modify_id"/>
+        <result property="modifyName" column="modify_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="TcPublicAsset">
+        INSERT INTO `tc_public_asset` (
+	      `id`,
+	      `building_code`,
+	      `house_code_new`,
+	      `building_full_name`,
+	      `description`,
+	      `address`,
+	      `location`,
+	      `amount`,
+	      `unit`,
+	      `is_hold`,
+	      `purpose`,
+	      `is_manage`,
+	      `is_billing`,
+	      `is_water`,
+	      `is_electricity`,
+	      `unit_wy_price`,
+	      `unit_bt_price`,
+	      `water_amount`,
+	      `electricity_amount`,
+	      `project_id`,
+	      `creater_id`,
+	      `creater_name`,
+	      `modify_id`,
+	      `modify_name`,
+	      `create_time`,
+	      `modify_time`,
+	      is_delete
+    )
+      VALUES
+	(
+		#{id},
+		#{buildingCode},
+		#{houseCodeNew},
+		#{buildingFullName},
+		#{description},
+		#{address},
+		#{location},
+		#{amount},
+		#{unit},
+		#{isHold},
+		#{purpose},
+		#{isManage},
+		#{isBilling},
+		#{isWater},
+		#{isElectricity},
+		#{unitWyPrice},
+		#{unitBtPrice},
+		#{waterAmount},
+		#{electricityAmount},
+		#{projectId},
+		#{createrId},
+		#{createrName},
+		#{modifyId},
+		#{modifyName},
+		now(),
+		now(),
+		0
+	);
+
+    </insert>
+    <update id="EditAsset" parameterType="TcPublicAsset">
+        UPDATE tc_public_asset
+        <set>
+            house_code_new = #{houseCodeNew},
+            building_full_name = #{buildingFullName},
+            description = #{description},
+            address = #{address},
+            location = #{location},
+            amount = #{amount},
+            unit = #{unit},
+            is_hold = #{isHold},
+            purpose = #{purpose},
+            is_manage = #{isManage},
+            is_billing = #{isBilling},
+            is_water = #{isWater},
+            is_electricity = #{isElectricity},
+            unit_wy_price = #{unitWyPrice},
+            unit_bt_price = #{unitBtPrice},
+            water_amount = #{waterAmount},
+            electricity_amount = #{electricityAmount},
+            project_id = #{projectId},
+            creater_id = #{createrId},
+            creater_name = #{createrName},
+            modify_id = #{modifyId},
+            modify_name = #{modifyName},
+            create_time = #{createTime},
+            modify_time = now()
+        </set>
+        WHERE
+        id = #{id}
+    </update>
+
+
+    <update id="deletePublicAsset" parameterType="string">
+        update tc_public_asset set is_delete = 1  where 1 = 1  and id = #{Id}
+    </update>
+
+    <select id="loadPublicAssetlistPage" parameterType="TcPublicAssetSearch" resultMap="BaseResultMap">
+        select * from tc_public_asset tt where 1 = 1 and is_delete = 0
+        <if test="houseCodeNew !=null and houseCodeNew != ''">
+            and tt.house_code_new = #{houseCodeNew}
+        </if>
+        <if test="buildingFullName !=null and buildingFullName != ''">
+            and tt.building_full_name = #{buildingFullName}
+        </if>
+        <if test="description !=null and description != ''">
+            and tt.description = #{description}
+        </if>
+        <if test="location !=null and location != ''">
+            and tt.location = #{location}
+        </if>
+
+        <if test="amount != null and amount != ''">
+            AND tt.amount = #{amount}
+        </if>
+        <if test="unit != null and unit != ''">
+            AND tt.unit = #{unit}
+        </if>
+        <if test="isHold != null and isHold != ''">
+            AND tt.is_hold = #{isHold}
+        </if>
+        <if test="purpose != null and purpose != ''">
+            AND tt.purpose = #{purpose}
+        </if>
+        <if test="isManage != null and isManage != ''">
+            AND tt.is_manage = #{isManage}
+        </if>
+        <if test="isWater != null and isWater != ''">
+            AND tt.is_water = #{isWater}
+        </if>
+        <if test="isElectricity != null and isElectricity != ''">
+            AND tt.is_electricity = #{isElectricity}
+        </if>
+        <if test="projectId != null and projectId != ''">
+            AND tt.project_id = #{projectId}
+        </if>
+        order by house_code_new
+    </select>
+
+    <select id="loadPublicWaterlistPage" parameterType="TcPublicAssetSearch" resultMap="BaseResultMap">
+        select tt.* from  tc_public_asset   tt
+        LEFT JOIN tc_water_meter b    on  tt.house_code_new = b.water_code
+        LEFT JOIN  tc_electricity_meter  c on  tt.house_code_new= c.elect_code
+
+        where b.id is null and c.id is null
+        <if test="houseCodeNew !=null and houseCodeNew != ''">
+            and tt.house_code_new = #{houseCodeNew}
+        </if>
+        <if test="buildingFullName !=null and buildingFullName != ''">
+            and tt.building_full_name = #{buildingFullName}
+        </if>
+        <if test="description !=null and description != ''">
+            and tt.description = #{description}
+        </if>
+        <if test="location !=null and location != ''">
+            and tt.location = #{location}
+        </if>
+
+        <if test="amount != null and amount != ''">
+            AND tt.amount = #{amount}
+        </if>
+        <if test="unit != null and unit != ''">
+            AND tt.unit = #{unit}
+        </if>
+        <if test="isHold != null and isHold != ''">
+            AND tt.is_hold = #{isHold}
+        </if>
+        <if test="purpose != null and purpose != ''">
+            AND tt.purpose = #{purpose}
+        </if>
+        <if test="isManage != null and isManage != ''">
+            AND tt.is_manage = #{isManage}
+        </if>
+        <if test="isWater != null and isWater != ''">
+            AND tt.is_water = #{isWater}
+        </if>
+        <if test="isElectricity != null and isElectricity != ''">
+            AND tt.is_electricity = #{isElectricity}
+        </if>
+        <if test="projectId != null and projectId != ''">
+            AND tt.project_id = #{projectId}
+        </if>
+        order by house_code_new
+    </select>
+    <select id="SearchMaxCode" resultType="java.lang.String">
+        select cast(IFNULL(SUBSTR(MAX(house_code_new) FROM 5 FOR 9),0) + 1 as char) from tc_public_asset where is_hold = #{isHold} and project_id = #{projectId};
+    </select>
+    <select id="SearchAsset" resultType="TcPublicAssetList" parameterType="string">
+       select
+        (select COUNT(*) from tc_public_asset where project_id = #{projectId}) assetAmount,
+        (select COUNT(*) from tc_public_asset where project_id = #{projectId} and is_hold = 'Y') assetHold,
+        (select COUNT(*) from tc_public_asset where project_id = #{projectId} and is_hold = 'N') assetIsntHold,
+        (select COUNT(*) from tc_public_asset where project_id = #{projectId} and is_billing = 'Y') assetBilling,
+        (select COUNT(*) from tc_public_asset where project_id = #{projectId} and is_manage = 'Y') assetManage,
+        (select COUNT(*) from tc_public_asset where project_id = #{projectId} and is_water = 'Y') assetWater,
+        (select COUNT(*) from tc_public_asset where project_id = #{projectId} and is_electricity = 'Y') assetElectricity,
+        (select COUNT(*) from tc_public_asset where project_id = #{projectId} and is_manage = 'Y') is_manage
+       from dual
+    </select>
+    <select id="selectById" resultType="TcPublicAsset" parameterType="string">
+        select * from tc_public_asset where id = #{id};
+    </select>
+
+</mapper>

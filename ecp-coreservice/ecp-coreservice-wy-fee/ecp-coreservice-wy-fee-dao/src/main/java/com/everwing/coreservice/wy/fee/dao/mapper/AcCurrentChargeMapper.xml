@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.coreservice.wy.fee.dao.mapper.AcCurrentChargeMapper">
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.fee.entity.AcCurrentCharge">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="house_code_new" jdbcType="VARCHAR" property="houseCodeNew" />
+    <result column="current_bill_fee" jdbcType="DECIMAL" property="currentBillFee" />
+    <result column="account_id" jdbcType="VARCHAR" property="accountId" />
+    <result column="account_type" jdbcType="INTEGER" property="accountType" />
+    <result column="charging_month" jdbcType="VARCHAR" property="chargingMonth" />
+    <result column="audit_time" jdbcType="TIMESTAMP" property="auditTime" />
+    <result column="project_id" jdbcType="VARCHAR" property="projectId" />
+    <result column="project_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="create_id" jdbcType="VARCHAR" property="createId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="signature" jdbcType="VARCHAR" property="signature" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, house_code_new, current_bill_fee, account_id, account_type, charging_month, audit_time, 
+    project_id, project_name, create_id, create_time, signature
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_ac_current_charge
+    where account_id = #{accountId,jdbcType=VARCHAR} and account_type=#{type} and house_code_new=#{houseCodeNew}
+  </select>
+  <select id="selectByAccountIdTypeAndHouseCodeNew" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_ac_current_charge
+    where account_id = #{accountId,jdbcType=VARCHAR} and account_type=#{type} and house_code_new=#{houseCodeNew}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_ac_current_charge
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="AcCurrentCharge">
+    insert into t_ac_current_charge (id, house_code_new, current_bill_fee, 
+      account_id, account_type, charging_month, 
+      audit_time, project_id, project_name, 
+      create_id, create_time, signature
+      )
+    values (#{id,jdbcType=VARCHAR}, #{houseCodeNew,jdbcType=VARCHAR}, #{currentBillFee,jdbcType=DECIMAL}, 
+      #{accountId,jdbcType=VARCHAR}, #{accountType,jdbcType=INTEGER}, #{chargingMonth,jdbcType=VARCHAR},
+      #{auditTime,jdbcType=TIMESTAMP}, #{projectId,jdbcType=VARCHAR}, #{projectName,jdbcType=VARCHAR}, 
+      #{createId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{signature,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="AcCurrentCharge">
+    insert into t_ac_current_charge
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="houseCodeNew != null">
+        house_code_new,
+      </if>
+      <if test="currentBillFee != null">
+        current_bill_fee,
+      </if>
+      <if test="accountId != null">
+        account_id,
+      </if>
+      <if test="accountType != null">
+        account_type,
+      </if>
+      <if test="chargingMonth != null">
+        charging_month,
+      </if>
+      <if test="auditTime != null">
+        audit_time,
+      </if>
+      <if test="projectId != null">
+        project_id,
+      </if>
+      <if test="projectName != null">
+        project_name,
+      </if>
+      <if test="createId != null">
+        create_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="signature != null">
+        signature,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="houseCodeNew != null">
+        #{houseCodeNew,jdbcType=VARCHAR},
+      </if>
+      <if test="currentBillFee != null">
+        #{currentBillFee,jdbcType=DECIMAL},
+      </if>
+      <if test="accountId != null">
+        #{accountId,jdbcType=VARCHAR},
+      </if>
+      <if test="accountType != null">
+        #{accountType,jdbcType=INTEGER},
+      </if>
+      <if test="chargingMonth != null">
+        #{chargingMonth,jdbcType=VARCHAR},
+      </if>
+      <if test="auditTime != null">
+        #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="projectId != null">
+        #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null">
+        #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="signature != null">
+        #{signature,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="AcCurrentCharge">
+    update t_ac_current_charge
+    <set>
+      <if test="houseCodeNew != null">
+        house_code_new = #{houseCodeNew,jdbcType=VARCHAR},
+      </if>
+      <if test="currentBillFee != null">
+        current_bill_fee = #{currentBillFee,jdbcType=DECIMAL},
+      </if>
+      <if test="accountId != null">
+        account_id = #{accountId,jdbcType=VARCHAR},
+      </if>
+      <if test="chargingMonth != null">
+        charging_month = #{chargingMonth,jdbcType=VARCHAR},
+      </if>
+      <if test="auditTime != null">
+        audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="projectId != null">
+        project_id = #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        project_name = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null">
+        create_id = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="signature != null">
+        signature = #{signature,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="AcCurrentCharge">
+    update t_ac_current_charge
+    set house_code_new = #{houseCodeNew,jdbcType=VARCHAR},
+      current_bill_fee = #{currentBillFee,jdbcType=DECIMAL},
+      account_id = #{accountId,jdbcType=VARCHAR},
+      account_type = #{accountType,jdbcType=INTEGER},
+      charging_month = #{chargingMonth,jdbcType=VARCHAR},
+      audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      project_id = #{projectId,jdbcType=VARCHAR},
+      project_name = #{projectName,jdbcType=VARCHAR},
+      create_id = #{createId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      signature = #{signature,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="selectAccountId" resultType="String" >
+  select DISTINCT account_id
+  from t_ac_current_charge
+    where house_code_new=#{houseCode}
+  </select>
+</mapper>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.everwing.coreservice.wy.fee.dao.mapper.TBsChargeBillHistoryMapper">
+	<resultMap type="com.everwing.coreservice.common.wy.entity.configuration.bill.TBsChargeBillHistory" id="BaseResultMap">
+		<result property="id" column="id" jdbcType="VARCHAR"/>
+		<result property="chargeTotalId" column="charge_total_id" jdbcType="VARCHAR"/>
+		<result property="projectId" column="project_id" jdbcType="VARCHAR"/>
+		<result property="buildingCode" column="building_code" jdbcType="VARCHAR"/>
+		<result property="fullName" column="full_name" jdbcType="VARCHAR"/>
+		<result property="lastBillFee" column="last_bill_fee" jdbcType="DOUBLE"/>
+		<result property="lastPayed" column="last_payed" jdbcType="DOUBLE"/>
+		<result property="currentFee" column="current_fee" jdbcType="DOUBLE"/>
+		<result property="lateFee" column="late_fee" jdbcType="DOUBLE"/>
+		<result property="currentBillFee" column="current_bill_fee" jdbcType="DOUBLE"/>
+		<result property="accountBalance" column="account_balance" jdbcType="DOUBLE"/>
+		<result property="billingTime" column="billing_time" jdbcType="TIMESTAMP"/>
+		<result property="lastBillId" column="last_bill_id" jdbcType="VARCHAR"/>
+		<result property="isUsed" column="is_used" jdbcType="TINYINT"/>
+		<result property="shareFee" column="share_fee" jdbcType="DOUBLE"/>
+		<result property="commonDesummoney" column="common_desummoney" jdbcType="DOUBLE"/>
+		<result property="noCommonDesummoney" column="no_common_desummoney" jdbcType="DOUBLE"/>
+		<result property="tax" column="tax" jdbcType="DOUBLE"/>
+		<result property="createId" column="create_id" jdbcType="VARCHAR"/>
+		<result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+		<result property="modifyId" column="modify_id" jdbcType="VARCHAR"/>
+		<result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+		<result property="feeItemDetail" column="fee_item_detail" jdbcType="VARCHAR"/>
+		<result property="lastOwedInfo" column="last_owed_info" jdbcType="VARCHAR"/>
+		<result property="currentKqAmount" column="current_kq_amount" jdbcType="DOUBLE"/>
+		<result property="isZipComplete" column="is_zip_complete" jdbcType="TINYINT"/>
+		<result property="aduitStatus" column="aduit_status" jdbcType="TINYINT"/>
+		<result property="temporaryBill" column="temporary_bill" jdbcType="VARCHAR"/>
+	</resultMap>
+
+	<resultMap type="com.everwing.coreservice.common.wy.entity.configuration.bill.TBsChargeBillHistory" id="assembleMap" extends="BaseResultMap">
+		<result property="type" column="type" jdbcType="TINYINT"/>
+	</resultMap>
+
+	<sql id="updateSql">
+		<set>
+			<if test="null != fullName">
+				full_name = #{fullName},
+			</if>
+			<if test="null != buildingCode">
+				building_code = #{buildingCode},
+			</if>
+			<if test="null != lastBillFee">
+				last_bill_fee = #{lastBillFee},
+			</if>
+			<if test="null != lastPayed">
+				last_payed = #{lastPayed},
+			</if>
+			<if test="null != currentFee">
+				current_fee = #{currentFee},
+			</if>
+			<if test="null != lateFee">
+				late_fee = #{lateFee},
+			</if>
+			<if test="null != currentBillFee">
+				current_bill_fee = #{currentBillFee},
+			</if>
+			<if test="null != accountBalance">
+				account_balance = #{accountBalance},
+			</if>
+			<if test="null != billingTime">
+				billing_time = #{billingTime},
+			</if>
+			<if test="null != lastBillId">
+				last_bill_id = #{lastBillId},
+			</if>
+			<if test="null != isUsed">
+				is_used = #{isUsed},
+			</if>
+			<if test="null != modifyId">
+				modify_id = #{modifyId},
+			</if>
+			<if test="null != feeItemDetail">
+				fee_item_detail = #{feeItemDetail},
+			</if>
+			<if test="null != lastOwedInfo">
+				last_owed_info = #{lastOwedInfo},
+			</if>
+			<if test="null != commonDesummoney">
+				common_desummoney = #{commonDesummoney},
+			</if>
+			<if test="null != noCommonDesummoney">
+				no_common_desummoney = #{noCommonDesummoney},
+			</if>
+			<if test="null != currentKqAmount">
+				current_kq_amount = #{currentKqAmount},
+			</if>
+			<if test="null != isZipComplete">
+				is_zip_complete = #{isZipComplete},
+			</if>
+			<if test="null != tax">
+				tax = #{tax},
+			</if>
+			<if test="aduitStatus !=null">
+				aduit_status=#{aduitStatus},
+			</if>
+			<if test="temporaryBill !=null">
+				temporary_bill=#{temporaryBill},
+			</if>
+			modify_time = sysdate()
+		</set>
+	</sql>
+	<update id="updateBillHistory" parameterType="com.everwing.coreservice.common.wy.entity.configuration.bill.TBsChargeBillHistory">
+		UPDATE t_bs_charge_bill_history
+		<include refid="updateSql"></include>
+		WHERE id = #{id}
+	</update>
+
+
+	<select id="findById" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from t_bs_charge_bill_history
+		where id = #{0}
+	</select>
+
+
+	<select id="selectNotBillingByObj" resultMap="BaseResultMap">
+		select t2.* from t_bs_charge_bill_history t2, t_bs_charge_bill_total t1
+		where t1.id = t2.charge_total_id
+		and t2.building_code = #{buildingCode}
+		and t1.`type` = #{type}
+		and t2.is_used = 0
+		and t2.billing_time is null
+		order by t2.create_time desc
+		limit 0,1
+	</select>
+</mapper>

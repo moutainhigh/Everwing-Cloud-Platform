@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.coreservice.platform.dao.mapper.gating.GatingExtraMapper">
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.entity.gating.Gating">
+    <id column="id" property="id"  />
+    <result column="gating_code" property="gatingCode"  />
+    <result column="equipment_num" property="equipmentNum"  />
+    <result column="account_name" property="accountName"/>
+    <result column="equipment_name" property="equipmentName"  />
+    <result column="equipment_model" property="equipmentModel"  />
+    <result column="equipment_sn" property="equipmentSn"  />
+    <result column="batch_nummer" property="batchNummer"  />
+    <result column="Manufacture_date" property="manufactureDate" />
+    <result column="quality_time_start" property="qualityTimeStart" />
+    <result column="scrap_time" property="scrapTime" />
+    <result column="scrap_cause" property="scrapCause"  />
+    <result column="quality_term" property="qualityTerm"  />
+    <result column="employ_term" property="employTerm"  />
+    <result column="facility_state" property="facilityState" />
+    <result column="market_id" property="marketId"  />
+    <result column="purchase_id" property="purchaseId"  />
+    <result column="production_firm" property="productionFirm"  />
+    <result column="production_site" property="productionSite"  />
+    <result column="district" property="district"  />
+    <result column="open_gating_state" property="openGatingState"  />
+    <result column="is_wall_gating" property="isWallGating" />
+    <result column="statenum" property="statenum" />
+    <result column="employ_project" property="employProject" />
+    <result column="quality_time_end" property="qualityTimeEnd"/>
+    <result column="project_id" property="projectId"/>
+    <result column="company_id" property="companyId"/>
+  </resultMap>
+  
+	<insert id="addGating" parameterType="com.everwing.coreservice.common.wy.entity.gating.Gating">
+		insert into gating 
+		(
+			id, 
+			equipment_num, 
+			gating_code, 
+			account_name,
+			equipment_name, 
+			equipment_model, 
+			equipment_sn, 
+			batch_nummer, 
+			Manufacture_date, 
+			quality_time_start, 
+			scrap_time, 
+      		scrap_cause, 
+      		quality_term, 
+      		employ_term, 
+     		facility_state, 
+     		market_id, 
+     		purchase_id, 
+      		production_firm, 
+      		production_site, 
+      		district, 
+      		two_dimension_code, 
+      		open_gating_state, 
+      		is_wall_gating,
+      		employ_project,
+      		project_id,
+      		company_id
+      	)
+    	values 
+    	(
+    		#{id,jdbcType=VARCHAR}, 
+    		#{equipmentNum,jdbcType=VARCHAR}, 
+    		#{gatingCode,jdbcType=VARCHAR}, 
+    		#{accountName,jdbcType=VARCHAR},
+      		#{equipmentName,jdbcType=VARCHAR},
+      		#{equipmentModel,jdbcType=VARCHAR}, 
+      		#{equipmentSn,jdbcType=VARCHAR}, 
+      		#{batchNummer,jdbcType=VARCHAR}, 
+      		#{manufactureDate,jdbcType=DATE}, 
+      		#{qualityTimeStart,jdbcType=DATE}, 
+      		#{scrapTime,jdbcType=DATE}, 
+	      	#{scrapCause,jdbcType=VARCHAR}, 
+	      	#{qualityTerm,jdbcType=INTEGER}, 
+		    #{employTerm,jdbcType=INTEGER}, 
+		    #{facilityState,jdbcType=VARCHAR}, 
+		    #{marketId,jdbcType=VARCHAR}, 
+		    #{purchaseId,jdbcType=VARCHAR}, 
+		    #{productionFirm,jdbcType=VARCHAR}, 
+		    #{productionSite,jdbcType=VARCHAR}, 
+		    #{district,jdbcType=VARCHAR}, 
+		    #{twoDimensionCode,jdbcType=VARCHAR}, 
+		    #{openGatingState,jdbcType=BIT}, 
+		    #{isWallGating,jdbcType=TINYINT}, 
+		    #{employProject,jdbcType=VARCHAR},
+		    #{projectId,jdbcType=VARCHAR},
+		    #{companyId,jdbcType=VARCHAR}
+	      ) 
+	</insert>
+
+	<insert id="batchAdd" parameterType="java.util.List">
+	insert into gating 
+		(
+			id, 
+			equipment_num, 
+			gating_code,
+			account_name,
+			equipment_name, 
+			equipment_model, 
+			equipment_sn, 
+			batch_nummer, 
+			Manufacture_date, 
+			quality_time_start, 
+			scrap_time, 
+      		scrap_cause, 
+      		quality_term, 
+      		employ_term, 
+     		facility_state, 
+     		market_id, 
+     		purchase_id, 
+      		production_firm, 
+      		production_site, 
+      		district, 
+      		two_dimension_code, 
+      		open_gating_state, 
+      		is_wall_gating,
+      		employ_project,
+      		project_id,
+      		company_id
+      	)
+    	values 
+    	<foreach collection="list" item="item" separator=",">
+	    	(
+	    		#{item.id,jdbcType=VARCHAR}, 
+	    		#{item.equipmentNum,jdbcType=VARCHAR}, 
+	    		#{item.gatingCode,jdbcType=VARCHAR},
+				#{item.accountName,jdbcType=VARCHAR},
+	      		#{item.equipmentName,jdbcType=VARCHAR},
+	      		#{item.equipmentModel,jdbcType=VARCHAR}, 
+	      		#{item.equipmentSn,jdbcType=VARCHAR}, 
+	      		#{item.batchNummer,jdbcType=VARCHAR}, 
+	      		#{item.manufactureDate,jdbcType=DATE}, 
+	      		#{item.qualityTimeStart,jdbcType=DATE}, 
+	      		#{item.scrapTime,jdbcType=DATE}, 
+		      	#{item.scrapCause,jdbcType=VARCHAR}, 
+		      	#{item.qualityTerm,jdbcType=INTEGER}, 
+			    #{item.employTerm,jdbcType=INTEGER}, 
+			    #{item.facilityState,jdbcType=VARCHAR}, 
+			    #{item.marketId,jdbcType=VARCHAR}, 
+			    #{item.purchaseId,jdbcType=VARCHAR}, 
+			    #{item.productionFirm,jdbcType=VARCHAR}, 
+			    #{item.productionSite,jdbcType=VARCHAR}, 
+			    #{item.district,jdbcType=VARCHAR}, 
+			    #{item.twoDimensionCode,jdbcType=VARCHAR}, 
+			    #{item.openGatingState,jdbcType=BIT}, 
+			    #{item.isWallGating,jdbcType=TINYINT}, 
+			    #{item.employProject,jdbcType=VARCHAR},
+		   	 	#{item.projectId,jdbcType=VARCHAR},
+		    	#{item.companyId,jdbcType=VARCHAR}
+		      ) 
+    	</foreach>
+	</insert>
+  
+  	<update id="updateGating" parameterType="com.everwing.coreservice.common.wy.entity.gating.Gating">
+  		update gating 
+  		<set>
+			<if test="equipmentModel != null">
+				equipment_model = #{equipmentModel},
+			</if>
+			<if test="equipmentName != null">
+				equipment_name = #{equipmentName},
+			</if>
+			<if test="equipmentSn != null">
+				equipment_sn = #{equipmentSn},
+			</if>
+			<if test="qualityTerm != null">
+				quality_term = #{qualityTerm},
+			</if>
+			<if test="qualityTimeStart != null">
+				quality_time_start = #{qualityTimeStart},
+			</if>
+			<if test="null != district">
+				district = #{district},
+			</if>
+			<if test="null != isWallGating">
+				is_wall_gating = #{isWallGating},
+			</if>
+		</set>
+		where id = #{id}
+  	</update>
+  
+  	<delete id="delGating" parameterType="com.everwing.coreservice.common.wy.entity.gating.Gating">
+  		delete from gating where id = #{id}
+  	</delete>
+  
+  	<delete id="batchDel" parameterType="java.util.List">
+  		delete from gating where id in
+  		<foreach collection="list" item="id" open="(" close=")" separator=",">
+  			#{id}
+  		</foreach>
+  	</delete>
+</mapper>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="systems">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="subsystem" minOccurs="1" maxOccurs="1"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="subsystem">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="modulegroup" minOccurs="1" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+			<xs:attribute name="desc" type="xs:string" use="required"/>
+			<xs:attribute name="order" type="xs:string"/>
+			<xs:attribute name="permission" type="xs:string"/>
+			<xs:attribute name="url" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="modulegroup">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="path" minOccurs="1" maxOccurs="1"/>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+			<xs:attribute name="desc" type="xs:string" use="required"/>
+			<xs:attribute name="order" type="xs:string"/>
+			<xs:attribute name="permission" type="xs:string"/>
+			<xs:attribute name="url" type="xs:string"/>
+			<xs:attribute name="img" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="path">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="path" type="xs:string" use="required" />
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.configuration.project.TBsRuleBuildingRelationMapper">
+	<resultMap type="TBsRuleBuildingRelation" id="BaseResultMap">
+		<result property="id" column="id" jdbcType="VARCHAR"/>
+		<result property="chargingRuleId" column="charging_rule_id"  jdbcType="VARCHAR"/>
+		<result property="relationBuildingCode" column="relation_building_code"  jdbcType="VARCHAR"/>
+		<result property="relationBuildingName" column="relation_building_name"  jdbcType="VARCHAR"/>
+		<result property="relationBuildingPid" column="relation_building_pid" jdbcType="VARCHAR"/>
+		<result property="relatioBuildingFullName" column="relation_building_full_name" jdbcType="VARCHAR"/>
+		<result property="relationBuildingType" column="relation_building_type" jdbcType="VARCHAR"/>
+	</resultMap>
+
+	<!-- 插入方案关联收费类型数据信息 -->
+<!-- 	<insert id="insertRule" parameterType="TBsRuleBuildingRelation"> -->
+	<insert id="batchInsert"  parameterType="java.util.List">
+		INSERT INTO t_bs_rule_building_relation
+		values
+		<foreach collection="list" item="item" index="index" separator="," >
+			(
+				UPPER(UUID()),
+				#{item.chargingRuleId},
+				#{item.relationBuildingCode},
+				#{item.relationBuildingName},
+				#{item.relationBuildingPid},
+				#{item.relatioBuildingFullName},
+				#{item.relationBuildingType}
+			)
+		</foreach>
+	</insert>
+
+	<!-- 根据规则类型查询此 规则下的关联资产信息 -->
+	<select id="selectAssetsByRuleId" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT 
+		  * 
+		FROM
+		  t_bs_rule_building_relation
+		WHERE charging_rule_id = #{ruleId}
+	</select>
+    
+    <!-- 根据规则编号和建筑类型查询 -->
+    <select id="getRelationByRuleIdAndType" parameterType="String" resultMap="BaseResultMap">
+    	SELECT 
+		  * 
+		FROM
+		  t_bs_rule_building_relation
+		WHERE charging_rule_id = #{0}
+		and relation_building_type=#{1}
+    </select>
+
+	<!-- 用户多选进行删除操作 -->
+	<delete id="batchDelRules" parameterType="java.util.List">
+		DELETE FROM t_bs_rule_building_relation WHERE id IN 
+		<foreach collection="list" item="id" open="(" close=")" separator="," index="index">
+			(#{id})
+		</foreach>
+	</delete>
+
+	<delete id="deleteRelationBuilding" parameterType="java.lang.String">
+		DELETE FROM t_bs_rule_building_relation WHERE charging_rule_id=#{0}
+	</delete>
+
+
+  <!-- 查询得到id的集合 -->
+  <select id="selectIdsByRuleId" parameterType="java.lang.String" resultType="java.lang.String">
+  	SELECT 
+		  id 
+		FROM
+		  t_bs_rule_building_relation
+		WHERE charging_rule_id = #{ruleId}
+  </select>
+	
+	
+	<!-- 根据规则编码查询关联建筑的建筑编号 -->
+	<select id="getBuildingCodeByRuleId" parameterType="java.util.Map" resultType="java.lang.String">
+		select distinct tbs.relation_building_code
+		from
+		t_bs_rule_building_relation tbs,
+		<if test="meterType==0">
+			tc_water_meter tcmeter
+		</if>
+		<if test="meterType==1">
+			tc_electricity_meter tcmeter
+		</if>
+		where charging_rule_id=#{ruleId}
+		and tcmeter.relation_building=tbs.relation_building_code
+		and tcmeter.project_id=#{projectId}
+		<if test=" null != relationBuilding ">
+			AND tbs.relation_building_code = #{relationBuilding}
+		</if>
+	</select>
+	
+	<!-- 根据规则id和Pid查询 -->
+	<select id="getRuleIdAndPid" parameterType="String" resultMap="BaseResultMap">
+		select * from t_bs_rule_building_relation
+		where charging_rule_id=#{0}
+		and relation_building_pid=#{1}
+	</select>
+	
+	<!-- 根据id查询 -->
+	<select id="getRelationByBuilCodeAndRuleId" parameterType="String" resultMap="BaseResultMap">
+		select * from t_bs_rule_building_relation
+		where relation_building_code=#{0}
+		and charging_rule_id=#{1}
+	</select>
+	
+	
+	<!-- 根据规则ID批量删除 -->
+	<delete id="delByRuleId" parameterType="java.util.List">
+		DELETE FROM t_bs_rule_building_relation WHERE charging_rule_id IN
+		<foreach collection="list" item="ruldId" open="(" close=")" separator=",">
+			(#{ruldId})
+		</foreach>
+	</delete>
+	
+	<!-- 根据buildCode和type查找，这里查找出来可能是多条 -->
+    <select id="findByBuildCodeAndType" parameterType="String" resultMap="BaseResultMap">
+    	select * from t_bs_rule_building_relation 
+    	where relation_building_code=#{0}
+    	and relation_building_type=#{1}
+    </select>
+    
+    <!-- 根据chargeRuleId异步查找 -->
+    <select id="getReaBuildByChargRuleId" parameterType="TBsRuleBuildingRelation" resultMap="BaseResultMap">
+    	select * from t_bs_rule_building_relation
+    		where charging_rule_id=#{chargingRuleId}
+    	<if test="relationBuildingCode !=null and relationBuildingCode !=''">
+    		and relation_building_code=#{relationBuildingCode}
+    	</if>
+    	<if test="relationBuildingPid ==null or relationBuildingPid ==''">
+    		and (relation_building_type ='qi')
+    	</if>
+    	<if test="relationBuildingPid !=null and relationBuildingPid !=''">
+    		and relation_building_pid=#{relationBuildingPid}
+    	</if>
+    	<if test="relationBuildingName !=null and relationBuildingName !=''">
+    		and relation_building_name like CONCAT('%',#{relationBuildingName},'%')
+    	</if>
+    </select>
+	<select id="selectByBuildingCode" resultMap="BaseResultMap">
+		select * from t_bs_rule_building_relation
+		where relation_building_code=#{buildingCode}
+	</select>
+</mapper>

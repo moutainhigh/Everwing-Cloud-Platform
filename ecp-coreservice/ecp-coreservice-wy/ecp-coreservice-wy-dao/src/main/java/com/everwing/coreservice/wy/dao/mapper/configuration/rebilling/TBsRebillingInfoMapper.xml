@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.configuration.rebilling.TBsRebillingInfoMapper">
+	<resultMap type="TBsRebillingInfo" id="BaseResultMap">
+		<result property="id" 					column="id" 					jdbcType="VARCHAR"/>
+		<result property="accountId" 			column="account_id" 			jdbcType="VARCHAR"/>
+		<result property="buildingCode" 		column="building_code" 			jdbcType="VARCHAR"/>
+		<result property="fullName" 			column="full_name" 				jdbcType="VARCHAR"/>
+		<result property="type" 				column="type" 					jdbcType="DOUBLE"/>
+		<result property="status" 				column="status" 				jdbcType="DOUBLE"/>
+		<result property="changeAmount" 		column="change_amount" 			jdbcType="DOUBLE"/>
+		<result property="rebillingStartTime" 	column="rebilling_start_time" 	jdbcType="TIMESTAMP"/>
+		<result property="billingTime" 			column="billing_time" 			jdbcType="TIMESTAMP"/>
+		<result property="rebillingReason" 		column="rebilling_reason" 		jdbcType="VARCHAR"/>
+		<result property="createTime" 			column="create_time" 			jdbcType="TIMESTAMP"/>
+		<result property="createId" 			column="create_id" 				jdbcType="VARCHAR"/>
+		<result property="modifyTime" 			column="modify_time" 			jdbcType="TIMESTAMP"/>
+		<result property="modifyId" 			column="modify_id" 				jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<select id="listPage" parameterType="TBsRebillingInfo" resultMap="BaseResultMap">
+		SELECT * FROM t_bs_rebilling_info
+		WHERE 1 = 1 AND TYPE = #{type}
+		<if test="null != fullName">
+			AND full_name like CONCAT('%',#{fullName},'%')
+		</if>
+		ORDER BY create_time DESC
+	</select>
+	
+	<insert id="batchInsert" parameterType="java.util.List">
+		insert into t_bs_rebilling_info
+		(
+			id,
+			account_id,
+			building_code,
+			full_name,
+			type,
+			status,
+			change_amount,
+			rebilling_start_time,
+			billing_time,
+			rebilling_reason,
+			create_time,
+			create_id,
+			modify_time,
+			modify_id
+		)
+		values
+		<foreach collection="list" item="item" open="" close="" separator=",">
+			(
+				#{item.id},
+				#{item.accountId},
+				#{item.buildingCode},
+				#{item.fullName},
+				#{item.type},
+				#{item.status},
+				#{item.changeAmount},
+				#{item.rebillingStartTime},
+				#{item.billingTime},
+				#{item.rebillingReason},
+				#{item.createTime},
+				#{item.createId},
+				#{item.modifyTime},
+				#{item.modifyId}
+			)
+		</foreach>
+	</insert>
+	
+	<insert id="insert" parameterType="TBsRebillingInfo">
+		insert into t_bs_rebilling_info
+		(
+			id,
+			account_id,
+			building_code,
+			full_name,
+			type,
+			status,
+			change_amount,
+			rebilling_start_time,
+			billing_time,
+			rebilling_reason,
+			create_time,
+			create_id,
+			modify_time,
+			modify_id
+		)
+		values
+		(
+			#{id},
+			#{accountId},
+			#{buildingCode},
+			#{fullName},
+			#{type},
+			#{status},
+			#{changeAmount},
+			#{rebillingStartTime},
+			#{billingTime},
+			#{rebillingReason},
+			#{createTime},
+			#{createId},
+			#{modifyTime},
+			#{modifyId}
+		)
+	</insert>
+	
+</mapper>

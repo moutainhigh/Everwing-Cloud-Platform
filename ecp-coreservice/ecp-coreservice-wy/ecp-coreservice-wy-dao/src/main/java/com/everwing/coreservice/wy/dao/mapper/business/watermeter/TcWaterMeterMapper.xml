@@ -1,0 +1,624 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.business.watermeter.TcWaterMeterMapper">
+	<resultMap id="BaseResultMap" type="TcWaterMeter">
+		<result property="id" column="id" jdbcType="VARCHAR"/>
+		<result property="code" column="code" jdbcType="VARCHAR"/>
+		<result property="waterMeterName" column="water_meter_name" jdbcType="VARCHAR"/>
+		<result property="position" column="position" jdbcType="VARCHAR"/>
+		<result property="relationBuilding" column="relation_building" jdbcType="VARCHAR"/>
+		<result property="companyCode" column="company_code" jdbcType="VARCHAR"/>
+		<result property="projectId" column="project_id" jdbcType="VARCHAR"/>
+		<result property="rate" column="rate" jdbcType="DOUBLE"/>
+		<result property="initAmount" column="init_amount" jdbcType="DOUBLE"/>
+		<result property="minAmount" column="min_amount" jdbcType="DOUBLE"/>
+		<result property="maxAmount" column="max_amount" jdbcType="DOUBLE"/>
+		<result property="isCircle" column="is_circle" jdbcType="TINYINT"/>
+		<result property="state" column="state" jdbcType="TINYINT"/>
+		<result property="type" column="type" jdbcType="TINYINT"/>
+		<result property="parentCode" column="parent_code" jdbcType="VARCHAR"/>
+		<result property="masterCode" column="master_code" jdbcType="VARCHAR"/>
+		<result property="userType" column="user_type" jdbcType="TINYINT"/>
+		<result property="isBilling" column="is_billing" jdbcType="TINYINT"/>
+		<result property="isPublic" column="is_public" jdbcType="TINYINT"/>
+		<result property="assetNo" column="asset_no" jdbcType="VARCHAR"/>
+		<result property="brand" column="brand" jdbcType="VARCHAR"/>
+		<result property="specs" column="specs" jdbcType="VARCHAR"/>
+		<result property="provider" column="provider" jdbcType="VARCHAR"/>
+		<result property="providerPhone" column="provider_phone" jdbcType="VARCHAR"/>
+		<result property="assemblePerson" column="assemble_person" jdbcType="VARCHAR"/>
+		<result property="assembleTime" column="assemble_time"/>
+		<result property="createId" column="create_id" jdbcType="VARCHAR"/>
+		<result property="createTime" column="create_time"/>
+		<result property="modifyId" column="modify_id" jdbcType="VARCHAR"/>
+		<result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP" />
+		<result property="meterLevel" column="meter_level" jdbcType="TINYINT"/>
+		<result property="modifyName" column="modify_name"  />
+		<result property="checkTable" column="check_table" />
+		<result property="describeNum" column="describe_num" />
+		<result property="groupTableCoding" column="group_table_coding" />
+		<result property="groupTableName" column="group_table_name" />
+		<result property="isShare" column="is_share" />
+		<result property="newCoding" column="new_coding" />
+		<result property="paymentObject" column="payment_object" />
+		<result property="externalCoding" column="external_coding" />
+		<result property="waterState" column="water_state" />
+		<result property="waterCode" column="water_code" />
+		<result property="parentTable" column="parent_table" />
+	</resultMap>
+	
+	<resultMap type="java.util.Map" id="countResultMap">
+		<result property="meterLevel" column="meter_level" jdbcType="VARCHAR"/>
+		<result property="num" column="num" jdbcType="INTEGER"/>
+		<result property="completeNum" column="complete_num" jdbcType="INTEGER"/>
+	</resultMap>
+	
+	<resultMap type="TcMeterBuilding" id="MeterBuildingMap">
+		<result property="id" column="id" jdbcType="VARCHAR"/>
+		<result property="buildingCode" column="building_code" jdbcType="VARCHAR"/>
+		<result property="pid" column="pid" jdbcType="VARCHAR"/>
+		<result property="buildingName" column="building_name" jdbcType="VARCHAR"/>
+		<result property="code" column="code" jdbcType="VARCHAR"/>
+		<result property="projectId" column="project_id" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	
+	<!-- 分页查询水表基础数据信息 -->
+	<select id="listPageWaterMeterInfos" parameterType="TcWaterMeter" resultMap="BaseResultMap">
+		SELECT wm.id,wm.CODE ,water_meter_name ,
+			init_amount ,rate,min_amount ,max_amount,meter_level,
+			is_circle,wm.state,wm.TYPE,user_type,is_billing,is_public,
+			asset_no,brand,specs,provider,provider_phone,parent_code,master_code,
+			b.building_full_name AS relationBuilding,b1.building_full_name AS POSITION,
+			assemble_time,wm.create_time createTime,
+			(SELECT staff_name FROM t_sys_user ta1 WHERE ta1.user_id=wm.create_id) AS createId,
+			(SELECT staff_name FROM t_sys_user ta2 WHERE ta2.user_id=wm.modify_id) AS modifyId,
+			wm.modify_id,CONCAT(p.name,',',wm.project_id) AS projectId,
+			wm.modify_time AS modifyTime,sf.staff_name AS assemblePerson
+			FROM tc_water_meter wm
+			LEFT JOIN t_sys_user sf ON wm.assemble_person = sf.staff_number
+			LEFT JOIN t_sys_project p ON wm.project_id=p.code
+			LEFT JOIN tc_building b ON b.building_code =wm.relation_building
+			LEFT JOIN tc_building b1 ON b1.building_code =wm.position
+			WHERE wm.CODE IS NOT NULL AND wm.project_id=#{projectId}
+		<if test="queryParam != null and queryParam != '' ">
+			AND (
+			wm.CODE LIKE CONCAT('%',#{queryParam},'%') 
+			OR wm.asset_no LIKE CONCAT('%',#{queryParam},'%') 
+			OR wm.water_meter_name LIKE CONCAT('%',#{queryParam},'%') 
+			OR b1.building_full_name LIKE CONCAT('%',#{queryParam},'%') 
+			OR b.building_full_name LIKE CONCAT('%',#{queryParam},'%') 
+			) 
+		</if>
+		<!-- 兼容单个水表信息的查询 -->
+		<if test="id != null and id != ''">
+			and wm.id=#{id}
+		</if>
+		<if test="code != null and code != ''">
+			and wm.code=#{code}
+		</if>
+		
+		<if test="orderColum != null and orderColum != '' ">
+			ORDER BY ${orderColum}
+		</if>
+	</select>
+	
+	<select id="checkWaterMeterCode" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM tc_water_meter WHERE CODE=#{code}
+	</select>
+	
+	
+	<!-- 新增水表基础数据信息 -->
+	<insert id="addWaerMeterInfo" parameterType="TcWaterMeter">
+		INSERT INTO tc_water_meter 
+		VALUES(
+			UUID(),
+			#{code},
+			#{waterMeterName},
+			#{position},
+			#{relationBuilding},
+			#{companyCode},
+			#{projectId},
+			#{rate},
+			#{initAmount},
+			#{minAmount},
+			#{maxAmount},
+			#{isCircle},
+			#{state},
+			#{type},
+			#{parentCode},
+			#{masterCode},
+			#{userType},
+			#{isBilling},
+			#{isPublic},
+			#{assetNo},
+			#{brand},
+			#{specs},
+			#{provider},
+			#{providerPhone},
+			#{assemblePerson},
+			#{assembleTime},
+			#{createId},
+			#{createTime},
+			#{modifyId},
+			#{modifyTime},
+			#{meterLevel}
+		)
+		
+	</insert>
+	
+	
+	<!-- 批量插入水表信息，用于使用excel导入信息 -->
+	<insert id="batchInsert"  parameterType="java.util.List">
+		INSERT INTO tc_water_meter 
+		VALUES 
+		<foreach collection="list" item="item" index="index" separator="," >
+			(
+				UUID(),
+				#{item.code},
+				#{item.waterMeterName},
+				#{item.position},
+				#{item.relationBuilding},
+				#{item.companyCode},
+				#{item.projectId},
+				#{item.rate},
+				#{item.initAmount},
+				#{item.minAmount},
+				#{item.maxAmount},
+				#{item.isCircle},
+				#{item.state},
+				#{item.type},
+				#{item.parentCode},
+				#{item.masterCode},
+				#{item.userType},
+				#{item.isBilling},
+				#{item.isPublic},
+				#{item.assetNo},
+				#{item.brand},
+				#{item.specs},
+				#{item.provider},
+				#{item.providerPhone},
+				#{item.assemblePerson},
+				#{item.assembleTime},
+				#{item.createId},
+				NOW(),
+				#{item.modifyId},
+				NOW(),
+				#{item.meterLevel}
+		)
+		</foreach>
+	</insert>
+	
+	<sql id="sqlForUpdate">
+		 <if test="waterMeterName != null" >
+	        water_meter_name = #{waterMeterName,jdbcType=VARCHAR},
+	     </if>
+	     <if test="position != null" >
+	        position = #{position,jdbcType=VARCHAR},
+	      </if>
+	     <if test="relationBuilding != null" >
+	         relation_building = #{relationBuilding,jdbcType=VARCHAR},
+	      </if>
+	      <if test="companyCode != null" >
+	         company_code = #{companyCode,jdbcType=VARCHAR},
+	      </if>
+	      <if test="rate != null" >        
+	      	rate = #{rate,jdbcType=DOUBLE},
+	      </if>
+	      <if test="initAmount != null" >        
+	      	init_amount = #{initAmount,jdbcType=DOUBLE},
+	      </if>
+	      <if test="minAmount != null" >        
+	      	  min_amount = #{minAmount,jdbcType=DOUBLE},
+	      </if>
+	       <if test="maxAmount != null" >        
+	      	  max_amount = #{maxAmount,jdbcType=DOUBLE},
+	      </if>
+	      <if test="isCircle != null" >        
+	      	 is_circle = #{isCircle,jdbcType=TINYINT},
+	      </if>
+	      <if test="state != null" >        
+	      	 state = #{state,jdbcType=TINYINT},
+	      </if>
+	       <if test="type != null" >        
+	      	 type = #{type,jdbcType=TINYINT},
+	      </if>
+	       <if test="parentCode != null" >        
+	      	parent_code = #{parentCode,jdbcType=VARCHAR},
+	      </if>
+	      <if test="masterCode != null" >        
+	      	master_code = #{masterCode,jdbcType=VARCHAR},
+	      </if>
+	       <if test="userType != null" >        
+	       user_type = #{userType,jdbcType=TINYINT},
+	      </if>
+	       <if test="isBilling != null" >        
+	       is_billing = #{isBilling,jdbcType=TINYINT},
+	      </if>
+	       <if test="isPublic != null" >        
+	        is_public = #{isPublic,jdbcType=TINYINT},
+	      </if>
+	        <if test="assetNo != null" >        
+	        asset_no = #{assetNo,jdbcType=VARCHAR},
+	      </if>
+	       <if test="brand != null" >        
+	         brand = #{brand,jdbcType=VARCHAR},
+	      </if>
+	       <if test="specs != null" >        
+	         specs = #{specs,jdbcType=VARCHAR},
+	      </if>
+	       <if test="provider != null" >        
+	        provider = #{provider,jdbcType=VARCHAR},
+	      </if>
+	       <if test="providerPhone != null" >        
+	        provider_phone = #{providerPhone,jdbcType=VARCHAR},
+	      </if>
+	      <if test="assemblePerson != null" >        
+	         assemble_person = #{assemblePerson,jdbcType=VARCHAR},
+	      </if>
+	       <if test="assembleTime != null" >        
+	         assemble_time = #{assembleTime,jdbcType=TIMESTAMP},
+	      </if>
+	       <if test="createTime != null" >        
+	           create_time = #{createTime,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="modifyId != null" >        
+	           modify_id=#{modifyId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="modifyTime != null" >
+	           modify_time=#{modifyTime,jdbcType=VARCHAR},
+	      </if>
+	      <if test="meterLevel != null" >
+	           meter_level=#{meterLevel,jdbcType=TINYINT},
+	      </if>
+	      <if test="projectId != null" >
+	           project_id=#{projectId,jdbcType=VARCHAR}
+	      </if>
+	</sql>
+	
+	
+	<select id="selectTcWaterMeterByCode" parameterType="TcWaterMeter" resultMap="BaseResultMap">
+		SELECT * FROM tc_water_meter WHERE CODE=#{code}
+	</select>
+	
+	<!-- 修改水表基础数据信息 -->
+	<update id="updateWaerMeterInfo" parameterType="TcWaterMeter">
+		UPDATE tc_water_meter 
+		<set>
+			<include refid="sqlForUpdate"></include>
+	    </set>
+		    WHERE  id = #{id}
+	</update>
+	
+	<!-- 修改水表基础数据信息 -->
+	<update id="bachUpdateForImport" parameterType="java.util.List">
+		<foreach collection="list" item="waterMeter" separator=";" index="index">
+			 UPDATE tc_water_meter SET 
+			 <if test="waterMeter.waterMeterName != null" >
+		        water_meter_name = #{waterMeter.waterMeterName,jdbcType=VARCHAR},
+		     </if>
+		     <if test="waterMeter.position != null" >
+		        position = #{waterMeter.position,jdbcType=VARCHAR},
+		      </if>
+		     <if test="waterMeter.relationBuilding != null" >
+		         relation_building = #{waterMeter.relationBuilding,jdbcType=VARCHAR},
+		      </if>
+		      <if test="waterMeter.companyCode != null" >
+		         company_code = #{waterMeter.companyCode,jdbcType=VARCHAR},
+		      </if>
+		      <if test="waterMeter.rate != null" >        
+		      	rate = #{waterMeter.rate,jdbcType=DOUBLE},
+		      </if>
+		      <if test="waterMeter.initAmount != null" >        
+		      	init_amount = #{waterMeter.initAmount,jdbcType=DOUBLE},
+		      </if>
+		      <if test="waterMeter.minAmount != null" >        
+		      	  min_amount = #{waterMeter.minAmount,jdbcType=DOUBLE},
+		      </if>
+		       <if test="waterMeter.maxAmount != null" >        
+		      	  max_amount = #{waterMeter.maxAmount,jdbcType=DOUBLE},
+		      </if>
+		      <if test="waterMeter.isCircle != null" >        
+		      	 is_circle = #{waterMeter.isCircle,jdbcType=TINYINT},
+		      </if>
+		      <if test="waterMeter.state != null" >        
+		      	 state = #{waterMeter.state,jdbcType=TINYINT},
+		      </if>
+		       <if test="waterMeter.type != null" >        
+		      	 type = #{waterMeter.type,jdbcType=TINYINT},
+		      </if>
+		       <if test="waterMeter.parentCode != null" >        
+		      	parent_code = #{waterMeter.parentCode,jdbcType=VARCHAR},
+		      </if>
+		      <if test="waterMeter.masterCode != null" >        
+		      	master_code = #{waterMeter.masterCode,jdbcType=VARCHAR},
+		      </if>
+		       <if test="waterMeter.userType != null" >        
+		       user_type = #{waterMeter.userType,jdbcType=TINYINT},
+		      </if>
+		       <if test="waterMeter.isBilling != null" >        
+		       is_billing = #{waterMeter.isBilling,jdbcType=TINYINT},
+		      </if>
+		       <if test="waterMeter.isPublic != null" >        
+		        is_public = #{waterMeter.isPublic,jdbcType=TINYINT},
+		      </if>
+		        <if test="waterMeter.assetNo != null" >        
+		        asset_no = #{waterMeter.assetNo,jdbcType=VARCHAR},
+		      </if>
+		       <if test="waterMeter.brand != null" >        
+		         brand = #{waterMeter.brand,jdbcType=VARCHAR},
+		      </if>
+		       <if test="waterMeter.specs != null" >        
+		         specs = #{waterMeter.specs,jdbcType=VARCHAR},
+		      </if>
+		       <if test="waterMeter.provider != null" >        
+		        provider = #{waterMeter.provider,jdbcType=VARCHAR},
+		      </if>
+		       <if test="waterMeter.providerPhone != null" >        
+		        provider_phone = #{waterMeter.providerPhone,jdbcType=VARCHAR},
+		      </if>
+		      <if test="waterMeter.assemblePerson != null" >        
+		         assemble_person = #{waterMeter.assemblePerson,jdbcType=VARCHAR},
+		      </if>
+		       <if test="waterMeter.assembleTime != null" >        
+		         assemble_time = #{waterMeter.assembleTime,jdbcType=TIMESTAMP},
+		      </if>
+		       <if test="waterMeter.createTime != null" >        
+		           create_time = #{waterMeter.createTime,jdbcType=TIMESTAMP},
+		      </if>
+		      <if test="waterMeter.modifyId != null" >        
+		           modify_id=#{waterMeter.modifyId,jdbcType=VARCHAR},
+		      </if>
+		      <if test="waterMeter.modifyTime != null" >
+		           modify_time=#{waterMeter.modifyTime,jdbcType=VARCHAR},
+		      </if>
+		     <!--  <if test="meterLevel != null" >
+		           meter_level=#{waterMeter.meterLevel,jdbcType=TINYINT},
+		      </if> -->
+		      <if test="waterMeter.projectId != null" >
+		           project_id=#{waterMeter.projectId,jdbcType=VARCHAR}
+		      </if>
+		      WHERE code=#{waterMeter.code}
+		</foreach>
+	</update>
+	
+	
+	
+	<!-- 修改水表启停用状态 -->
+	<update id="startStopWaerMeterByOne" parameterType="TcWaterMeter">
+		UPDATE tc_water_meter 
+		SET state =#{state} WHERE code=#{code}
+	</update>
+	
+	<!-- 更换水表时查询可选水表信息 -->
+	<select id="listPageloadWaterMeterForChange" parameterType="TcWaterMeter" resultMap="BaseResultMap">
+		SELECT wm.id,wm.code,wm.water_meter_name,tb.building_full_name AS POSITION,wm.project_id,wm.init_amount 
+		FROM tc_water_meter wm,tc_building tb
+		WHERE wm.position=tb.building_code AND  wm.state='1' AND wm.project_id=#{projectId} 
+		<if test="null != code and '' != code">
+			AND wm.CODE LIKE CONCAT('%',#{code},'%') 
+		</if>
+		<if test="null != waterMeterName and '' != waterMeterName">
+			AND wm.water_meter_name LIKE CONCAT('%',#{waterMeterName},'%') 
+		</if>
+		<if test="null != position and '' != position">
+			AND tb.building_full_name LIKE CONCAT('%',#{position},'%') 
+		</if>
+		
+	</select>
+	
+
+	
+	<delete id="deleteWaterMeterInfos" parameterType="java.util.List">
+  		DELETE FROM tc_water_meter
+  		WHERE id IN 
+  		<foreach collection="list" item="id" open="(" close=")" separator=",">
+  			#{id}
+  		</foreach>
+	</delete>
+	
+	<select id="findMetersByPositions" parameterType="java.util.List" resultMap="BaseResultMap">
+		select * from tc_water_meter 
+		where relation_building in 
+		<foreach collection="list" open="(" separator="," item="position" close=")">
+			#{position}
+		</foreach>
+		and state = 0
+		and meter_level != 11
+	</select>
+	
+	<!-- 根据code集合查询已存在的code集合 -->
+	<select id="findMetersByCodes" parameterType="java.util.List" resultMap="BaseResultMap">
+		SELECT * FROM tc_water_meter 
+		WHERE code IN
+		<foreach collection="list" open="(" separator="," item="code" close=")">
+			#{code}
+		</foreach>
+	</select>
+	
+	<!-- 更换水表时保证新水表和旧水表的关联收费对象一致 -->
+	<update id="updateWaterMeterForReplace" >
+		UPDATE tc_water_meter 
+		SET relation_building =#{0} WHERE CODE=#{1}
+	</update>
+	
+	<!-- AND t2.status = 1   是否只看本月的执行中任务,这样只有抄表那几天可以看到数据 -->
+	<select id="countMeters" parameterType="TcWaterMeter" resultMap="countResultMap">
+		SELECT * FROM (
+						  SELECT COUNT(0) AS num ,"totalCount" AS meter_level , 0 AS complete_num FROM tc_water_meter
+						  WHERE meter_level IS NOT NULL
+								<if test="null != projectId">
+								AND project_id = #{projectId}
+								</if>
+					  ) t1
+		UNION ALL
+				SELECT * FROM (
+							  SELECT COUNT(t1.meter_level) AS num ,CONCAT(t1.meter_level,"级") AS meter_level, COUNT(t2.meter_code) AS complete_count
+							  FROM tc_water_meter t1, tc_meter_data t2, tc_reading_task t3, tc_reading_schedule t4
+							  WHERE t1.code = t2.meter_code
+									AND t2.task_id = t3.id
+									AND t3.schedule_id = t4.id
+									AND t4.status = 1
+								<if test="null != projectId">
+									AND t1.project_id = #{projectId}
+								</if>
+									AND t2.meter_type = 0
+									AND t2.is_used = 0
+									AND t2.reading_time IS NOT NULL
+									AND DATE_FORMAT(t3.start_time,"%Y-%m") = DATE_FORMAT(CURDATE(),"%Y-%m")
+									AND t1.meter_level IS NOT NULL
+							  GROUP BY t1.meter_level
+						  ) t2
+	</select>
+	
+	<select id="listPageWaterMeterByLevel" parameterType="TcWaterMeter" resultMap="BaseResultMap">
+		SELECT 
+			wm.id,wm.code,wm.water_meter_name,b.building_full_name AS POSITION,
+			b2.building_full_name AS relationBuilding,parent_code,meter_level,
+			wm.state
+		FROM tc_water_meter wm,
+		tc_building b,
+		tc_building b2
+		WHERE wm.position=b.building_code
+		AND wm.relation_building=b2.building_code
+		AND wm.project_id=#{projectId}
+		AND wm.meter_level=#{meterLevel}
+		<if test="code != null and code != ''">
+			AND wm.code LIKE CONCAT('%',#{code},'%') 
+		</if>
+		<if test="position != null and position != ''">
+			AND b.building_full_name LIKE CONCAT('%',#{position},'%') 
+		</if>
+		
+	</select>
+	
+	<select id="getWaterMeterByCode" parameterType="String" resultMap="BaseResultMap">
+		select * from tc_water_meter 
+		where code = #{0}
+		and project_id = #{1}
+	</select>
+	
+	<select id="getBuildingAndMeter" parameterType="TcWaterMeter" resultMap="MeterBuildingMap">
+		  SELECT 
+			  tb.building_code ,tb.building_name,tb.pid,wm.code 
+			FROM
+			  tc_building tb 
+			  LEFT JOIN 
+			 <if test=" 1 == state ">
+				 tc_electricity_meter wm
+			</if>
+			<if test=" 0 == state ">
+			  tc_water_meter wm
+			</if>
+			    ON tb.building_code = wm.relation_building 
+			    AND wm.state = 0 
+			WHERE tb.project_id = #{projectId}
+	</select>
+	
+	<select id="checkWaterMeterByBuilding" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM tc_water_meter WHERE relation_building =#{buildingCode} AND state=0
+	</select>
+	
+	
+	<!--根据收费对象编号、项目编号和状态是启用状态查询， -->
+	<select id="findByRelarionId" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from tc_water_meter where project_id=#{0} and relation_building=#{1} and state=0
+	</select>
+	
+
+	<!-- 根据表编号和项目编号查找M等级表 -->
+	<select id="getWaterMeterByCodeAndM" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from tc_water_meter 
+		where code = #{0}
+		and project_id = #{1}
+		and meter_level=11
+	</select>
+	
+	<!-- 根据父表编号和项目编号查询 -->
+	<select id="findByparentCodeAndProjectId" parameterType="java.lang.String" resultType="java.lang.String">
+		select code from tc_water_meter
+		where project_id=#{1}
+		and parent_code=#{0}
+	</select>
+    
+    <!--  根据父表编号和项目编号查找收费对象ID得到收费对象ID-->
+    <select id="findRelationIdByparentCode" parameterType="String" resultType="java.lang.String">
+    	select relation_building from tc_water_meter
+		where project_id=#{1}
+		and parent_code=#{0}
+    </select>
+	<!-- 根据项目id, 建筑code, 以及表类型,获取表级别 -->
+	<select id="findMeterLevelBySomeParams" resultType="java.lang.Integer">
+		SELECT meter_level
+		  FROM 
+		  	<if test="historyType == 3">
+			  	tc_water_meter  
+		  	</if>
+		  	<if test="historyType == 4">
+    		    tc_electricity_meter 
+		  	</if>
+		 WHERE project_id = #{projectId}
+		   AND relation_building = #{buildingCode}
+	</select>
+
+	<!-- 通过C级表关联起来查M级表,且一个C级表有且仅有一个对应的M级表-->
+	<select id="findMByCCodeAndProjectId" parameterType="String" resultMap="BaseResultMap">
+		SELECT
+			t2.*
+		FROM
+			tc_water_meter t1,
+		    tc_water_meter t2
+		where t1.parent_code=t2.`code`
+		and t1.`code`= #{0}
+		and t1.project_id= #{1}
+		and t1.meter_level=12
+	</select>
+	
+	<!-- 收费对象和表是一对一的关系，一个收费对象现在不允许有多个表 ,根据收费对象查找M级表-->
+	<select id="findMByBuildCodeAndProjectId" parameterType="String" resultMap="BaseResultMap">
+			select 
+			*
+			from tc_water_meter
+			where project_id=#{0}
+			and relation_building=#{1}
+			and meter_level=11
+	</select>
+	
+	<select id="findAssetNoByTypeAndMeterCode" resultType="String">
+		SELECT asset_no
+		  FROM 
+		  	<if test="meterType == 0">
+			  	tc_water_meter  
+		  	</if>
+		  	<if test="meterType == 1">
+    		    tc_electricity_meter 
+		  	</if>
+		 where code = #{meterCode}
+		   and project_id = #{projectId}
+		   and state = 0
+	</select>
+	
+	<select id="findByBuildingCode" resultMap="BaseResultMap">
+		select * from tc_water_meter 
+		 where state = 0 
+		   and project_id = #{0}
+		   and relation_building = #{1}
+        order by code desc
+		 limit 1
+	</select>
+	<select id="findsByBuildingCode" resultMap="BaseResultMap">
+		select code,water_meter_name from tc_water_meter 
+		 where relation_building = #{buildingCode}
+	</select>
+
+
+	<select id="listPageWaterMeterByBuildingCode"  resultMap="BaseResultMap">
+		select wm.water_code,tc.building_full_name relationBuilding,wm.position,wm.state,wm.init_amount from tc_water_meter wm
+		LEFT JOIN tc_public_asset tc on wm.relation_building = tc.building_code
+		 where 1 = 1
+		<if test="relationBuilding != null and relationBuilding != ''">
+			and wm.relation_building = #{relationBuilding}
+		</if>
+	</select>
+
+</mapper>

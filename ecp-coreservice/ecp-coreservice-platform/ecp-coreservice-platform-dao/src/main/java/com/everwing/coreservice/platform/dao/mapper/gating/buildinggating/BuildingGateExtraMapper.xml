@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.coreservice.platform.dao.mapper.gating.buildinggating.BuildingGateExtraMapper">
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.entity.gating.BuildingGate">
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="building_id" property="buildingId" jdbcType="VARCHAR" />
+    <result column="gate_id" property="gateId" jdbcType="VARCHAR" />
+  </resultMap>
+  
+
+	<insert id="batchAdd" parameterType="java.util.List">
+	insert into building_gate 
+		(
+			id, 
+			building_id, 
+			gate_id
+      	)
+    	values 
+    	<foreach collection="list" item="item" separator=",">
+	    	(
+				UPPER(UUID()),
+	    		#{item.buildingId,jdbcType=VARCHAR}, 
+	    		#{item.gateId,jdbcType=VARCHAR}
+		      ) 
+    	
+    	</foreach>
+	</insert>
+  
+  	<delete id="delete" parameterType="String">
+  		delete from building_gate where gate_id = #{0}
+  	</delete>
+  
+</mapper>

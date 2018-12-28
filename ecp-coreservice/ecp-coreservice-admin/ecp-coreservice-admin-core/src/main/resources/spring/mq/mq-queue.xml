@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+
+
+            http://www.springframework.org/schema/rabbit
+            http://www.springframework.org/schema/rabbit/spring-rabbit-1.0.xsd">
+
+	<!-- 此处可声明不同的queue, 指定queue_key以及是否持久化 -->
+
+	<!-- 接收到wy平台发送过来的个人客户消息队列 -->
+	<rabbit:queue id="wyPersonCust2Admin" name="${queue.personCust.name}"
+   				durable="${queue.personCust.declare}" auto-delete="${queue.personCust.autoDelete}" exclusive="${queue.personCust.exclusive}" />
+   				
+	<!-- wy平台发送过来的客户资产绑定队列 -->
+	<rabbit:queue id="wyPersonBuilding2Admin" name="${queue.personBuilding.name}"
+				durable="${queue.personBuilding.declare}" auto-delete="${queue.personBuilding.autoDelete}" exclusive="${queue.personBuilding.exclusive}"/>
+	
+	<!-- wy平台发送过来的门控机数据消息队列 -->
+	<rabbit:queue id="wyGating2Admin" name="${queue.gating.name}"
+				durable="${queue.gating.declare}" auto-delete="${queue.gating.autoDelete}" exclusive="${queue.gating.exclusive}"/>
+
+	<!-- wy平台发送过来的门控-房屋绑定关系数据消息队列 -->
+	<rabbit:queue id="wyBuildingGate2Admin" name="${queue.buildingGate.name}"
+				durable="${queue.buildingGate.declare}" auto-delete="${queue.buildingGate.autoDelete}" exclusive="${queue.buildingGate.exclusive}"/>
+
+	<!-- 建筑结构数据发送到平台 -->
+	<rabbit:queue id="wy2platform4building" name="${queue.wy2platform.building.name}"
+				  durable="${queue.wy2platform.building.declare}" auto-delete="${queue.wy2platform.building.autoDelete}" exclusive="${queue.wy2platform.building.exclusive}"/>
+</beans>

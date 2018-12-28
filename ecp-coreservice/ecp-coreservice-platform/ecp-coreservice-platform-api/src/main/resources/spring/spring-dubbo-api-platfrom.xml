@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+
+
+
+
+	http://code.alibabatech.com/schema/dubbo
+	http://code.alibabatech.com/schema/dubbo/dubbo.xsd"
+       default-lazy-init="false">
+
+    <dubbo:registry address="${platform-api.dubbo.registry.address}" protocol="zookeeper" file="${catalina.home}/dubbo-registry/dubbo-registry.properties" />
+
+    <dubbo:reference id="platformAccountService"
+                     interface="com.everwing.coreservice.common.service.PlatformAccountService"
+                     check="false"/>
+
+    <dubbo:reference id="accountService"
+                     interface="com.everwing.coreservice.common.platform.service.AccountService"
+                     check="false"/>
+
+    <dubbo:reference id="commonService"
+                     interface="com.everwing.coreservice.common.platform.service.CommonService"
+                     check="false"/>
+
+    <dubbo:reference id="smsService"
+                     interface="com.everwing.coreservice.common.platform.service.other.SmsService"
+                     check="false"/>
+
+    <dubbo:reference id="accountAndHouseService"
+                     interface="com.everwing.coreservice.common.platform.service.AccountAndHouseService"
+                     check="false"/>
+
+    <dubbo:reference id="idGenService"
+                     interface="com.everwing.coreservice.common.platform.service.IdGenService"
+                     check="false"/>
+
+    <dubbo:reference id="fastDFSService" interface="com.everwing.coreservice.common.platform.service.FastDFSService"
+                     check="false"/>
+
+    <dubbo:reference id="companyService"
+                     interface="com.everwing.coreservice.common.admin.service.CompanyService"
+                     check="false"/>
+    <dubbo:reference id="identityService"
+                     interface="com.everwing.coreservice.common.platform.service.IdentityService"
+                     check="false"/>
+    <dubbo:reference id="buildingService"
+                     interface="com.everwing.coreservice.common.platform.service.BuildingService"
+                     check="false"/>
+    <dubbo:reference id="platformGatingService"
+                     interface="com.everwing.coreservice.common.platform.service.PlatformGatingService"
+                     check="false"/>
+    <dubbo:reference id="authorizationService"
+                     interface="com.everwing.coreservice.common.platform.service.AuthorizationService"
+                     check="false"/>
+    <dubbo:reference id="linPhoneService"
+                     interface="com.everwing.coreservice.common.platform.service.LinPhoneService"
+                     check="false"/>
+    <dubbo:reference id="projectService"
+                     interface="com.everwing.coreservice.common.platform.service.ProjectService"
+                     check="false"/>
+    <dubbo:reference id="informationService"
+                     interface="com.everwing.coreservice.common.platform.service.InformationService"
+                     check="false"/>
+</beans>

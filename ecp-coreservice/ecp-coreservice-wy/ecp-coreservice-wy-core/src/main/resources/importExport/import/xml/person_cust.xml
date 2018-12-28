@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<excel id="person_cust">
+    <sheet index="0">
+        <list index="0" startRow="1" class="com.everwing.coreservice.common.wy.entity.cust.person.PersonCustNewImportList">
+            <field index="0" property="name" required="true"></field>
+            <field index="1" property="sex" type="Map" required="true" format="0:男;1:女"></field>
+            <field index="2" property="nation" required="true"></field>
+            <field index="3" property="cardType" required="true" type="Map" format="0:身份证;1:士官证;2:护照;3:香港身份证;4:台湾身份证;5:澳门身份证;6:其他"></field>
+            <field index="4" property="cardNum" required="true"></field>
+            <field index="5" property="birthday"  type="Date" pattern="yyyy-MM-dd" required="true"></field>
+            <field index="6" property="marrieState" required="true" type="Map" format="0:已婚;1:未婚"></field>
+            <field index="7" property="registerPhone"></field>
+            <field index="8" property="nativePlace"></field>
+            <field index="9" property="urgentContactPerson"></field>
+            <field index="10" property="urgentContactPhone"></field>
+            <field index="11" property="census"></field>
+            <field index="12" property="email"></field>
+            <field index="13" property="weixinNum"></field>
+            <field index="14" property="jiajiaNum"></field>
+            <field index="15" property="workUnits"></field>
+            <field index="16" property="phoneNum"></field>
+        </list>
+    </sheet>
+</excel>

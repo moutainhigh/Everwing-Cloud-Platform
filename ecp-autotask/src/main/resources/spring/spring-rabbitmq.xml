@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+
+
+        http://www.springframework.org/schema/rabbit
+        http://www.springframework.org/schema/rabbit/spring-rabbit-1.0.xsd">
+
+    <!--配置connection-factory，指定连接rabbit server参数-->
+    <bean id="connectionFactory" class="org.springframework.amqp.rabbit.connection.CachingConnectionFactory">
+        <property name="host" value="${rabbitmq.host}" />
+        <property name="port" value="${rabbitmq.port}" />
+        <property name="username" value="${rabbitmq.username}" />
+        <property name="password" value="${rabbitmq.password}" />
+        <property name="virtualHost" value="${rabbitmq.virtualHost}" />
+        <property name="cacheMode" value="CHANNEL"/>
+
+        <!-- 默认通道缓存25,多线程环境中，较小的缓存意味着通道的创建和关闭将以很高的速率运行.加大默认缓存大小可避免这种开销
+         如果达到了限制,调用线程将会阻塞，直到某个通道可用或者超时, 在后者的情况中，将抛出 AmqpTimeoutException异常.-->
+        <property name="channelCacheSize" value="${rabbit.channelCacheSize}"/>
+
+        <!-- channelCheckoutTimeout属性. 当此属性的值大于０时， channelCacheSize会变成连接上创建通道数目的限制. -->
+        <property name="channelCheckoutTimeout" value="${rabbit.channelCheckoutTimeout}"/>
+
+    </bean>
+
+    <!--通过指定下面的admin信息，当前producer中的exchange和queue会在rabbitmq服务器上自动生成-->
+    <rabbit:admin connection-factory="connectionFactory"/>
+
+    <bean id="jsonMessageConverter" class="com.everwing.coreservice.common.convert.FastJsonMessageConverter" />
+
+    <!--定义rabbit template用于数据的接收和发送-->
+    <rabbit:template exchange="${exchange.account.name}" id="amqpTemplate"  connection-factory="connectionFactory"  message-converter="jsonMessageConverter" />
+
+
+    <!--定义queue-->
+    <rabbit:queue id="commonAccountDetail" name="${queue.tcAccount.commonAccountDetail.name}" durable="${queue.tcAccount.commonAccountDetail.durable}" auto-delete="${queue.tcAccount.commonAccountDetail.autoDelete}" exclusive="${queue.tcAccount.commonAccountDetail.exclusive}">
+        <rabbit:queue-arguments>
+            <entry key="x-dead-letter-exchange" value="${dlx.exchange.name}" />
+            <entry key="x-dead-letter-routing-key" value="${queue.dlx.key}" />
+        </rabbit:queue-arguments>
+    </rabbit:queue>
+
+    <rabbit:queue id="lateFeeDetail" name="${queue.tcAccount.lateFeeDetail.name}" durable="${queue.tcAccount.lateFeeDetail.durable}" auto-delete="${queue.tcAccount.lateFeeDetail.autoDelete}" exclusive="${queue.tcAccount.lateFeeDetail.exclusive}">
+        <rabbit:queue-arguments>
+            <entry key="x-dead-letter-exchange" value="${dlx.exchange.name}" />
+            <entry key="x-dead-letter-routing-key" value="${queue.dlx.key}" />
+        </rabbit:queue-arguments>
+    </rabbit:queue>
+
+    <rabbit:queue id="specialDetail" name="${queue.tcAccount.specialDetail.name}" durable="${queue.tcAccount.specialDetail.durable}" auto-delete="${queue.tcAccount.specialDetail.autoDelete}" exclusive="${queue.tcAccount.specialDetail.exclusive}">
+        <rabbit:queue-arguments>
+            <entry key="x-dead-letter-exchange" value="${dlx.exchange.name}" />
+            <entry key="x-dead-letter-routing-key" value="${queue.dlx.key}" />
+        </rabbit:queue-arguments>
+    </rabbit:queue>
+
+    <rabbit:queue id="lastBillFee" name="${queue.tcAccount.lastBillFee.name}" durable="${queue.tcAccount.lastBillFee.durable}" auto-delete="${queue.tcAccount.lastBillFee.autoDelete}" exclusive="${queue.tcAccount.lastBillFee.exclusive}">
+        <rabbit:queue-arguments>
+            <entry key="x-dead-letter-exchange" value="${dlx.exchange.name}" />
+            <entry key="x-dead-letter-routing-key" value="${queue.dlx.key}" />
+        </rabbit:queue-arguments>
+    </rabbit:queue>
+
+    <rabbit:queue id="billDetail" name="${queue.tcAccount.billDetail.name}" durable="${queue.tcAccount.billDetail.durable}" auto-delete="${queue.tcAccount.billDetail.autoDelete}" exclusive="${queue.tcAccount.billDetail.exclusive}">
+        <rabbit:queue-arguments>
+            <entry key="x-dead-letter-exchange" value="${dlx.exchange.name}" />
+            <entry key="x-dead-letter-routing-key" value="${queue.dlx.key}" />
+        </rabbit:queue-arguments>
+    </rabbit:queue>
+
+    <rabbit:queue id="chargeDetail" name="${queue.tcAccount.chargeDetail.name}" durable="${queue.tcAccount.chargeDetail.durable}" auto-delete="${queue.tcAccount.chargeDetail.autoDelete}" exclusive="${queue.tcAccount.chargeDetail.exclusive}">
+        <rabbit:queue-arguments>
+            <entry key="x-dead-letter-exchange" value="${dlx.exchange.name}" />
+            <entry key="x-dead-letter-routing-key" value="${queue.dlx.key}" />
+        </rabbit:queue-arguments>
+    </rabbit:queue>
+
+    <rabbit:queue id="currentChargeDetail" name="${queue.acAccount.currentChargeDetail.update.name}" durable="${queue.acAccount.currentChargeDetail.update.durable}" auto-delete="${queue.acAccount.currentChargeDetail.update.autoDelete}" exclusive="${queue.acAccount.currentChargeDetail.update.exclusive}">
+        <rabbit:queue-arguments>
+            <entry key="x-dead-letter-exchange" value="${dlx.exchange.name}" />
+            <entry key="x-dead-letter-routing-key" value="${queue.dlx.key}" />
+        </rabbit:queue-arguments>
+    </rabbit:queue>
+
+    <rabbit:queue id="dlx" name="${queue.dlx.name}" durable="false"></rabbit:queue>
+
+    <rabbit:direct-exchange id="exchange" name="${exchange.account.name}" durable="${exchange.account.durable}" auto-delete="${exchange.account.autoDelete}">
+        <rabbit:bindings>
+            <rabbit:binding queue="${queue.tcAccount.commonAccountDetail.name}" key="${queue.tcAccount.commonAccountDetail.key}"></rabbit:binding>
+            <rabbit:binding queue="${queue.tcAccount.lateFeeDetail.name}" key="${queue.tcAccount.lateFeeDetail.key}"></rabbit:binding>
+            <rabbit:binding queue="${queue.tcAccount.specialDetail.name}" key="${queue.tcAccount.specialDetail.key}"></rabbit:binding>
+            <rabbit:binding queue="${queue.tcAccount.lastBillFee.name}" key="${queue.tcAccount.lastBillFee.key}"></rabbit:binding>
+            <rabbit:binding queue="${queue.tcAccount.billDetail.name}" key="${queue.tcAccount.billDetail.key}"></rabbit:binding>
+            <rabbit:binding queue="${queue.tcAccount.chargeDetail.name}" key="${queue.tcAccount.chargeDetail.key}"></rabbit:binding>
+            <!-- 审核以后为新的账户版本做数据的修改操作 -->
+            <rabbit:binding queue="${queue.acAccount.currentChargeDetail.update.name}" key="${queue.acAccount.currentChargeDetail.update.key}"></rabbit:binding>
+        </rabbit:bindings>
+    </rabbit:direct-exchange>
+</beans>

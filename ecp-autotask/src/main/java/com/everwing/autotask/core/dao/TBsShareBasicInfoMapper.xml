@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.autotask.core.dao.TBsShareBasicInfoMapper">
+    <resultMap type="TBsShareBasicsInfo" id="BaseResultMap">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="shareName" column="share_name"  jdbcType="VARCHAR"/>
+        <result property="shareFrequency" column="share_frequency"  jdbcType="INTEGER"/>
+        <result property="isUsed" column="is_used"  jdbcType="TINYINT"/>
+        <result property="startMode" column="start_mode"  jdbcType="TINYINT"/>
+        <result property="effectTime" column="effect_time"  jdbcType="TIMESTAMP"/>
+        <result property="invalidTime" column="invalid_time"  jdbcType="TIMESTAMP"/>
+        <result property="lastExecuteTime" column="last_execute_time"  jdbcType="TIMESTAMP"/>
+        <result property="shareAmount" column="share_amount"  jdbcType="DOUBLE"/>
+        <result property="shareType" column="share_type"  jdbcType="TINYINT"/>
+        <result property="projectId" column="project_id"  jdbcType="VARCHAR"/>
+        <result property="projectName" column="project_name"  jdbcType="VARCHAR"/>
+        <result property="createBy" column="create_by"  jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time"  jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <select id="getUsedShareInfo" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        *
+        FROM
+        t_bs_share_basics_info
+        WHERE project_id = #{0}
+        AND share_type = #{1}
+        AND is_used = '0'
+        AND effect_time &lt; NOW()
+        AND invalid_time > NOW()
+        AND (
+        last_execute_time IS NULL
+        OR (
+        SUBSTRING(
+        (
+        DATE_ADD(last_execute_time,INTERVAL share_frequency MONTH)
+        ),1,7) = SUBSTRING(NOW(), 1, 7)
+        )
+        )
+    </select>
+    <update id="updateShareBasicInfo" parameterType="java.util.List">
+        UPDATE t_bs_share_basics_info SET last_execute_time = sysdate()
+        WHERE id IN
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+</mapper>

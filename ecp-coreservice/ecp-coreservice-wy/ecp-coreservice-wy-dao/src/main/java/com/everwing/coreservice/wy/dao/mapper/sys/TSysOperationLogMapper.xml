@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.sys.TSysOperationLogMapper">
+    <resultMap id="baseResultMap" type="TSysOperationLog">
+        <result property="operationLogId" column="operation_log_id"/>
+        <result property="companyId" column="company_id"/>
+        <result property="projectId" column="project_id"/>
+        <result property="moduleName" column="module_name"/>
+        <result property="businessName" column="business_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="operationRole" column="operation_role"/>
+        <result property="operationUser" column="operation_user"/>
+        <result property="operationDataId" column="operation_data_id"/>
+        <result property="operationDate" column="operation_date"/>
+        <result property="operationType" column="operation_type"/>
+        <result property="operationIp" column="operation_ip"/>
+        <result property="logSourceType" column="log_source_type"/>
+    </resultMap>
+
+    <resultMap id="listResultMap" type="TSysOperationLogList" extends="baseResultMap">
+        <result property="projectName" column="project_name"/>
+    </resultMap>
+
+    <select id="listPage" parameterType="TSysOperationLogSearch" resultMap="listResultMap">
+        SELECT
+            t.operation_log_id,
+            t.company_id,
+            t.project_id,
+            (SELECT p.name FROM t_sys_project p WHERE p.project_id = t.project_id) as project_name,
+            t.module_name,
+            t.business_name,
+            t.create_time,
+            t.operation_role,
+            t.operation_user,
+            t.operation_data_id,
+            t.operation_date,
+            t.operation_type,
+            t.operation_ip,
+            t.log_source_type
+        FROM t_sys_operation_log t
+        WHERE 1 = 1
+        <if test="moduleName != null and moduleName !=  ''">
+            AND t.module_name = #{moduleName}
+        </if>
+        <if test="projectId != null and projectId != ''">
+            AND t.project_id = #{projectId}
+        </if>
+        <if test="businessName != null and businessName != ''">
+            AND t.business_name = #{businessName}
+        </if>
+        ORDER BY t.operation_date DESC
+    </select>
+
+    <insert id="insert" parameterType="TSysOperationLog">
+        INSERT INTO t_sys_operation_log (
+            operation_log_id,
+            company_id,
+            project_id,
+            module_name,
+            business_name,
+            create_time,
+            operation_role,
+            operation_user,
+            operation_data_id,
+            operation_date,
+            operation_type,
+            operation_ip,
+            log_source_type
+        )
+        VALUES (
+            UUID(),
+            #{companyId},
+            #{projectId},
+            #{moduleName},
+            #{businessName},
+            sysdate(),
+            #{operationRole},
+            #{operationUser},
+            #{operationDataId},
+            #{operationDate},
+            #{operationType},
+            #{operationIp},
+            #{logSourceType}
+        )
+    </insert>
+</mapper>

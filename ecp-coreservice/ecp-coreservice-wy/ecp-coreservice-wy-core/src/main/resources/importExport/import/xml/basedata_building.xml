@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<excel id="basedata_building">
+    <sheet index="0">
+        <list startRow="1" class="com.everwing.coreservice.common.wy.entity.property.building.TcBuildingImportList">
+            <field index="0" property="firstNode" required="true"></field>
+            <field index="1" property="secondNode" required="true"></field>
+            <field index="2" property="thirdNode" required="true"></field>
+            <field index="3" property="fourthNode" required="true"></field>
+            <field index="4" property="fifthNode" required="true"></field>
+            <field index="5" property="sixthNode" required="true"></field>
+            <field index="6" property="buildingType" type="LookupItem" required="true" lookupCode="buildingType"></field>
+            <field index="7" property="houseCodeNew"></field>
+            <field index="8" property="houseCode"></field>
+            <field index="9" property="propertyName"></field>
+            <field index="10" property="propertyAddr"></field>
+            <field index="11" property="propertyRightFlag" type="LookupItem" lookupCode="yesNo"></field>
+            <field index="12" property="buildingCertificate"></field>
+            <field index="13" property="propertyRightType" type="LookupItem" lookupCode="propertyRightType"></field>
+            <field index="14" property="propertyAttributes" type="LookupItem" lookupCode="propertyAttributes"></field>
+            <field index="15" property="assetAttributes"></field>
+            <field index="16" property="buildingArea" type="Double" regex="([1-9]+[0-9]*|0)(\\.[\\d]+)?" regexErrMsg="只能输入整数或两位小数点以内的数字"></field>
+            <field index="17" property="usableArea" type="Double" regex="([1-9]+[0-9]*|0)(\\.[\\d]+)?" regexErrMsg="只能输入整数或两位小数点以内的数字"></field>
+            <field index="18" property="shareArea" type="Double" regex="([1-9]+[0-9]*|0)(\\.[\\d]+)?" regexErrMsg="只能输入整数或两位小数点以内的数字"></field>
+            <field index="19" property="finishDate" type="Date" pattern="yyyy-MM-dd"></field>
+            <field index="20" property="marketState" type="LookupItem" lookupCode="marketState"></field>
+            <field index="21" property="joinFlag" type="LookupItem" lookupCode="yesNo"></field>
+            <field index="22" property="assetUsage" type="LookupItem" lookupCode="propertyUsage"></field>
+            <field index="23" property="placeAttribute" type="LookupItem" lookupCode="placeAttribute"></field>
+            <field index="24" property="buildingHeight" type="LookupItem" lookupCode="houseProperty"></field>
+            <field index="25" property="parkingSpaceType" type="LookupItem" lookupCode="stationType"></field>
+            <field index="26" property="associatedParkingSpaces"></field>
+            <field index="27" property="unitWyPrice" type="Double" regex="([1-9]+[0-9]*|0)(\\.[\\d]+)?" regexErrMsg="只能输入整数或两位小数点以内的数字"></field>
+            <field index="28" property="unitBtPrice" type="Double" regex="([1-9]+[0-9]*|0)(\\.[\\d]+)?" regexErrMsg="只能输入整数或两位小数点以内的数字"></field>
+            <field index="29" property="isChargeObj" type="LookupItem" lookupCode="yesNo"></field>
+            <field index="30" property="billAddress"></field>
+        </list>
+    </sheet>
+</excel>

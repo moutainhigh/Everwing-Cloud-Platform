@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.coreservice.wy.fee.dao.mapper.AcSpecialDetailMapper">
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.fee.entity.AcSpecialDetail">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="special_id" jdbcType="VARCHAR" property="specialId" />
+    <result column="house_code_new" jdbcType="VARCHAR" property="houseCodeNew" />
+    <result column="before_amount" jdbcType="DECIMAL" property="beforeAmount" />
+    <result column="after_amount" jdbcType="DECIMAL" property="afterAmount" />
+    <result column="change_amount" jdbcType="DECIMAL" property="changeAmount" />
+    <result column="business_type" jdbcType="INTEGER" property="businessType" />
+    <result column="project_id" jdbcType="VARCHAR" property="projectId" />
+    <result column="project_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_id" jdbcType="VARCHAR" property="createId" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="bill_detail_id" jdbcType="VARCHAR" property="billDetailId" />
+    <result column="opera_id" jdbcType="VARCHAR" property="operaId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, special_id, house_code_new, before_amount, after_amount, change_amount, business_type, 
+    project_id, project_name, create_time, create_id, description, bill_detail_id, opera_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_ac_special_detail
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectNewestAmount" resultType="java.math.BigDecimal">
+    select amount
+    from (SELECT ifnull(after_amount,0) amount,max(create_time)
+    FROM t_ac_special_detail
+    WHERE house_code_new=#{houseCodeNew} group by house_code_new) t
+  </select>
+    
+    <!-- 查询出最新一条的专项抵扣数据 -->
+    <select id="checkInsert" resultType="java.lang.Integer">
+		SELECT
+			count(1)
+		FROM
+			t_ac_special_detail
+		WHERE
+			create_time = (
+				SELECT
+					MAX(create_time)
+				FROM
+					t_ac_special_detail
+				WHERE
+					house_code_new = #{houseCodeNew}
+				AND special_id = #{specialId}
+			)
+		AND house_code_new = #{houseCodeNew}
+		AND special_id = #{specialId}
+		LIMIT 1
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_ac_special_detail
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="AcSpecialDetail">
+    insert into t_ac_special_detail (id, special_id, house_code_new, 
+      before_amount, after_amount, change_amount, 
+      business_type, project_id, project_name, 
+      create_time, create_id, description, 
+      bill_detail_id, opera_id)
+    values (#{id,jdbcType=VARCHAR}, #{specialId,jdbcType=VARCHAR}, #{houseCodeNew,jdbcType=VARCHAR}, 
+      #{beforeAmount,jdbcType=DECIMAL}, #{afterAmount,jdbcType=DECIMAL}, #{changeAmount,jdbcType=DECIMAL}, 
+      #{businessType,jdbcType=INTEGER}, #{projectId,jdbcType=VARCHAR}, #{projectName,jdbcType=VARCHAR},
+      #{createTime,jdbcType=TIMESTAMP}, #{createId,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{billDetailId,jdbcType=VARCHAR}, #{operaId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="AcSpecialDetail">
+    insert into t_ac_special_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="specialId != null">
+        special_id,
+      </if>
+      <if test="houseCodeNew != null">
+        house_code_new,
+      </if>
+      <if test="beforeAmount != null">
+        before_amount,
+      </if>
+      <if test="afterAmount != null">
+        after_amount,
+      </if>
+      <if test="changeAmount != null">
+        change_amount,
+      </if>
+      <if test="businessType != null">
+        business_type,
+      </if>
+      <if test="projectId != null">
+        project_id,
+      </if>
+      <if test="projectName != null">
+        project_name,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createId != null">
+        create_id,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="billDetailId != null">
+        bill_detail_id,
+      </if>
+      <if test="operaId != null">
+        opera_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="specialId != null">
+        #{specialId,jdbcType=VARCHAR},
+      </if>
+      <if test="houseCodeNew != null">
+        #{houseCodeNew,jdbcType=VARCHAR},
+      </if>
+      <if test="beforeAmount != null">
+        #{beforeAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="afterAmount != null">
+        #{afterAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="changeAmount != null">
+        #{changeAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="businessType != null">
+        #{businessType,jdbcType=INTEGER},
+      </if>
+      <if test="projectId != null">
+        #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createId != null">
+        #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="billDetailId != null">
+        #{billDetailId,jdbcType=VARCHAR},
+      </if>
+      <if test="operaId != null">
+        #{operaId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="selectByOperaId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_ac_special_detail
+    where opera_id = #{operaId,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByOperaIdAndType"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_ac_special_detail
+    where  special_id = (
+    select id from t_ac_special_account where account_type=#{acoountType} and house_code_new=#{houseCodeNew}
+
+    )and opera_id=#{operaId}
+  </select>
+
+  <insert id="insertBySelect">
+    insert into t_ac_special_detail (id, special_id, house_code_new,
+                                     before_amount, after_amount, change_amount,
+                                     business_type, project_id, project_name,
+                                     create_time, create_id, description,
+                                     bill_detail_id, opera_id)
+                          VALUES (#{id,jdbcType=VARCHAR}, #{specialId,jdbcType=VARCHAR}, #{houseCodeNew,jdbcType=VARCHAR},
+                         #{beforeAmount}, #{afterAmount}, #{changeAmount,jdbcType=DECIMAL},
+                           #{businessType,jdbcType=INTEGER}, #{projectId,jdbcType=VARCHAR}, #{projectName,jdbcType=VARCHAR},
+                          #{createTime,jdbcType=TIMESTAMP}, #{createId,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
+                          #{billDetailId,jdbcType=VARCHAR}, #{operaId,jdbcType=VARCHAR} )
+  </insert>
+
+
+
+  <update id="updateByPrimaryKeySelective" parameterType="AcSpecialDetail">
+    update t_ac_special_detail
+    <set>
+      <if test="specialId != null">
+        special_id = #{specialId,jdbcType=VARCHAR},
+      </if>
+      <if test="houseCodeNew != null">
+        house_code_new = #{houseCodeNew,jdbcType=VARCHAR},
+      </if>
+      <if test="beforeAmount != null">
+        before_amount = #{beforeAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="afterAmount != null">
+        after_amount = #{afterAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="changeAmount != null">
+        change_amount = #{changeAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="businessType != null">
+        business_type = #{businessType,jdbcType=INTEGER},
+      </if>
+      <if test="projectId != null">
+        project_id = #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        project_name = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createId != null">
+        create_id = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="billDetailId != null">
+        bill_detail_id = #{billDetailId,jdbcType=VARCHAR},
+      </if>
+      <if test="operaId != null">
+        opera_id = #{operaId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="AcSpecialDetail">
+    update t_ac_special_detail
+    set special_id = #{specialId,jdbcType=VARCHAR},
+      house_code_new = #{houseCodeNew,jdbcType=VARCHAR},
+      before_amount = #{beforeAmount,jdbcType=DECIMAL},
+      after_amount = #{afterAmount,jdbcType=DECIMAL},
+      change_amount = #{changeAmount,jdbcType=DECIMAL},
+      business_type = #{businessType,jdbcType=INTEGER},
+      project_id = #{projectId,jdbcType=VARCHAR},
+      project_name = #{projectName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_id = #{createId,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      bill_detail_id = #{billDetailId,jdbcType=VARCHAR},
+      opera_id = #{operaId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="findDeductionByDetail" resultType="java.lang.Double">
+    select  IFNULL(SUM(change_amount),0)  from t_ac_special_detail where business_type=#{businessType} and special_id in(
+    select id from t_ac_special_account where account_type=#{chargingType}
+    ) and project_id=#{projectId}
+    and DATE_FORMAT(create_time, '%Y-%m-%d') &gt;=  DATE_FORMAT(#{startTime}, '%Y-%m-%d')
+    and  DATE_FORMAT(create_time, '%Y-%m-%d') &lt;=  DATE_FORMAT(#{endTime}, '%Y-%m-%d')
+
+  </select>
+</mapper>

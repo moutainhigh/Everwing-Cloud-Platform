@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.fee.dao.mapper.TBsChargingSchemeMapper">
+
+	<select id="findTaxRate" resultType="java.lang.Double">
+		SELECT IFNULL(t1.tax_rate,0.00) AS tax_rate 
+		  FROM t_bs_charging_scheme t1,tc_building t2 
+		 WHERE t1.is_used = 0 
+		   AND t1.scheme_type = #{schemeType} 
+		   AND t1.project_id = t2.project_id
+		   AND t2.building_code = #{buildingCode}
+	</select>
+	
+
+	
+</mapper>

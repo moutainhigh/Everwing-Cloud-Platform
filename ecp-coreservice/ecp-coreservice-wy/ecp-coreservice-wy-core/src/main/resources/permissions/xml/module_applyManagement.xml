@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- modulegroup节点从main.xml里面复制过来的，id属性值要和main里面的一样，name和desc属性必须保留，但值可以空 -->
+<modulegroup id="dc2e2406-76e6-436e-abe3-144fa1608d78" name="" desc="">
+	<!-- 水表管理 -->
+	<module id="AA6B8B48-0522-4B81-9972-021A0B0FA03E" name="Water Meter Management" desc="水表管理" order="1" page="WaterMeterComponent" url="./WaterMeterManagement" img="">
+		<modulegroup id="0872F965126E4E5CACC7CA09E06FD00A" name="water schedule" desc="水表计划">
+			<module id="8BEBDE952CB74478835DFDFAE6E79AAC" name="waterSchedule" desc="水表计划管理" page="waterSchedule">
+				<operation id="F3F935A147CE4B5594A5098DCECAC4C2" name="isUsed" desc="计划启停用" url="*"/>
+				<operation id="F3F935A147CE4B5594A5098DCECAC4C3" name="edit" desc="计划编辑" url="*"/>
+				<operation id="F3F935A147CE4B5594A5098DCECAC4C4" name="add" desc="计划新增" url="*"/>
+				<operation id="F3F935A147CE4B5594A5098DCECAC4C5" name="save" desc="计划保存" url="*"/>
+				<operation id="81F19F35BC3340749072CE40FC640428" name="anon" desc="anon" permission="anon" url="/waterMeter/countMeters"/>
+				<operation id="85C2CBE0B73942CA828AD8701146689F" name="anon" desc="anon" permission="anon" url="/readingSchedule/findUsingSchedule"/>
+			</module>
+		</modulegroup>
+		<modulegroup id="016C5F7BE04A490D8D0481092F43CAAA" name="water base data" desc="水表数据">
+			<module id="50B786E9D7D44BD69931245DAB5D36E0" name="waterBaseData" desc="水表基础数据管理"  page="waterBaseData">
+				<operation id="50B786E9D7D44BD69931245DAB5D36E1" name="add" desc="水表新增" url="/waterMeter/addWaerMeterInfo"/>
+				<operation id="50B786E9D7D44BD69931245DAB5D36E2" name="edit" desc="水表修改" url="/waterMeter/updateWaerMeterInfo"/>
+				<operation id="50B786E9D7D44BD69931245DAB5D36E3" name="del" desc="水表删除" url="/waterMeter/deleteWaterMeterInfos/*"/>
+				<operation id="50B786E9D7D44BD69931245DAB5D36E4" name="start" desc="水表启用" url="/waterMeter/startStopWaerMeterByOne/*/*"/>
+				<operation id="50B786E9D7D44BD69931245DAB5D36E5" name="stop" desc="水表停用" url="/waterMeter/startStopWaerMeterByOne/*/*"/>
+				<operation id="50B786E9D7D44BD69931245DAB5D36E6" name="change" desc="水表更换" url="/waterMeter/replaceWaerMeterByOne"/>
+				<operation id="50B786E9D7D44BD69931245DAB5D36E7" name="tempDownload" desc="水表导入模板下载" url="/waterMeter/downloadTemplate"/>
+				<operation id="50B786E9D7D44BD69931245DAB5D36E8" name="import" desc="水表导入" url="*"/>
+				<operation id="50B786E9D7D44BD69931245DAB5D36E9" name="export" desc="水表导出" url="/system/ImportExportController/export"/>
+				<operation id="fbc8b5c3-4df1-4959-818e-e4006375bfe0" name="fjUpload" desc="水表附件上传" url="/system/ImportExportController/uploadEnclosureFile"/>
+				<operation id="50B786E9D7D44BD69931245DAB5D3610" name="fjDelete" desc="水表附件删除" url="/system/ImportExportController/deleteEnclosureFile"/>
+				
+				
+				<operation id="51C0672A444047F3A6A72C72CB9C7772" name="anon" desc="anon" permission="anon" url="/waterMeter/listPageWaterMeterInfos"/>
+				<operation id="51C0672A444047F3A6A72C72CB9C7773" name="anon" desc="anon" permission="anon" url="/waterMeter/checkWaterMeterCode/*"/>
+				<operation id="51C0672A444047F3A6A72C72CB9C7774" name="anon" desc="anon" permission="anon" url="/system/ImportExportController/queryEnclosureFile"/>
+				<operation id="51C0672A444047F3A6A72C72CB9C7775" name="anon" desc="anon" permission="anon" url="/waterMeter/listPageLoadMeterReadingRecordById"/>
+				<operation id="51C0672A444047F3A6A72C72CB9C7776" name="anon" desc="anon" permission="anon" url="/waterMeter/listPageloadWaterMeterForChange"/>
+				<operation id="51C0672A444047F3A6A72C72CB9C7777" name="anon" desc="anon" permission="anon" url="/waterMeter/listPageWaterMeterByLevel"/>
+				<operation id="51C0672A444047F3A6A72C72CB9C7778" name="anon" desc="anon" permission="anon" url="/system/TSysUserController/listPageUser"/>
+				<operation id="51C0672A444047F3A6A72C72CB9C7779" name="anon" desc="anon" permission="anon" url="/project/TcBuildingController/loadBuildingByProjectId/*"/>
+			</module>
+		</modulegroup>
+		
+		<modulegroup id="0872F965126E4E5CACC7CA09E06FD01A" name="water task" desc="水表任务">
+			<module id="8BEBDE952CB74478835DFDFAE6E79AAD" name="waterTask" desc="水表任务"  page="waterTask">
+				<operation id="94C49ADEF46846EC83C4A306232994A0" name="add" desc="任务新增" url="/OrderComplaint/insert"/>
+				<operation id="94C49ADEF46846EC83C4A306232994A1" name="addFile" desc="任务新增附件" url="*"/>
+				<operation id="94C49ADEF46846EC83C4A306232994A2" name="delFile" desc="任务删除附件" url="/system/ImportExportController/deleteEnclosureFile"/>
+				<operation id="94C49ADEF46846EC83C4A306232994A3" name="complete" desc="任务完成" url="/OrderComplete/insert"/>
+				
+				<operation id="D0EFBFA3EB6A483A9FB4661C1019FDA0" name="anon" desc="anon" permission="anon" url="/OrderComplaint/listPage"/>
+				<operation id="D0EFBFA3EB6A483A9FB4661C1019FDA1" name="anon" desc="anon" permission="anon" url="/project/TcBuildingController/loadBuildingByProjectId/*"/>
+				<operation id="D0EFBFA3EB6A483A9FB4661C1019FDA2" name="anon" desc="anon" permission="anon" url="/meterData/findByBuildingCode/*"/>
+				<operation id="D0EFBFA3EB6A483A9FB4661C1019FDA3" name="anon" desc="anon" permission="anon" url="/meterData/findByTaskIdAndBuildingCode/*/*"/>
+				<operation id="D0EFBFA3EB6A483A9FB4661C1019FDA4" name="anon" desc="anon" permission="anon" url="/OrderComplete/findDetailById/*"/>
+				<operation id="D0EFBFA3EB6A483A9FB4661C1019FDA5" name="anon" desc="anon" permission="anon" url="/system/TSysUserController/listPageUser"/>
+				<operation id="D0EFBFA3EB6A483A9FB4661C1019FDA6" name="anon" desc="anon" permission="anon" url="/system/ImportExportController/queryEnclosureFile"/>
+				<operation id="D0EFBFA3EB6A483A9FB4661C1019FDA7" name="anon" desc="anon" permission="anon" url="/system/LookupController/findLookupItem"/>
+			</module>
+		</modulegroup>
+		
+		<modulegroup id="F1FEBD34C08F4A17843DAD0A5A15886A" name="water result" desc="水表抄表结果">
+			<module id="7D748A08D9CD4A5D813C11E717DCE39C" name="waterResult" desc="水表抄表结果"  page="waterResult">
+				<operation id="8DACC840906247728D5125EBFE8F15A0" name="changeReading" desc="修改读数" url="/meterData/modifyReading"/>
+				<operation id="8DACC840906247728D5125EBFE8F15A1" name="auditTask" desc="任务审核" url="/readingTask/batchAudit/1"/>
+				<operation id="8DACC840906247728D5125EBFE8F15A2" name="detail" desc="任务详情" url="*"/>
+				<operation id="8DACC840906247728D5125EBFE8F15A3" name="reading" desc="抄表" url="/meterData/batchModify/0"/>
+				<operation id="8DACC840906247728D5125EBFE8F15A4" name="import" desc="导入" url="/meterData/importMeterReading/0/*"/>
+				<operation id="8DACC840906247728D5125EBFE8F15A5" name="tempDownload" desc="导入模板下载" url="/meterData/downloadTemplate/*"/>
+				<operation id="8DACC840906247728D5125EBFE8F15A6" name="export" desc="导出" url="/system/ImportExportController/export"/>
+				
+				
+				
+				<operation id="1B19CD547F7A49D8879BCB5E1A97CDB0" name="anon" desc="anon" permission="anon" url="/meterData/listPageReadingInfoByYear/*"/>
+				<operation id="1B19CD547F7A49D8879BCB5E1A97CDB1" name="anon" desc="anon" permission="anon" url="/meterData/selectAbnormalData"/>
+				<operation id="1B19CD547F7A49D8879BCB5E1A97CDB2" name="anon" desc="anon" permission="anon" url="/meterData/listPageDatas"/>
+				<operation id="1B19CD547F7A49D8879BCB5E1A97CDB3" name="anon" desc="anon" permission="anon" url="/readingTask/listPageTasks"/>
+			</module>
+		</modulegroup>
+	</module>
+	
+	<!-- 电表管理 -->
+	<module id="0D18DFD4-8C3A-415D-B3E1-4C673627EE07" name="Elec Meter Management" desc="电表管理" order="2" page="ElectricityMeterComponent" url="./ElectricityMeterManagement" img="">
+	      <modulegroup id="F444B5CB-C399-11E7-80C8-0050568E00C5" name="elect schedule" desc="电表计划">
+	      		<module id="20ED9A27-C39A-11E7-80C8-0050568E00C5" name="electSchedule" desc="电表计划管理" page="electSchedule">
+	      			<operation id="6C048BDB-C39A-11E7-80C8-0050568E00C5" name="isUsed" desc="计划启停用" url="*"/>
+	      			<operation id="951F9B39-C39A-11E7-80C8-0050568E00C5" name="edit" desc="计划编辑" url="*"/>
+	      			<operation id="B17C400F-C39A-11E7-80C8-0050568E00C5" name="add" desc="计划新增" url="*"/>
+	      			<operation id="664D8F61-C3A2-11E7-80C8-0050568E00C5" name="save" desc="计划保存" url="*"/>
+	      			<operation id="B30B1AB8-C3A2-11E7-80C8-0050568E00C5" name="anon" desc="anon" permission="anon" url="/ElectricityMeter/countMeters"/>
+				    <operation id="C22E085A-C3A2-11E7-80C8-0050568E00C5" name="anon" desc="anon" permission="anon" url="/readingSchedule/findUsingSchedule"/>
+	      		</module>
+	      </modulegroup>
+	      
+	       <modulegroup id="6B9854D2-C38D-11E7-80C8-0050568E00C5" name="elect base data" desc="电表数据">
+	       		<module id="A473BF60-C38D-11E7-80C8-0050568E00C5" name="electBaseData" desc="电表基础数据管理" page="electBaseData">
+	       			<operation id="884E5BCA-C38E-11E7-80C8-0050568E00C5" name="add" desc="电表新增" url="/ElectricityMeter/addElectMeter"/>
+	       			<operation id="A9354AE3-C38F-11E7-80C8-0050568E00C5" name="edit" desc="电表修改" url="/ElectricityMeter/editSave"/>
+	       			<operation id="2BA2947A-C390-11E7-80C8-0050568E00C5" name="del" desc="电表删除" url="/ElectricityMeter/delElect"/>
+	       			<operation id="800C1C5E-C390-11E7-80C8-0050568E00C5" name="start" desc="电表启用" url="/ElectricityMeter/listPageElectricityMeter/*"/>
+	       			<operation id="E792AED4-C390-11E7-80C8-0050568E00C5" name="stop" desc="电表停用" url="/ElectricityMeter/listPageElectricityMeter/*"/>
+	       			<operation id="6700f8fb-c392-11e7-80c8-0050568e00c5" name="change" desc="电表更换" url="/ElectricityMeter/listPageElectricityMeter/*"/>
+	       			<operation id="860C85AF-C398-11E7-80C8-0050568E00C5" name="tempDownload" desc="导入模板下载" url="/ElectricityMeter/downloadTemplate"/>
+	       			<operation id="EF5A4D91-C398-11E7-80C8-0050568E00C5" name="import" desc="电表导入" url="*"/>
+	       			<operation id="21DB296D-C399-11E7-80C8-0050568E00C5" name="export" desc="电表导出" url="/system/ImportExportController/export"/>
+	       			<operation id="6DFB86C6-C399-11E7-80C8-0050568E00C5" name="fjUpload" desc="电表附件上传" url="/system/ImportExportController/uploadEnclosureFile"/>
+	       			<operation id="A2FBAB1B-C399-11E7-80C8-0050568E00C5" name="fjDelete" desc="电表附件删除" url="/system/ImportExportController/deleteEnclosureFile"/>
+	       			
+	       			
+	       			<operation id="058A90A3-C3A3-11E7-80C8-0050568E00C5" name="anon" desc="anon" permission="anon" url="/ElectricityMeter/listPageElectricityMeter"/>
+	       			<operation id="526C2163-C3A3-11E7-80C8-0050568E00C5" name="anon" desc="anon" permission="anon" url="/project/TcBuildingController/loadBuildingByProjectId/*"/>
+	       			<operation id="571EF145-C5BC-11E7-80C8-0050568E00C5" name="anon" desc="anon" permission="anon" url="/system/ImportExportController/queryEnclosureFile"/>
+	       		</module>
+	       </modulegroup>
+	       
+	       <modulegroup id="B44A2A51-C5BE-11E7-80C8-0050568E00C5" name="elect task" desc="电表任务">
+	       		<module id="F51EF7EA-C5BE-11E7-80C8-0050568E00C5" name="electTask" desc="电表任务" page="electTask">
+	       			<operation id="3D53BAC7-C5BF-11E7-80C8-0050568E00C5" name="add" desc="任务新增" url="/OrderComplaint/insert"/>
+	       			<operation id="CD58275F-C5BF-11E7-80C8-0050568E00C5" name="addFile" desc="任务新增附件" url="*"/>
+	       			<operation id="EADA1F52-C5BF-11E7-80C8-0050568E00C5" name="delFile" desc="任务删除附件" url="/system/ImportExportController/deleteEnclosureFile"/>
+	       			<operation id="34F214B9-C5C0-11E7-80C8-0050568E00C5" name="complete" desc="任务完成" url="/OrderComplete/insert"/>
+	       			
+	       			<operation id="8E62CCCF-C5C0-11E7-80C8-0050568E00C5" name="anon" desc="anon" permission="anon" url="/OrderComplaint/listPage"/>
+	       			<operation id="1441A9A6-C5C1-11E7-80C8-0050568E00C5" name="anon" desc="anon" permission="anon" url="/project/TcBuildingController/loadBuildingByProjectId/*"/>
+	       			<operation id="3B1A8C36-C5C1-11E7-80C8-0050568E00C5" name="anon" desc="anon" permission="anon" url="/meterData/findByBuildingCode/*"/>
+	       			<operation id="8F275EDB-C5C1-11E7-80C8-0050568E00C5" name="anon" desc="anon" permission="anon" url="/meterData/findByTaskIdAndBuildingCode/*/*"/>
+	       			<operation id="AD78DEDF-C5C1-11E7-80C8-0050568E00C5" name="anon" desc="anon" permission="anon" url="/OrderComplete/findDetailById/*"/>
+	       			<operation id="D024CF96-C5C1-11E7-80C8-0050568E00C5" name="anon" desc="anon" permission="anon" url="/system/TSysUserController/listPageUser"/>
+	       			<operation id="10E3BA8A-C5C2-11E7-80C8-0050568E00C5" name="anon" desc="anon" permission="anon" url="/system/ImportExportController/queryEnclosureFile"/>
+	       			<operation id="29C20117-C5C2-11E7-80C8-0050568E00C5" name="anon" desc="anon" permission="anon" url="/system/LookupController/findLookupItem"/>
+	       		</module>
+	       </modulegroup>
+	       
+	       <modulegroup id="2EABE0D6-C5C3-11E7-80C8-0050568E00C5" name="elect result" desc="电表抄表结果">
+	       		<module id="4B385656-C5C3-11E7-80C8-0050568E00C5" name="electResult" desc="电表抄表结果"  page="electResult">
+	       			<operation id="B7E0EE93-C5C3-11E7-80C8-0050568E00C5" name="changeReading" desc="修改读数" url="/meterData/modifyReading"/>
+	       			<operation id="17B5468F-C5C4-11E7-80C8-0050568E00C5" name="auditTask" desc="任务审核" url="/readingTask/batchAudit/1"/>
+	       			<operation id="6E1FCCA0-C5C4-11E7-80C8-0050568E00C5" name="detail" desc="任务详情" url="*"/>
+	       			<operation id="89B2AC5C-C5C4-11E7-80C8-0050568E00C5" name="reading" desc="抄表" url="/meterData/batchModify/0"/>
+	       			<operation id="A34B4FC0-C5C4-11E7-80C8-0050568E00C5" name="import" desc="导入" url="/meterData/importMeterReading/0/*"/>
+	       			<operation id="C1420D4D-C5C4-11E7-80C8-0050568E00C5" name="tempDownload" desc="导入模板下载" url="/meterData/downloadTemplate/*"/>
+	       			<operation id="E9D511A1-C5C4-11E7-80C8-0050568E00C5" name="export" desc="导出" url="/system/ImportExportController/export"/>
+	       			
+		       		<operation id="91C58E6F-C5C5-11E7-80C8-0050568E00C5" name="anon" desc="anon" permission="anon" url="/meterData/listPageReadingInfoByYear/*"/>
+					<operation id="9A79BD00-C5C5-11E7-80C8-0050568E00C5" name="anon" desc="anon" permission="anon" url="/meterData/selectAbnormalData"/>
+					<operation id="A14268CB-C5C5-11E7-80C8-0050568E00C5" name="anon" desc="anon" permission="anon" url="/meterData/listPageDatas"/>
+					<operation id="A8BB53B0-C5C5-11E7-80C8-0050568E00C5" name="anon" desc="anon" permission="anon" url="/readingTask/listPageTasks"/>
+	       		</module>
+	       </modulegroup>
+	</module>
+	
+	<!-- 门控机管理 -->
+	<module id="0D18DFD4-8C3A-415D-B3E1-4C673627EE08" name="Gating Management" desc="门控机管理" order="3" page="Gating" url="./gatingIndex" img="">
+	      <operation id="73848DF0-501C-40C7-BE84-901085488601" name="repair" desc="维修申请" url="/Company/getCompanyInformation/*"/>
+	      <operation id="73848DF0-501C-40C7-BE84-901085488602" name="add" desc="新建门控机" url="/wyGating/addNewGating/"/>
+	      <operation id="73848DF0-501C-40C7-BE84-901085488603" name="bind" desc="绑定" url="/wyGating/batchInsertBuildingGate"/>
+	      <operation id="73848DF0-501C-40C7-BE84-901085488604" name="edit" desc="编辑" url="/wyGating/updateGating"/>
+	      <operation id="73848DF0-501C-40C7-BE84-901085488605" name="delete" desc="删除" url="/wyGating/deleteGating/*"/>
+	      <operation id="0de73484-0418-4fdd-b152-d29e3f84f595" name="videoOpr" desc="视频操作" url="/wyGating/enableVideo"/>
+	      <operation id="f4be5f45-efdd-45cf-b629-8c26f231dfbb" name="restart" desc="重启" url="/wyGating/restart"/>
+	      <operation id="1b0b4321-a705-44bd-82b3-a738d13e261b" name="update" desc="更新" url="/wyGating/forceUpdate"/>
+	      
+	      <operation id="73848DF0-501C-40C7-BE84-901085488606" name="anon" desc="anon" permission="anon" url="/wyGating/batchInsertHouseGate/*"/>
+	      <operation id="73848DF0-501C-40C7-BE84-901085488607" name="anon" desc="anon" permission="anon" url="/Company/getCompanyInformation/*"/>
+	      <operation id="73848DF0-501C-40C7-BE84-901085488608" name="anon" desc="anon" permission="anon" url="/wyGating/listPageGating"/>
+	      <operation id="73848DF0-501C-40C7-BE84-901085488609" name="anon" desc="anon" permission="anon" url="/wyGating/getGatingState"/>
+	      <operation id="73848DF0-501C-40C7-BE84-901085488610" name="anon" desc="anon" permission="anon" url="/Project/selectAllProject"/>
+	      <operation id="73848DF0-501C-40C7-BE84-901085488611" name="anon" desc="anon" permission="anon" url="/Project/getProAndCompanyInfoByProId/*"/>
+	      <operation id="73848DF0-501C-40C7-BE84-901085488612" name="anon" desc="anon" permission="anon" url="/wyGating/listAllGatingByKey/"/>
+	      <operation id="73848DF0-501C-40C7-BE84-901085488613" name="anon" desc="anon" permission="anon" url="/project/building/loadBuildingInfos"/>
+	      <operation id="73848DF0-501C-40C7-BE84-901085488614" name="anon" desc="anon" permission="anon" url="/wyGating/getAccountDetail/*"/>
+	      <operation id="73848DF0-501C-40C7-BE84-901085488615" name="anon" desc="anon" permission="anon" url="/wyGating/houseGateList/*"/>
+	      <operation id="73848DF0-501C-40C7-BE84-901085488616" name="anon" desc="anon" permission="anon" url="/wyGating/getGatingByKey/*"/>
+	      <operation id="73848DF0-501C-40C7-BE84-901085488617" name="anon" desc="anon" permission="anon" url="/repairOrder/add"/>
+	</module>
+
+	<!--<module id="bc34d857-ad8a-11e7-80c8-0050568e00c5" name="Vehicle Management" desc="车辆管理" order="5" page="vehicle4business" url="index.businessManagement.vehicle" img="img/menu/vehicle.png">
+		<operation id="eb2d9260-ad8a-11e7-80c8-0050568e00c5" name="Add" desc="新建" url="/TBsVehicleController/add"/>
+		<operation id="f05f1634-ad8a-11e7-80c8-0050568e00c5" name="Delete" desc="删除" url="/TBsVehicleController/delete/*"/>
+		<operation id="f547afa7-ad8a-11e7-80c8-0050568e00c5" name="Search" desc="查询" url="/TBsVehicleController/listPage"/>
+		<operation id="f9a23b4e-ad8a-11e7-80c8-0050568e00c5" name="Modify" desc="修改" url="/TBsVehicleController/modify"/>
+		<operation id="febac018-ad8a-11e7-80c8-0050568e00c5" name="anon" desc="anon" permission="anon" url="/TBsVehicleController/findByCondition"/>
+	</module>-->
+
+	<module id="aebe45dc-ad8b-11e7-80c8-0050568e00c5" name="Product Management" desc="产品管理" order="17" page="" url="./productManagementModule4apply" img="">
+		<modulegroup id="aebe45dc-ad8b-11e7-80c8-0050568e00c5" name="Product Management Group" desc="产品管理">
+			<module id="66c8087b-f377-11e8-8fb4-0050568e0e15" name="Product Purchase" desc="产品代买" order="1" page="productPurchase4apply" url="./applyManagementModule/productManagementModule4apply/default/productPurchaseListComponent">
+
+			</module>
+			<module id="6cae822c-f377-11e8-8fb4-0050568e0e15" name="Product Order List" desc="销售记录" order="3" page="productOrderList4apply" url="./applyManagementModule/productManagementModule4apply/default/productOrderListComponent">
+
+			</module>
+			<module id="711a2372-f377-11e8-8fb4-0050568e0e15" name="Product Management" desc="产品管理" order="5" page="productManagement4apply" url="./applyManagementModule/productManagementModule4apply/default/productListComponent">
+				<operation id="79b15f5b-f377-11e8-8fb4-0050568e0e15" name="Search" desc="查询" url="*"/>
+				<operation id="7dc20c1f-f377-11e8-8fb4-0050568e0e15" name="Add" desc="新建" url="*"/>
+				<operation id="827b47a0-f377-11e8-8fb4-0050568e0e15" name="Add2shopping" desc="加入购物车" url="*"/>
+				<operation id="89a2ee87-f377-11e8-8fb4-0050568e0e15" name="Shelve" desc="上架" url="*"/>
+				<operation id="8dbb0eb4-f377-11e8-8fb4-0050568e0e15" name="normalOffShelve" desc="下架" url="*"/>
+				<operation id="91d65604-f377-11e8-8fb4-0050568e0e15" name="Modify" desc="编辑" url="*"/>
+				<operation id="966a734d-f377-11e8-8fb4-0050568e0e15" name="Delete" desc="删除" url="*"/>
+			</module>
+		</modulegroup>
+	</module>
+	<!--<module id="b48d0e7d-ad8b-11e7-80c8-0050568e00c5" name="Property Management" desc="资产管理" order="18" page="property4business" url="./AssetManage" img="">
+		<operation id="9f1fa8af-cf67-11e7-80c8-0050568e00c5" name="Search" desc="查询" url="*"/>
+		<operation id="2f6fb8c6-ce9e-11e7-80c8-0050568e00c5" name="Modify" desc="编辑" url="*"/>
+	</module>-->
+
+	<module id="ab302a0a-6f7f-11e8-af29-0050568e0e15" name="Finance Management" desc="财务管理" order="22" page="finance" url="/index/applyManagementModule/financial/financialIndex" img="">
+		<modulegroup id="ab302a0a-6f7f-11e8-af29-0050568e0e15" name="Finance Management" desc="财务管理">
+			<module id="29f58335-e714-11e8-ba6f-00163e02f7ae" name="Index Page" desc="首页" order="1" page="" url="/index/applyManagementModule/financial/financialIndex" img="">
+			</module>
+			<module id="44eda032-e714-11e8-ba6f-00163e02f7ae" name="Zhang Hu" desc="账户" order="5" page="" url="/index/applyManagementModule/financial/account" img="">
+			</module>
+			<module id="4b5bcca4-e714-11e8-ba6f-00163e02f7ae" name="Shou Ru" desc="收入" order="8" page="" url="/index/applyManagementModule/financial/income" img="">
+			</module>
+			<module id="50039a00-e714-11e8-ba6f-00163e02f7ae" name="Jiao Yi Ji Lu" desc="交易记录" order="11" page="" url="" img="">
+			</module>
+			<module id="54548427-e714-11e8-ba6f-00163e02f7ae" name="Yin Zhang" desc="银帐" order="14" page="" url="" img="">
+			</module>
+			<module id="76a88d77-e714-11e8-ba6f-00163e02f7ae" name="Tuo Shou" desc="托收" order="18" page="" url="" img="">
+			</module>
+			<module id="7b985c15-e714-11e8-ba6f-00163e02f7ae" name="Ji Fei" desc="计费" order="21" page="" url="/index/applyManagementModule/financial/charging" img="">
+			</module>
+			<module id="82957a3d-e714-11e8-ba6f-00163e02f7ae" name="Yi Chang Xiang Chu Li" desc="异常项处理" order="25" page="" url="" img="">
+			</module>
+			<module id="87b8cae0-e714-11e8-ba6f-00163e02f7ae" name="Product Order" desc="产品交易" order="28" page="" url="" img="">
+			</module>
+			<module id="8beed3f7-e714-11e8-ba6f-00163e02f7ae" name="Ya Jin" desc="押金" order="31" page="" url="" img="">
+			</module>
+			<module id="90a17914-e714-11e8-ba6f-00163e02f7ae" name="Tui Kuan" desc="退款" order="36" page="" url="" img="">
+			</module>
+			<module id="955f98e0-e714-11e8-ba6f-00163e02f7ae" name="Ji Fei Xiang She Zhi" desc="计费项设置" order="39" page="" url="" img="">
+			</module>
+		</modulegroup>
+	</module>
+
+	<!--<module id="b19e0891-6f7f-11e8-af29-0050568e0e15" name="Service Request" desc="服务请求" order="25" page="service" url="" img="">
+	</module>-->
+
+
+	<!--<module id="b8fb147f-ad8b-11e7-80c8-0050568e00c5" name="Change Property" desc="产权变更" order="20" page="propertyChanging4business" url="index.businessManagement.propertyChanging" img="img/menu/PropertyChange.png">
+		<operation id="b12cbf8d-cf67-11e7-80c8-0050568e00c5" name="Search" desc="查询" url="*"/>
+		<operation id="aedaf2d2-ce9e-11e7-80c8-0050568e00c5" name="Add" desc="新建" url="*"/>
+	</module>
+
+	<module id="be03e543-ad8b-11e7-80c8-0050568e00c5" name="Deposit Management" desc="押金管理" order="22" page="deposit4business" url="index.businessManagement.deposit" img="img/menu/deposit.png">
+		<operation id="9fb3bd61-dbec-11e7-80c8-0050568e00c5" name="Search" desc="查询" url="*"/>
+		<operation id="a44709cc-dbec-11e7-80c8-0050568e00c5" name="RollBackDeposit" desc="退押金" url="*"/>
+	</module>
+
+	<module id="c24a0bd4-ad8b-11e7-80c8-0050568e00c5" name="Order Management" desc="工单管理" order="25" page="order4business" url="index.businessManagement.order" img="img/menu/order.png">
+	</module>-->
+	
+	<!-- 个人客户 -->
+	<module id="76009397-2FBD-46B2-A295-92920C24BBAD" name="PersonCust Management" desc="个人客户管理" order="26" page="pcmByBusiness" url="/index/applyManagementModule/PersonalCustomer" img="">
+		<modulegroup id="76009397-2FBD-46B2-A295-92920C24BBAD" name="PersonCust Management" desc="个人客户管理">
+			<module id="595237b4-ff43-11e8-9a3f-0050568e00c5" name="Home" desc="Home" order="1" page="" url="/index/applyManagementModule/PersonalCustomer/personIndex" img="">
+			</module>
+			<module id="6d694048-ff47-11e8-9a3f-0050568e00c5" name="PersonCust" desc="个人客户" order="2" page="" url="/index/applyManagementModule/PersonalCustomer/PersonalCustomer" img="">
+			</module>
+		</modulegroup>
+	</module>
+	
+	<!-- 企业客户 -->
+	<module id="B369AD8C-614E-4CA3-8805-D32C8A78CADD" name="EnterpriseCust Management" desc="企业客户管理" order="27" page="ecmByBusiness" url="./EnterpriseCustomer" img="img/menu/enterpriseCust.png">
+		<operation id="D67DA08C-DE82-4858-94F1-AD9971EAAE9A" name="add" desc="新建" url="/EnterpriseCustNew/insertEnterpriseCustNew"/>
+		<operation id="F64F0ECF-772F-4A2F-8ECC-554B7E3B6E5F" name="modify" desc="修改" url="/EnterpriseCustNew/updateEnterpriseCustNewRestful"/>
+		<operation id="D0C7D741-531C-400C-9C98-932898099686" name="delete" desc="删除" url="/EnterpriseCustNew/deleteEnterpriseCustNewRestful/*"/>
+		<operation id="E4ACAD0B-A7FA-4C13-8017-F69EA1538DE0" name="modeldownload" desc="导入模板下载" url="*"/>
+		<operation id="4530F907-CFB6-4200-AE65-4D132FCDAC11" name="import" desc="导入" url="*"/>
+		<operation id="FFC2396D-FD05-4252-9F02-0B1D5FD46944" name="export" desc="导出" url="/EnterpriseCustNew/exportEnterperiseFile"/>
+		<operation id="0CCFA1FC-6691-4A0F-9C61-31BE6C2EAD50" name="complete" desc="完成" url="/projectCompletion/changeStateByProjectIdAndParamTypes/*/*"/>
+
+		<operation id="ECCEA0A8-6855-4C48-8068-F0859CEA6DDF" name="addstaffs" desc="新增企业员工" url="/enterprise/cust/staff/add"/>
+		<operation id="5777E9BD-36BE-415B-B93F-25AD3F9804AD" name="editstaffs" desc="修改企业员工" url="/enterprise/cust/staff/edit"/>
+		<operation id="39A22353-70B5-4BAB-88E7-190B14636522" name="delstaffs" desc="删除企业员工" url="/enterprise/cust/staff/del/*"/>
+
+
+		<operation id="6B892490-2DB6-41EB-AC7F-4A2B1E9BC7F5" name="anon" desc="anon" permission="anon" url="/Project/listAllProject"/>
+		<operation id="E3D7C0DE-367E-4405-BA72-96FAE1B086D3" name="anon" desc="anon" permission="anon" url="/EnterpriseCustNew/listPageEnterpriseCustNewByCondition"/>
+		<operation id="4D6558D9-4968-4B33-9FB8-F29E61F07685" name="anon" desc="anon" permission="anon" url="/EnterpriseCustNew/getEnterpriseCustNewByIdRestful/*"/>
+		<operation id="D86F0D17-88BA-499B-8EF0-92BD687890E9" name="anon" desc="anon" permission="anon" url="/enterprise/cust/staff/listPage/"/>
+		<operation id="77C2AF84-9655-47BF-A248-FA28C872B91A" name="anon" desc="anon" permission="anon" url="/PersonCustNew/listPagePersonCustNewByAllSearch"/>
+		<operation id="DC4A3E39-2F04-4646-BCDF-1F159E2D549C" name="anon" desc="anon" permission="anon" url="/EnterpriseCustNew/listAllEnterpriseCustNewRestful"/>
+	</module>
+	
+	<!-- 资产绑定 -->
+	<!--<module id="E426CC58-2FE7-4100-B2CA-27E0A5246858" name="AssetBinding Management" desc="资产绑定管理" order="28" page="assetBindingByBusiness" url="./assetsBindingIndex" img="">
+		<operation id="939FC626-AA0A-4934-A2AB-6E957B71F3F3" name="export" desc="导出"  url="/BuildingStructureNew/exportBuildingInfos"/>
+		<operation id="4A2EA671-8614-4F70-A348-916D404C5431" name="exportmodel" desc="导出模板"  url="/BuildingStructureNew/exportBuildingInfos"/>
+		<operation id="2DA692D3-66F3-46B5-9285-73089BC48B0A" name="import" desc="导入"  url="*"/>
+		<operation id="07840B02-02E9-4199-A00A-56674E4D9F6E" name="add" desc="新增绑定客户"  url="*"/>
+		<operation id="A797A004-0ED8-4844-AF1D-CF332FD30306" name="bind" desc="绑定"  url="/PersonBuildingNew/bind"/>
+		<operation id="E4E0195A-F8AB-4915-88F6-1FB9B382E3C6" name="unbind" desc="解绑"  url="/PersonBuildingNew/unbind"/>
+
+
+		<operation id="059EE781-A1DE-4046-8F95-735FE14D706F" name="anon" desc="anon" permission="anon" url="/PersonBuildingNew/getInfosByBuildingId/*"/>
+		<operation id="9CB01BF3-6DEF-4777-A8E8-712F932A6BF1" name="anon" desc="anon" permission="anon" url="/BuildingNew/searchBuildingInfoToTree"/>
+		<operation id="F8DFF340-34AE-40FC-ACE4-3A7DE50015B2" name="anon" desc="anon" permission="anon" url="/PersonCustNew/listPagePersonCustInfos"/>
+		<operation id="D8B43BCC-FCBD-4E74-BC43-A7B7C70414DD" name="anon" desc="anon" permission="anon" url="/EnterpriseCustNew/listPageEnterprise"/>
+		<operation id="7B3445B6-C955-4E66-A40B-C5151EDF2F3D" name="anon" desc="anon" permission="anon" url="/PersonCustNew/listPageSearchPersonCust"/>
+		<operation id="20A8C682-FD86-4A97-BEA0-0118242B95DF" name="anon" desc="anon" permission="anon" url="/EnterpriseCustNew/listPageEnterpriseCustNewRestful"/>
+		<operation id="9C5A4263-9585-44EB-9586-F62938A57BA2" name="anon" desc="anon" permission="anon" url="/BuildingStructureNew/getBuildingStructurebyId/"/>
+	</module>-->
+
+
+	<!--<module id="0b687a8e-6f80-11e8-af29-0050568e0e15" name="Project Init" desc="项目初始化" order="35" page="projectInit" url="" img="">
+	</module>
+
+	<module id="0f80c3a7-6f80-11e8-af29-0050568e0e15" name="Release Pass" desc="放行条" order="37" page="releasePass" url="" img="">
+	</module>
+
+	<module id="4812aba7-6f81-11e8-af29-0050568e0e15" name="Lease" desc="租赁" order="39" page="lease" url="" img="">
+	</module>
+
+	<module id="4d12d42e-6f81-11e8-af29-0050568e0e15" name="Entrance Guard Card" desc="门禁卡" order="41" page="entranceGuardCard" url="" img="">
+	</module>-->
+
+
+	<module id="0547e4fa-db4f-11e8-8fb4-0050568e0e15" name="public Asset" desc="公共资产" order="44" page="publicAsset" url="./PublicAssetManage" img="">
+	</module>
+
+	<module id="93593642-6f81-11e8-af29-0050568e0e15" name="Engineering Manage" desc="工程施工" order="45" page="engineeringManage" url="./EngineeringManage" img="">
+	</module>
+
+
+	<!--<module id="9bed8d58-6f81-11e8-af29-0050568e0e15" name="Enterprise organization" desc="企业组织" order="49" page="enterpriseOrganization" url="" img="">
+	</module>-->
+</modulegroup>

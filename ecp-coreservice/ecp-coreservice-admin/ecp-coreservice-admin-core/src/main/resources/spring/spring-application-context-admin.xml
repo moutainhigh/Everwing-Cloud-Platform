@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd  
+    http://www.springframework.org/schema/beans  
+    http://www.springframework.org/schema/beans/spring-beans.xsd  
+
+
+
+
+
+
+    http://www.springframework.org/schema/aop  
+    http://www.springframework.org/schema/aop/spring-aop.xsd  
+
+
+    http://www.springframework.org/schema/rabbit
+	http://www.springframework.org/schema/rabbit/spring-rabbit-1.0.xsd">
+
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <array>
+                <value>file:/app/coreservice/admin/dubbo/dubbo-coreservice-admin.properties</value>
+                <value>file:/app/coreservice/admin/mq/mq-config.properties</value>
+            </array>
+        </property>
+        <property name="ignoreResourceNotFound" value="true" />
+        <property name="ignoreUnresolvablePlaceholders" value="true" />
+        <property name="properties" ref="defaultAdminCoreOrderServiceProperties" />
+    </bean>
+
+    <bean name="defaultAdminCoreOrderServiceProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <array>
+                <value>classpath:config/dubbo-coreservice-admin.properties</value>
+                <value>classpath:config/mq-config.properties</value>
+            </array>
+        </property>
+    </bean>
+    
+    <!-- 消息队列连接工厂 -->
+    <bean id="connectionFactory" class="org.springframework.amqp.rabbit.connection.CachingConnectionFactory">  
+        <property name="host" value="${rabbitmq.host}" />  
+        <property name="port" value="${rabbitmq.port}" />  
+        <property name="username" value="${rabbitmq.username}" />  
+        <property name="password" value="${rabbitmq.password}" />  
+        <property name="virtualHost" value="${rabbitmq.virtualHost}" />
+        <property name="cacheMode" value="CHANNEL"/>
+
+        <!-- 默认通道缓存25,多线程环境中，较小的缓存意味着通道的创建和关闭将以很高的速率运行.加大默认缓存大小可避免这种开销
+         如果达到了限制,调用线程将会阻塞，直到某个通道可用或者超时, 在后者的情况中，将抛出 AmqpTimeoutException异常.-->
+        <property name="channelCacheSize" value="${rabbit.channelCacheSize}"/>
+
+        <!-- channelCheckoutTimeout属性. 当此属性的值大于０时， channelCacheSize会变成连接上创建通道数目的限制. -->
+        <property name="channelCheckoutTimeout" value="${rabbit.channelCheckoutTimeout}"/>
+
+   	</bean>  
+   	
+   	<rabbit:admin connection-factory="connectionFactory"/>
+   	
+   	<!-- json处理 start-->
+    	<bean id="jsonMessageConverter" class="com.everwing.coreservice.common.convert.FastJsonMessageConverter" />
+    <!-- json处理 end-->
+    
+
+	<context:component-scan base-package="com.everwing.coreservice.admin.core" />
+    <aop:aspectj-autoproxy />
+
+    <import resource="classpath:spring/dubbo-coreservice-platform-api-config.xml"/>
+
+    <import resource="classpath:spring/dubbo-coreservice-wy-api-config.xml"/>
+
+	<import resource="classpath:spring/spring-dubbo-service-admin.xml"/>
+	<!-- <import resource="classpath:spring/spring-redis-admin.xml"/> -->
+
+	<import resource="classpath:spring/spring-platform-dao.xml"/>
+
+    <import resource="classpath:spring/spring-coreservice-commom.xml" />
+	<!-- 加载消息队列用配置文件 -->
+ 	<import resource="classpath:spring/mq/mq-queue.xml"/>
+    <import resource="classpath:spring/mq/mq-consumer.xml"/>
+	
+</beans> 

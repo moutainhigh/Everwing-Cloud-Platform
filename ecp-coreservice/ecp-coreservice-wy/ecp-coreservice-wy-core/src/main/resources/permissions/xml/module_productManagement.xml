@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modulegroup id="62df70ab-2825-4c92-a123-bdea62bec705" name="" desc="">
+    <module id="3a0d17b0-db5a-11e8-8fb4-0050568e0e15" name="Product Purchase" desc="产品代买" order="1" page="productPurchase" url="./productManagementModule/default/productPurchaseListComponent">
+
+    </module>
+    <module id="b811f048-d76b-11e8-9a3f-0050568e00c5" name="Product Order List" desc="销售记录" order="3" page="productOrderList" url="./productManagementModule/default/productOrderListComponent">
+
+    </module>
+    <module id="ee114ff0-bf9b-11e7-80c8-0050568e00c5" name="Product Management" desc="产品管理" order="5" page="productManagement" url="./productManagementModule/default/productListComponent">
+        <operation id="0da343bd-cf68-11e7-80c8-0050568e00c5" name="Search" desc="查询" url="*"/>
+        <operation id="f0039a0f-ce9c-11e7-80c8-0050568e00c5" name="Add" desc="新建" url="*"/>
+        <operation id="0bc44c6c-ce9d-11e7-80c8-0050568e00c5" name="Add2shopping" desc="加入购物车" url="*"/>
+        <operation id="0612ca3c-ce9d-11e7-80c8-0050568e00c5" name="Shelve" desc="上架" url="*"/>
+        <operation id="10421307-ce9d-11e7-80c8-0050568e00c5" name="normalOffShelve" desc="下架" url="*"/>
+        <operation id="14a0fb49-ce9d-11e7-80c8-0050568e00c5" name="Modify" desc="编辑" url="*"/>
+        <operation id="1923159d-ce9d-11e7-80c8-0050568e00c5" name="Delete" desc="删除" url="*"/>
+    </module>
+
+</modulegroup>

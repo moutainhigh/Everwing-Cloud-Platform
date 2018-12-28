@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.cust.enterprisecust.staff.EnterpriseCustStaffMapper" >
+  	<resultMap id="BaseResultMap" type="EnterpriseCustStaffNew" >
+    	<id column="id" property="id" jdbcType="VARCHAR" />
+    	<result column="name" property="name" jdbcType="VARCHAR" />
+    	<result column="cert_type" property="certType" jdbcType="VARCHAR" />
+    	<result column="cert_num" property="certNum" jdbcType="VARCHAR" />
+    	<result column="phone_num" property="phoneNum" jdbcType="VARCHAR" />
+    	<result column="enterprise_id" property="enterpriseId" jdbcType="VARCHAR" />
+    	<result column="create_id" property="createId" jdbcType="VARCHAR" />
+    	<result column="modify_id" property="modifyId" jdbcType="VARCHAR" />
+    	<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    	<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  	</resultMap>
+  
+  
+  	<select id="listPageEnterpriseCustStaff" parameterType="EnterpriseCustStaffNew" resultMap="BaseResultMap">
+  		select * from tc_enterprise_cust_staff t
+  		where 1=1 
+  		<if test="null != enterpriseId">
+  			and enterprise_id = #{enterpriseId,jdbcType=VARCHAR}
+  		</if>
+  		<if test="null != id">
+  			and id = #{id,jdbcType=VARCHAR}
+  		</if>
+  		order by create_time desc
+  	</select>
+  	
+  	<select id="getEnterpriseCustStaffInfo" parameterType="EnterpriseCustStaffNew" resultMap="BaseResultMap">
+  		select * from tc_enterprise_cust_staff 
+  		where id = #{id,jdbcType=VARCHAR}
+  	</select>
+  	
+  	<insert id="addEnterpriseCustStaff" parameterType="EnterpriseCustStaffNew">
+  		insert into tc_enterprise_cust_staff
+  		(
+  			id, name,cert_type,cert_num,phone_num,enterprise_id,create_id,modify_id,create_time,modify_time
+  		)
+  		values
+  		(
+  			UUID(),
+  			#{name,jdbcType=VARCHAR},
+  			#{certType,jdbcType=VARCHAR},
+  			#{certNum,jdbcType=VARCHAR},
+  			#{phoneNum,jdbcType=VARCHAR},
+  			#{enterpriseId,jdbcType=VARCHAR},
+  			#{createId,jdbcType=VARCHAR},
+  			#{modifyId,jdbcType=VARCHAR},
+  			sysdate(),
+  			sysdate()
+  		)
+  	</insert>
+  	
+  	<update id="updateEnterpriseCustStaff" parameterType="EnterpriseCustStaffNew">
+  		update tc_enterprise_cust_staff
+  		<set>
+  			<if test="null != name">
+  				name = #{name,jdbcType=VARCHAR},
+  			</if>
+  			<if test="null != certType">
+  				cert_type = #{certType,jdbcType=VARCHAR},
+  			</if>
+  			<if test="null != certNum">
+  				cert_num = #{certNum,jdbcType=VARCHAR},
+  			</if>
+  			<if test="null != phoneNum">
+  				phone_num = #{phoneNum,jdbcType=VARCHAR},
+  			</if>
+  			<if test="null != modifyId">
+  				modify_id = #{modifyId,jdbcType=VARCHAR},
+  			</if>
+  			modify_time = sysdate()
+  		</set>
+		where id = #{id,jdbcType=VARCHAR}
+  	</update>
+  	
+  	<delete id="deleteEnterpriseCustStaff" parameterType="java.util.List">
+  		delete from tc_enterprise_cust_staff
+  		where id in 
+  		<foreach collection="list" item="id" open="(" separator="," close=")">
+  			#{id}
+  		</foreach>
+  	</delete>
+  	
+  	
+  
+  	
+</mapper>

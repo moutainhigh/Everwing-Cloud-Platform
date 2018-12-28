@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.configuration.owed.TBsOwedHistoryMapper">
+	<resultMap type="TBsOwedHistory" id="BaseResultMap">
+		<result property="id" column="id" jdbcType="VARCHAR"/>
+		<result property="projectId" column="project_id" jdbcType="VARCHAR"/>
+		<result property="owedAmount" column="owed_amount" jdbcType="DOUBLE"/>
+		<result property="accountId" column="account_id" jdbcType="VARCHAR"/>
+		<result property="owedTime" column="owed_time" jdbcType="TIMESTAMP"/>
+		<result property="owedEndTime" column="owed_end_time" jdbcType="TIMESTAMP"/>
+		<result property="isUsed" column="is_used" jdbcType="TINYINT"/>
+		<result property="totalLateFee" column="total_late_fee" jdbcType="DOUBLE"/>
+		<result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+		<result property="createId" column="create_id" jdbcType="VARCHAR"/>
+		<result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+		<result property="modifyId" column="modify_id" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<resultMap type="TBsOwedHistory" id="hasLateFeeResultMap" extends="BaseResultMap">
+		<result property="proportion" column="proportion" jdbcType="DOUBLE"/>
+		<result property="calculationType" column="calculation_type" jdbcType="TINYINT"/>
+	</resultMap>
+	
+	<select id="findUsingDataById" parameterType="String" resultMap="BaseResultMap">
+		select * from t_bs_owed_history
+		 where 1 = 1
+		   <if test="null != isUsed">
+		   	and is_used = #{isUsed}
+		   </if>
+		   and id = #{id}
+	</select>
+	
+	<select id="findSomeInfoByAccountId" parameterType="String" resultType="java.util.Map">
+		select id as id,
+			   owed_amount as owedAmount,
+			   owed_time as owedTime,
+			   total_late_fee as totalLateFee,
+			   owed_end_time as owedEndTime,
+			   is_used as isUsed
+		  from t_bs_owed_history
+		 where is_used = 0
+		   and account_id = #{0}
+	</select>
+	
+	<select id="findUsingDatas" parameterType="TBsOwedHistory" resultMap="hasLateFeeResultMap">
+		  SELECT  t1.*,
+				  t3.proportion,
+				  t3.calculation_type
+			FROM  t_bs_owed_history t1,
+			      t_bs_project t2,
+			      t_bs_charging_scheme t3,
+			      t_bs_asset_account t4
+			WHERE t1.account_id = t4.id
+			  AND t4.type != 0
+			  AND t4.type = t3.scheme_type
+			  AND t1.project_id = t2.project_id
+			  AND t1.project_id = t4.project_id
+			  AND t1.project_id = t3.project_id
+			  AND t3.is_used = 0
+			  <![CDATA[
+				  AND DATE_ADD(t1.owed_time,INTERVAL t3.overdue_start_dates DAY) <= SYSDATE()
+			  ]]>
+		 <if test="null != id">
+		 	and t1.id = #{id}
+		 </if>
+		 <if test="null != projectId">
+		 	and t1.project_id = #{projectId}
+		 </if>
+		 <if test="null != accountId">
+		 	and t1.account_id = #{accountId}
+		 </if>
+		 <if test="null != isUsed">
+		 	and t1.is_used = #{isUsed}
+		 </if>
+		 GROUP BY t1.id
+	</select>
+	
+	<select id="findAllByAccountId" parameterType="String" resultMap="BaseResultMap">
+		select * 
+		  from t_bs_owed_history
+		 where account_id = #{0}
+		   and is_used = 0
+		 order by create_time asc
+	</select>
+
+	<select id="findUpDateByAccountId" parameterType="String" resultMap="BaseResultMap">
+		select *
+		from t_bs_owed_history
+		where account_id = #{accountId}
+		ORDER BY create_time desc
+		 limit 0,1
+	</select>
+	
+	<update id="update" parameterType="TBsOwedHistory">
+		update t_bs_owed_history
+		<set>
+			<if test="null != projectId">
+				project_id = #{projectId},
+			</if>
+			<if test="null != owedAmount">
+				owed_amount = #{owedAmount},
+			</if>
+			<if test="null != accountId">
+				account_id = #{accountId},
+			</if>
+			<if test="null != owedTime">
+				owed_time = #{owedTime},
+			</if>
+			<if test="null != owedEndTime">
+				owed_end_time = #{owedEndTime},
+			</if>
+			<if test="null == owedEndTime">
+				owed_end_time = null,
+			</if>
+			<if test="null != isUsed">
+				is_used = #{isUsed},
+			</if>
+			<if test="null != totalLateFee">
+				total_late_fee = #{totalLateFee},
+			</if>
+			<if test="null != modifyId">
+				modify_id = #{modifyId},
+			</if>
+			modify_time = sysdate()
+		</set>
+		where id = #{id}
+	</update>
+	
+	<insert id="batchInsert" parameterType="java.util.List">
+		insert into t_bs_owed_history
+		(
+			id,
+			project_id,
+			owed_amount,
+			account_id,
+			owed_time,
+			owed_end_time,
+			is_used,
+			total_late_fee,
+			create_time,
+			create_id,
+			modify_time,
+			modify_id
+		)
+		values
+		<foreach collection="list" open="" close="" item="item" separator=",">
+			(
+				#{item.id},
+				#{item.projectId},
+				#{item.owedAmount},
+				#{item.accountId},
+				#{item.owedTime},
+				#{item.owedEndTime},
+				#{item.isUsed},
+				#{item.totalLateFee},
+				#{item.createTime},
+				#{item.createId},
+				#{item.modifyTime},
+				#{item.modifyId}
+			)
+		</foreach>
+	</insert>
+
+	<insert id="insert" parameterType="TBsOwedHistory">
+		insert into t_bs_owed_history
+		(
+			id,
+			project_id,
+			owed_amount,
+			account_id,
+			owed_time,
+			owed_end_time,
+			is_used,
+			total_late_fee,
+			create_time,
+			create_id,
+			modify_time,
+			modify_id
+		)
+		values
+		(
+			#{id},
+			#{projectId},
+			#{owedAmount},
+			#{accountId},
+			#{owedTime},
+			#{owedEndTime},
+			#{isUsed},
+			#{totalLateFee},
+			#{createTime},
+			#{createId},
+			#{modifyTime},
+			#{modifyId}
+		)
+	</insert>
+	
+	<sql id="batchUpdateSql">
+		<if test="item.projectId !=null">
+			project_id=#{item.projectId},
+		</if>
+		<if test="item.owedAmount !=null">
+			owed_amount=#{item.owedAmount},
+		</if>
+		<if test="item.accountId !=null">
+			account_id=#{item.accountId},
+		</if>
+		<if test="item.owedTime !=null">
+			owed_time=#{item.owedTime},
+		</if>
+		<if test="item.owedEndTime !=null">
+			owed_end_time=#{item.owedEndTime},
+		</if>
+		<if test="item.isUsed !=null">
+			is_used=#{item.isUsed},
+		</if>
+		<if test="item.totalLateFee !=null">
+			total_late_fee=#{item.totalLateFee},
+		</if>
+		<if test="item.modifyId !=null">
+			modify_id=#{item.modifyId},
+		</if>
+	</sql>
+	
+	<!-- 批量更新 -->
+	<update id="batchUpdate" parameterType="TBsOwedHistory">
+		<foreach collection="list" separator=";" item="item" index="index">
+			update t_bs_owed_history set <include refid="batchUpdateSql"/> modify_time =sysdate()
+			where id=#{item.id}
+		</foreach>
+	</update>
+	
+	<select id="findNotOnJrlCollingDatas" resultMap="BaseResultMap">
+		SELECT t1.*
+		  FROM t_bs_owed_history t1, t_bs_asset_account t2
+		 WHERE t1.is_used = 0
+		   AND t1.account_id = t2.id
+		   AND t2.project_id = #{projectId}
+		   AND t2.building_code NOT IN (
+				SELECT t4.building_code 
+				  FROM t_bc_jrl_head t3, 
+				       t_bc_jrl_body t4
+				 WHERE t3.id = t4.head_id
+				   AND t3.type = 0
+				   AND t3.total_id = #{totalId}
+				 GROUP BY t4.building_code
+				)
+	</select>
+	
+	<select id="findNotOnUnionCollingDatas" resultMap="BaseResultMap">
+		SELECT t1.*
+		  FROM t_bs_owed_history t1, t_bs_asset_account t2
+		 WHERE t1.is_used = 0
+		   AND t1.account_id = t2.id
+		   AND t2.project_id = #{projectId}
+		   AND t2.building_code 
+		   NOT IN (
+				SELECT t4.building_code 
+				FROM  t_bc_union_collection_head t3, 
+					   t_bc_union_collection_body t4
+				 WHERE t3.id = t4.head_id
+				   AND t3.type = 0
+				   AND t3.total_id = #{totalId}
+				 GROUP BY t4.building_code
+				)
+	</select>
+	 <select id="findSumByBuildingCodeAndType" resultType="java.lang.Double">
+		SELECT ifnull(sum(h.total_late_fee),0) total
+		from t_bs_asset_account a
+			LEFT JOIN t_bs_owed_history h on a.id=h.account_id
+		where a.building_code=#{buildingCode}  AND h.id is not NULL and h.is_used=0 and a.type=#{type}
+	</select>
+	<select id="findSumLateFeeByBuildingCode" resultType="java.lang.Double">
+		SELECT ifnull(sum(h.total_late_fee),0) total
+		from t_bs_asset_account a
+			LEFT JOIN t_bs_owed_history h on a.id=h.account_id
+		where a.building_code=#{buildingCode}  AND h.id is not NULL and h.is_used=0
+	</select>
+	<select id="findSumLateFeeByAccountId" resultType="java.lang.Double">
+		SELECT ifnull(sum(h.total_late_fee),0) total
+		from
+		 t_bs_owed_history h
+		where h.account_id=#{ accountId}  AND h.id is not NULL and h.is_used=0
+	</select>
+	<select id="fingListTBsOwedHistory" resultType="com.everwing.coreservice.common.wy.entity.configuration.owed.TBsOwedHistoryDto">
+		SELECt
+
+		IFNULL(SUM(case when type =1 then IFNULL(totalLateFee,0) END ),0.0) wyoweamount,
+
+		IFNULL(SUM(case when type =2 then IFNULL(totalLateFee,0) END ),0.0) btoweamount,
+
+		IFNULL(SUM(case when type =3 then IFNULL(totalLateFee,0) END ),0.0) wateroweamount,
+
+		IFNULL(SUM(case when type =4 then IFNULL(totalLateFee,0) END ),0.0) eleoweamount,
+		buildingCode
+
+		FROM(
+
+		select MAX(t1.id) aid,MAX(t1.building_code) buildingCode,
+		MAX(account_balance) accountAmount,MAX(t1.type) type,SUM(t2.owed_amount) owedAmount,SUM(t2.total_late_fee) totalLateFee
+
+		from t_bs_asset_account t1,t_bs_owed_history t2 where t1.id = t2.account_id  and 0>t1.account_balance and t1.building_code in(
+		select building_code from tc_building where project_id=#{projectId}
+		)
+		and t2.is_used = 0 and t2.total_late_fee > 0 group by t2.account_id
+		) tt group by buildingCode
+	</select>
+	<select id="fingListThirdTBsOwedHistory" resultType="com.everwing.coreservice.common.wy.entity.configuration.owed.TBsOwedHistoryDto">
+		SELECt
+
+		IFNULL(SUM(case when type =1 then IFNULL(totalLateFee,0) END ),0.0) wyoweamount,
+
+		IFNULL(SUM(case when type =2 then IFNULL(totalLateFee,0) END ),0.0) btoweamount,
+
+		IFNULL(SUM(case when type =3 then IFNULL(totalLateFee,0) END ),0.0) wateroweamount,
+
+		IFNULL(SUM(case when type =4 then IFNULL(totalLateFee,0) END ),0.0) eleoweamount,
+		buildingCode
+
+		FROM(
+
+		select MAX(t1.id) aid,MAX(t1.building_code) buildingCode,
+		MAX(account_balance) accountAmount,MAX(t1.type) type,SUM(t2.owed_amount) owedAmount,SUM(t2.total_late_fee) totalLateFee
+
+		from t_bs_asset_account t1,t_bs_owed_history t2 where t1.id = t2.account_id  and 0>t1.account_balance and t1.building_code in(
+		select building_code from tc_building where project_id=#{projectId}  and building_type in ('disanfangzichan','gonggongchangdichuzu')
+		)
+		and t2.is_used = 0 and t2.total_late_fee > 0 group by t2.account_id
+		) tt group by buildingCode
+	</select>
+
+
+	<select id="findOweAndBuildingCodeAndTime" resultType="com.everwing.coreservice.common.wy.entity.configuration.owed.TBsOwedHistoryDto">
+			SELECt
+
+		IFNULL(SUM(case when type =1 then IFNULL(totalLateFee,0) END ),0.0) wyoweamount,
+
+		IFNULL(SUM(case when type =2 then IFNULL(totalLateFee,0) END ),0.0) btoweamount,
+
+		IFNULL(SUM(case when type =3 then IFNULL(totalLateFee,0) END ),0.0) wateroweamount,
+
+		IFNULL(SUM(case when type =4 then IFNULL(totalLateFee,0) END ),0.0) eleoweamount
+
+
+		FROM(
+
+		select MAX(t1.id) aid,
+		MAX(account_balance) accountAmount,MAX(t1.type) type,SUM(t2.owed_amount) owedAmount,SUM(t2.total_late_fee) totalLateFee
+
+		from t_bs_asset_account t1,t_bs_owed_history t2 where t1.id = t2.account_id  and 0>t1.account_balance and t1.building_code in(
+		select building_code from tc_building where building_code=#{buildingCode}
+		)
+		and t2.is_used = 0 and t2.total_late_fee > 0 group by t2.account_id
+		) tt
+
+	</select>
+</mapper>

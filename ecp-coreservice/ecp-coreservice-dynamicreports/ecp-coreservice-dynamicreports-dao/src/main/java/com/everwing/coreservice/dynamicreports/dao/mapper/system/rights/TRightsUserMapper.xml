@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.dynamicreports.dao.mapper.system.rights.TRightsUserMapper">
+    <resultMap type="TRightsUser" id="TRightsUserResultMap">
+        <result property="userId" column="user_id"/>
+        <result property="loginName" column="login_name"/>
+        <result property="password" column="password"/>
+        <result property="staffNumber" column="staff_number"/>
+        <result property="staffName" column="staff_name"/>
+        <result property="sex" column="sex"/>
+        <result property="email" column="email"/>
+        <result property="mobilePhone" column="mobile_phone"/>
+        <result property="status" column="status"/>
+        <result property="type" column="type"/>
+        <result property="createrId" column="creater_id"/>
+        <result property="createrName" column="creater_name"/>
+        <result property="modifyId" column="modify_id"/>
+        <result property="modifyName" column="modify_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <resultMap id="TRightsUserVOResultMap" type="TRightsUserVO" extends="TRightsUserResultMap">
+        <result property="sexName" column="sex_name"/>
+        <result property="statusName" column="status_name"/>
+    </resultMap>
+
+    <select id="listPage" parameterType="TRightsUserQO" resultMap="TRightsUserVOResultMap">
+        SELECT * FROM t_rights_user t WHERE 1=1
+        <if test="userId != null and userId != ''">
+            AND user_id = #{userId}
+        </if>
+        <if test="staffNumber != null and staffNumber != ''">
+            AND staff_number = #{staffNumber}
+        </if>
+        <if test="loginName != null and loginName != ''">
+            AND login_name = #{loginName}
+        </if>
+        <if test="password != null and password != ''">
+            AND password = #{password}
+        </if>
+        <if test="type != null and type != ''">
+            AND type = #{type}
+        </if>
+        <if test="status != null and status != ''">
+            AND status = #{status}
+        </if>
+        ORDER BY login_name ASC
+    </select>
+
+    <select id="findByCondition" parameterType="TRightsUserQO" resultMap="TRightsUserVOResultMap">
+        SELECT * FROM t_rights_user t WHERE 1=1
+        <if test="userId != null and userId != ''">
+            AND user_id = #{userId}
+        </if>
+        <if test="staffNumber != null and staffNumber != ''">
+            AND staff_number = #{staffNumber}
+        </if>
+        <if test="loginName != null and loginName != ''">
+            AND login_name = #{loginName}
+        </if>
+        <if test="password != null and password != ''">
+            AND password = #{password}
+        </if>
+        <if test="type != null and type != ''">
+            AND type = #{type}
+        </if>
+        <if test="status != null and status != ''">
+            AND status = #{status}
+        </if>
+        ORDER BY login_name ASC
+    </select>
+
+
+    <insert id="insert" parameterType="TRightsUser">
+        insert into t_rights_user
+        (
+            user_id,
+            staff_number,
+            staff_name,
+            document_type,
+            document_number,
+            sex,
+            mobile_phone,
+            login_name,
+            password,
+            status,
+            type,
+            creater_id,
+            creater_name,
+            create_time
+        )
+        values
+        (
+            UUID(),
+            #{staffNumber},
+            #{staffName},
+            #{documentType},
+            #{documentNumber},
+            #{sex},
+            #{mobilePhone},
+            #{loginName},
+            #{password},
+            #{status},
+            #{type},
+            #{createrId},
+            #{createrName},
+            sysdate()
+        )
+    </insert>
+
+    <insert id="batchInsert" parameterType="List">
+        insert into t_rights_user
+        (
+            user_id,
+            staff_number,
+            staff_name,
+            document_type,
+            document_number,
+            sex,
+            mobile_phone,
+            login_name,
+            password,
+            status,
+            type,
+            creater_id,
+            creater_name,
+            create_time
+        )
+        values
+        <foreach collection="list" index="index" item="item" separator=",">
+        (
+            UUID(),
+            #{item.staffNumber},
+            #{item.staffName},
+            #{item.documentType},
+            #{item.documentNumber},
+            #{item.sex},
+            #{item.mobilePhone},
+            #{item.loginName},
+            #{item.password},
+            #{item.status},
+            #{item.type},
+            #{item.createrId},
+            #{item.createrName},
+            sysdate()
+        )
+        </foreach>
+    </insert>
+
+    <update id="modify" parameterType="TRightsUser">
+        UPDATE t_rights_user t
+        SET
+            staff_number = #{staffNumber},
+            staff_name = #{staffName},
+            document_type = #{documentType},
+            document_number = #{documentNumber},
+            sex = #{sex},
+            mobile_phone = #{mobilePhone},
+            password = #{password},
+            status = #{status},
+            modify_id = #{modifyId},
+            modify_name = #{modifyName},
+            modify_time = sysdate()
+        WHERE t.user_id = #{userId}
+    </update>
+
+    <delete id="delete" parameterType="String">
+        DELETE FROM t_rights_user WHERE user_id = #{0}
+    </delete>
+</mapper>

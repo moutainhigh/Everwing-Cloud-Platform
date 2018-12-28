@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.coreservice.wy.fee.dao.mapper.AcAbnormalChargeMapper">
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.fee.entity.AcAbnormalCharge">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="opera_id" jdbcType="VARCHAR" property="operaId" />
+    <result column="project_id" jdbcType="VARCHAR" property="projectId" />
+    <result column="project_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="Owner_name" jdbcType="VARCHAR" property="ownerName" />
+    <result column="house_code" jdbcType="VARCHAR" property="houseCode" />
+    <result column="building_name" jdbcType="VARCHAR" property="buildingName" />
+    <result column="account_type" jdbcType="INTEGER" property="accountType" />
+    <result column="abnormal_type" jdbcType="INTEGER" property="abnormalType" />
+    <result column="before_amount" jdbcType="DECIMAL" property="beforeAmount" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, opera_id, house_code,building_name,Owner_name, account_type,abnormal_type,before_amount,project_id,project_name, amount, create_time, description
+  </sql>
+
+  <select id="listPageAbnormalCharg" parameterType="com.everwing.coreservice.common.wy.fee.entity.AcAbnormalCharge" resultMap="BaseResultMap">
+
+    select
+
+    <include refid="Base_Column_List" />
+
+    from t_ac_abnormal_charge
+
+    where 1=1
+    and project_id in
+    <foreach collection="projectList" item="item" index="index" open="(" close=")" separator=",">
+      '${item}'
+    </foreach>
+
+    <if test="houseCode !=null and houseCode!='' ">
+
+     and  house_code = #{houseCode,jdbcType=VARCHAR}
+
+    </if>
+
+    <if test="buildingName !=null and buildingName!='' ">
+
+      and building_name =#{buildingName}
+
+    </if>
+
+    <if test="projectId !=null and projectId!='' ">
+
+      and project_id = #{projectId}
+
+    </if>
+
+    ORDER BY create_time desc
+
+  </select>
+
+  <insert id="insertAcAbnormalCharge" parameterType="com.everwing.coreservice.common.wy.fee.entity.AcAbnormalCharge">
+
+  insert into t_ac_abnormal_charge
+
+(id,house_code,building_name,Owner_name,account_type,abnormal_type,before_amount,amount,opera_id,project_id,project_name,create_time,description)
+
+VALUES
+(
+UUID(),#{houseCode},#{buildingName},#{ownerName},#{accountType},#{abnormalType},#{beforeAmount},#{amount},#{operaId},#{projectId},#{projectName},#{createTime},#{description}
+)
+
+  </insert>
+</mapper>

@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.property.TcConstructionMapper">
+	<resultMap id="BaseResultMap" type="TcConstruction">
+		<result property="id" column="id"/>
+		<result property="houseCodeNew" column="house_code_new" />
+		<result property="constructionAddr" column="construction_addr"/>
+		<result property="startDate" column="start_date"/>
+		<result property="engineeringName" column="engineering_name"/>
+		<result property="engineeringCycle" column="engineering_cycle"/>
+		<result property="completionDate" column="completion_date"/>
+		<result property="engineeringUnit" column="engineering_unit"/>
+		<result property="ownerOfProperty" column="owner_of_property"/>
+		<result property="engineeringDirector" column="engineering_director"/>
+		<result property="waterUse" column="water_use"/>
+		<result property="electricityUse" column="electricity_use"/>
+		<result property="electricPower" column="electric_power"/>
+		<result property="waterPower" column="water_power"/>
+		<result property="billingStatus" column="billing_status"/>
+		<result property="constructionState" column="construction_state"/>
+		<result property="state" column="state"/>
+		<result property="projectId" column="project_id"/>
+		<result property="companyId" column="company_id"/>
+		<result property="createrId" column="creater_id"/>
+		<result property="createrName" column="creater_name"/>
+		<result property="modifyId" column="modify_id"/>
+		<result property="modifyName" column="modify_name"/>
+		<result property="createTime" column="create_time"/>
+		<result property="modifyTime" column="modify_time"/>
+	</resultMap>
+
+
+	<resultMap id="ListResultMap" type="TcConstructionList" extends="BaseResultMap">
+
+	</resultMap>
+
+	<!-- 查询 -->
+	<select id="loadbyConstructionlistPage" parameterType="TcConstructionSearch" resultMap="ListResultMap">
+		select * from  tc_construction   tt  where 1 = 1   AND  is_delete=0
+
+		<if test="projectId != null and projectId != ''">
+			AND tt.project_id = #{projectId}
+		</if>
+		<if test="houseCodeNew != null and houseCodeNew != ''">
+			AND tt.house_code_new = #{houseCodeNew}
+		</if>
+		<if test="constructionAddr != null and constructionAddr != ''">
+			AND tt.construction_addr = #{constructionAddr}
+		</if>
+		<if test="engineeringName != null and engineeringName != ''">
+			AND tt.engineering_name = #{engineeringName}
+		</if>
+		<if test="ownerOfProperty != null and ownerOfProperty != ''">
+			AND tt.owner_of_property = #{ownerOfProperty}
+		</if>
+		<if test="engineeringDirector != null and engineeringDirector != ''">
+			AND tt.engineering_director = #{engineeringDirector}
+		</if>
+		<if test="engineeringName != null and engineeringName != ''">
+			AND engineering_name LIKE CONCAT(CONCAT('%',#{engineeringName}),'%')
+		</if>
+		<if test="constructionAddr != null and constructionAddr != ''">
+			AND construction_addr LIKE CONCAT(CONCAT('%',#{constructionAddr}),'%')
+		</if>
+		<if test="engineeringUnit != null and engineeringUnit != ''">
+			AND engineering_unit LIKE CONCAT(CONCAT('%',#{engineeringUnit}),'%')
+		</if>
+		<if test="engineeringName != null and engineeringName != ''">
+			AND engineering_name LIKE CONCAT(CONCAT('%',#{engineeringName}),'%')
+		</if>
+		<if test="engineeringDirector != null and engineeringDirector != ''">
+			AND engineering_director LIKE CONCAT(CONCAT('%',#{engineeringDirector}),'%')
+		</if>
+		<if test="startDate != null and startDate != ''">
+			AND start_date LIKE CONCAT(CONCAT('%',#{startDate}),'%')
+		</if>
+		order by house_code_new desc
+	</select>
+
+
+	<!-- 查询未关联水电 -->
+	<select id="loadbyWaterElectlistPage" parameterType="TcConstructionSearch" resultMap="ListResultMap">
+		select tt.* from  tc_construction   tt
+		  LEFT JOIN tc_water_meter b    on  tt.house_code_new = b.position
+    	  LEFT JOIN  tc_electricity_meter  c on  tt.house_code_new= c.position
+
+ 			where b.id is null and c.id is null
+
+	</select>
+
+	<!-- 查询历史施工 -->
+	<select id="loadbyEhistorylistPage" parameterType="TcConstructionSearch" resultMap="ListResultMap">
+		select * from  tc_construction   tt  where 1 = 1
+		<if test="projectId != null and projectId != ''">
+			AND tt.project_id = #{projectId}
+		</if>
+		<if test="houseCodeNew != null and houseCodeNew != ''">
+			AND tt.house_code_new = #{houseCodeNew}
+		</if>
+		<if test="constructionAddr != null and constructionAddr != ''">
+			AND tt.construction_addr = #{constructionAddr}
+		</if>
+		<if test="engineeringName != null and engineeringName != ''">
+			AND tt.engineering_name = #{engineeringName}
+		</if>
+		<if test="ownerOfProperty != null and ownerOfProperty != ''">
+			AND tt.owner_of_property = #{ownerOfProperty}
+		</if>
+		<if test="engineeringDirector != null and engineeringDirector != ''">
+			AND tt.engineering_director = #{engineeringDirector}
+		</if>
+		    AND    construction_state='完工'   AND billing_status='结束'
+		                 order by house_code_new desc
+	</select>
+
+
+
+	<!-- 删除 -->
+	<update id="deleteConstruction" parameterType="string">
+		update  tc_construction   set is_delete = 1  where 1 = 1  and id = #{Id}
+	</update>
+
+
+	<!-- 修改 -->
+	<update id="modify" parameterType= "TcConstruction">
+		update tc_construction
+		<set>
+			house_code_new=#{houseCodeNew},
+			construction_addr=#{constructionAddr},
+			start_date=#{startDate},
+			engineering_name=#{engineeringName},
+			engineering_cycle=#{engineeringCycle},
+			completion_date=#{completionDate},
+			engineering_unit=#{engineeringUnit},
+			owner_of_property=#{ownerOfProperty},
+			engineering_director=#{engineeringDirector},
+			water_use=#{waterUse},
+			electricity_use=#{electricityUse},
+			electric_power=#{electricPower},
+			water_power=#{waterPower},
+			billing_status=#{billingStatus},
+			construction_state=#{constructionState},
+			modify_id = #{modifyId},
+			modify_name = #{modifyName},
+			modify_time = sysdate()
+		</set>
+		where 1=1 AND id = #{id}
+	</update>
+
+	<!-- 修改状态为完工 -->
+	<update id="reviseComplete" parameterType= "TcConstruction">
+		update tc_construction
+		<set>
+			completion_date=sysdate(),
+			 construction_state='完工'  ,
+			 billing_status='结束',
+			modify_id = #{modifyId},
+			modify_name = #{modifyName},
+			modify_time = sysdate()
+		</set>
+		where 1=1 AND construction_state='施工中' and billing_status='开始'  and id = #{id}
+	</update>
+
+	<!-- 修改状态为暂停 -->
+	<update id="suspend" parameterType= "TcConstruction">
+		update tc_construction
+		<set>
+			construction_state='暂停'  ,
+			modify_id = #{modifyId},
+			modify_name = #{modifyName},
+			modify_time = sysdate()
+		</set>
+		where 1=1 AND construction_state='施工中' and billing_status='开始'  and id = #{id}
+	</update>
+
+	<!-- 修改状态为启动 -->
+	<update id="startUp" parameterType= "TcConstruction">
+		update tc_construction
+		<set>
+			construction_state='施工中'  ,
+			modify_id = #{modifyId},
+			modify_name = #{modifyName},
+			modify_time = sysdate()
+		</set>
+		where 1=1 AND construction_state='暂停' and billing_status='开始'   and id = #{id}
+	</update>
+
+	<!-- 修改延期时间 -->
+	<update id="editDelay" parameterType= "TcConstruction">
+		update tc_construction
+		<set>
+			completion_date=#{completionDate},
+			modify_id = #{modifyId},
+			modify_name = #{modifyName},
+			modify_time = sysdate()
+		</set>
+		where 1=1 AND construction_state='施工中'   and id = #{id}
+	</update>
+
+	<select id="getCode" parameterType = "string" resultType="string">
+		select IFNULL(SUBSTR(MAX(house_code_new) FROM 5 FOR 9),0) + 1 from  tc_construction  tt where 1 = 1
+		AND tt.project_id = #{projectId}
+	</select>
+
+	<select id="SeleteByID" parameterType="string" resultMap="BaseResultMap">
+		select * from tc_construction where id = #{id}
+	</select>
+
+	<!-- 新增 -->
+	<insert id="insert" parameterType = "TcConstruction">
+		insert into tc_construction(
+		id,
+		house_code_new,
+		construction_addr,
+		start_date,
+		engineering_name,
+		engineering_cycle,
+		completion_date,
+		engineering_unit,
+		owner_of_property,
+		engineering_director,
+		water_use,
+		electricity_use,
+		electric_power,
+		water_power,
+		billing_status,
+		construction_state,
+		 state,
+		project_id,
+		company_id,
+		creater_id,
+		creater_name,
+		is_delete
+		)
+		values
+		(
+		#{id},
+		#{houseCodeNew},
+		#{constructionAddr},
+		#{startDate},
+		#{engineeringName},
+		#{engineeringCycle},
+		#{completionDate},
+		#{engineeringUnit},
+		#{ownerOfProperty},
+		#{engineeringDirector},
+		#{waterUse},
+		#{electricityUse},
+		#{electricPower},
+		#{waterPower},
+		#{billingStatus},
+		#{constructionState},
+		#{state},
+		#{projectId},
+		#{companyId},
+		#{createrId},
+		#{createrName},
+		0
+		)
+	</insert>
+
+</mapper>

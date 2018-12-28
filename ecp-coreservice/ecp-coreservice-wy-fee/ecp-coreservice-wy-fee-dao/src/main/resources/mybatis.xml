@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration    PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <setting name="logImpl" value="STDOUT_LOGGING" />
+    </settings>
+
+    <typeAliases>
+        <!--新账户模块的别名配置信息 -->
+      	<typeAlias type="com.everwing.coreservice.common.wy.fee.entity.AcAbnormalCharge" alias="AcAbnormalCharge"/>
+      	<typeAlias type="com.everwing.coreservice.common.wy.fee.entity.AcAccount" alias="AcAccount"/>
+      	<typeAlias type="com.everwing.coreservice.common.wy.fee.entity.AcBillDetail" alias="AcBillDetail"/>
+      	<typeAlias type="com.everwing.coreservice.common.wy.fee.entity.AcBusinessOperaDetail" alias="AcBusinessOperaDetail"/>
+      	<typeAlias type="com.everwing.coreservice.common.wy.fee.entity.AcCommonAccountDetail" alias="AcCommonAccountDetail"/>
+      	<typeAlias type="com.everwing.coreservice.common.wy.fee.entity.AcCurrentCharge" alias="AcCurrentCharge"/>
+      	<typeAlias type="com.everwing.coreservice.common.wy.fee.entity.AcCurrentChargeDetail" alias="AcCurrentChargeDetail"/>
+      	<typeAlias type="com.everwing.coreservice.common.wy.fee.entity.AcCycleOrderDetail" alias="AcCycleOrderDetail"/>
+      	<typeAlias type="com.everwing.coreservice.common.wy.fee.entity.AcDelayAccount" alias="AcDelayAccount"/>
+      	<typeAlias type="com.everwing.coreservice.common.wy.fee.entity.AcLastBillFeeInfo" alias="AcLastBillFeeInfo"/>
+      	
+      	<typeAlias type="com.everwing.coreservice.common.wy.fee.entity.AcLateFeeBillInfo" alias="AcLateFeeBillInfo"/>
+      	<typeAlias type="com.everwing.coreservice.common.wy.fee.entity.AcLateFeeStream" alias="AcLateFeeStream"/>
+      	<typeAlias type="com.everwing.coreservice.common.wy.fee.entity.AcOrder" alias="AcOrder"/>
+      	<typeAlias type="com.everwing.coreservice.common.wy.fee.entity.AcSpecialAccount" alias="AcSpecialAccount"/>
+      	<typeAlias type="com.everwing.coreservice.common.wy.fee.entity.AcSpecialDetail" alias="AcSpecialDetail"/>
+      	<typeAlias type="com.everwing.coreservice.common.wy.fee.entity.ProjectAccount" alias="ProjectAccount"/>
+      	<typeAlias type="com.everwing.coreservice.common.wy.fee.entity.ProjectCycleAccount" alias="ProjectCycleAccount"/>
+      	<typeAlias type="com.everwing.coreservice.common.wy.fee.entity.ProjectCycleDetail" alias="ProjectCycleDetail"/>
+      	<typeAlias type="com.everwing.coreservice.common.wy.fee.entity.ProjectDelayAccount" alias="ProjectDelayAccount"/>
+      	<typeAlias type="com.everwing.coreservice.common.wy.fee.entity.ProjectDelayDetail" alias="ProjectDelayDetail"/>
+      	<typeAlias type="com.everwing.coreservice.common.wy.fee.entity.ProjectFineDetail" alias="ProjectFineDetail"/>
+      	<typeAlias type="com.everwing.coreservice.common.wy.fee.entity.ProjectPrestoreAccount" alias="ProjectPrestoreAccount"/>
+      	
+      	<typeAlias type="com.everwing.coreservice.common.wy.fee.entity.ProjectPrestoreDetail" alias="ProjectPrestoreDetail"/>
+      	<typeAlias type="com.everwing.coreservice.common.wy.fee.entity.ProjectProductDetail" alias="ProjectProductDetail"/>
+      	<typeAlias type="com.everwing.coreservice.common.wy.fee.entity.ProjectRefundDetail" alias="ProjectRefundDetail"/>
+		<typeAlias type="com.everwing.coreservice.common.wy.fee.dto.AcBusinessOperaDetailDto" alias="AcBusinessOperaDetailDto"/>
+    </typeAliases>
+
+
+    <plugins>
+        <plugin interceptor="com.everwing.coreservice.wy.fee.dao.plugins.WySqlInterceptor">
+            <property name="dialect" value="mysql" />
+            <property name="pageSqlId" value=".*listPage.*" />
+        </plugin>
+    </plugins>
+
+</configuration>

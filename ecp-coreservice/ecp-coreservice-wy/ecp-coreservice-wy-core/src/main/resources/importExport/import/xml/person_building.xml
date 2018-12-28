@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<excel id="person_building">
+    <sheet index="0">
+        <list index="0" startRow="1" class="com.everwing.coreservice.common.wy.entity.personbuilding.PersonBuildingImportBean">
+            <field index="0" property="fullName" type="String" required="true"></field>
+            <field index="1" property="nodeName" type="String" required="true"></field>
+            <field index="2" property="houseCode" type="String" required="true"></field>
+            <field index="3" property="custName" type="String" required="true"></field>
+            <field index="4" property="cardnum" type="String" required="true"></field>
+            <field index="5" property="isEc" type="String" required="false"></field>
+        </list>
+    </sheet>
+</excel>

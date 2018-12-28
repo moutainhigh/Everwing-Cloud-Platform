@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.autotask.core.dao.TcStallMapper">
+
+    <resultMap id="BaseResultMap" type="TcStall">
+        <result property="id" column="id"/>
+        <result property="buildingCode" column="building_code"/>
+        <result property="maintenancePrice" column="maintenance_price"/>
+        <result property="isMechanicalStall" column="is_mechanical_stall"/>
+        <result property="stallNumber" column="stall_number"/>
+        <result property="stallName" column="stall_name"/>
+        <result property="stallCode" column="stall_code"/>
+        <result property="stallAdress" column="stall_adress"/>
+        <result property="stallProperty" column="stall_property"/>
+        <result property="isFixedStall" column="is_fixed_stall"/>
+        <result property="intakeDate" column="intake_date"/>
+        <result property="garagePosition" column="garage_position"/>
+        <result property="contractNumber" column="contract_number"/>
+        <result property="subscriptionDate" column="subscription_date"/>
+        <result property="contractDate" column="contract_date"/>
+        <result property="propertyPerson" column="Property_person"/>
+        <result property="propertyType" column="property_type"/>
+        <result property="registerPrice" column="register_price"/>
+        <result property="mortgageAmount" column="mortgage_amount"/>
+        <result property="registrant" column="registrant"/>
+        <result property="registrationDate" column="registration_date"/>
+        <result property="downPaymentAmount" column="down_payment_amount"/>
+        <result property="paymentMethod" column="payment_method"/>
+        <result property="transactionType" column="transaction_type"/>
+        <result property="discountedPrices" column="discounted_prices"/>
+        <result property="stallType" column="stall_Type"/>
+        <result property="buildingArea" column="building_area"/>
+        <result property="usableArea" column="usable_area"/>
+        <result property="shareArea" column="share_area"/>
+        <result property="stallState" column="stall_state"/>
+        <result property="finishDate" column="finish_date"/>
+        <result property="marketState" column="market_state"/>
+        <result property="projectNumber" column="project_number"/>
+        <result property="buildingCertificate" column="building_certificate"/>
+        <result property="administrativeExpenese" column="administrative_expenese"/>
+        <result property="billAddress" column="bill_address"/>
+        <result property="associatedParkingSpaces" column="associated_parking_spaces"/>
+        <result property="createrId" column="creater_id"/>
+        <result property="createrName" column="creater_name"/>
+        <result property="modifyId" column="modify_id"/>
+        <result property="modifyName" column="modify_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+
+    <select id="findByBuildingCode" parameterType="String" resultMap="BaseResultMap">
+        SELECT s.* FROM tc_stall s WHERE s.building_code =#{0} LIMIT 1
+    </select>
+</mapper>

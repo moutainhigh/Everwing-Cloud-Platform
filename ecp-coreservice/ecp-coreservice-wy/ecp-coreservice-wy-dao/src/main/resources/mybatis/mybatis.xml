@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration    PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <setting name="logImpl" value="STDOUT_LOGGING" />
+    </settings>
+
+    <typeAliases>
+        <!-- 系统模块 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.lookup.TSysLookup" alias="TSysLookup"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.lookup.TSysLookupList" alias="TSysLookupList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.lookup.TSysLookupSearch" alias="TSysLookupSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.lookup.TSysLookupItem" alias="TSysLookupItem"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.lookup.TSysLookupItemList" alias="TSysLookupItemList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.lookup.TSysLookupItemSearch" alias="TSysLookupItemSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.lookup.TSysLookupSelectView" alias="TSysLookupSelectView"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.lookup.TSysLookupSelectSearch" alias="TSysLookupSelectSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.menu.TSysMenu" alias="TSysMenu"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.menu.TSysMenuSearch" alias="TSysMenuSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.menu.TSysMenuTree" alias="TSysMenuTree"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.relation.PopMenuResourceTreeMap" alias="PopMenuResourceTreeMap"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.relation.ResourceTreeMap" alias="ResourceTreeMap"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.relation.TSysRoleResource" alias="TSysRoleResource"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.relation.TSysUserRole" alias="TSysUserRole"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.resource.TSysResource" alias="TSysResource"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.resource.TSysResourceSearch" alias="TSysResourceSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.role.TSysRole" alias="TSysRole"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.role.TSysRoleList" alias="TSysRoleList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.role.TSysRoleSearch" alias="TSysRoleSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.role.TSysRoleTree" alias="TSysRoleTree"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.user.TSysUser" alias="TSysUser"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.user.TSysUserList" alias="TSysUserList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.user.TSysUserSearch" alias="TSysUserSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.importExport.TSysImportExport" alias="TSysImportExport"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.importExport.TSysImportExportList" alias="TSysImportExportList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.importExport.TSysImportExportSearch" alias="TSysImportExportSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.operationLog.TSysOperationLog" alias="TSysOperationLog"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.operationLog.TSysOperationLogList" alias="TSysOperationLogList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.operationLog.TSysOperationLogSearch" alias="TSysOperationLogSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.company.TSysCompany" alias="TSysCompany"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.company.TSysCompanyList" alias="TSysCompanyList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.company.TSysCompanySearch" alias="TSysCompanySearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.department.TSysDepartment" alias="TSysDepartment"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.department.TSysDepartmentList" alias="TSysDepartmentList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.department.TSysDepartmentSearch" alias="TSysDepartmentSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.organization.TSysOrganization" alias="TSysOrganization"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.organization.TSysOrganizationList" alias="TSysOrganizationList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.organization.TSysOrganizationSearch" alias="TSysOrganizationSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.project.TSysProject" alias="TSysProject"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.project.TSysProjectList" alias="TSysProjectList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.project.TSysProjectSearch" alias="TSysProjectSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.dataPrivilege.TSysDataPrivilege" alias="TSysDataPrivilege"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.dataPrivilege.TSysDataPrivilegeList" alias="TSysDataPrivilegeList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.dataPrivilege.TSysDataPrivilegeSearch" alias="TSysDataPrivilegeSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.code.TSysCode" alias="TSysCode"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.system.code.TSysCodeSearch" alias="TSysCodeSearch"/>
+
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.common.select.customer.CustomerSelectSearch" alias="CustomerSelectSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.common.select.customer.CustomerSelectList" alias="CustomerSelectList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.common.select.asset.AssetSelectSearch" alias="AssetSelectSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.common.select.asset.AssetSelectList" alias="AssetSelectList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.common.select.vehicle.VehicleSelectSearch" alias="VehicleSelectSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.common.select.vehicle.VehicleSelectList" alias="VehicleSelectList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.common.attachment.Attachment" alias="Attachment"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.common.attachment.AttachmentList" alias="AttachmentList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.common.attachment.AttachmentSearch" alias="AttachmentSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.common.synchrodata.TSynchrodata" alias="TSynchrodata"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.common.synchrodata.TSynchrodataList" alias="TSynchrodataList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.common.synchrodata.TSynchrodataSearch" alias="TSynchrodataSearch"/>
+
+        <!-- 附件 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.annex.Annex" alias="Annex"/>
+
+        <!-- 资产账户 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.account.Account" alias="Account"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.account.asset.AssetAccount" alias="AssetAccount"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.account.relation.AccountRelation" alias="AccountRelation"/>
+
+        <!-- 个人客户 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.cust.person.PersonCustNew" alias="PersonCustNew"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.cust.person.PersonCustNewSearch" alias="PersonCustNewSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.cust.person.PersonCustNewList" alias="PersonCustNewList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.cust.person.PersonCustNewImportList" alias="PersonCustNewImportList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.cust.person.relation.PersonCustRelation" alias="PersonCustRelation"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.cust.person.relation.PersonCustRelationSearch" alias="PersonCustRelationSearch"/>
+
+        <!-- 企业客户 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.cust.enterprise.EnterpriseCustNew" alias="EnterpriseCustNew"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.cust.enterprise.EnterpriseCustNewSearch" alias="EnterpriseCustNewSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.cust.enterprise.staff.EnterpriseCustStaffNew" alias="EnterpriseCustStaffNew"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.cust.enterprise.SearchPersonAndEnterprise" alias="SearchPersonAndEnterprise"/>
+
+        <!-- 客户资产绑定 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.personbuilding.PersonBuildingNew" alias="PersonBuildingNew"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.personbuilding.PersonBuildingInfo" alias="PersonBuildingInfo"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.cust.enterprise.staff.EnterpriseCustStaffNew" alias="EnterpriseCustStaffNew"/>
+
+        <!-- 门控机 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.gating.Gating" alias="Gating"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.gating.BuildingGate" alias="BuildingGate"/>
+
+        <!-- 建筑结构 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.building.TcBuilding" alias="TcBuilding"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.building.TcBuildingList" alias="TcBuildingList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.building.TcBuildingSearch" alias="TcBuildingSearch"/>
+
+        <!-- 面积 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.area.TcArea" alias="TcArea"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.area.TcAreaList" alias="TcAreaList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.area.TcAreaSearch" alias="TcAreaSearch"/>
+
+        <!-- 房屋 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.house.TcHouse" alias="TcHouse"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.house.TcHouseList" alias="TcHouseList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.house.TcHouseSearch" alias="TcHouseSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.house.CountHouseList" alias="CountHouseList"/>
+
+        <!-- 公共资产 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.PublicAsset.TcPublicAsset" alias="TcPublicAsset"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.PublicAsset.TcPublicAssetSearch" alias="TcPublicAssetSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.PublicAsset.TcPublicAssetList" alias="TcPublicAssetList"/>
+
+
+        <!-- 工程施工 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.Engineering.TcConstruction" alias="TcConstruction"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.Engineering.TcConstructionList" alias="TcConstructionList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.Engineering.TcConstructionSearch" alias="TcConstructionSearch"/>
+
+
+        <!-- 车位 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.stall.TcStall" alias="TcStall"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.stall.TcStallList" alias="TcStallList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.stall.TcStallSearch" alias="TcStallSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.stall.CountStallList" alias="CountStallList"/>
+
+        <!-- 商铺 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.store.TcStore" alias="TcStore"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.store.TcStoreList" alias="TcStoreList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.store.TcStoreSearch" alias="TcStoreSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.store.CountStoreList" alias="CountStoreList"/>
+
+        <!-- 操作日志 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.operation.Operationlog" alias="Operationlog"/>
+        <!-- 工程施工操作日志 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.Engineering.Engineeringlog" alias="Engineeringlog"/>
+
+        <!-- 公建 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.publicbuilding.TcPublicBuilding" alias="TcPublicBuilding"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.publicbuilding.TcPublicBuildingList" alias="TcPublicBuildingList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.publicbuilding.TcPublicBuildingSearch" alias="TcPublicBuildingSearch"/>
+
+        <!-- 水表 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.business.watermeter.TcWaterMeter" alias="TcWaterMeter"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.business.watermeter.TcMeterBuilding" alias="TcMeterBuilding"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.business.watermeter.TcWaterMeterSearch" alias="TcWaterMeterSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.business.watermeter.TcWaterMeterList" alias="TcWaterMeterList"/>
+
+        <!-- 水表操作日志 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.business.watermeter.TcWaterlog" alias="TcWaterlog"/>
+        <!-- 电表操作日志 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.business.electmeter.TcElectlog" alias="TcElectlog"/>
+
+        <!-- 电表 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.business.electmeter.ElectMeter" alias="ElectMeter"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.business.electmeter.ElectMeterSearch" alias="ElectMeterSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.business.electmeter.ElectMeterImport" alias="ElectMeterImport"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.business.electmeter.TcElectMeterSearch"  alias="TcElectMeterSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.business.electmeter.TcElectMeterList" alias="TcElectMeterList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.business.electmeter.TcElectMeter" alias="TcElectMeter"/>
+        <!-- 水电表操作记录 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.business.watermeter.TcHydroMeterOperationRecord" alias="TcHydroMeterOperationRecord"/>
+
+
+        <!-- 抄表历史数据 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.business.meterdata.TcMeterData" alias="TcMeterData"/>
+
+        <!-- 抄表计划 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.business.readingschedule.TcReadingSchedule" alias="TcReadingSchedule"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.business.readingtask.TcReadingTask" alias="TcReadingTask"/>
+
+        <!-- 表与建筑关联关系表 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.business.meterrelation.TcMeterRelation" alias="TcMeterRelation"/>
+
+
+        <!-- 工单 start -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.order.TcOrderComplaint" alias="TcOrderComplaint"/>	<!-- 投诉工单 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.order.TcOrderComplete" alias="TcOrderComplete"/>		<!-- 完成工单 -->
+        <!-- 工单 end -->
+
+        <!-- 收费计费 start-->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.configuration.project.TBsProject" alias="TBsProject"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.configuration.project.TBsChargingScheme" alias="TBsChargingScheme"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.configuration.project.TBsChargeType" alias="TBsChargeType"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.configuration.assetaccount.TBsAssetAccount" alias="TBsAssetAccount"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.configuration.assetaccount.stream.TBsAssetAccountStream" alias="TBsAssetAccountStream"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.configuration.project.TBsChargingRules" alias="TBsChargingRules"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.configuration.project.TBsRuleBuildingRelation" alias="TBsRuleBuildingRelation"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.configuration.project.TBsShareBasicsInfo" alias="TBsShareBasicsInfo"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.configuration.project.TBsShareRelatedTask" alias="TBsShareRelatedTask"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.configuration.project.TBsShareBuildingRelation" alias="TBsShareBuildingRelation"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.configuration.owed.TBsOwedHistory" alias="TBsOwedHistory"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.configuration.payinfo.PushPayInfoToFinance" alias="PushPayInfoToFinance"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.configuration.project.TBsGetRuleBuilding" alias="TBsGetRuleBuilding"/>
+        <!-- 计费常量 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.configuration.bsconstant.TBsConstant" alias="TBsConstant"/>
+        <!-- 计费总数据 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.configuration.bill.TBsChargeBillTotal" alias="TBsChargeBillTotal"/>
+        <!-- 计费元数据 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.configuration.bill.TBsChargeBillHistory" alias="TBsChargeBillHistory"/>
+        <!-- 重计费数据 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.configuration.rebilling.TBsRebillingInfo" alias="TBsRebillingInfo"/>
+        <!-- 账户缴费 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.account.pay.TBsPayInfo" alias="TBsPayInfo"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.account.pay.TBsPayInfoExample" alias="TBsPayInfoExample"/>
+        <!-- 收费计费 end-->
+
+
+        <!-- 车辆 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.vehicle.TVehicle" alias="TVehicle"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.vehicle.TVehicleList" alias="TVehicleList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.vehicle.TVehicleSearch" alias="TVehicleSearch"/>
+
+        <!-- 产权变更 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.property.TPropertyChangingHistory" alias="TPropertyChangingHistory"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.property.TPropertyChangingHistoryList" alias="TPropertyChangingHistoryList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.property.TPropertyChangingHistorySearch" alias="TPropertyChangingHistorySearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.property.ProprietorInfo" alias="ProprietorInfo"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.property.CustomerList" alias="CustomerList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.property.property.CustomerSearch" alias="CustomerSearch"/>
+
+
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.common.field.TFields" alias="TFields"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.common.quilleditor.TQuillEditor" alias="TQuillEditor"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.common.quilleditor.TQuillEditorList" alias="TQuillEditorList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.common.quilleditor.TQuillEditorSearch" alias="TQuillEditorSearch"/>
+
+        <!-- 产品 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.product.TProduct" alias="TProduct"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.product.TProductList" alias="TProductList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.product.TProductSearch" alias="TProductSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.product.TProductDetailInsert" alias="TProductDetailInsert"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.product.TProductModify" alias="TProductModify"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.product.TProductDetailModify" alias="TProductDetailModify"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.product.TProductDetail" alias="TProductDetail"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.product.TProductDetailList" alias="TProductDetailList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.product.TProductDetailSearch" alias="TProductDetailSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.product.TProductPaymentDetail" alias="TProductPaymentDetail"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.product.TProductPaymentDetailList" alias="TProductPaymentDetailList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.product.TProductPaymentDetailSearch" alias="TProductPaymentDetailSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.product.TProductOrder" alias="TProductOrder"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.product.TProductOrderList" alias="TProductOrderList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.product.TProductOrderSearch" alias="TProductOrderSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.product.TProductOrderDetail" alias="TProductOrderDetail"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.product.TProductOrderDetailList" alias="TProductOrderDetailList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.product.TProductOrderDetailSearch" alias="TProductOrderDetailSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.product.TDeposit" alias="TDeposit"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.product.TDepositSearch" alias="TDepositSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.product.TDepositList" alias="TDepositList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.product.TDepositDetail" alias="TDepositDetail"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.product.TDepositDetailList" alias="TDepositDetailList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.product.TDepositDetailSearch" alias="TDepositDetailSearch"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.product.ProductSaleHistoryList" alias="ProductSaleHistoryList"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.product.ProductSaleHistorySearch" alias="ProductSaleHistorySearch"/>
+
+
+        <!-- 托收 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.configuration.bc.project.TBcProject" alias="TBcProject"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.configuration.bc.collection.TBcCollectionTotal" alias="TBcCollectionTotal"/>
+        <!-- 银联母子表 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.configuration.bc.collection.union.TBcUnionCollectionHead" alias="TBcUnionCollectionHead"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.configuration.bc.collection.union.TBcUnionCollectionBody" alias="TBcUnionCollectionBody"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.configuration.bc.collection.union.back.TBcUnionBackHead" alias="TBcUnionBackHead"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.configuration.bc.collection.union.back.TBcUnionBackBody" alias="TBcUnionBackBody"/>
+        <!-- 金融联母子表 -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.configuration.bc.collection.jrl.TBcJrlHead" alias="TBcJrlHead"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.configuration.bc.collection.jrl.TBcJrlBody" alias="TBcJrlBody"/>
+
+        <!-- 银账交割S -->
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.delivery.TJgAccountReceivable" alias="TJgAccountReceivable"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.delivery.TJgDepositReceipt" alias="TJgDepositReceipt"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.delivery.TJgGiveAccountDetail" alias="TJgGiveAccountDetail"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.delivery.TJgStaffGrop" alias="TJgStaffGrop"/>
+        <typeAlias type="com.everwing.coreservice.common.wy.entity.delivery.TJgTotalCalculation" alias="TJgTotalCalculation"/>
+        <!-- 银账交割E -->
+
+
+    </typeAliases>
+
+    <plugins>
+        <plugin interceptor="com.everwing.coreservice.wy.dao.plugins.WySqlInterceptor">
+            <property name="dialect" value="mysql" />
+            <property name="pageSqlId" value=".*listPage.*" />
+        </plugin>
+    </plugins>
+</configuration>

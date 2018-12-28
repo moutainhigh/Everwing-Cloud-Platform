@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.configuration.tbs.assetsaccount.TBsAssetAccountMapper">
+		
+		<resultMap type="TBsAssetAccount" id="BaseResultMap">
+			<id column="id" property="id"/>
+			<result column="building_code" property="buildingCode"/>
+			<result column="type" property="type"/>
+			<result column="account_balance" property="accountBalance"/>
+			<result column="use_status" property="useStatus"/>
+			<result column="project_id" property="projectId"/>
+			<result column="project_name" property="projectName"/>
+			<result column="create_time" property="createTime"/>
+			<result column="create_id" property="createId"/>
+			<result column="create_name" property="createName"/>
+			<result column="modify_id" property="modifyId"/>
+			<result column="modify_name" property="modifyName"/>
+			<result column="full_name" property="fullName"/>
+			<result column="modify_time" property="modifyTime"/>
+		</resultMap>
+		
+		<update id="update" parameterType="TBsAssetAccount">
+			update t_bs_asset_account
+			<set>
+				<if test="null != accountBalance">
+					account_balance = #{accountBalance},
+				</if>
+				<if test="null != useStatus">
+					use_status = #{useStatus},
+				</if>
+				<if test="null != modifyId">
+					modify_id = #{modifyId},
+				</if>
+				modify_time = sysdate()
+			</set>
+			where id = #{id}
+		</update>
+		
+		<sql id="batchUpdateField">
+			<if test="item.buildingCode !=null">
+				building_code=#{item.buildingCode},
+			</if>
+			<if test="item.type !=null">
+				type=#{item.type},
+			</if>
+			<if test="item.accountBalance !=null">
+				account_balance=#{item.accountBalance},
+			</if>
+			<if test="item.useStatus !=null">
+				use_status=#{item.useStatus},
+			</if>
+			<if test="item.projectId !=null">
+				project_id=#{item.projectId},
+			</if>
+			<if test="item.projectName !=null">
+				project_name=#{item.projectName},
+			</if>
+			<if test="item.fullName !=null">
+				full_name=#{item.fullName},
+			</if>
+			<if test="item.modifyId !=null">
+				modify_id=#{item.modifyId},
+			</if>
+			<if test="item.modifyName !=null">
+				modify_name=#{item.modifyName},
+			</if>
+		</sql>
+		
+		<!-- 批量更新账号 -->
+		<update id="batchUpdate" parameterType="TBsAssetAccount">
+			<foreach collection="list" separator=";" item="item" index="index">
+				update t_bs_asset_account set <include refid="batchUpdateField"/> modify_time=sysdate()
+				where id=#{item.id}
+			</foreach>
+		</update>
+		<!--单个新增 -->
+		<insert id="singleInsert" parameterType="TBsAssetAccount">
+			INSERT INTO t_bs_asset_account 
+			VALUES (
+				<if test="null == id">UUID(),</if>
+				<if test="null != id">#{id},</if>
+				#{buildingCode},
+				#{type},
+				#{accountBalance},
+				#{useStatus},
+				#{projectId},
+				#{projectName},
+				NOW(),
+				#{createId},
+				#{createName},
+				#{modifyId},
+				#{modifyName},
+				#{fullName},
+				#{modifyTime}
+			)
+		</insert>
+		
+		<!--批量新增-->
+		<insert id="batchInsert"  parameterType="java.util.List">
+			INSERT INTO t_bs_asset_account 
+		    VALUES 
+		    <foreach collection="list" item="item" index="index" separator="," >
+		    	(
+				<if test="null != item.id">#{item.id}, </if>
+				<if test="null == item.id">UUID(),</if>
+				#{item.buildingCode},
+				#{item.type},
+				#{item.accountBalance},
+				#{item.useStatus},
+				#{item.projectId},
+				#{item.projectName},
+				NOW(),
+				#{item.createId},
+				#{item.createName},
+				#{item.modifyId},
+				#{item.modifyName},
+				#{item.fullName},
+				#{item.modifyTime}
+			)
+		    </foreach>
+		</insert>
+		
+		<sql id="Sqlfield">
+			id,building_code,type,account_balance,use_status,project_id,project_name,
+			create_time,create_id,create_name,modify_id,modify_name,full_name,modify_time
+		</sql>
+		
+		<!-- 根据建筑编号和账户类型查找 -->
+		<select id="lookupByBuildCodeAndType" parameterType="String" resultMap="BaseResultMap">
+			select <include refid="Sqlfield" />
+			from  t_bs_asset_account
+			where building_code=#{0}
+			      and type=#{1}
+		</select>
+		
+		<!-- 根据建筑编号查询物业、本体、水费、电费账户情况 -->
+		<select id="queryAccountSituationByBuildCode" parameterType="String" resultMap="BaseResultMap">
+			select 
+			<include refid="Sqlfield"/>
+			from t_bs_asset_account
+			where building_code=#{0}
+			and type !=0
+		</select>
+		
+		<!-- 根据账单id获取账户信息 -->
+		<select id="findByBillId" parameterType="String" resultMap="BaseResultMap">
+			SELECT
+			       t1.*
+			  FROM t_bs_asset_account t1,
+			       t_bs_charge_bill_history t2,
+			       t_bs_charge_bill_total t3
+			 WHERE t1.building_code = t2.building_code
+			   AND t2.charge_total_id = t3.id
+			   AND t1.type = t3.type
+			   AND t2.id = #{0}
+		</select>
+		
+		<!-- 查询单个建筑总欠费 -->
+		<select id="queryTotalArrears" parameterType="String" resultType="java.lang.Double">
+		    SELECT
+				sum(t.account_balance)
+			FROM
+				t_bs_asset_account t
+			WHERE
+				 t.project_id = #{0}
+			AND t.building_code= #{1}
+			and t.account_balance  <![CDATA[ < ]]> 0
+		</select>
+		
+		<!-- 查询多个建筑总欠费 -->
+		<select id="queryTotalBalances" resultType="Double">
+			SELECT IFNULL(SUM(account_balance),0) AS account_balance
+			  FROM t_bs_asset_account
+			 WHERE account_balance <![CDATA[ <= ]]> 0 
+			 <if test="null != buildings">
+			 	and building_code in 
+				 <foreach collection="buildings" item="building" open="(" close=")" separator=",">
+					#{building.buildingCode}
+				</foreach>
+			 </if>
+		</select>
+		
+		<select id="getAccountsByBuildingCodesAndType" resultType="Integer">
+			SELECT count(id) as `count`
+			FROM t_bs_asset_account
+			WHERE `type` = #{type}
+			  and use_status = 0
+			AND building_code IN
+			<foreach collection="buildingCodes" item="code" open="(" close=")" separator=",">
+				#{code}
+			</foreach>
+		</select>
+
+	<select id="getAccountsByBuildingCodesAndTypeNew" resultType="Integer">
+		SELECT count(t1.id) as `count`
+		FROM t_bs_asset_account t1,tc_building t2
+		WHERE t1.type = #{type}
+		and t1.use_status = 0
+		and t1.building_code = t2.building_code
+		AND t2.house_code IN
+		<foreach collection="buildingCodes" item="code" open="(" close=")" separator=",">
+			#{code}
+		</foreach>
+	</select>
+
+		<!-- 根据buildingCode获取所有账户 -->
+		<select id="getAccountsByBuildingCode" resultMap="BaseResultMap">
+			select 
+			<include refid="Sqlfield"/>
+			from t_bs_asset_account
+			where building_code=#{buildingCode}
+		</select>
+		
+		<!-- 计入违约金到账户余额 -->
+		<update id="addLateFee">
+			update t_bs_asset_account 
+			set account_balance = (account_balance - #{lateFee,jdbcType=DOUBLE})
+			where id = #{accountId}
+		</update>
+		
+		<select id="findByBuildingCodeAndItems" resultMap="BaseResultMap">
+			SELECT * FROM t_bs_asset_account
+			WHERE building_code = #{buildingCode}
+			<if test="null != items">
+                AND type IN
+                <foreach collection="items" item="item" open="(" separator="," close=")">
+                	#{item}
+                </foreach>
+            </if>
+		</select>
+	<select id="queryBalances" resultType="java.util.Map">
+		SELECT building_code,sum(IFNULL(account_balance,0)) AS account_balance
+		FROM t_bs_asset_account
+		WHERE
+		<if test="null != buildings">
+			building_code in
+			<foreach collection="buildings" item="building" open="(" close=")" separator=",">
+				#{building.buildingCode}
+			</foreach>
+		</if>
+		group by building_code
+	</select>
+
+	<select id="findByAccountBalance" resultType="java.util.Map">
+		select
+		IFNULL(SUM(case when type =1 then IFNULL(accountAmount,0) END ),0.0) wyAmount,
+		IFNULL(SUM(case when type =2 then IFNULL(accountAmount,0) END ),0.0) btamount,
+		IFNULL(SUM(case when type =3 then IFNULL(accountAmount,0) END ),0.0) wateramount,
+		IFNULL(SUM(case when type =4 then IFNULL(accountAmount,0) END ),0.0) eleamount
+		from (
+		select building_Code bro,type,account_balance AS accountAmount
+		 FROM t_bs_asset_account where building_code = #{buildingCode}
+		)tt GROUP BY bro
+	</select>
+	<select id="findListAccountAndArrears" parameterType="String"  resultType="com.everwing.coreservice.common.wy.entity.configuration.assetaccount.TBsAssetAccountDto">
+		select
+		IFNULL(SUM(case when type =1 then IFNULL(accountAmount,0) END ),0.0) wyAmount,
+		IFNULL(SUM(case when type =2 then IFNULL(accountAmount,0) END ),0.0) btamount,
+		IFNULL(SUM(case when type =3 then IFNULL(accountAmount,0) END ),0.0) wateramount,
+		IFNULL(SUM(case when type =4 then IFNULL(accountAmount,0) END ),0.0) eleamount,
+		buildingCode
+		from (
+		select building_Code buildingCode,type,account_balance AS accountAmount
+		FROM t_bs_asset_account where project_id = #{projectId} and building_code IN (
+		select building_code from tc_building
+		)and 0>account_balance
+
+		)tt GROUP BY buildingCode;
+	</select>
+
+	<select id="findListThirdAccountAndArrears" parameterType="String"  resultType="com.everwing.coreservice.common.wy.entity.configuration.assetaccount.TBsAssetAccountDto">
+		select
+		IFNULL(SUM(case when type =1 then IFNULL(accountAmount,0) END ),0.0) wyAmount,
+		IFNULL(SUM(case when type =2 then IFNULL(accountAmount,0) END ),0.0) btamount,
+		IFNULL(SUM(case when type =3 then IFNULL(accountAmount,0) END ),0.0) wateramount,
+		IFNULL(SUM(case when type =4 then IFNULL(accountAmount,0) END ),0.0) eleamount,
+		buildingCode
+		from (
+		select building_Code buildingCode,type,account_balance AS accountAmount
+		FROM t_bs_asset_account where project_id = #{projectId} and building_code IN (
+		select building_code from tc_building where  building_type in ('disanfangzichan','gonggongchangdichuzu')
+		)and 0>account_balance
+
+		)tt GROUP BY buildingCode;
+	</select>
+	<select id="findByInitializationAndProjectId" parameterType="String"  resultType="com.everwing.coreservice.common.wy.entity.configuration.assetaccount.TBsAssetAccountInitialization">
+		select
+		buildingCode,
+		IFNULL(SUM((CASE WHEN (cmoney > 0 and type = 0 ) then IFNULL(cmoney,0) END)),0.0) commonInit,   -- 初始化通用账户
+		IFNULL(SUM((CASE WHEN (cmoney > 0 and type = 1 ) then IFNULL(cmoney,0) END)),0.0) wyInit, -- 初始化物业账户预存
+		IFNULL(MIN((CASE WHEN (cmoney &lt;=0 and type = 1 ) then IFNULL(cmoney,0) END)),0.0) wyArreasInit, -- 初始化的欠费
+		IFNULL(MAX( (CASE WHEN (cmoney&lt;= 0 and type = 1 ) then IFNULL(cmoney,0) END )),0.0) lateFeeInit,-- 初始化违约金
+		IFNULL(SUM((CASE WHEN (cmoney > 0 and type = 2 ) then IFNULL(cmoney,0) END)),0.0) btInit, -- 初始化本体账户预存
+		IFNULL(SUM((CASE WHEN (cmoney &lt;= 0 and type = 2 ) then IFNULL(cmoney,0) END)),0.0) btArreasInit, -- 初始化的欠费
+
+		IFNULL(SUM((CASE WHEN (cmoney > 0 and type = 3 ) then IFNULL(cmoney,0) END)),0.0) waterInit, --
+		IFNULL(SUM((CASE WHEN (cmoney &lt;= 0 and type = 3 ) then IFNULL(cmoney,0) END)),0.0) waterArreasInit, --
+
+		IFNULL(SUM((CASE WHEN (cmoney > 0 and type = 4 ) then IFNULL(cmoney,0) END)),0.0) electInit, --
+		IFNULL(SUM((CASE WHEN (cmoney &lt;= 0 and type = 4 ) then IFNULL(cmoney,0) END)),0.0) electArreasInit -- 初始化的欠费
+
+		from (
+		select * from (
+		select id sonid,parent_id pid,chang_money cmoney,occurrence_time otime from t_bs_asset_account_stream where occurrence_time &lt; '2018-01-10' and purpose is NULL and
+		create_id = 'system' ) t1,
+		(
+		select id,building_code buildingCode,type,account_balance abalance  from t_bs_asset_account where project_id =#{projectCode} ) t2
+		where t1.pid = t2.id ) xx group by buildingCode;
+	</select>
+
+	<select id="findByThirdInitializationAndProjectId" parameterType="String"  resultType="com.everwing.coreservice.common.wy.entity.configuration.assetaccount.TBsAssetAccountInitialization">
+		select
+		buildingCode,
+		IFNULL(SUM((CASE WHEN (cmoney > 0 and type = 0 ) then IFNULL(cmoney,0) END)),0.0) commonInit,   -- 初始化通用账户
+		IFNULL(SUM((CASE WHEN (cmoney > 0 and type = 1 ) then IFNULL(cmoney,0) END)),0.0) wyInit, -- 初始化物业账户预存
+		IFNULL(MIN((CASE WHEN (cmoney &lt;=0 and type = 1 ) then IFNULL(cmoney,0) END)),0.0) wyArreasInit, -- 初始化的欠费
+
+		IFNULL(SUM((CASE WHEN (cmoney > 0 and type = 2 ) then IFNULL(cmoney,0) END)),0.0) btInit, -- 初始化本体账户预存
+		IFNULL(SUM((CASE WHEN (cmoney &lt;= 0 and type = 2 ) then IFNULL(cmoney,0) END)),0.0) btArreasInit, -- 初始化的欠费
+
+		IFNULL(SUM((CASE WHEN (cmoney > 0 and type = 3 ) then IFNULL(cmoney,0) END)),0.0) waterInit, --
+		IFNULL(SUM((CASE WHEN (cmoney &lt;= 0 and type = 3 ) then IFNULL(cmoney,0) END)),0.0) waterArreasInit, --
+
+		IFNULL(SUM((CASE WHEN (cmoney > 0 and type = 4 ) then IFNULL(cmoney,0) END)),0.0) electInit, --
+		IFNULL(SUM((CASE WHEN (cmoney &lt;= 0 and type = 4 ) then IFNULL(cmoney,0) END)),0.0) electArreasInit -- 初始化的欠费
+
+		from (
+		select * from (
+		select id sonid,parent_id pid,chang_money cmoney,occurrence_time otime from t_bs_asset_account_stream where
+		 purpose LIKE '%初始化%'
+		and	create_id = 'system'
+		) t1,
+		(
+		select id,building_code buildingCode,type,account_balance abalance  from t_bs_asset_account where   building_code in(
+		select building_code from tc_building WHERE project_id =#{projectCode} and building_type in ('disanfangzichan','gonggongchangdichuzu')
+		)
+		) t2
+		where t1.pid = t2.id ) xx group by buildingCode;
+	</select>
+
+	<select id="getAccountInfoByCode" parameterType="java.lang.String" resultType="java.util.Map">
+		select
+			   ABS(MAX(case when type = 1 then IFNULL(account_balance,0.0) END)) wyA,
+			   ABS(MAX(case when type = 2 then IFNULL(account_balance,0.0) END)) btA,
+			   ABS(MAX(case when type = 3 then IFNULL(account_balance,0.0) END)) waterA,
+			   ABS(MAX(case when type = 4 then IFNULL(account_balance,0.0) END)) electA
+		from t_bs_asset_account where building_code = #{buildingCode} group by building_code
+	</select>
+
+</mapper>

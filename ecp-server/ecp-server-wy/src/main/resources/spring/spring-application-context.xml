@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/context      http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/beans      http://www.springframework.org/schema/beans/spring-beans.xsd
+
+
+
+    http://code.alibabatech.com/schema/dubbo	http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+
+
+    http://code.alibabatech.com/schema/dubbo    http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+    <dubbo:application name="consumer-of-wyApi"/>
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <array>
+                <value>file:/app/server/wy/conf.properties</value>
+                <value>file:/app/server/wy/thread-pool.properties</value>
+            </array>
+        </property>
+        <property name="ignoreResourceNotFound" value="true" />
+        <property name="ignoreUnresolvablePlaceholders" value="true" />
+        <property name="properties" ref="wyServerProperties" />
+    </bean>
+
+    <bean name="wyServerProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <array>
+                <value>classpath:/config/conf.properties</value>
+                <value>classpath:/config/thread-pool.properties</value>
+            </array>
+        </property>
+    </bean>
+
+    <context:component-scan base-package="com.everwing.server.wy"/>
+    <bean class="com.everwing.coreservice.common.utils.SpringContextHolder" lazy-init="false"/>
+    <import resource="classpath:spring/spring-coreservice-commom.xml" />
+    <import resource="classpath:spring/dubbo-coreservice-wy-api-config.xml"/>
+    <import resource="classpath:spring/dubbo-coreservice-wy-fee-api-config.xml" />
+    <import resource="classpath:spring/dubbo-coreservice-platform-api-config.xml"/>
+    <import resource="classpath:spring/dubbo-coreservice-solr-api-config.xml"/>
+    <import resource="classpath:spring/dubbo-coreservice-wy-fee-order-api-config.xml"/>
+    <import resource="classpath:spring/spring-mvc.xml"/>
+    <import resource="classpath:spring/spring-application-redis.xml"/>
+    <import resource="classpath:spring/spring-thread-pool.xml"/>
+</beans>

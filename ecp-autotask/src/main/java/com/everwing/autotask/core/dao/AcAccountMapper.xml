@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.autotask.core.dao.AcAccountMapper">
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.fee.entity.AcAccount">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="house_code_new" jdbcType="VARCHAR" property="houseCodeNew" />
+    <result column="total_amount" jdbcType="DECIMAL" property="totalAmount" />
+    <result column="common_deposit_amount" jdbcType="DECIMAL" property="commonDepositAmount" />
+    <result column="special_deposit_amount" jdbcType="DECIMAL" property="specialDepositAmount" />
+    <result column="late_fee_amount" jdbcType="DECIMAL" property="lateFeeAmount" />
+    <result column="current_charging_amount" jdbcType="DECIMAL" property="currentChargingAmount" />
+    <result column="last_arrears_amount" jdbcType="DECIMAL" property="lastArrearsAmount" />
+    <result column="current_bill_amount" jdbcType="DECIMAL" property="currentBillAmount" />
+    <result column="project_id" jdbcType="VARCHAR" property="projectId" />
+    <result column="project_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_id" jdbcType="VARCHAR" property="createId" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="modify_id" jdbcType="VARCHAR" property="modifyId" />
+    <result column="signature" jdbcType="VARCHAR" property="signature" />
+    <result column="charging_month" jdbcType="VARCHAR" property="chargingMonth" />
+  </resultMap>
+
+    <sql id="Base_Column_List">
+        id, house_code_new, common_deposit_amount, special_deposit_amount,
+        late_fee_amount, current_charging_amount, last_arrears_amount, current_bill_amount,
+        project_id, project_name, create_time, create_id, modify_time, modify_id, signature,
+        charging_month
+    </sql>
+
+  <select id="selectByHouseCodeNew" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_ac_account
+    where house_code_new = #{houseCodeNew,jdbcType=VARCHAR}
+  </select>
+  
+   <update id="updateByPrimaryKeyForAmount" parameterType="com.everwing.coreservice.common.wy.fee.entity.AcAccount">
+    		update t_ac_account set
+   			<if test="null != commonDepositAmount">
+    			 common_deposit_amount = common_deposit_amount + #{commonDepositAmount,jdbcType=DECIMAL},
+   			</if>
+   			<if test="null != specialDepositAmount">
+    			 special_deposit_amount = special_deposit_amount + #{specialDepositAmount,jdbcType=DECIMAL},
+   			</if>
+   			<if test="null != lateFeeAmount">
+    			 late_fee_amount = late_fee_amount + #{lateFeeAmount,jdbcType=DECIMAL},
+   			</if>
+   			<if test="null != currentChargingAmount">
+    			 current_charging_amount = current_charging_amount + #{currentChargingAmount,jdbcType=DECIMAL},
+   			</if>
+   			<if test="null != lastArrearsAmount">
+    			 last_arrears_amount = last_arrears_amount + #{lastArrearsAmount,jdbcType=DECIMAL},
+   			</if>
+   			<if test="null != currentBillAmount">
+    			 current_bill_amount = current_bill_amount + #{currentBillAmount,jdbcType=DECIMAL},
+   			</if>
+    		modify_time = SYSDATE() where id = #{id,jdbcType=VARCHAR}
+    		
+    		
+   </update>
+  
+  
+</mapper>

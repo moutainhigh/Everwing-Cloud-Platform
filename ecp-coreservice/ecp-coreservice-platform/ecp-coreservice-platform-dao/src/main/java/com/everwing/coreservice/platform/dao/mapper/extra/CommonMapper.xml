@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.everwing.coreservice.platform.dao.mapper.extra.CommonMapper">
+
+	<select id="selectBySql" resultType="map">
+		select * from ${tableName}
+		<where>
+			<foreach item="item" index="index" collection="criteriaArray">
+				<if	test="item[0] != null &amp;&amp; item[1] != null &amp;&amp; item[2] != null">
+					${item[0]} ${item[1]} ${item[2]} 
+					<if test="item[2] == 'is'">null</if>
+					<if test="item[2] != 'is'">#{item[3]}</if>
+				</if>
+			</foreach>
+		</where>
+		<if	test="orderByString != null">
+			order by ${orderByString}
+		</if>
+		<if	test="limitStart != -1 &amp;&amp; limitEnd != -1">
+			limit ${limitStart},${limitEnd}
+		</if>
+		
+	</select>
+
+</mapper>

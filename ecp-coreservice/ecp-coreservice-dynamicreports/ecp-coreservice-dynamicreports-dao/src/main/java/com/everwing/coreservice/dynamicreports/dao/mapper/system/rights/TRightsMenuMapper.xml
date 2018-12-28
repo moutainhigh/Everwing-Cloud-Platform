@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.dynamicreports.dao.mapper.system.rights.TRightsMenuMapper">
+    <resultMap type="TRightsMenu" id="TRightsMenuResultMap">
+        <result property="menuId" column="menu_id"/>
+        <result property="menuName" column="menu_name"/>
+        <result property="menuDesc" column="menu_desc"/>
+        <result property="menuUrl" column="menu_url"/>
+        <result property="menuPermission" column="menu_permission"/>
+        <result property="menuLevel" column="menu_level"/>
+        <result property="menuOrder" column="menu_order"/>
+        <result property="menuImg" column="menu_img"/>
+        <result property="pid" column="pid"/>
+        <result property="createrId" column="creater_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyId" column="modify_id"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <resultMap id="TRightsMenuVOResultMap" type="TRightsMenuVO" extends="TRightsMenuResultMap">
+
+    </resultMap>
+
+    <select id="findByCondition" resultMap="TRightsMenuVOResultMap" parameterType="TRightsMenuQO">
+        SELECT
+            t.*
+        FROM
+            t_rights_menu t
+        WHERE
+            1 = 1
+        <if test="menuId != null and menuId != ''">
+            AND t.menu_id = #{menuId}
+        </if>
+        <if test="menuLevel != null and menuLevel != ''">
+            AND t.menu_level = #{menuLevel}
+        </if>
+        <if test="pid != null and pid != ''">
+            AND t.pid  = #{pid}
+        </if>
+        <if test="menuPermission != null and menuPermission != ''">
+            AND t.menu_permission  = #{menuPermission}
+        </if>
+        order by t.menu_order ASC
+    </select>
+
+    <select id="findNonWhiteListByAdmin" resultMap="TRightsMenuVOResultMap">
+        SELECT
+            sm.menu_id,
+            sm.menu_name,
+            sm.menu_desc,
+            sm.menu_permission,
+            sm.menu_url,
+            sm.menu_img,
+            sm.menu_level,
+            sm.pid
+        FROM t_rights_menu sm
+        WHERE  sm.menu_permission != 'anon'
+        ORDER BY sm.menu_order ASC
+    </select>
+
+    <select id="findWhiteListByAdmin" resultMap="TRightsMenuVOResultMap">
+        SELECT
+            sm.menu_id,
+            sm.menu_name,
+            sm.menu_desc,
+            sm.menu_permission,
+            sm.menu_url,
+            sm.menu_img
+        FROM t_rights_menu sm
+        WHERE  sm.menu_permission = 'anon'
+        ORDER BY sm.menu_order ASC
+    </select>
+
+    <select id="findNonWhiteListByRole" parameterType="TRightsMenuQO" resultMap="TRightsMenuVOResultMap">
+        SELECT
+            DISTINCT
+            sm.menu_id,
+            sm.menu_name,
+            sm.menu_desc,
+            sm.menu_permission,
+            sm.menu_url,
+            sm.menu_img,
+            sm.menu_level,
+            sm.pid
+        FROM t_rights_menu sm,t_sys_role_resource srr
+        WHERE srr.src_type='m'
+            AND sm.menu_id = srr.src_id
+            AND sm.menu_permission != 'anon'
+            <if test="menuLevel != null and menuLevel != ''">
+                AND sm.menu_level = #{menuLevel}
+            </if>
+            <if test="pid != null and pid != ''">
+                AND sm.pid  = #{pid}
+            </if>
+            <if test="roleIdList != null">
+                AND srr.role_id IN
+                <foreach collection="roleIdList" item="roleId" index="index" open="(" close=")" separator=",">
+                    '${roleId}'
+                </foreach>
+            </if>
+        ORDER BY sm.menu_order ASC
+    </select>
+
+    <select id="findWhiteListByRole" parameterType="TRightsMenuQO" resultMap="TRightsMenuVOResultMap">
+        SELECT
+            DISTINCT
+            sm.menu_id,
+            sm.menu_name,
+            sm.menu_desc,
+            sm.menu_permission,
+            sm.menu_url,
+            sm.menu_img
+        FROM t_rights_menu sm,t_sys_role_resource srr
+        WHERE srr.src_type='m'
+            AND sm.menu_id = srr.src_id
+            AND sm.menu_permission = 'anon'
+            <if test="roleIdList != null">
+                AND srr.role_id IN
+                <foreach collection="roleIdList" item="roleId" index="index" open="(" close=")" separator=",">
+                    '${roleId}'
+                </foreach>
+            </if>
+        ORDER BY sm.menu_order ASC
+    </select>
+
+
+    <select id="findMenuTreeByRoleId" parameterType="String" resultType="java.util.Map">
+        SELECT
+            DISTINCT
+            m.menu_id,
+            m.menu_name,
+            m.menu_desc,
+            m.menu_level,
+            m.pid,
+            IF(toRole.src_id IS NULL,'false','true') AS checked
+        FROM t_rights_menu m
+        LEFT JOIN (SELECT srs.src_id FROM t_sys_role_resource srs WHERE srs.src_type='m' AND srs.role_id = #{0}) toRole
+        ON m.menu_id = toRole.src_id
+        WHERE m.menu_permission != 'anon'
+        ORDER BY m.menu_order ASC
+    </select>
+
+    <insert id="insert" parameterType="TRightsMenu">
+        insert into t_rights_menu
+        (
+            menu_id ,
+            menu_name,
+            menu_desc,
+            menu_url,
+            menu_permission,
+            menu_level,
+            menu_order,
+            menu_img,
+            pid,
+            creater_id,
+            modify_id,
+            create_time,
+            modify_time
+        )
+        values
+        (
+            UUID(),
+            #{menuName},
+            #{menuDesc},
+            #{menuUrl},
+            #{menuPermission},
+            #{menuLevel},
+            #{menuOrder},
+            #{menuImg},
+            #{pId},
+            #{createrId},
+            '',
+            sysdate(),
+            sysdate()
+        )
+    </insert>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        insert into t_rights_menu
+        (
+            menu_id ,
+            menu_name,
+            menu_desc,
+            menu_url,
+            menu_permission,
+            menu_level,
+            menu_order,
+            menu_img,
+            pid,
+            creater_id,
+            modify_id,
+            create_time,
+            modify_time
+        )
+        values
+        <foreach collection="list" index="index" item="item" separator=",">
+            (
+                UUID(),
+                #{item.menuName},
+                #{item.menuDesc},
+                #{item.menuUrl},
+                #{item.menuPermission},
+                #{item.menuLevel},
+                #{item.menuOrder},
+                #{item.menuImg},
+                #{item.pid},
+                #{item.createrId},
+                '',
+                sysdate(),
+                sysdate()
+            )
+        </foreach>
+    </insert>
+
+    <delete id="deleteAll">
+        DELETE FROM t_rights_menu
+    </delete>
+</mapper>

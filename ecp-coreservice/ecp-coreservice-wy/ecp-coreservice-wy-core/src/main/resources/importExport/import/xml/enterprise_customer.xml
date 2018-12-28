@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<excel id="enterprise_customer">
+    <sheet index="0">
+        <list index="0" startRow="1" class="com.everwing.coreservice.common.wy.entity.cust.enterprise.EnterpriseCustNewImportList">
+            <field index="0" property="enterpriseName" required="true"></field>
+            <field index="1" property="manageType" required="true" type="Map" format="0:餐饮类;1:服务类;2:零售类;3:娱乐类"></field>
+            <field index="2" property="address"  required="true"></field>
+            <field index="3" property="representative"></field>
+            <field index="4" property="officePhone"></field>
+            <field index="5" property="email"></field>
+            <field index="6" property="tradingDate" type="Date" pattern="yyyy-MM-dd"></field>
+            <field index="7" property="enterpriseProperty"  type="Map" format="0:个人独资;1:独资企业;2:公司"></field>
+            <field index="8" property="principal"></field>
+            <field index="9" property="businessAddress"></field>
+        </list>
+    </sheet>
+</excel>

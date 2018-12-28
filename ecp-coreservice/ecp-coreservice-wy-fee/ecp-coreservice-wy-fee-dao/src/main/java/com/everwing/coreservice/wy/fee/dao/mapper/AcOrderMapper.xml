@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.coreservice.wy.fee.dao.mapper.AcOrderMapper">
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.fee.entity.AcOrder">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="payer" jdbcType="VARCHAR" property="payer" />
+    <result column="payer_mobile" jdbcType="VARCHAR" property="payerMobile" />
+    <result column="order_state" jdbcType="INTEGER" property="orderState" />
+    <result column="pay_state" jdbcType="INTEGER" property="payState" />
+    <result column="order_type" jdbcType="INTEGER" property="orderType" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opera_id" jdbcType="VARCHAR" property="operaId" />
+    <result column="signature" jdbcType="VARCHAR" property="signature" />
+    <result column="payment_time" jdbcType="TIMESTAMP" property="paymentTime" />
+    <result column="house_code_new" jdbcType="VARCHAR" property="houseCodeNew" />
+    <result column="payment_channel" jdbcType="INTEGER" property="paymentChannel" />
+    <result column="is_rcorded" jdbcType="INTEGER" property="isRcorded" />
+    <result column="pay_channel_trade_no" jdbcType="VARCHAR" property="payChannelTradeNo" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, order_no, amount, payer, payer_mobile, order_state, pay_state, order_type, update_time, 
+    opera_id, signature, payment_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_ac_order
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_ac_order
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.everwing.coreservice.common.wy.fee.entity.AcOrder">
+    insert into t_ac_order (id, order_no, amount, 
+      payer, payer_mobile, order_state, 
+      pay_state, order_type, update_time, 
+      opera_id, signature, payment_time
+      )
+    values (#{id,jdbcType=VARCHAR}, (select concat(#{orderNo,jdbcType=VARCHAR},func_nextval('D'),ROUND(RAND(),2)*100)), #{amount,jdbcType=DECIMAL},
+      #{payer,jdbcType=VARCHAR}, #{payerMobile,jdbcType=VARCHAR}, #{orderState,jdbcType=INTEGER}, 
+      #{payState,jdbcType=INTEGER}, #{orderType,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{operaId,jdbcType=VARCHAR}, #{signature,jdbcType=VARCHAR}, #{paymentTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.everwing.coreservice.common.wy.fee.entity.AcOrder">
+    insert into t_ac_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="orderNo != null">
+        order_no,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="payer != null">
+        payer,
+      </if>
+      <if test="payerMobile != null">
+        payer_mobile,
+      </if>
+      <if test="orderState != null">
+        order_state,
+      </if>
+      <if test="payState != null">
+        pay_state,
+      </if>
+      <if test="orderType != null">
+        order_type,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="operaId != null">
+        opera_id,
+      </if>
+      <if test="signature != null">
+        signature,
+      </if>
+      <if test="paymentTime != null">
+        payment_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null">
+        (select concat(#{orderNo,jdbcType=VARCHAR},func_nextval('D'),ROUND(ROUND(),2)*100)),
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="payer != null">
+        #{payer,jdbcType=VARCHAR},
+      </if>
+      <if test="payerMobile != null">
+        #{payerMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="orderState != null">
+        #{orderState,jdbcType=INTEGER},
+      </if>
+      <if test="payState != null">
+        #{payState,jdbcType=INTEGER},
+      </if>
+      <if test="orderType != null">
+        #{orderType,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operaId != null">
+        #{operaId,jdbcType=VARCHAR},
+      </if>
+      <if test="signature != null">
+        #{signature,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentTime != null">
+        #{paymentTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.everwing.coreservice.common.wy.fee.entity.AcOrder">
+    update t_ac_order
+    <set>
+      <!--<if test="orderNo != null">-->
+        <!--order_no = #{orderNo,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="payer != null">
+        payer = #{payer,jdbcType=VARCHAR},
+      </if>
+      <if test="payerMobile != null">
+        payer_mobile = #{payerMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="orderState != null">
+        order_state = #{orderState,jdbcType=INTEGER},
+      </if>
+      <if test="payState != null">
+        pay_state = #{payState,jdbcType=INTEGER},
+      </if>
+      <if test="orderType != null">
+        order_type = #{orderType,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operaId != null">
+        opera_id = #{operaId,jdbcType=VARCHAR},
+      </if>
+      <if test="signature != null">
+        signature = #{signature,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentTime != null">
+        payment_time = #{paymentTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.everwing.coreservice.common.wy.fee.entity.AcOrder">
+    update t_ac_order
+    set amount = #{amount,jdbcType=DECIMAL},
+      payer = #{payer,jdbcType=VARCHAR},
+      payer_mobile = #{payerMobile,jdbcType=VARCHAR},
+      order_state = #{orderState,jdbcType=INTEGER},
+      pay_state = #{payState,jdbcType=INTEGER},
+      order_type = #{orderType,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      opera_id = #{operaId,jdbcType=VARCHAR},
+      signature = #{signature,jdbcType=VARCHAR},
+      payment_time = #{paymentTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <resultMap id="AcOrderDtoMap" type="com.everwing.coreservice.common.wy.fee.dto.AcOrderDto" >
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="amount" jdbcType="DOUBLE" property="amount" />
+    <result column="payer" jdbcType="VARCHAR" property="payer" />
+    <result column="payer_mobile" jdbcType="VARCHAR" property="payerMobile" />
+    <result column="order_state" jdbcType="INTEGER" property="orderState" />
+    <result column="id" jdbcType="VARCHAR" property="id" />
+    <result column="id" jdbcType="VARCHAR" property="id" />
+    <result column="id" jdbcType="VARCHAR" property="id" />
+    <result column="pay_state" jdbcType="INTEGER" property="payState" />
+    <result column="order_type" jdbcType="INTEGER" property="orderType" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="opera_id" jdbcType="VARCHAR" property="operaId" />
+    <result column="signature" jdbcType="VARCHAR" property="signature" />
+    <result column="payment_time" jdbcType="TIMESTAMP" property="paymentTime" />
+    <result column="house_code_new" jdbcType="VARCHAR" property="houseCodeNew" />
+    <result column="payment_channel" jdbcType="INTEGER" property="paymentCahnnel" />
+    <result column="is_rcorded" jdbcType="INTEGER" property="isRcorded" />
+    <result column="pay_channel_trade_no" jdbcType="VARCHAR" property="transactionId" />
+    <collection property="orderCycleDetailList" ofType="com.everwing.coreservice.common.wy.fee.dto.AcOrderCycleDetailDto">
+      <id column="detail_id" jdbcType="VARCHAR" property="id" />
+      <result column="house_code_new" jdbcType="VARCHAR" property="houseCodeNew" />
+      <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+      <result column="business_type" jdbcType="INTEGER" property="businessType" />
+      <result column="deposit_type" jdbcType="INTEGER" property="depositType" />
+      <result column="account_type" jdbcType="INTEGER" property="accountType" />
+      <result column="detail_amount" jdbcType="DECIMAL" property="detailAmount" />
+      <result column="late_amount" jdbcType="DECIMAL" property="lateAmount" />
+    </collection>
+  </resultMap>
+
+  <select id="queryByNo" resultMap="AcOrderDtoMap">
+    select t1.*,t2.* from t_ac_order t1 ,t_ac_cycle_order_detail t2
+    where t1.id = t2.order_id and t1.order_no = #{orderNo}
+  </select>
+
+  <select id="queryOrderSequence" resultType="java.lang.String">
+    SELECT func_nextval('D') from dual
+  </select>
+
+  <select id="queryOrderByStateAndDate" resultType="com.everwing.coreservice.common.wy.fee.dto.AcOrderHistoryDto">
+    SELECT t1.amount payMoney,t1.order_no orderNumber,t2.building_full_name  buildingFullName,t1.payment_time payTime from t_ac_order t1
+    INNER JOIN tc_building t2 ON t2.house_code = t1.house_code_new
+    where t1.house_code_new = #{houseCodeNew} and t1.order_state in(2,4)
+    and  DATE_FORMAT(t1.payment_time,'%Y-%m') = #{month} and t1.payer = #{userId}
+  </select>
+
+  <select id="queryOrderByYear" resultType="com.everwing.coreservice.common.wy.fee.dto.AcOrderHistoryDto">
+    SELECT t1.amount payMoney,t1.order_no orderNumber,t2.building_full_name  buildingFullName,t1.payment_time payTime from t_ac_order t1
+    INNER JOIN tc_building t2 ON t2.house_code = t1.house_code_new
+    where t1.house_code_new = #{houseCodeNew} and t1.order_state in(2,4)
+    and  year(t1.payment_time) = #{year}
+  </select>
+
+  <update id="updateOrderPayState">
+    update t_ac_order
+    set
+      order_state = #{orderState,jdbcType=INTEGER},
+      pay_state = #{payState,jdbcType=INTEGER},
+      update_time = now(),
+      payment_time = now(),
+      pay_channel_trade_no = #{payChannelTradeNo}
+    where order_no = #{orderNo,jdbcType=VARCHAR} and pay_state = 1 and order_state = 1
+
+  </update>
+
+  <update id="updateOrderRcorded">
+    update t_ac_order
+    set
+    is_rcorded = #{rcorded,jdbcType=INTEGER},
+    order_state = 2,
+    update_time = now()
+    where order_no = #{orderNo,jdbcType=VARCHAR} and pay_state = 4 and order_state = 4
+  </update>
+
+  <insert id="insertAcOrderDto" parameterType="com.everwing.coreservice.common.wy.fee.dto.AcOrderDto">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
+      SELECT uuid()
+    </selectKey>
+    INSERT INTO `t_ac_order`
+    (`id`,
+    `order_no`,
+    `amount`,
+    `payer`,
+    `payer_mobile`,
+    `order_state`,
+    `pay_state`,
+    `order_type`,
+    `update_time`,
+    `opera_id`,
+    `signature`,
+    `payment_time`,
+    `house_code_new`,
+    `payment_channel`,
+    `is_rcorded`)
+    VALUES
+    (
+    #{id},
+    #{orderNo},
+    #{amount},
+    #{payer},
+    #{payerMobile},
+    #{orderState},
+    #{payState},
+    #{orderType},
+    now(),
+    #{operaId},
+    #{signature},
+    null,
+    #{houseCodeNew},
+    #{paymentCahnnel},
+    #{isRcorded}
+    );
+  </insert>
+
+  <insert id="insertCycleOrderInfoList" parameterType="java.util.List">
+    INSERT INTO `t_ac_cycle_order_detail`
+    (`detail_id`,
+    `order_id`,
+    `business_type`,
+    `deposit_type`,
+    `account_type`,
+    `detail_amount`,
+    `house_code_new`,
+    `late_amount`
+    )
+    VALUES
+    <foreach collection ="list" item="item" index= "index" separator =",">
+     (
+      uuid(),
+      #{item.orderId},
+      #{item.businessType},
+      #{item.depositType},
+      #{item.accountType},
+      #{item.detailAmount},
+      #{item.houseCodeNew},
+      #{item.lateAmount}
+     )
+    </foreach>
+  </insert>
+  <select id="listPageOrderData" parameterType="AcOrder" resultMap="BaseResultMap">
+
+    select * from  t_ac_order where  1=1
+    <if test=" isRcorded !=null and isRcorded!=''">
+      and is_rcorded = #{isRcorded}
+
+    </if>>
+     order by payment_time desc
+
+  </select>
+
+  <update id="returnOrConfirmGiveInfo" parameterType="java.util.Map">
+
+    UPDATE t_ac_order set is_rcorded=#{isRcorded},update_time = now() where id in
+    <foreach collection ="list" item="item" index= "index" separator =",">
+        #{id}
+    </foreach>
+
+  </update>
+  <delete id="deleteOrderById" parameterType="java.lang.String">
+
+    DELETE  * from t_ac_order where id=#{id}
+  </delete>
+</mapper>

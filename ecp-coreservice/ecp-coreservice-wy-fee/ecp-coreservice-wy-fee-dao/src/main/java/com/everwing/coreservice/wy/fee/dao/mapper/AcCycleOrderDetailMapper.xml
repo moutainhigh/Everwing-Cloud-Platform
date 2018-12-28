@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.coreservice.wy.fee.dao.mapper.AcCycleOrderDetailMapper">
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.fee.entity.AcCycleOrderDetail">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="business_type" jdbcType="INTEGER" property="businessType" />
+    <result column="deposit_type" jdbcType="INTEGER" property="depositType" />
+    <result column="pay_type" jdbcType="INTEGER" property="payType" />
+    <result column="account_type" jdbcType="INTEGER" property="accountType" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, order_id, business_type, deposit_type, pay_type, account_type, amount
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_ac_cycle_order_detail
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectBySearchObj" resultType="java.util.Map">
+    SELECT coc.account_type accountType
+      ,o.pay_channel payChannel,u.staff_name creater,pi.create_time createTime
+    from t_ac_cycle_order_detail coc
+      LEFT JOIN t_ac_order o ON coc.order_id=o.id
+      LEFT JOIN t_bs_pay_info pi ON o.opera_id=pi.id
+      LEFT JOIN t_sys_user u ON pi.create_id=u.user_id
+    where coc.house_code_new=#{buildingCode}
+    AND date_format(pi.create_time,'yyyy-MM')=#{yearMonth}
+    <if test="chargeType!=null and chargeType!=''">
+      AND coc.pay_type=#{chargeType}
+    </if>
+    <if test="payType!=null and payType!=''">
+      AND pi.pay_type=#{payType}
+    </if>
+    <if test="accountType!=null and accountType!=''">
+      and coc.account_type=#{accountType}
+    </if>
+    <if test="orderNo!=null and orderNo!=''">
+      AND o.order_no=#{orderNo}
+    </if>
+    <if test="creater!=null and creater!=''">
+      AND u.staff_name=#{creater}
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_ac_cycle_order_detail
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="AcCycleOrderDetail">
+    insert into t_ac_cycle_order_detail (id, order_id, business_type, 
+      deposit_type, pay_type, account_type, 
+      amount)
+    values (#{id,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{businessType,jdbcType=INTEGER}, 
+      #{depositType,jdbcType=INTEGER}, #{payType,jdbcType=INTEGER}, #{accountType,jdbcType=INTEGER}, 
+      #{amount,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="AcCycleOrderDetail">
+    insert into t_ac_cycle_order_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="businessType != null">
+        business_type,
+      </if>
+      <if test="depositType != null">
+        deposit_type,
+      </if>
+      <if test="payType != null">
+        pay_type,
+      </if>
+      <if test="accountType != null">
+        account_type,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="businessType != null">
+        #{businessType,jdbcType=INTEGER},
+      </if>
+      <if test="depositType != null">
+        #{depositType,jdbcType=INTEGER},
+      </if>
+      <if test="payType != null">
+        #{payType,jdbcType=INTEGER},
+      </if>
+      <if test="accountType != null">
+        #{accountType,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="AcCycleOrderDetail">
+    update t_ac_cycle_order_detail
+    <set>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="businessType != null">
+        business_type = #{businessType,jdbcType=INTEGER},
+      </if>
+      <if test="depositType != null">
+        deposit_type = #{depositType,jdbcType=INTEGER},
+      </if>
+      <if test="payType != null">
+        pay_type = #{payType,jdbcType=INTEGER},
+      </if>
+      <if test="accountType != null">
+        account_type = #{accountType,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="AcCycleOrderDetail">
+    update t_ac_cycle_order_detail
+    set order_id = #{orderId,jdbcType=VARCHAR},
+      business_type = #{businessType,jdbcType=INTEGER},
+      deposit_type = #{depositType,jdbcType=INTEGER},
+      pay_type = #{payType,jdbcType=INTEGER},
+      account_type = #{accountType,jdbcType=INTEGER},
+      amount = #{amount,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

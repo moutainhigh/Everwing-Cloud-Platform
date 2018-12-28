@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.sys.TSysLookupMapper">
+    <!-- 主表视图映射 -->
+    <resultMap id="baseLookupMap" type="TSysLookup">
+        <result property="lookupId" column="lookup_id"/>
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+        <result property="parentCode" column="parent_code"/>
+        <result property="status" column="status"/>
+        <result property="lan" column="lan"/>
+        <result property="description" column="description"/>
+        <result property="projectCode" column="project_code"/>
+        <result property="projectName" column="project_name"/>
+        <result property="itemOrder" column="item_order"/>
+        <result property="createrId" column="creater_id"/>
+        <result property="createrName" column="creater_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyId" column="modify_id"/>
+        <result property="modifyName" column="modify_name"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+
+    <!-- 子表视图映射 -->
+    <resultMap id="baseLookupItemMap" type="TSysLookupItem">
+        <result property="lookupItemId" column="lookup_item_id"/>
+        <result property="lookupId" column="lookup_id"/>
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+        <result property="parentCode" column="parent_code"/>
+        <result property="status" column="status"/>
+        <result property="lan" column="lan"/>
+        <result property="description" column="description"/>
+        <result property="itemOrder" column="item_order"/>
+        <result property="createrId" column="creater_id"/>
+        <result property="createrName" column="creater_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyId" column="modify_id"/>
+        <result property="modifyName" column="modify_name"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+
+    <!-- 下拉框视图映射 -->
+    <resultMap id="lookupSelectViewMap" type="TSysLookupSelectView">
+        <result property="id" column="id"/>
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+    </resultMap>
+
+    <resultMap id="LookupListResultMap" type="TSysLookupList" extends="baseLookupMap">
+        <result property="statusName" column="status_name"/>
+    </resultMap>
+
+    <resultMap id="LookupItemListResultMap" type="TSysLookupItemList" extends="baseLookupItemMap">
+        <result property="statusName" column="status_name"/>
+    </resultMap>
+
+    <select id="listPageLookup" parameterType="TSysLookupSearch" resultMap="LookupListResultMap">
+        SELECT
+        t.*,
+        (SELECT li.`name` FROM t_sys_lookup l,t_sys_lookup_item li WHERE l.`code` = li.parent_code and l.`code` = '${@com.everwing.coreservice.common.wy.common.enums.LookupEnum@enableDisable.name()}' AND li.`code` = t.status) as status_name
+        FROM t_sys_lookup t WHERE 1 = 1
+        <if test="code != null and code !=  ''">
+            AND t.code LIKE CONCAT('%',#{code},'%')
+        </if>
+        <if test="name != null and name != ''">
+            AND t.name  LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test="status != null and status != ''">
+            AND t.status = #{status}
+        </if>
+    </select>
+
+    <select id="listPageLookupItem" parameterType="TSysLookupItemSearch" resultMap="LookupItemListResultMap">
+        SELECT
+            t.*,
+            (SELECT li.`name` FROM t_sys_lookup l,t_sys_lookup_item li WHERE l.`code` = li.parent_code and l.`code` = '${@com.everwing.coreservice.common.wy.common.enums.LookupEnum@enableDisable.name()}' AND li.`code` = t.status) as status_name
+        FROM t_sys_lookup_item t WHERE 1 = 1
+        <if test="lookupId != null and lookupId !=  ''">
+            AND t.lookup_id = #{lookupId}
+        </if>
+        <if test="lookupItemCode != null and lookupItemCode !=  ''">
+            AND t.code LIKE CONCAT('%',#{lookupItemCode},'%')
+        </if>
+        <if test="name != null and name != ''">
+            AND t.name LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test="status != null and status != ''">
+            AND t.status = #{status}
+        </if>
+    </select>
+
+    <!-- 新增一条lookup信息 -->
+    <insert id="insertLookup" parameterType="TSysLookup">
+        INSERT INTO t_sys_lookup (
+        lookup_id,
+        code,
+        name,
+        parent_code,
+        lan,
+        status,
+        description,
+        project_code,
+        item_order,
+        creater_id,
+        creater_name,
+        create_time
+        )
+        VALUES (
+        UUID(),
+        #{code},
+        #{name},
+        #{parentCode},
+        #{lan},
+        #{status},
+        #{description},
+        #{projectCode},
+        #{itemOrder},
+        #{createrId},
+        #{createrName},
+        sysdate()
+        )
+    </insert>
+
+    <!-- 修改一条lookup信息 -->
+    <update id="modifyLookup" parameterType="TSysLookup">
+        UPDATE t_sys_lookup
+        <set>
+            status = #{status},
+            name = #{name},
+            description = #{description},
+            item_order = #{itemOrder},
+            lan = #{lan},
+            parent_code = #{parentCode},
+            modify_id = #{modifyId},
+            modify_name = #{modifyName},
+            modify_time = sysdate()
+        </set>
+        WHERE lookup_id = #{lookupId}
+    </update>
+
+    <insert id="insertLookupItem" parameterType="TSysLookupItem">
+        INSERT INTO t_sys_lookup_item (
+            lookup_item_id,
+            lookup_id,
+            code,
+            name,
+            parent_code,
+            lan,
+            status,
+            item_order,
+            description,
+            creater_id,
+            creater_name,
+            create_time
+        )
+        VALUES (
+            UUID(),
+            #{lookupId},
+            #{code},
+            #{name},
+            #{parentCode},
+            #{lan},
+            #{status},
+            #{itemOrder,},
+            #{description},
+            #{createrId},
+            #{createrName},
+            sysdate()
+        )
+    </insert>
+
+    <!-- 修改一条lookupItem信息 -->
+    <update id="modifyLookupItem" parameterType="TSysLookupItem">
+        UPDATE t_sys_lookup_item
+        <set>
+            status = #{status},
+            name = #{name},
+            description = #{description},
+            item_order = #{itemOrder},
+            lan = #{lan},
+            parent_code = #{parentCode},
+            modify_id = #{modifyId},
+            modify_name = #{modifyName},
+            modify_time = sysdate()
+        </set>
+        WHERE lookup_item_id = #{lookupItemId}
+    </update>
+
+    <!-- 根据条件查询主表 -->
+    <select id="findLookupByCondtion" parameterType="TSysLookupSearch" resultMap="baseLookupMap">
+        SELECT t.code,t.name FROM t_sys_lookup t WHERE t.lan = #{lan}
+        <if test="parentCode != null and parentCode !=  ''">
+            AND t.parent_code = #{parentCode}
+        </if>
+        <if test="code != null and code !=  ''">
+            AND t.code = #{code}
+        </if>
+        <if test="name != null and name !=  ''">
+            AND t.name = #{name}
+        </if>
+        <if test="projectCode != null and projectCode !=  ''">
+            AND t.project_code = #{projectCode}
+        </if>
+        <if test="status != null and status !=  ''">
+            AND t.status = #{status}
+        </if>
+        ORDER BY t.item_order ASC
+    </select>
+
+    <!-- 根据条件查询子列表 -->
+    <select id="findLookupItemByCondtion" parameterType="TSysLookupItemSearch" resultMap="baseLookupItemMap">
+        SELECT t.* FROM t_sys_lookup_item t WHERE t.lan = #{lan}
+        <if test="parentCode != null and parentCode !=  ''">
+            AND t.parent_code = #{parentCode}
+        </if>
+        <if test="lookupItemCode != null and lookupItemCode !=  ''">
+            AND t.code = #{lookupItemCode}
+        </if>
+        <if test="name != null and name !=  ''">
+            AND t.name = #{name}
+        </if>
+        <if test="status != null and status !=  ''">
+            AND t.status = #{status}
+        </if>
+        <if test="projectCode != null and projectCode !=  ''">
+            AND t.lookup_id = (SELECT t1.lookup_id FROM t_sys_lookup t1 WHERE t1.code = #{parentCode} AND t1.project_code = #{projectCode} AND t1.status = 'enable')
+        </if>
+         ORDER BY t.item_order ASC
+    </select>
+
+    <!-- 查找主表，下拉框，根据父编码 -->
+    <select id="findLookup" parameterType="TSysLookupSelectSearch" resultMap="lookupSelectViewMap">
+        SELECT t.code,t.name FROM t_sys_lookup t WHERE t.status = 'enable' AND t.lan = #{lan} AND t.parent_code = #{parentCode} ORDER BY item_order ASC
+    </select>
+
+    <!-- 查找主表，下拉框，根据父编码和项目编码 -->
+    <select id="findLookupByProjectCode" parameterType="TSysLookupSelectSearch" resultMap="lookupSelectViewMap">
+        SELECT t.code,t.name FROM t_sys_lookup t WHERE t.status = 'enable' AND t.lan = #{lan}  AND t.parent_code = #{parentCode} and t.project_code = #{projectCode}  ORDER BY item_order ASC
+    </select>
+
+    <!-- 查找子表，下拉框，根据父编码 -->
+    <select id="findLookupItem" parameterType="TSysLookupSelectSearch" resultMap="lookupSelectViewMap">
+        SELECT t.code,t.name FROM t_sys_lookup_item t WHERE t.status = 'enable' AND t.lan = #{lan} AND t.parent_code = #{parentCode}  ORDER BY item_order ASC
+    </select>
+
+    <!-- 查找子表，下拉框，根据父编码和项目编码 -->
+    <select id="findLookupItemByProjectCode" parameterType="TSysLookupSelectSearch" resultMap="lookupSelectViewMap">
+        SELECT t.code,t.name FROM t_sys_lookup_item t WHERE t.status = 'enable' AND t.lan = #{lan} AND t.parent_code = #{parentCode}  ORDER BY item_order ASC
+    </select>
+</mapper>

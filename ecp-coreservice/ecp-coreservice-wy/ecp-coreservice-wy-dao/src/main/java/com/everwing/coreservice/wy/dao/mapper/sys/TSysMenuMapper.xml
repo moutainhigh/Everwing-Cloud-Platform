@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.sys.TSysMenuMapper" >
+  	<resultMap id="BaseResultMap" type="TSysMenu" >
+    	<id column="menu_id" property="menuId"/>
+    	<result column="menu_name" property="menuName"/>
+    	<result column="menu_desc" property="menuDesc"/>
+    	<result column="menu_url" property="menuUrl"/>
+    	<result column="menu_permission" property="menuPermission"/>
+    	<result column="menu_level" property="menuLevel"/>
+    	<result column="menu_img" property="menuImg"/>
+    	<result column="pid" property="pId"/>
+		<result property="createrId" column="creater_id"/>
+		<result property="createrName" column="creater_name"/>
+		<result property="createTime" column="create_time"/>
+		<result property="modifyId" column="modify_id"/>
+		<result property="modifyName" column="modify_name"/>
+		<result property="modifyTime" column="modify_time"/>
+  	</resultMap>
+  
+   <!-- 批量添加菜单 -->
+   	<insert id="batchInsert" parameterType="java.util.List">
+   		insert into t_sys_menu(menu_id ,
+				   menu_name,
+				   menu_desc,
+				   menu_url,
+				   menu_permission,
+				   menu_level,
+				   menu_order,
+				   menu_img,
+				   pid,
+				   create_id,
+				   modify_id,
+				   create_time,
+				   modify_time
+				  )
+		values
+		<foreach collection="list" index="index" item="item" separator=",">
+		(
+			#{item.menuId},
+			#{item.menuName},
+			#{item.menuDesc},
+			#{item.menuUrl},
+			#{item.menuPermission},
+			#{item.menuLevel},
+			#{item.menuOrder},
+			#{item.menuImg},
+			#{item.pId},
+			#{item.createrId},
+			#{item.modifyId},
+			sysdate(),sysdate()
+		)
+		</foreach>
+   	</insert>
+
+
+
+	<!-- 清空所有菜单 -->
+  	<delete id="clearMenu">
+  		delete from t_sys_menu
+  	</delete>
+
+
+
+	<!-- 超级管理员：非白名单单菜单集合 -->
+	<select id="findAllMenus4SystemAdmin" resultMap="BaseResultMap">
+		SELECT
+			sm.menu_id,
+			sm.menu_name,
+			sm.menu_desc,
+			sm.menu_permission,
+			sm.menu_url,
+			sm.menu_img,
+			sm.menu_level,
+			sm.pid
+		FROM t_sys_menu sm
+		WHERE  sm.menu_permission != 'anon'
+		order by sm.menu_order ASC
+	</select>
+
+
+
+	<!-- 获取非超级管理员的非白名单菜单集合 -->
+  	<select id="findMenu" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT
+			DISTINCT
+			sm.menu_id,
+			sm.menu_name,
+			sm.menu_desc,
+			sm.menu_permission,
+			sm.menu_url,
+			sm.menu_img,
+			sm.menu_level,
+			sm.pid
+		FROM t_sys_menu sm,t_sys_role_resource srr
+		WHERE srr.src_type='m'
+		AND sm.menu_id = srr.src_id
+		AND sm.menu_permission != 'anon'
+		<if test="level != null and level != ''">
+			AND sm.menu_level = #{level}
+		</if>
+		<if test="pid != null and pid != ''">
+			AND sm.pid  = #{pid}
+		</if>
+		<if test="roleIds != null and roleIds.size != 0">
+			AND srr.role_id IN
+			<foreach collection="roleIds" item="roleId" index="index" open="(" close=")" separator=",">
+				#{roleId}
+			</foreach>
+		</if>
+		order by sm.menu_order ASC
+  	</select>
+</mapper>

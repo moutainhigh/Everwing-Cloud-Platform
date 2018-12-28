@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.dynamicreports.dao.mapper.system.rights.TRightsUserRoleMapper">
+    <resultMap type="TRightsUserRole" id="TRightsUserRoleResultMap">
+        <result property="id" column="id"/>
+        <result property="roleId" column="role_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="createrId" column="creater_id"/>
+        <result property="createrName" column="creater_name"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <select id="findByCondition" resultMap="TRightsUserRoleResultMap" parameterType="TRightsUserRole">
+        SELECT * FROM t_rights_user_role t WHERE 1=1
+        <if test="id != null and id != ''">
+            AND id = #{id}
+        </if>
+        <if test="roleId != null and roleId != ''">
+            AND role_id = #{roleId}
+        </if>
+        <if test="userId != null and userId != ''">
+            AND user_id = #{userId}
+        </if>
+    </select>
+
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        insert into t_rights_user_role
+        (
+            id,
+            role_id,
+            user_id,
+            creater_id,
+            create_time
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+        (
+            UUID(),
+            #{item.roleId},
+            #{item.userId},
+            #{item.createrId},
+            sysdate()
+        )
+        </foreach>
+    </insert>
+
+
+    <delete id="delete" parameterType="String">
+        delete from t_rights_user_role where id = #{0}
+    </delete>
+
+    <delete id="batchDelete" parameterType="java.util.List">
+        delete from t_rights_user_role where id in
+        <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="batchDeleteByUserId" parameterType="java.util.List">
+        delete from t_rights_user_role where user_id in
+        <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

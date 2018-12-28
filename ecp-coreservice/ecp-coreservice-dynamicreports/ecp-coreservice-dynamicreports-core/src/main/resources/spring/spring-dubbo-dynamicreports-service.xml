@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+
+
+
+
+	http://code.alibabatech.com/schema/dubbo
+	http://code.alibabatech.com/schema/dubbo/dubbo.xsd"
+       default-lazy-init="false">
+
+    <dubbo:protocol name="${dynamicreports-coreservice.dubbo.protocol.name}" port="${dynamicreports-coreservice.dubbo.protocol.port}"/>
+    <dubbo:application name="${dynamicreports-coreservice.dubbo.application.name}"/>
+    <dubbo:registry address="${dynamicreports-coreservice.dubbo.registry.address}"/>
+
+    <dubbo:service id="roleService" interface="com.everwing.coreservice.common.dynamicreports.service.system.RoleService" ref="roleServiceImpl"/>
+    <dubbo:service id="userService" interface="com.everwing.coreservice.common.dynamicreports.service.system.UserService" ref="userServiceImpl"/>
+    <dubbo:service id="dynamicreportsCommonService" interface="com.everwing.coreservice.common.dynamicreports.service.system.CommonService" ref="commonServiceImpl"/>
+</beans>

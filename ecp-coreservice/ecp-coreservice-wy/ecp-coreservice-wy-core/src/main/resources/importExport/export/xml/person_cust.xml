@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<excel id="person_cust">
+    <sheet label="个人客户信息列表">
+        <list>
+            <sql id="43ab6f32-6389-4ca3-9ee4-ea385726fcc3">
+                <![CDATA[
+                    SELECT a.cust_code AS custCode,a.name,(case a.sex when 0 then '男' when  1 then '女' else '不详' end) AS sex,a.nation,a.birthday,a.native_place AS nativePlace,
+					 (CASE a.card_type WHEN 0 THEN '身份证' WHEN 1 THEN '士官证' WHEN 2 THEN '护照' WHEN 3 THEN '香港身份证' WHEN 4 THEN '台湾身份证' WHEN 5 THEN '澳门身份证' ELSE '其他' END) AS cardType,
+					 a.card_num AS cardNum,
+					 (CASE WHEN a.marrie_state=0 THEN '未婚' WHEN 1 THEN '已婚' ELSE '不详' END) AS marry,a.register_phone AS registerPhone,
+					 a.urgent_contact_person AS urgentContactPerson,a.urgent_contact_phone AS urgentContactPhone,
+					 a.census,a.email,a.weixin_num AS weixinNum,a.jiajia_num AS jiajiaNum,a.work_units AS workUnits,a.phone_num AS phoneNum
+					 FROM tc_person_cust a 
+				     LEFT JOIN tc_person_vip pv ON  a.cust_id=pv.cust_id
+				     LEFT JOIN tc_person_emphasis pe ON a.cust_id=pe.cust_id
+				     LEFT JOIN tc_person_building b ON a.cust_id=b.cust_id
+				     LEFT JOIN tc_building tb ON b.building_id=tb.id
+				     WHERE a.cust_code IS NOT NULL
+				     <#if cardType ??>
+                        AND a.card_type = '${cardType}'
+                     </#if>
+                     <#if cardNum ??>
+                        AND a.card_num like '%${cardNum}%'
+                     </#if>
+                     <#if registerPhone ??>
+                        AND a.register_phone = '${registerPhone}'
+                     </#if>
+                     <#if sex ??>
+                        AND a.sex = '${sex}'
+                     </#if>
+                     <#if urgentContactPerson ??>
+                        AND a.urgent_contact_person = '${urgentContactPerson}'
+                     </#if>
+                     <#if urgentContactPhone ??>
+                        AND a.urgent_contact_phone = '${urgentContactPhone}'
+                     </#if>
+                     <#if projectId??>
+                        AND a.project_id = '${projectId}'
+                     </#if>
+                     GROUP BY custCode 
+                ]]>
+            </sql>
+            <!-- 查询结果字段和excel表头标题的映射，column的值一定要和SQL语句的AS别名一致 -->
+             <field column="custCode" label="编码" type="String"></field>
+			 <field column="name" label="姓名" type="String"></field>
+			 <field column="sex" label="性别" type="String"></field>
+			 <field column="nation" label="民族" type="String"></field>
+			 <field column="cardType" label="证件类型" type="String"></field>
+			 <field column="cardNum" label="证件号码" type="String"></field>
+			 <field column="birthday" label="出生日期" type="Date" format="yyyy-MM-dd"></field>
+			 <field column="marry" label="婚姻状况" type="String"></field>
+			 <field column="registerPhone" label="注册电话" type="String"></field>
+			 <field column="nativePlace" label="籍贯" type="String"></field>
+			 <field column="urgentContactPerson" label="紧急联系人" type="String"></field>
+			 <field column="urgentContactPhone" label="紧急联系人号码" type="String"></field>
+			 <field column="census" label="户口所在地" type="String"></field>
+			 <field column="email" label="电子邮件" type="String"></field>
+			 <field column="weixinNum" label="微信号" type="String"></field>
+			 <field column="jiajiaNum" label="家家号" type="String"></field>
+			 <field column="workUnits" label="工作单位" type="String"></field>
+			 <field column="phoneNum" label="联系电话" type="String"></field>
+        </list>
+    </sheet>
+</excel>

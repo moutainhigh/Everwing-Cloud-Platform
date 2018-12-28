@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.autotask.core.dao.TcReadingScheduleMapper">
+    <resultMap id="BaseResultMap" type="TcReadingSchedule">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="scheduleCode" column="schedule_code" jdbcType="VARCHAR"/>
+        <result property="scheduleName" column="schedule_name" jdbcType="VARCHAR"/>
+        <result property="readingStartTime" column="reading_start_time" jdbcType="TIMESTAMP"/>
+        <result property="readingEndTime" column="reading_end_time" jdbcType="TIMESTAMP"/>
+        <result property="readingDays" column="reading_days" jdbcType="TINYINT"/>
+        <result property="auditStartTime" column="audit_start_time" jdbcType="TIMESTAMP"/>
+        <result property="auditDays" column="audit_days" jdbcType="TINYINT"/>
+        <result property="isCircle" column="is_circle" jdbcType="TINYINT"/>
+        <result property="execFreq" column="exec_freq" jdbcType="TINYINT"/>
+        <result property="meterType" column="meter_type" jdbcType="TINYINT"/>
+        <result property="companyCode" column="company_code" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+        <result property="scheduleDesc" column="schedule_desc" jdbcType="VARCHAR"/>
+        <result property="createId" column="create_id" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="modifyId" column="modify_id" jdbcType="VARCHAR"/>
+        <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+        <result property="projectId" column="project_id" jdbcType="VARCHAR"/>
+        <result property="totalMeterCount" column="total_meter_count" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <resultMap type="TcReadingSchedule" id="hasTasksResultMap" extends="BaseResultMap">
+        <collection property="tasks" ofType="TcReadingTask"
+                    column="id" select="com.everwing.autotask.core.dao.TcReadingTaskMapper.getTasksByScheduleId"/>
+    </resultMap>
+
+    <select id="getMeterCountByScheduleId" parameterType="java.util.Map" resultType="Integer">
+        SELECT COUNT(t1.id) AS `count`
+        FROM tc_meter_data t1,
+        tc_reading_task t2,
+        tc_reading_schedule t3
+        WHERE t1.task_id  = t2.id
+        AND t2.schedule_id  = t3.id
+        AND DATE_FORMAT(t2.start_time ,'%y-%M') = DATE_FORMAT(SYSDATE(),'%y-%M')
+        AND t3.status = 1
+        AND t3.id = #{id}
+        <if test="1 == flag">
+            and t1.reading_time is not null
+        </if>
+    </select>
+
+    <update id="stopFailedSchedule">
+        UPDATE tc_reading_schedule
+        SET STATUS = 2
+        WHERE 1 = 1
+        <![CDATA[
+		  	 and CURDATE() > DATE(reading_end_time)
+		  ]]>
+    </update>
+
+    <select id="getScheduleById" parameterType="java.lang.String" resultMap="hasTasksResultMap">
+        select * from tc_reading_schedule where id = #{id}
+    </select>
+
+    <update id="modify" parameterType="TcReadingSchedule">
+        update tc_reading_schedule
+        <set>
+            <if test="null != scheduleName">
+                schedule_name = #{scheduleName},
+            </if>
+            <if test="null != readingStartTime">
+                reading_start_time = #{readingStartTime},
+            </if>
+            <if test="null != readingEndTime">
+                reading_end_time = #{readingEndTime},
+            </if>
+            <if test="null != readingDays">
+                reading_days = #{readingDays},
+            </if>
+            <if test="null != auditStartTime">
+                audit_start_time = #{auditStartTime},
+            </if>
+            <if test="null != auditDays">
+                audit_days = #{auditDays},
+            </if>
+            <if test="null != isCircle">
+                is_circle = #{isCircle},
+            </if>
+            <if test="null != execFreq">
+                exec_freq = #{execFreq},
+            </if>
+            <if test="null != meterType">
+                meter_type = #{meterType},
+            </if>
+            <if test="null != companyCode">
+                company_code = #{companyCode},
+            </if>
+            <if test="null != status">
+                status = #{status},
+            </if>
+            <if test="null != scheduleDesc">
+                schedule_desc = #{scheduleDesc},
+            </if>
+            <if test="null != modifyId">
+                modify_id = #{modifyId},
+            </if>
+            <if test="null != projectId">
+                project_id = #{projectId},
+            </if>
+            <if test="null != totalMeterCount">
+                total_meter_count = #{totalMeterCount},
+            </if>
+            <if test="null != scheduleCode">
+                schedule_code = #{scheduleCode},
+            </if>
+            modify_time = sysdate(),
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="findUsingSchedule" parameterType="TcReadingSchedule" resultMap="BaseResultMap">
+        select * from tc_reading_schedule
+        where status = 1
+        <if test="null != id">
+            and id != #{id}
+        </if>
+        <if test="meterType !=null">
+            and meter_type=#{meterType}
+        </if>
+        <if test="projectId != null and projectId != ''">
+            and project_id = #{projectId}
+        </if>
+    </select>
+</mapper>

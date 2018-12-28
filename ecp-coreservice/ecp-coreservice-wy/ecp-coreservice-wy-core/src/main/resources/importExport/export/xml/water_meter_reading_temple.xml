@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<excel id="water_meter_reading">
+	 <sheet label="水表抄表信息">
+	 	<list>
+	 		<sql id="9c286a4c-c589-42e0-8692-8be75c00d0067">
+	 			 <![CDATA[
+                  SELECT 
+					  t1.CODE meterCode,
+					  b.building_full_name AS relationBuilding,
+					  t1.rate rate,
+					  t.last_total_reading lastTotalReading,
+					  t.total_reading totalReading 
+					FROM
+					  tc_meter_data t,
+					  tc_water_meter t1,
+					  tc_building b 
+					WHERE t.meter_code = t1.code 
+					  AND t1.position = b.building_code 
+				  	 <#if taskCode??>
+                        AND t.task_id = '${taskCode}'
+                     </#if>
+                ]]>
+	 		</sql>
+	 		
+	 		 <!-- 查询结果字段和excel表头标题的映射，column的值一定要和SQL语句的AS别名一致 -->
+	 		  <field column="meterCode" label="水表编号" type="String"></field>
+	 		  <field column="relationBuilding" label="位置" type="String"></field>
+	 		  <field column="rate" label="倍率" type="Double" format="#.00"></field>
+	 		  <field column="lastTotalReading" label="上次读数" type="Double" format="#.00"></field>
+	 	</list>
+	 </sheet>
+	
+</excel>

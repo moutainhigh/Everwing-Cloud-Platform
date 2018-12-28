@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.coreservice.platform.dao.mapper.cust.PersonCustExtraMapper">
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.admin.entity.cust.PersonCust">
+	  <result column="cust_id" property="custId" jdbcType="VARCHAR" />
+	  <result column="cust_code" property="custCode" jdbcType="VARCHAR" />
+	  <result column="name" property="name" jdbcType="VARCHAR" />
+	  <result column="sex" property="sex" jdbcType="VARCHAR" />
+	  <result column="native_place" property="nativePlace" jdbcType="VARCHAR" />
+	  <result column="census" property="census" jdbcType="VARCHAR" />
+	  <result column="birthday" property="birthday" jdbcType="DATE" />
+	  <result column="card_type" property="cardType" jdbcType="VARCHAR" />
+	  <result column="card_num" property="cardNum" jdbcType="VARCHAR" />
+	  <result column="jiajia_num" property="jiajiaNum" jdbcType="VARCHAR" />
+	  <result column="weixin_num" property="weixinNum" jdbcType="VARCHAR" />
+	  <result column="work_units" property="workUnits" jdbcType="VARCHAR" />
+	  <result column="marrie_state" property="marrieState" jdbcType="TINYINT" />
+	  <result column="is_enterprise" property="isEnterprise" jdbcType="TINYINT" />
+	  <result column="urgent_contact_person" property="urgentContactPerson" jdbcType="VARCHAR" />
+	  <result column="urgent_contact_phone" property="urgentContactPhone" jdbcType="VARCHAR" />
+	  <result column="upload_image" property="uploadImage" jdbcType="VARCHAR" />
+	  <result column="phone_num" property="phoneNum" jdbcType="VARCHAR" />
+	  <result column="register_phone" property="registerPhone" jdbcType="VARCHAR" />
+	  <result column="email" property="email" jdbcType="VARCHAR" />
+	  <result column="nation" property="nation" jdbcType="VARCHAR" />
+	  <result column="remark" property="remark" jdbcType="VARCHAR" />
+	  <result column="national" property="national" jdbcType="VARCHAR" />
+	  <result column="company_id" property="companyId" jdbcType="VARCHAR" />
+	  <result property="createId" column="create_id"/>
+	  <result property="createName" column="create_name"/>
+	  <result property="createTime" column="create_time"/>
+	  <result property="modifyId" column="modify_id"/>
+	  <result property="modifyName" column="modify_name"/>
+	  <result property="modifyTime" column="modify_time"/>
+  </resultMap>
+  
+  <sql id="Base_Where_Clause">
+  		<where>
+	  		<trim prefixOverrides="and">
+	  			<if test="null != custId">
+	  				and cust_id = #{custId}
+	  			</if>
+	  			<if test="null != name">
+		  			and name like concat('%',#{name},'%')
+			  	</if>
+		  		<if test="null != cardNum">
+					and card_num like concat('%',#{cardNum},'%') 		
+		  		</if>
+		  		<if test="null != urgentContactPerson">
+		  			and urgent_contact_person like concat('%',#{urgentContactPerson},'%')
+		  		</if>
+		  		<if test="null != urgentContactPhone">
+		  			and urgent_contact_phone like concat('%',#{urgentContactPhone},'%')
+		  		</if>
+		  		<if test="null != phoneNum">
+		  			and phone_num like concat('%',#{phone_num},'%')
+		  		</if>
+		  		<if test="null != registerPhone">
+		  			and register_phone like concat('%',#{registerPhone},'%')
+		  		</if>
+		  		<if test="null != companyId">
+		  			and company_id  = #{companyId}
+		  		</if>
+	  		</trim>
+  		</where>
+  </sql>
+  
+  <select id="getPersonCustList" parameterType="com.everwing.coreservice.common.admin.entity.cust.PersonCust" resultMap="BaseResultMap">
+  	select * from person_cust <include refid="Base_Where_Clause" />
+  </select>
+  
+  <select id="getPersonCustById" parameterType="com.everwing.coreservice.common.admin.entity.cust.PersonCust" resultMap="BaseResultMap">
+  	select * from person_cust <include refid="Base_Where_Clause" />
+  </select>
+  
+  <insert id="insert" parameterType="com.everwing.coreservice.common.admin.entity.cust.PersonCust">
+  	insert into person_cust
+		(cust_id,
+		cust_code,
+		name,
+		sex,
+		native_place,
+		census,
+		birthday,
+		card_type,
+		card_num,
+		jiajia_num,
+		weixin_num,
+		work_units,
+		marrie_state,
+		is_enterprise,
+		urgent_contact_person,
+		urgent_contact_phone,
+		upload_image,
+		phone_num,
+		register_phone,
+		email,
+		nation,
+		remark,
+		`national`,
+		company_id,
+		create_id,
+		create_name,
+		create_time
+		)
+		values (
+		#{custId},
+		#{custCode},
+		#{name},
+		#{sex},
+		#{nativePlace},
+		#{census},
+		#{birthday},
+		#{cardType},
+		#{cardNum},
+		#{jiajiaNum},
+		#{weixinNum},
+		#{workUnits},
+		#{marrieState},
+		#{isEnterprise},
+		#{urgentContactPerson},
+		#{urgentContactPhone},
+		#{uploadImage},
+		#{phoneNum},
+		#{registerPhone},
+		#{email},
+		#{nation},
+		#{remark},
+		#{national},
+		#{companyId},
+		#{createId},
+		#{createName},
+		sysdate()
+		)
+  </insert>
+  
+  <update id="update" parameterType="com.everwing.coreservice.common.admin.entity.cust.PersonCust">
+	  update person_cust
+	  <set>
+		  <if test="custCode != null" >
+			  cust_code = #{custCode,jdbcType=VARCHAR},
+		  </if>
+		  <if test="name != null" >
+			  name = #{name,jdbcType=VARCHAR},
+		  </if>
+		  <if test="sex != null" >
+			  sex = #{sex,jdbcType=VARCHAR},
+		  </if>
+		  <if test="nativePlace != null" >
+			  native_place = #{nativePlace,jdbcType=VARCHAR},
+		  </if>
+		  <if test="census != null" >
+			  census = #{census,jdbcType=VARCHAR},
+		  </if>
+		  <if test="birthday != null" >
+			  birthday = #{birthday,jdbcType=DATE},
+		  </if>
+		  <if test="cardType != null" >
+			  card_type = #{cardType,jdbcType=VARCHAR},
+		  </if>
+		  <if test="cardNum != null" >
+			  card_num = #{cardNum,jdbcType=VARCHAR},
+		  </if>
+		  <if test="jiajiaNum != null" >
+			  jiajia_num = #{jiajiaNum,jdbcType=VARCHAR},
+		  </if>
+		  <if test="weixinNum != null" >
+			  weixin_num = #{weixinNum,jdbcType=VARCHAR},
+		  </if>
+		  <if test="workUnits != null" >
+			  work_units = #{workUnits,jdbcType=VARCHAR},
+		  </if>
+		  <if test="marrieState != null" >
+			  marrie_state = #{marrieState,jdbcType=TINYINT},
+		  </if>
+		  <if test="isEnterprise != null" >
+			  is_enterprise = #{isEnterprise,jdbcType=TINYINT},
+		  </if>
+		  <if test="urgentContactPerson != null" >
+			  urgent_contact_person = #{urgentContactPerson,jdbcType=VARCHAR},
+		  </if>
+		  <if test="urgentContactPhone != null" >
+			  urgent_contact_phone = #{urgentContactPhone,jdbcType=VARCHAR},
+		  </if>
+		  <if test="uploadImage != null" >
+			  upload_image = #{uploadImage,jdbcType=VARCHAR},
+		  </if>
+		  <if test="phoneNum != null" >
+			  phone_num = #{phoneNum,jdbcType=VARCHAR},
+		  </if>
+		  <if test="registerPhone != null" >
+			  register_phone=#{registerPhone,jdbcType=VARCHAR},
+		  </if>
+		  <if test="email != null" >
+			  email=#{email,jdbcType=VARCHAR},
+		  </if>
+		  <if test="nation!= null" >
+			  nation = #{nation,jdbcType=VARCHAR},
+		  </if>
+		  <if test="null != remark">
+			  remark = #{remark,jdbcType=VARCHAR},
+		  </if>
+		  <if test="null != `national`">
+			  `national` = #{national,jdbcType=VARCHAR},
+		  </if>
+		  <if test="null != companyId">
+			  company_id = #{companyId},
+		  </if>
+		  <if test="null != modifyId">
+			  modify_id = #{modifyId},
+		  </if>
+		  <if test="null != modifyName">
+			  modify_name = #{modifyName},
+		  </if>
+		  modify_time = sysdate()
+	  </set>
+	  where  cust_id = #{custId,jdbcType=VARCHAR}
+  </update>
+  
+  <delete id="delete" parameterType="com.everwing.coreservice.common.admin.entity.cust.PersonCust">
+  	delete from person_cust where cust_id = #{custId}
+  </delete>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+  	insert into person_cust (
+  		cust_id,name,sex,card_type,card_num,urgent_contact_person,urgent_contact_phone,phone_num,register_phone,company_id,national,native_place
+  	) values
+  	<foreach collection="list" item="cust" separator="," index="index">
+	  	(
+	  		#{cust.custId},
+	  		#{cust.name},
+	  		#{cust.sex},
+	  		#{cust.cardType},
+	  		#{cust.cardNum},
+	  		#{cust.urgentContactPerson},
+	  		#{cust.urgentContactPhone},
+	  		#{cust.phoneNum},
+	  		#{cust.registerPhone},
+	  		#{cust.companyId},
+	  		#{cust.national},
+	  		#{cust.nativePlace}
+	  	)
+  	</foreach>
+  </insert>
+  
+  <delete id="batchDelete" parameterType="java.util.List">
+  	delete from person_cust where cust_id in 
+  		<foreach collection="list" open="(" close=")" separator="," item="id">
+  			#{id}
+  		</foreach>
+  </delete>
+  
+</mapper>

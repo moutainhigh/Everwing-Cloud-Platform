@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modulegroup id="bdad6783-f6f9-48b1-9325-a8a7c3b77eb9" name="" desc="">
+    <module id="4fe329c4-3b48-4371-9a39-5c8b8d7225c7" name="Customer management" desc="客户管理" order="1" page="customerManagement" url="index.customerManagement" img="img/menu/user.png">
+        <modulegroup id="b28a7f90-8a9e-45bc-b986-4177c6e48a10" name="Customer management" desc="客户管理(客户维度)">
+            <module id="4321dc64-14b9-40ba-b54e-d3ecc6fc6eaf" name="jiaofei" desc="交费" order="9" page="jiaofei4customer" url="index.customerManagement.customerView.pay4Cust">
+                <operation id="4A9BA718-F8D6-40BD-A529-6B750EEFCB68" name="pay" desc="付款" url="/payInfos/pay2Account/*"/>
+            	
+                <operation id="46149BB2-41E9-4969-9902-162516CCB5DA" name="anon" desc="anon" permission="anon" url="/payInfos/listPage"/>
+                <operation id="A29724FA-CB3A-4C2A-91C3-B5909A0D9EEC" name="anon" desc="anon" permission="anon" url="/payInfos/findByObj"/>
+                <operation id="62EA31D0-D598-4943-93CA-CC5AA16A9FB8" name="anon" desc="anon" permission="anon" url="/payInfos/checkAccountExists/*"/>
+                <operation id="1AC2BF3D-DA2B-431D-8587-24C3A3C6DEF0" name="anon" desc="anon" permission="anon" url="/payInfos/findHistory"/>
+            </module>
+            <module id="94a14f80-5aa1-4628-b759-aac2eefbdc54" name="Deposit Management" desc="退押金" order="3" page="deposit4customer" url="index.customerManagement.customerView.deposit">
+                <operation id="d97d41d4-dbec-11e7-80c8-0050568e00c5" name="Search" desc="查询" url="*"/>
+                <operation id="deaa1b01-dbec-11e7-80c8-0050568e00c5" name="RollBackDeposit" desc="退押金" url="*"/>
+            </module>
+            <module id="3e3ce1c5-cebe-4a85-8c6e-36725741ce96" name="Product Management" desc="产品管理" order="5" page="product4customer" url="index.customerManagement.customerView.product" img="">
+                <operation id="cd8d13ab-cf67-11e7-80c8-0050568e00c5" name="Search" desc="查询" url="*"/>
+                <operation id="c9b5de35-ce9c-11e7-80c8-0050568e00c5" name="Add2shopping" desc="加入购物车" url="*"/>
+            </module>
+            <module id="0f00fdca-9619-473a-b47a-0522d8baafc6" name="Change Property" desc="产权变更" order="7" page="propertyChanging4customer" url="index.customerManagement.customerView.propertyChanging" img="">
+                <operation id="d81d9e79-cf67-11e7-80c8-0050568e00c5" name="Search" desc="查询" url="*"/>
+                <operation id="a1641f50-ce9e-11e7-80c8-0050568e00c5" name="Add" desc="新建" url="*"/>
+            </module>
+            <module id="C7992C04-E846-48E6-B54A-F45C3A7A0EC3" name="account" desc="账户" order="8" page="account4Cust" url="index.customerManagement.customerView.account4Cust" img="">
+                <operation id="08316C91-18F9-4AB3-B6B7-281D47F7ADA0" name="backMoney" desc="退款" url="/payInfos/backMoney"/>
+                <operation id="5D808545-94BB-47B0-B8FB-DA274F263C9A" name="jmMoney" desc="减免" url="/payInfos/jmMoney"/>
+                <operation id="5D808545-94BB-47B0-B8FB-DA274F263C12" name="rollBack" desc="回退" url="/payInfos/rollback"/>
+                <operation id="5D808545-94BB-47B0-B8FB-DA274F263C9B" name="addInvoices" desc="添加发票" url="/payInfos/addInvoices"/>
+                <operation id="5D808545-94BB-47B0-B8FB-DA274F263C9C" name="detailInvoices" desc="查看发票" url="*"/>
+            	
+                <operation id="88200791-00A1-4D08-A9AF-30AFFD999F52" name="anon" desc="账户加载" permission="anon" url="/payInfos/listPage"/>
+                <operation id="B23AA6E2-E815-49B4-965B-41FDA5D8C794" name="anon" desc="账单加载" permission="anon" url="/billHistory/listPageInCustomerService"/>
+                <operation id="9272244E-DF56-4EB3-8702-508A0F1BEBA2" name="anon" desc="资产账户流水加载" permission="anon" url="/payInfos/listPageHistory4Building"/>
+                <operation id="F958B267-AEC7-42BD-8417-45DE26B79854" name="anon" desc="客户名下所有账户流水加载" permission="anon" url="/payInfos/listPageHistory4Cust"/>
+            </module>
+            <module id="C7992C04-E846-48E6-B54A-F45C3A7A0DJ5" name="newAccount" desc="新账户" order="21" url="index.customerManagement.customerView.newAccount4Cust" img=""></module>
+            <module id="76dfa089-c610-4776-9c9c-54f6520aeef3" name="order" desc="工单管理" order="1" page="order4customer" url="index.customerManagement.customerView.order">
+                <operation id="0e1e51b2-2b85-463f-8169-e35d9001e8fd" name="add" desc="新建" url="/order/newOrders"/>
+                <operation id="c8bdf181-73bd-48c8-97b1-42c8371a042d" name="delete" desc="删除" url="/order/updateOrder"/>
+                <operation id="ef3b6a5f-4478-47c0-a497-453eeb988b44" name="finish" desc="完成" url="/order/finish"/>
+                <operation id="c1329a4d-3731-44af-a53d-aaad9eab380b" name="export" desc="导出" url="/system/ImportExportController/export"/>
+                <operation id="fca9290e-e7fb-460c-8511-ac27560bb91b" name="anon" desc="anon" permission="anon" url="/orderType/subTypeList"/>
+                <operation id="32793296-d117-4494-b7ac-689d727f7aab" name="anon" desc="anon" permission="anon" url="/project/TcBuildingController/loadBuildingByPickUpTree"/>
+                <operation id="bff92a81-42db-48de-81a0-eb0e2a8764b5" name="anon" desc="anon" permission="anon" url="/PersonBuildingNew/findBuildingByCustId"/>
+            </module>
+            <module id="0d588645-63a4-42c1-91de-037a6a379426" name="Property Management" desc="资产管理" order="10" page="property4customer" url="index.customerManagement.customerView.property" img="">
+                <operation id="e3b5c8b1-cf67-11e7-80c8-0050568e00c5" name="Search" desc="查询" url="*"/>
+                <operation id="42ae5c4f-ce9e-11e7-80c8-0050568e00c5" name="Modify" desc="编辑" url="*"/>
+            </module>
+            <!--<module id="13c37ff9-ea49-4d26-b3cf-c7cf65e7e110" name="tingcheka" desc="停车卡管理" order="11" page="tingcheka" url="*">
+            </module>-->
+            <module id="659acfac-91be-4247-a093-8edbac45c958" name="Vehicle Management" desc="车辆管理" order="15" page="vehicle4customer" url="index.customerManagement.customerView.vehicle">
+                <operation id="6b5924b2-ae1b-11e7-80c8-0050568e00c5" name="Add" desc="新建" url=" /TBsVehicleController/add"/>
+                <operation id="75e94edf-ae1b-11e7-80c8-0050568e00c5" name="Delete" desc="删除" url=" /TBsVehicleController/delete/*"/>
+                <operation id="7b56502d-ae1b-11e7-80c8-0050568e00c5" name="Search" desc="查询" url=" /TBsVehicleController/listPage"/>
+                <operation id="80ebd597-ae1b-11e7-80c8-0050568e00c5" name="Modify" desc="修改" url=" /TBsVehicleController/modify"/>
+                <operation id="85512f2c-ae1b-11e7-80c8-0050568e00c5" name="anon" desc="anon" permission="anon" url=" /TBsVehicleController/findByCondition"/>
+            </module>
+            <module id="37605c83-8f40-4f63-872c-77005213202e" name="shouquan" desc="授权管理" order="17" page="shouquan4customer" url="*">
+            </module>
+            <module id="0ca68993-a198-4849-9df9-9acf143c782a" name="zulin" desc="租赁管理" order="19" page="zulin4customer" url="*">
+            </module>
+            <module id="4e9efe09-d338-11e8-9a3f-0050568e00c5" name="Green Light Item for Customer" desc="放行条" order="22" page="greenLightItem4customer" url="index.customerManagement.customerView.greenLightItem4customer">
+            </module>
+            <module id="5604ee89-d338-11e8-9a3f-0050568e00c5" name="Entrance Guard Management for Customer" desc="门禁管理" order="25" page="entranceGuard4customer" url="index.customerManagement.customerView.entranceGuard4customer">
+            </module>
+        </modulegroup>
+
+        <modulegroup id="f22e6979-ae59-11e7-80c8-0050568e00c5" name="Customer management" desc="客户管理(资产维度)">
+            <module id="003697fb-ae5a-11e7-80c8-0050568e00c5" name="jiaofei" desc="交费" order="9" page="jiaofei4property" url="index.customerManagement.customerView4property.pay4Building">
+            	<operation id="46A4B584-4BA9-434A-B7B6-E755E8742BD5" name="pay" desc="付款" url="/payInfos/pay2Account/*"/>
+            	
+                <operation id="38DF3860-38C8-485F-BD9F-87346174A370" name="anon" desc="anon" permission="anon" url="/payInfos/listPage"/>
+                <operation id="AFDF23A8-840C-4EDC-8ECE-D761FF3914F9" name="anon" desc="anon" permission="anon" url="/payInfos/findByObj"/>
+                <operation id="CF3219FD-9454-40F9-A796-9E561ADB300C" name="anon" desc="anon" permission="anon" url="/payInfos/checkAccountExists/*"/>
+                <operation id="C10943B0-0717-452C-8319-58196B47CD68" name="anon" desc="anon" permission="anon" url="/payInfos/findHistory"/>
+            </module>
+            <module id="2acb9fdf-ae5a-11e7-80c8-0050568e00c5" name="Change Property" desc="产权变更" order="7" page="propertyChanging4property" url="index.customerManagement.customerView4property.propertyChanging4property" img="img/menu/anbao.png">
+                <operation id="f593d1c1-cf67-11e7-80c8-0050568e00c5" name="Search" desc="查询" url="*"/>
+                <operation id="95c74f91-ce9e-11e7-80c8-0050568e00c5" name="Add" desc="新建" url="*"/>
+            </module>
+            <module id="DFCA8BD1-9A10-40F4-A5CE-958AFF89B71B" name="account" desc="账户" order="8" page="account4property" url="index.customerManagement.customerView4property.account4Building" img="img/menu/anbao.png">
+            	<operation id="0CA16685-6176-4830-82AA-9A29838ACBAA" name="backMoney" desc="退款" url="/payInfos/backMoney"/>
+                <operation id="841DCEB0-AF7A-4D18-A77D-A3BE0395C11D" name="jmMoney" desc="减免" url="/payInfos/jmMoney"/>
+                <operation id="5D808545-94BB-47B0-B8FB-DA274F263CCC" name="rollBack" desc="回退" url="/payInfos/rollback"/>
+                <operation id="841DCEB0-AF7A-4D18-A77D-A3BE0395C11E" name="addInvoices" desc="添加发票" url="/payInfos/addInvoices"/>
+                <operation id="841DCEB0-AF7A-4D18-A77D-A3BE0395C11F" name="detailInvoices" desc="查看发票" url="*"/>
+            	
+                <operation id="4A663896-EBF2-4A40-A049-4CC11373535D" name="anon" desc="账户加载" permission="anon" url="/payInfos/listPage"/>
+                <operation id="1B8EF8DC-D12F-4125-B91E-1FBE36A1BA25" name="anon" desc="账单加载" permission="anon" url="/billHistory/listPageInCustomerService"/>
+                <operation id="2CBD394B-94EC-4A85-9384-0BC3D88C8901" name="anon" desc="资产账户流水加载" permission="anon" url="/payInfos/listPageHistory4Building"/>
+            </module>
+            <module id="C7992C04-E846-48E6-B54A-F45C3A7A0FFF" name="newAccount" desc="新账户" order="21" url="index.customerManagement.customerView4property.newAccount4Building" img="" />
+            <module id="2f0634b1-ae5a-11e7-80c8-0050568e00c5" name="order" desc="工单管理" order="1" page="order4property" url="index.customerManagement.customerView4property.order4property">
+                <operation id="10327da8-a422-41d8-8b4b-4cf601e49338" name="add" desc="新建" url="/order/newOrders"/>
+                <operation id="a297612d-c007-4dea-856d-9f25f7c5cc32" name="delete" desc="删除" url="/order/updateOrder"/>
+                <operation id="3150e22b-b075-4716-8417-e6cd198ba2aa" name="finish" desc="完成" url="/order/finish"/>
+                <operation id="4a690ff0-7951-47c2-b786-71748c03a2c1" name="export" desc="导出" url="/system/ImportExportController/export"/>
+                <operation id="04d0ac1b-fd4c-4afb-b3bf-36518de84bc5" name="anon" desc="anon" permission="anon" url="/orderType/subTypeList"/>
+                <operation id="83c6ae62-ffb3-4784-acc8-b48d8aa8a7e5" name="anon" desc="anon" permission="anon" url="/project/TcBuildingController/loadBuildingByPickUpTree"/>
+                <operation id="c90b94c7-80e9-4b53-8269-75f4985c7636" name="anon" desc="anon" permission="anon" url="/PersonBuildingNew/findBuildingByCustId"/>
+            </module>
+            <module id="3350fbbf-ae5a-11e7-80c8-0050568e00c5" name="Property Management" desc="资产管理" order="10" page="property4property" url="index.customerManagement.customerView4property.property4property" img="img/menu/anbao.png">
+                <operation id="fe9427f9-cf67-11e7-80c8-0050568e00c5" name="Search" desc="查询" url="*"/>
+                <operation id="51e2ac2d-ce9e-11e7-80c8-0050568e00c5" name="Modify" desc="编辑" url="*"/>
+            </module>
+            <!--<module id="37e3b708-ae5a-11e7-80c8-0050568e00c5" name="tingcheka" desc="停车卡管理" order="11" page="tingcheka4property" url="*">
+            </module>-->
+            <module id="3bfc4bbc-ae5a-11e7-80c8-0050568e00c5" name="collection Management" desc="银行托收" order="13" page="collection4property" url="index.customerManagement.customerView4property.collection4property">
+            </module>
+            <module id="400150f9-ae5a-11e7-80c8-0050568e00c5" name="Vehicle Management" desc="车辆管理" order="15" page="vehicle4property" url="index.customerManagement.customerView4property.vehicle4property">
+                <operation id="44f1f740-ae5a-11e7-80c8-0050568e00c5" name="Add" desc="新建" url=" /TBsVehicleController/add"/>
+                <operation id="48eb5060-ae5a-11e7-80c8-0050568e00c5" name="Delete" desc="删除" url=" /TBsVehicleController/delete/*"/>
+                <operation id="4cfdb03f-ae5a-11e7-80c8-0050568e00c5" name="Search" desc="查询" url=" /TBsVehicleController/listPage"/>
+                <operation id="50fcfa8b-ae5a-11e7-80c8-0050568e00c5" name="Modify" desc="修改" url=" /TBsVehicleController/modify"/>
+                <operation id="54c3b35f-ae5a-11e7-80c8-0050568e00c5" name="anon" desc="anon" permission="anon" url=" /TBsVehicleController/findByCondition"/>
+            </module>
+            <module id="5972c861-ae5a-11e7-80c8-0050568e00c5" name="shouquan" desc="授权管理" order="17" page="shouquan4property" url="*">
+            </module>
+            <module id="5dc53b7f-ae5a-11e7-80c8-0050568e00c5" name="zulin" desc="租赁管理" order="19" page="zulin4property" url="*">
+            </module>
+            <module id="9dd06878-6252-11e8-99c4-0050568e00c5" name="Green Light Item for Property" desc="放行条" order="25" page="greenLightItem4property" url="index.customerManagement.customerView4property.greenLightItem4property">
+            </module>
+            <module id="cdaba541-d339-11e8-9a3f-0050568e00c5" name="Entrance Guard Management for Property" desc="门禁管理" order="25" page="entranceGuard4property" url="index.customerManagement.customerView4property.entranceGuard4property">
+            </module>
+        </modulegroup>
+    </module>
+</modulegroup>

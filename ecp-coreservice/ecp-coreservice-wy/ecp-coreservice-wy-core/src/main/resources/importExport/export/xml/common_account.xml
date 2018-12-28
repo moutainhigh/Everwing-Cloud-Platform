@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<excel id="common_account">
+    <sheet label="通用账户抵扣明细">
+        <list>
+            <sql id="2e2885bf-e6e3-11e8-9a3f-0050568e00c5">
+                <![CDATA[
+
+         SELECT house_code_new,change_amount,
+
+              (CASE dikou_type WHEN 1 THEN '物业' WHEN 2 THEN '本体' WHEN 3 THEN '水费' WHEN 4 THEN '电费'  ELSE '' END) as type,
+         create_time from t_ac_common_account_detail where business_type=2
+    <#if projectId?? && projectId!=''>
+    and project_id='${projectId}'
+     </#if>
+    <#if lastPushDate??  && lastPushDate!=''>
+  	AND DATE_FORMAT(create_time,'%Y-%m-%d') >= '${lastPushDate}'
+    </#if>
+
+			<#if intervalDays??  && intervalDays!=''>
+
+					AND DATE_FORMAT(create_time,'%Y-%m-%d')< DATE_FORMAT(DATE_ADD('${intervalDays}',INTERVAL 1 DAY),'%Y-%m-%d')
+			</#if>
+            order by create_time desc
+
+                ]]>
+            </sql>
+            <!-- 查询结果字段和excel表头标题的映射，column的值一定要和SQL语句的AS别名一致 -->
+            <field column="house_code_new" label="房号" type="String"></field>
+            <field column="type" label="通用抵扣类型" type="String"></field>
+            <field column="change_amount" label="变化金额" type="Double" format="0.00"></field>
+            <field column="create_time" label="创建时间" type="Date" format="yyyy-MM-dd HH:mm:ss"></field>
+
+        </list>
+    </sheet>
+</excel>

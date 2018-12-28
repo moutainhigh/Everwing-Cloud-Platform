@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<excel id="finace_account">
+    <sheet label="财务账户欠费信息表">
+        <list>
+            <sql id="829248a4-801e-11e8-b69d-0050568e00c5">
+                <![CDATA[
+       select x.id,x.houseCode,x.address,x.buildingCode,max(x.wy) wy,max(x.bt)bt,max(x.water)water,max(x.elect) elect,sum(x.total) total
+    FROM(SELECT b.id,b.house_code houseCode,b.building_full_name address,b.building_code buildingCode,lbfi.account_type type,
+    if(lbfi.account_type=1,concat(lbfi.last_bill_fee+da.amount),0) wy,
+    if(lbfi.account_type=2,concat(lbfi.last_bill_fee+da.amount),0) bt,
+    if(lbfi.account_type=3,concat(lbfi.last_bill_fee+da.amount),0) water,
+    if(lbfi.account_type=4,concat(lbfi.last_bill_fee+da.amount),0) elect,
+    lbfi.last_bill_fee+da.amount as total
+    FROM tc_building b,t_ac_last_bill_fee_info lbfi,t_ac_delay_account da
+    where  b.house_code=lbfi.house_code_new AND b.house_code=da.house_code_new AND da.account_type=lbfi.account_type
+    <#if houseCode?? && houseCode!=''>
+      AND b.building_code in(select building_code FROM  tc_building WHERE house_code='${houseCode}')
+    </#if>
+    <#if projectId?? && projectId!=''>
+  and  b.project_id='${projectId}'
+    </#if>
+    <#if buildingFullName??  && buildingFullName!=''>
+  AND b.building_code in(select building_code FROM  tc_building WHERE building_full_name='${buildingFullName}')
+    </#if>
+    <#if userName?? && userName!=''>
+    and b.building_code in
+      ( select building_code from tc_person_building where cust_id in
+      (select cust_id from tc_person_cust where name like CONCAT ('%','${userName}','%')))
+    </#if>
+
+
+			<#if maxMoney??  && maxMoney!=''>
+
+				and lbfi.last_bill_fee+da.amount <= '${maxMoney}'
+			</#if>
+			<#if minMoney?? && minMoney!=''>
+				and  lbfi.last_bill_fee+da.amount >= '${minMoney}'
+			</#if>
+			 ) x GROUP BY x.buildingCode
+                ]]>
+            </sql>
+            <!-- 查询结果字段和excel表头标题的映射，column的值一定要和SQL语句的AS别名一致 -->
+            <field column="houseCode" label="资产编号" type="String"></field>
+            <field column="address" label="地址" type="String"></field>
+            <field column="wy" label="物业账户" type="Double" format="0.00"></field>
+            <field column="bt" label="本体账户" type="Double" format="0.00"></field>
+            <field column="water" label="水账户" type="Double" format="0.00"></field>
+            <field column="elect" label="电账户" type="Double" format="0.00"></field>
+            <field column="total" label="账户总额" type="Double" format="0.00"></field>
+
+        </list>
+    </sheet>
+</excel>

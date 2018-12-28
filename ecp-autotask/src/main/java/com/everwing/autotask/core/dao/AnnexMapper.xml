@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.autotask.core.dao.AnnexMapper">
+
+    <insert id="insert" parameterType="Annex" >
+        insert into ts_annex (annex_id, file_type,relation_id, annex_type, annex_address,annex_name,annex_time,pact_id,is_main,is_used,md5,upload_file_id)
+        values (
+        <if test="null == annexId">
+            UUID(),
+        </if>
+        <if test="null != annexId">
+            #{annexId},
+        </if>
+        #{fileType},#{relationId,jdbcType=VARCHAR}, #{annexType,jdbcType=TINYINT}, #{annexAddress,jdbcType=VARCHAR},
+        #{annexName,jdbcType=VARCHAR},#{annexTime,jdbcType=TIMESTAMP},#{pactId,jdbcType=VARCHAR},#{isMain,jdbcType=VARCHAR},#{isUsed,jdbcType=TINYINT},#{md5},#{uploadFileId})
+    </insert>
+</mapper>

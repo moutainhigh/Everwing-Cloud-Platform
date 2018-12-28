@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.autotask.core.dao.TBsChargingSchemeMapper">
+    <resultMap type="TBsChargingScheme" id="BaseResultMap">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="schemeName" column="scheme_name"  jdbcType="VARCHAR"/>
+        <result property="isUsed" column="is_used"  jdbcType="TINYINT"/>
+        <result property="startUsingDate" column="start_using_date"  jdbcType="TIMESTAMP"/>
+        <result property="endUsingDate" column="end_using_date"  jdbcType="TIMESTAMP"/>
+        <result property="chargingType" column="charging_type"  jdbcType="TINYINT"/>
+        <result property="proportion" column="proportion"  jdbcType="DOUBLE"/>
+        <result property="overdueStartDates" column="overdue_start_dates"  jdbcType="TIMESTAMP"/>
+        <result property="calculationType" column="calculation_type"  jdbcType="TINYINT"/>
+        <result property="schemeType" column="scheme_type"  jdbcType="TINYINT"/>
+        <result property="frequency" column="frequency" jdbcType="INTEGER"/>
+        <result property="chargingArea" column="charging_area" jdbcType="INTEGER"/>
+        <result property="chargeData" column="charge_data"  jdbcType="INTEGER"/>
+        <result property="isEffective" column="is_effective"  jdbcType="TINYINT"/>
+        <result property="projectId" column="project_id"  jdbcType="VARCHAR"/>
+        <result property="projectName" column="project_name"  jdbcType="VARCHAR"/>
+        <result property="taxRate" column="tax_rate" jdbcType="DOUBLE"/>
+        <result property="createTime" column="create_time"  jdbcType="TIMESTAMP"/>
+        <result property="createBy" column="create_by"  jdbcType="VARCHAR"/>
+        <result property="createName" column="create_name"  jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time"  jdbcType="TIMESTAMP"/>
+        <result property="updateBy" column="update_by"  jdbcType="VARCHAR"/>
+        <result property="updateName" column="update_name"  jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="findCurrentRate" parameterType="String" resultType="java.util.Map">
+        SELECT
+        CASE scheme_type WHEN 1 THEN 'wy' WHEN 2 THEN 'bt' WHEN 3 THEN 'water' WHEN 4 THEN 'elect' ELSE "null" END AS schemeType,
+        tax_rate AS taxRate
+        FROM t_bs_charging_scheme t1,
+        t_bs_project t2,
+        t_bs_charge_bill_total t3
+        WHERE t1.project_id = t2.project_id
+        AND t3.project_id = t2.project_id
+        AND DATE_FORMAT(t3.billing_time,'%Y-%m') = DATE_FORMAT(t2.billing_time,"%Y-%m")
+        AND t3.scheme_id = t1.id
+        AND t2.project_id = #{projectId}
+        AND t1.is_used = 0
+        GROUP BY t1.id
+    </select>
+
+    <select id="findCurrentRateByProjectIdAndType" resultType="java.math.BigDecimal">
+        SELECT
+            tax_rate AS taxRate
+        FROM t_bs_charging_scheme t1,
+            t_bs_project t2,
+            t_bs_charge_bill_total t3
+        WHERE t1.project_id = t2.project_id
+              AND t3.project_id = t2.project_id
+              AND DATE_FORMAT(t3.billing_time,'%Y-%m') = DATE_FORMAT(t2.billing_time,"%Y-%m")
+              AND t3.scheme_id = t1.id
+              AND t2.project_id = #{projectId}
+              AND t1.is_used = 0
+              and scheme_type=#{type}
+        GROUP BY t1.id
+    </select>
+
+    <select id="findUsingScheme" parameterType="TBsChargingScheme" resultMap="BaseResultMap">
+        select
+        t.id,
+        t.scheme_name,
+        t.is_used,
+        t.start_using_date,
+        t.end_using_date,
+        t.charging_type,
+        t.proportion,
+        t.overdue_start_dates,
+        t.calculation_type,
+        t.scheme_type,
+        t.frequency,
+        t.charging_area,
+        t.charge_data,
+        t.is_effective,
+        t.project_id,
+        t.project_name,
+        t.create_time,
+        t.tax_rate,
+        (select staff_name from t_sys_user where user_id = t.create_by) as create_by,
+        t.update_time,
+        (select staff_name from t_sys_user where user_id = t.update_by) as update_by
+        from t_bs_charging_scheme t
+        where t.is_used = 0
+        and t.is_effective = 0
+        and t.scheme_type = #{schemeType}
+        <![CDATA[
+			and t.start_using_date <= SYSDATE()
+			and t.end_using_date >= SYSDATE()
+		]]>
+        and t.project_id = #{projectId}
+        <if test="chargingType==0">
+            and t.charge_data  = DATE_FORMAT(SYSDATE(),'%d')
+        </if>
+
+    </select>
+
+    <update id="autoStopScheme">
+        UPDATE t_bs_charging_scheme SET is_used = 1 WHERE SYSDATE() > end_using_date
+    </update>
+</mapper>

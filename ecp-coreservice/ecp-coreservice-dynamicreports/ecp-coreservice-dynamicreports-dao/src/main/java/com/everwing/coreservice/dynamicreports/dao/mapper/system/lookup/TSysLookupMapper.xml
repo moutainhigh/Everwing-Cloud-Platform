@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.everwing.coreservice.dynamicreports.dao.mapper.system.initData.TSysLookupMapper">
+    <resultMap id="TSysLookupResultMap" type="TSysLookup">
+        <result property="lookupId" column="lookup_id"/>
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+        <result property="parentCode" column="parent_code"/>
+        <result property="status" column="status"/>
+        <result property="lan" column="lan"/>
+        <result property="description" column="description"/>
+        <result property="itemOrder" column="item_order"/>
+        <result property="column1" column="column1"/>
+        <result property="column2" column="column2"/>
+        <result property="column3" column="column3"/>
+        <result property="createrId" column="creater_id"/>
+        <result property="createrName" column="creater_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyId" column="modify_id"/>
+        <result property="modifyName" column="modify_name"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+
+    <resultMap id="TSysLookupVOResultMap" type="TSysLookupVO" extends="TSysLookupResultMap">
+        <result property="statusName" column="status_name"/>
+    </resultMap>
+
+    <resultMap id="TSysLookupSelectVOResultMap" type="TSysLookupSelectVO">
+        <result property="id" column="id"/>
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+    </resultMap>
+
+
+    <select id="listPage" parameterType="TSysLookupQO" resultMap="TSysLookupVOResultMap">
+        SELECT t.* FROM t_sys_lookup t WHERE 1 = 1
+        <if test="code != null and code !=  ''">
+            AND t.code LIKE CONCAT('%',#{code},'%')
+        </if>
+        <if test="name != null and name != ''">
+            AND t.name  LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test="status != null and status != ''">
+            AND t.status = #{status}
+        </if>
+    </select>
+
+    <select id="findByCondition" parameterType="TSysLookupQO" resultMap="TSysLookupVOResultMap">
+        SELECT t.* FROM t_sys_lookup t WHERE t.lan = #{lan}
+        <if test="parentCode != null and parentCode !=  ''">
+            AND t.parent_code = #{parentCode}
+        </if>
+        <if test="code != null and code !=  ''">
+            AND t.code = #{code}
+        </if>
+        <if test="name != null and name !=  ''">
+            AND t.name = #{name}
+        </if>
+        <if test="status != null and status !=  ''">
+            AND t.status = #{status}
+        </if>
+        ORDER BY t.item_order ASC
+    </select>
+
+    <select id="findLookupSelect" parameterType="TSysLookupSelectQO" resultMap="TSysLookupSelectVOResultMap">
+        SELECT t.code,t.name FROM t_sys_lookup t WHERE t.status = 'enable' AND t.lan = #{lan} AND t.parent_code = #{parentCode} ORDER BY item_order ASC
+    </select>
+
+    <insert id="insert" parameterType="TSysLookup">
+        INSERT INTO t_sys_lookup (
+            lookup_id,
+            code,
+            name,
+            parent_code,
+            lan,
+            status,
+            description,
+            item_order,
+            column1,
+            column2,
+            column3,
+            creater_id,
+            creater_name,
+            create_time
+        )
+        VALUES (
+            UUID(),
+            #{code},
+            #{name},
+            #{parentCode},
+            #{lan},
+            #{status},
+            #{description},
+            #{itemOrder},
+            #{column1},
+            #{column2},
+            #{column3},
+            #{createrId},
+            #{createrName},
+            sysdate()
+        )
+    </insert>
+
+    <update id="modify" parameterType="TSysLookup">
+        UPDATE t_sys_lookup
+        <set>
+            status = #{status},
+            name = #{name},
+            description = #{description},
+            item_order = #{itemOrder},
+            lan = #{lan},
+            parent_code = #{parentCode},
+            column1 = #{column1},
+            column2 = #{column2},
+            column3 = #{column3},
+            modify_id = #{modifyId},
+            modify_name = #{modifyName},
+            modify_time = sysdate()
+        </set>
+        WHERE lookup_id = #{lookupId}
+    </update>
+</mapper>

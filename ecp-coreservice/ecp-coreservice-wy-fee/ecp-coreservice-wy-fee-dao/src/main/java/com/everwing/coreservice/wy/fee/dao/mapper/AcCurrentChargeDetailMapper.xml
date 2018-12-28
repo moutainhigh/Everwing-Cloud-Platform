@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.coreservice.wy.fee.dao.mapper.AcCurrentChargeDetailMapper">
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.fee.entity.AcCurrentChargeDetail">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="house_code_new" jdbcType="VARCHAR" property="houseCodeNew" />
+    <result column="charge_amount" jdbcType="DECIMAL" property="chargeAmount" />
+    <result column="account_id" jdbcType="VARCHAR" property="accountId" />
+    <result column="account_type" jdbcType="INTEGER" property="accountType" />
+    <result column="charge_time" jdbcType="TIMESTAMP" property="chargeTime" />
+    <result column="audit_time" jdbcType="TIMESTAMP" property="auditTime" />
+    <result column="last_charge_id" jdbcType="VARCHAR" property="lastChargeId" />
+    <result column="charge_detail" jdbcType="VARCHAR" property="chargeDetail" />
+    <result column="common_dikou" jdbcType="DECIMAL" property="commonDikou" />
+    <result column="special_dikou" jdbcType="DECIMAL" property="specialDikou" />
+    <result column="project_id" jdbcType="VARCHAR" property="projectId" />
+    <result column="project_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="create_id" jdbcType="VARCHAR" property="createId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="payed_amount" jdbcType="DECIMAL" property="payedAmount" />
+    <result column="assign_amount" jdbcType="DECIMAL" property="assignAmount" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="payable_amount" jdbcType="DECIMAL" property="payableAmount" />
+    <result column="currenct_arreas" jdbcType="DECIMAL" property="currenctArreas" />
+    <result column="business_type" jdbcType="INTEGER" property="businessType" />
+    <result column="opera_id" jdbcType="VARCHAR" property="operaId" />
+    <result column="current_payment" jdbcType="DECIMAL" property="currentPayment" />
+    
+    
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, house_code_new, charge_amount, account_id, account_type, charge_time, audit_time, 
+    last_charge_id, charge_detail, common_dikou, special_dikou, project_id, project_name, 
+    create_id, create_time, payed_amount, assign_amount, update_time, 
+    payable_amount, currenct_arreas,business_type, opera_id,current_payment
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_ac_current_charge_detail
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_ac_current_charge_detail
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="AcCurrentChargeDetail">
+    insert into t_ac_current_charge_detail (id, house_code_new, charge_amount, 
+      account_id, account_type, charge_time, 
+      audit_time, last_charge_id, charge_detail, 
+      common_dikou, special_dikou, project_id, 
+      project_name, create_id, create_time, 
+      payed_amount, assign_amount,
+      update_time, payable_amount, currenct_arreas, business_type,
+      opera_id,current_payment)
+    values (#{id,jdbcType=VARCHAR}, #{houseCodeNew,jdbcType=VARCHAR}, #{chargeAmount,jdbcType=DECIMAL}, 
+      #{accountId,jdbcType=VARCHAR}, #{accountType,jdbcType=INTEGER}, #{chargeTime,jdbcType=TIMESTAMP},
+      #{auditTime,jdbcType=TIMESTAMP}, #{lastChargeId,jdbcType=VARCHAR}, #{chargeDetail,jdbcType=VARCHAR}, 
+      #{commonDikou,jdbcType=DECIMAL}, #{specialDikou,jdbcType=DECIMAL}, #{projectId,jdbcType=VARCHAR}, 
+      #{projectName,jdbcType=VARCHAR}, #{createId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{payedAmount,jdbcType=DECIMAL}, #{assignAmount,jdbcType=DECIMAL}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{payableAmount,jdbcType=DECIMAL}, #{currenctArreas,jdbcType=DECIMAL}, 
+      #{businessType,jdbcType=INTEGER},#{operaId,jdbcType=VARCHAR},#{currentPayment,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="AcCurrentChargeDetail">
+    insert into t_ac_current_charge_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="houseCodeNew != null">
+        house_code_new,
+      </if>
+      <if test="chargeAmount != null">
+        charge_amount,
+      </if>
+      <if test="accountId != null">
+        account_id,
+      </if>
+      <if test="accountType != null">
+        account_type,
+      </if>
+      <if test="chargeTime != null">
+        charge_time,
+      </if>
+      <if test="auditTime != null">
+        audit_time,
+      </if>
+      <if test="lastChargeId != null">
+        last_charge_id,
+      </if>
+      <if test="chargeDetail != null">
+        charge_detail,
+      </if>
+      <if test="commonDikou != null">
+        common_dikou,
+      </if>
+      <if test="specialDikou != null">
+        special_dikou,
+      </if>
+      <if test="projectId != null">
+        project_id,
+      </if>
+      <if test="projectName != null">
+        project_name,
+      </if>
+      <if test="createId != null">
+        create_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="payedAmount != null">
+        payed_amount,
+      </if>
+      <if test="assignAmount != null">
+        assign_amount,
+      </if>
+
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="payableAmount != null">
+        payable_amount,
+      </if>
+      <if test="currenctArreas != null">
+        currenct_arreas,
+      </if>
+      <if test="operaId != null">
+        opera_id,
+      </if>
+      <if test="currentPayment != null">
+        current_payment,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="houseCodeNew != null">
+        #{houseCodeNew,jdbcType=VARCHAR},
+      </if>
+      <if test="chargeAmount != null">
+        #{chargeAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="accountId != null">
+        #{accountId,jdbcType=VARCHAR},
+      </if>
+      <if test="accountType != null">
+        #{accountType,jdbcType=INTEGER},
+      </if>
+      <if test="chargeTime != null">
+        #{chargeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditTime != null">
+        #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastChargeId != null">
+        #{lastChargeId,jdbcType=VARCHAR},
+      </if>
+      <if test="chargeDetail != null">
+        #{chargeDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="commonDikou != null">
+        #{commonDikou,jdbcType=DECIMAL},
+      </if>
+      <if test="specialDikou != null">
+        #{specialDikou,jdbcType=DECIMAL},
+      </if>
+      <if test="projectId != null">
+        #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null">
+        #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payedAmount != null">
+        #{payedAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="assignAmount != null">
+        #{assignAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payableAmount != null">
+        #{payableAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="currenctArreas != null">
+        #{currenctArreas,jdbcType=DECIMAL},
+      </if>
+      <if test="operaId != null">
+        #{operaId,jdbcType=VARCHAR},
+      </if>
+       <if test="currentPayment != null">
+        #{currentPayment,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="AcCurrentChargeDetail">
+    update t_ac_current_charge_detail
+    <set>
+      <if test="houseCodeNew != null">
+        house_code_new = #{houseCodeNew,jdbcType=VARCHAR},
+      </if>
+      <if test="chargeAmount != null">
+        charge_amount = #{chargeAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="accountId != null">
+        account_id = #{accountId,jdbcType=VARCHAR},
+      </if>
+
+      <if test="auditTime != null">
+        audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastChargeId != null">
+        last_charge_id = #{lastChargeId,jdbcType=VARCHAR},
+      </if>
+      <if test="chargeDetail != null">
+        charge_detail = #{chargeDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="commonDikou != null">
+        common_dikou = #{commonDikou,jdbcType=DECIMAL},
+      </if>
+      <if test="specialDikou != null">
+        special_dikou = #{specialDikou,jdbcType=DECIMAL},
+      </if>
+      <if test="projectId != null">
+        project_id = #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        project_name = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null">
+        create_id = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payedAmount != null">
+        payed_amount = #{payedAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="assignAmount != null">
+        assign_amount = #{assignAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payableAmount != null">
+        payable_amount = #{payableAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="currenctArreas != null">
+        currenct_arreas = #{currenctArreas,jdbcType=DECIMAL},
+      </if>
+      <if test="operaId != null">
+        opera_id = #{operaId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="AcCurrentChargeDetail">
+    update t_ac_current_charge_detail
+    set house_code_new = #{houseCodeNew,jdbcType=VARCHAR},
+      charge_amount = #{chargeAmount,jdbcType=DECIMAL},
+      account_id = #{accountId,jdbcType=VARCHAR},
+      account_type = #{accountType,jdbcType=INTEGER},
+      charge_time = #{chargeTime,jdbcType=TIMESTAMP},
+      audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      last_charge_id = #{lastChargeId,jdbcType=VARCHAR},
+      charge_detail = #{chargeDetail,jdbcType=VARCHAR},
+      common_dikou = #{commonDikou,jdbcType=DECIMAL},
+      special_dikou = #{specialDikou,jdbcType=DECIMAL},
+      project_id = #{projectId,jdbcType=VARCHAR},
+      project_name = #{projectName,jdbcType=VARCHAR},
+      create_id = #{createId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      payed_amount = #{payedAmount,jdbcType=DECIMAL},
+      assign_amount = #{assignAmount,jdbcType=DECIMAL},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      payable_amount = #{payableAmount,jdbcType=DECIMAL},
+      currenct_arreas = #{currenctArreas,jdbcType=DECIMAL},
+      opera_id = #{operaId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+    
+  <!-- 根据房号查询最新一条，专项账户查询审核时间为空的 -->
+  <select id="selectNewestChargeDetail" resultMap="BaseResultMap">
+		SELECT
+			*
+		FROM
+			t_ac_current_charge_detail
+		WHERE house_code_new = #{houseCodeNew} and account_type = #{accountType}
+			and DATE_FORMAT(create_time, '%Y-%m') = DATE_FORMAT(SYSDATE(), '%Y-%m')
+			and audit_time is null
+		ORDER BY
+			create_time DESC
+		LIMIT 1
+  </select>
+  
+  <!-- 根据房号查询最新一条,通用账户查询审核时间非空的 -->
+  <select id="selectNewestChargeDetailCommon" resultMap="BaseResultMap">
+		SELECT
+			*
+		FROM
+			t_ac_current_charge_detail
+		WHERE house_code_new = #{houseCodeNew} and account_type = #{accountType}
+			and DATE_FORMAT(create_time, '%Y-%m') = DATE_FORMAT(SYSDATE(), '%Y-%m')
+			and audit_time is not null
+		ORDER BY
+			create_time DESC
+		LIMIT 1
+  </select>
+  
+  
+  <select id="getBillInfoByHouseCodeNew" parameterType = "java.lang.String" resultType = "java.util.Map">
+  		SELECT t1.*,t2.building_full_name billAddress, IFNULL(t2.building_area,0) buildingArea  FROM
+			(
+			select SUM(IFNULL(charge_amount,0)) chargeTotal,house_code_new houseCodeNew,DATE_FORMAT(charge_time ,'%Y-%m') chargeMonth,
+			 DATE_FORMAT(create_time ,'%Y-%m-%d') createTime, project_name projectName,
+			 MAX((CASE account_type WHEN 1 THEN charge_detail END )) wyDetail,
+			 MAX((CASE account_type WHEN 2 THEN charge_detail END )) btDetail,
+			 MAX((CASE account_type WHEN 3 THEN charge_detail END )) waterDetail,
+			 MAX((CASE account_type WHEN 4 THEN charge_detail END )) electDetail
+			from t_ac_current_charge_detail where house_code_new = #{houseCodeNew} and business_type = 1 
+			and DATE_FORMAT(audit_time, '%Y-%m') = DATE_FORMAT(SYSDATE(), '%Y-%m')
+			and audit_time IS NOT NULL) t1,tc_building t2 where t1.houseCodeNew = t2.house_code
+  </select>
+  
+  
+  <!-- 根据新的房号和账户类型，查询出当前所有欠费的信息（考虑到后续有可能会根据月份来进行缴费，所以这里先预留） -->
+  <!-- 这里后面发现一个问题是：audit_time IS NOT NULL 这个条件不适合审核的时候用,交费和审核这个方法不能共用 -->
+  <select id="getChargeDetailListByHouseCode" parameterType = "java.util.Map" resultMap = "BaseResultMap" >
+		SELECT
+			*
+		FROM
+			t_ac_current_charge_detail
+		WHERE
+			create_time IN (
+				SELECT
+					MAX(create_time)
+				FROM
+					t_ac_current_charge_detail
+				WHERE
+					house_code_new = #{houseCodeNew}
+					AND audit_time IS NOT NULL
+					AND account_type = #{accountType}
+				<if test=" null != monthInfo">
+					AND DATE_FORMAT(audit_time,'%Y-%m-%d')  in
+					<foreach collection="list" item="item" index="index" open="(" close=")" separator="," >
+						#{item}
+					</foreach>
+				</if>
+				GROUP BY
+					audit_time
+			) AND house_code_new = #{houseCodeNew} AND account_type = #{accountType} AND currenct_arreas > 0 AND business_type != 5  ORDER BY create_time
+  </select>
+  
+  <!-- 这个提供给审核的时候用 -->
+  <select id="getChargeDetailListByHouseCodeForAudit" parameterType = "java.util.Map" resultMap = "BaseResultMap" >
+		SELECT
+			*
+		FROM
+			t_ac_current_charge_detail
+		WHERE
+			create_time IN (
+				SELECT
+					MAX(create_time)
+				FROM
+					t_ac_current_charge_detail
+				WHERE
+					house_code_new = #{houseCodeNew}
+				AND account_type = #{accountType}
+				<if test=" null != monthInfo">
+					AND DATE_FORMAT(audit_time,'%Y-%m-%d')  in
+					<foreach collection="list" item="item" index="index" open="(" close=")" separator="," >
+						#{item}
+					</foreach>
+				</if>
+				
+				GROUP BY
+					audit_time
+			) AND house_code_new = #{houseCodeNew} AND account_type = #{accountType} AND currenct_arreas > 0 AND business_type != 5  ORDER BY create_time
+  </select>
+  
+  
+  <select id="getAcCurrentChargeDetail" resultMap = "BaseResultMap">
+  		SELECT
+			*
+		FROM
+			t_ac_current_charge_detail
+		WHERE
+			house_code_new = #{houseCodeNew}
+		AND account_type = #{accountType}
+		AND business_type = 1
+		AND audit_time IS NULL
+  </select>
+  <select id="selectByOperaIdAndType" resultMap = "BaseResultMap">
+    SELECT
+    *
+    FROM
+    t_ac_current_charge_detail
+    WHERE
+    account_type = #{accountType}
+    AND opera_id=#{operaId}
+
+  </select>
+  <select id="listPageBySearchObj" resultType="Map">
+    SELECT ccd.account_type accountType,ccd.charge_amount amount,ifnull(pi.pay_type,0) payType,
+    u.staff_name creater,ccd.create_time createTime
+    from (SELECT  * from tc_building where building_code=#{buildingCode,jdbcType=VARCHAR}) b
+    LEFT JOIN  t_ac_current_charge_detail ccd ON ccd.house_code_new=b.house_code
+    LEFT JOIN t_bs_pay_info pi on ccd.opera_id=pi.batch_no
+    LEFT JOIN t_sys_user u ON pi.create_id=u.user_id
+    where date_format(ccd.create_time,'%Y-%m')=#{yearMonth,jdbcType=VARCHAR}
+    <if test="payType!=null and payType!=''">
+      AND pi.pay_type=#{payType}
+    </if>
+    <if test="accountType!=null and accountType!=''">
+      AND ccd.account_type=#{accountType}
+    </if>
+    <if test="creater!=null and creater!=''">
+      AND u.staff_name=#{creater}
+    </if>
+    order by ccd.create_time desc
+  </select>
+  <select id="selectByOperaId" parameterType = "java.lang.String" resultMap = "BaseResultMap" >
+    SELECT
+    *
+    FROM
+    t_ac_current_charge_detail
+    WHERE
+    opera_id = #{operaId,jdbcType=VARCHAR}
+
+  </select>
+  <delete id="deleteBYOperaId" parameterType="java.lang.String">
+    delete from t_ac_current_charge_detail
+    where opera_id = #{batchNo,jdbcType=VARCHAR}
+  </delete>
+
+  <select id="selectChargeDetail" resultMap="BaseResultMap">
+    SELECT
+    *
+    FROM
+    t_ac_current_charge_detail
+    WHERE house_code_new = #{houseCodeNew} and account_type = #{accountType}
+    ORDER BY
+    create_time DESC
+    LIMIT 1
+  </select>
+
+  <update id="updateById" parameterType="AcCurrentChargeDetail">
+    update t_ac_current_charge_detail
+    set
+    charge_amount = #{chargeAmount,jdbcType=DECIMAL},
+
+    update_time = #{updateTime,jdbcType=TIMESTAMP},
+    payable_amount = #{payableAmount,jdbcType=DECIMAL},
+    currenct_arreas = #{currenctArreas,jdbcType=DECIMAL}
+
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="selectbyHouseCodeAndType" resultMap = "BaseResultMap">
+    SELECT
+    *
+    FROM
+    t_ac_current_charge_detail
+    WHERE
+    house_code_new = #{houseCodeNew}
+    AND account_type = #{accountType}
+    AND business_type = 1
+    AND audit_time IS NOT NULL
+    ORDER BY create_time
+    limit 1
+  </select>
+</mapper>

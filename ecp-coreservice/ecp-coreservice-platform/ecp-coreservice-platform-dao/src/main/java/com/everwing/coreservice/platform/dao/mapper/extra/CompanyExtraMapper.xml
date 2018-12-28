@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.coreservice.platform.dao.mapper.extra.CompanyExtraMapper">
+
+<update id="wy_ddl">
+    CREATE database IF NOT EXISTS `${dbName}`;
+    USE `${dbName}`;
+
+    CREATE USER IF NOT EXISTS `${user}` IDENTIFIED BY `${password}`;
+    GRANT ALL ON `${dbName}`.* TO `${user}` identified by `${password}`;
+    GRANT ALL ON `platform_db`.account TO `${user}` identified by `${password}`;
+
+    USE `${dbName}`;
+    <![CDATA[
+        ${ddlTableSql}
+        ${ddlFunctionSql}
+    ]]>
+</update>
+
+<update id="wy_dml">
+    USE `${dbName}` ;
+    <![CDATA[
+        ${dmlSql}
+    ]]>
+</update>
+
+<insert id="init_user">
+    USE `${dbName}` ;
+    INSERT INTO `t_sys_user`
+    (
+        user_id,
+        login_name,
+        password,
+        staff_number,
+        staff_name,
+        document_type,
+        document_number,
+        sex,
+        email,
+        image,
+        mobile_telephone,
+        join_date,
+        staff_state,
+        type,
+        file_ids,
+        `status`,
+        `company_id`,
+        `creater_id`,
+        `creater_name`,
+        `modify_id`,
+        `modify_name`,
+        `create_time`,
+        `modify_time`
+    )
+    VALUES
+    (
+        UUID(),
+        '${accountName}',
+        NULL,
+        '${userCode}',
+        '系统管理员',
+        '0',
+        NULL,
+        'male',
+        NULL,
+        NULL,
+        NULL,
+        sysdate(),
+        'joined',
+        'systemAdmin',
+        NULL,
+        'enable',
+        '${companyId}',
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        sysdate(),
+        NULL
+    );
+
+
+    INSERT INTO `t_sys_company`
+    (
+        company_id,
+        code,
+        name,
+        description,
+        leader,
+        `creater_id`,
+        `creater_name`,
+        `modify_id`,
+        `modify_name`,
+        `create_time`,
+        `modify_time`
+    )
+    VALUES
+    (
+        '${companyId}',
+        '${companyCode}',
+        '${companyName}',
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        sysdate(),
+        NULL
+    );
+
+
+    INSERT INTO `t_sys_organization`
+    (
+        organization_id,
+        type,
+        code,
+        pid,
+        description,
+        `creater_id`,
+        `creater_name`,
+        `modify_id`,
+        `modify_name`,
+        `create_time`,
+        `modify_time`
+        )
+    VALUES(
+        '${companyId}',
+        'company',
+        '${companyId}',
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        sysdate(),
+        NULL
+    );
+
+
+    USE `platform_db` ;
+</insert>
+
+</mapper>

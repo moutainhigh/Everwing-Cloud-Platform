@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.autotask.core.dao.AcSpecialDetailMapper">
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.fee.entity.AcSpecialDetail">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="special_id" jdbcType="VARCHAR" property="specialId" />
+    <result column="house_code_new" jdbcType="VARCHAR" property="houseCodeNew" />
+    <result column="before_amount" jdbcType="DECIMAL" property="beforeAmount" />
+    <result column="after_amount" jdbcType="DECIMAL" property="afterAmount" />
+    <result column="change_amount" jdbcType="DECIMAL" property="changeAmount" />
+    <result column="business_type" jdbcType="INTEGER" property="businessType" />
+    <result column="project_id" jdbcType="VARCHAR" property="projectId" />
+    <result column="project_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_id" jdbcType="VARCHAR" property="createId" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="bill_detail_id" jdbcType="VARCHAR" property="billDetailId" />
+    <result column="opera_id" jdbcType="VARCHAR" property="operaId" />
+    <!-- 附加字段 数据表中无 -->
+    <result column="account_type" jdbcType="INTEGER" property="accountType" />
+  </resultMap>
+  <select id="getPushDataForSpcialAccount" parameterType="java.util.Map" resultMap="BaseResultMap">
+    SELECT t1.house_code_new,t2.change_amount,t1.account_type,t2.create_time
+    from t_ac_special_account t1,t_ac_special_detail t2 where  t1.id =t2.special_id
+    and t1.project_id=#{projectId} and t2.business_type=2
+    <if test=" null != lastPushDate and '' != lastPushDate ">
+      <![CDATA[
+					AND t2.create_time > #{lastPushDate}
+				]]>
+    </if>
+    <if test=" null != intervalDays and '' != intervalDays ">
+      <![CDATA[
+					AND t2.create_time < #{intervalDays}
+				]]>
+    </if>
+
+  </select>
+
+</mapper>

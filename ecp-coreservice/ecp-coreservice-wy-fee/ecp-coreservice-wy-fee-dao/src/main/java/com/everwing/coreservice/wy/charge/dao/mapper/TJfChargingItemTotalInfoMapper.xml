@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.charge.dao.mapper.TJfChargingItemTotalInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.charging.entity.TJfChargingItemTotalInfo" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="charging_item_id" property="chargingItemId" jdbcType="VARCHAR" />
+    <result column="charging_item_name" property="chargingItemName" jdbcType="VARCHAR" />
+    <result column="charging_type" property="chargingType" jdbcType="INTEGER" />
+    <result column="start_charging_time" property="startChargingTime" jdbcType="TIMESTAMP" />
+    <result column="charging_status" property="chargingStatus" jdbcType="INTEGER" />
+    <result column="audit_status" property="auditStatus" jdbcType="INTEGER" />
+    <result column="deduct_status" property="deductStatus" jdbcType="INTEGER" />
+    <result column="charging_time" property="chargingTime" jdbcType="TIMESTAMP" />
+    <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
+    <result column="deduct_time" property="deductTime" jdbcType="TIMESTAMP" />
+    <result column="current_charging_total" property="currentChargingTotal" jdbcType="DECIMAL" />
+    <result column="current_deduct_total" property="currentDeductTotal" jdbcType="DECIMAL" />
+    <result column="last_arrears_total" property="lastArrearsTotal" jdbcType="DECIMAL" />
+    <result column="charging_times" property="chargingTimes" jdbcType="INTEGER" />
+    <result column="last_charging_id" property="lastChargingId" jdbcType="VARCHAR" />
+    <result column="charging_num" property="chargingNum" jdbcType="INTEGER" />
+    <result column="project_id" property="projectId" jdbcType="VARCHAR" />
+    <result column="project_name" property="projectName" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_id" property="createId" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_jf_charging_item_total_info
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.everwing.coreservice.common.wy.charging.entity.TJfChargingItemTotalInfo" >
+    <selectKey resultType="java.lang.String" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_jf_charging_item_total_info (charging_item_id, charging_item_name, 
+      charging_type, start_charging_time, charging_status, 
+      audit_status, deduct_status, charging_time, 
+      audit_time, deduct_time, current_charging_total, 
+      current_deduct_total, last_arrears_total, charging_times, 
+      last_charging_id, charging_num, project_id, 
+      project_name, create_time, create_id
+      )
+    values (#{chargingItemId,jdbcType=VARCHAR}, #{chargingItemName,jdbcType=VARCHAR}, 
+      #{chargingType,jdbcType=INTEGER}, #{startChargingTime,jdbcType=TIMESTAMP}, #{chargingStatus,jdbcType=INTEGER}, 
+      #{auditStatus,jdbcType=INTEGER}, #{deductStatus,jdbcType=INTEGER}, #{chargingTime,jdbcType=TIMESTAMP}, 
+      #{auditTime,jdbcType=TIMESTAMP}, #{deductTime,jdbcType=TIMESTAMP}, #{currentChargingTotal,jdbcType=DECIMAL}, 
+      #{currentDeductTotal,jdbcType=DECIMAL}, #{lastArrearsTotal,jdbcType=DECIMAL}, #{chargingTimes,jdbcType=INTEGER}, 
+      #{lastChargingId,jdbcType=VARCHAR}, #{chargingNum,jdbcType=INTEGER}, #{projectId,jdbcType=VARCHAR}, 
+      #{projectName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createId,jdbcType=VARCHAR}
+      )
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="com.everwing.coreservice.common.wy.charging.entity.TJfChargingItemTotalInfo" >
+    update t_jf_charging_item_total_info
+    set charging_item_id = #{chargingItemId,jdbcType=VARCHAR},
+      charging_item_name = #{chargingItemName,jdbcType=VARCHAR},
+      charging_type = #{chargingType,jdbcType=INTEGER},
+      start_charging_time = #{startChargingTime,jdbcType=TIMESTAMP},
+      charging_status = #{chargingStatus,jdbcType=INTEGER},
+      audit_status = #{auditStatus,jdbcType=INTEGER},
+      deduct_status = #{deductStatus,jdbcType=INTEGER},
+      charging_time = #{chargingTime,jdbcType=TIMESTAMP},
+      audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      deduct_time = #{deductTime,jdbcType=TIMESTAMP},
+      current_charging_total = #{currentChargingTotal,jdbcType=DECIMAL},
+      current_deduct_total = #{currentDeductTotal,jdbcType=DECIMAL},
+      last_arrears_total = #{lastArrearsTotal,jdbcType=DECIMAL},
+      charging_times = #{chargingTimes,jdbcType=INTEGER},
+      last_charging_id = #{lastChargingId,jdbcType=VARCHAR},
+      charging_num = #{chargingNum,jdbcType=INTEGER},
+      project_id = #{projectId,jdbcType=VARCHAR},
+      project_name = #{projectName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_id = #{createId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select id, charging_item_id, charging_item_name, charging_type, start_charging_time, 
+    charging_status, audit_status, deduct_status, charging_time, audit_time, deduct_time, 
+    current_charging_total, current_deduct_total, last_arrears_total, charging_times, 
+    last_charging_id, charging_num, project_id, project_name, create_time, create_id
+    from t_jf_charging_item_total_info
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, charging_item_id, charging_item_name, charging_type, start_charging_time, 
+    charging_status, audit_status, deduct_status, charging_time, audit_time, deduct_time, 
+    current_charging_total, current_deduct_total, last_arrears_total, charging_times, 
+    last_charging_id, charging_num, project_id, project_name, create_time, create_id
+    from t_jf_charging_item_total_info
+  </select>
+</mapper>

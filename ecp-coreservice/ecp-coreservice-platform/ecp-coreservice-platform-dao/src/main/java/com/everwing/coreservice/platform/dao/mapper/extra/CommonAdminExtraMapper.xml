@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.everwing.coreservice.platform.dao.mapper.extra.CommonAdminExtraMapper">
+	<resultMap id="AppPkgBaseResultMap" type="java.util.Map"
+		extends="com.everwing.coreservice.platform.dao.mapper.generated.AppPkgMapper.BaseResultMap">
+	</resultMap>
+	<resultMap id="CompanyApprovalBaseResultMap" type="java.util.Map"
+		extends="com.everwing.coreservice.platform.dao.mapper.generated.CompanyApprovalMapper.BaseResultMap">
+	</resultMap>
+	<resultMap id="AnnouncementBaseResultMap" type="java.util.Map"
+		extends="com.everwing.coreservice.platform.dao.mapper.generated.AnnouncementMapper.BaseResultMap">
+	</resultMap>
+	<resultMap id="OperationLogBaseResultMap" type="java.util.Map"
+		extends="com.everwing.coreservice.platform.dao.mapper.generated.OperationLogMapper.BaseResultMap">
+	</resultMap>
+	<resultMap id="RoleBaseResultMap" type="java.util.Map"
+		extends="com.everwing.coreservice.platform.dao.mapper.generated.RoleMapper.BaseResultMap">
+	</resultMap>
+	<resultMap id="AdminInfoBaseResultMap" type="java.util.Map"
+		extends="com.everwing.coreservice.platform.dao.mapper.generated.AdminInfoMapper.BaseResultMap">
+	</resultMap>
+
+
+	<select id="queryRoleByAccountIds" resultType="map">
+		SELECT
+			rna.account_id AS accountId,
+			r.role_id AS roleId,
+			r.role_name AS roleName
+		FROM
+			role_and_account rna
+		JOIN role r ON rna.role_id = r.role_id
+		WHERE
+			rna.account_id IN <foreach close=")" collection="idList" item="id" open="(" separator=",">#{id}</foreach>
+		AND r.`status` = 1
+	</select>
+
+	<select id="listAdminAccountByPage" resultMap="AdminInfoBaseResultMap">
+		SELECT
+			ai.*, a1.state,
+			a1.account_name AS accountName,
+			a2.account_name AS createrName,
+			a1.create_time AS createTime,
+			a1.update_time AS updateTime
+		FROM
+			account a1
+		JOIN admin_info ai ON a1.account_id = ai.account_id
+		JOIN account a2 ON a2.account_id = ai.creater_account_id
+		<where>
+			a1.type = 6
+			<if test="@com.everwing.coreservice.platform.util.Assert@notEmpty(pageBean.params.queryContent)">
+				AND (
+					a1.account_name LIKE CONCAT('%', #{pageBean.params.queryContent}, '%')
+					OR ai.real_name LIKE CONCAT('%', #{pageBean.params.queryContent}, '%')
+					OR ai.work_num LIKE CONCAT('%', #{pageBean.params.queryContent}, '%')
+					OR a2.account_name LIKE CONCAT('%', #{pageBean.params.queryContent}, '%')
+				)
+			</if>
+		</where>
+		ORDER BY FIELD(a1.`state`, 1,0) ,a1.create_time DESC
+	</select>
+
+
+	<select id="listPermissionByRoleId" resultMap="com.everwing.coreservice.platform.dao.mapper.generated.PermissionMapper.BaseResultMap">
+		SELECT DISTINCT
+			p.*
+		FROM
+			permission p
+		JOIN permission_and_role pnr ON p.permission_id = pnr.permission_id
+		WHERE
+			pnr.role_id = #{roleId}
+	</select>
+
+	<select id="listPermissionByAccountId" resultMap="com.everwing.coreservice.platform.dao.mapper.generated.PermissionMapper.BaseResultMap">
+		SELECT
+			DISTINCT p.*
+		FROM
+			permission p
+		JOIN permission_and_role pnr ON p.permission_id = pnr.permission_id
+		JOIN role_and_account raa ON raa.role_id = pnr.role_id
+		WHERE raa.account_id = #{accountId}
+	</select>
+	
+	<select id="listRoleByPage" resultMap="RoleBaseResultMap"  resultType="java.util.Map">
+		SELECT
+			r.*, a.account_name as createrName
+		FROM
+			role r
+		JOIN account a ON a.account_id = r.create_account_id
+		<where>
+			<if test="@com.everwing.coreservice.platform.util.Assert@notEmpty(pageBean.params.queryContent)">
+				AND (
+					r.role_name LIKE CONCAT('%', #{pageBean.params.queryContent}, '%')
+					OR r.role_decsription LIKE CONCAT('%', #{pageBean.params.queryContent}, '%')
+					OR a.account_name LIKE CONCAT('%', #{pageBean.params.queryContent}, '%')
+				)
+			</if>
+		</where>
+	</select>
+
+
+	<select id="listAdminLogByPage" resultMap="OperationLogBaseResultMap"  resultType="java.util.Map">
+		SELECT * FROM operation_log ol
+		<where>
+			<if test="@com.everwing.coreservice.platform.util.Assert@notEmpty(pageBean.params.timeStart)">
+				AND ol.create_time &gt;= #{pageBean.params.timeStart}
+			</if>
+			<if test="@com.everwing.coreservice.platform.util.Assert@notEmpty(pageBean.params.timeEnd)">
+				AND ol.create_time &lt;= date_add(#{pageBean.params.timeEnd},interval 1 day)
+			</if>
+			<if test="@com.everwing.coreservice.platform.util.Assert@notEmpty(pageBean.params.queryContent)">
+				AND (
+					ol.operation_user_name LIKE CONCAT('%', #{pageBean.params.queryContent}, '%')
+					OR ol.operation_description LIKE CONCAT('%', #{pageBean.params.queryContent}, '%')
+				)
+			</if>
+			<if test="@com.everwing.coreservice.platform.util.Assert@notEmpty(pageBean.params.isSuccess)">
+				AND ol.is_success = #{pageBean.params.isSuccess}
+			</if>
+		</where>
+	</select>
+
+	<select id="listAnnouncementByPage" resultMap="AnnouncementBaseResultMap"  resultType="java.util.Map">
+			SELECT
+				a.*, c.company_name	as companyName,
+				acc.account_name as accountName
+			FROM
+				announcement a
+			LEFT JOIN company c ON a.target_company_id = c.company_id
+			JOIN account acc ON a.create_account_id = acc.account_id
+		<where>
+			<if test="@com.everwing.coreservice.platform.util.Assert@notEmpty(pageBean.params.query_content)">
+				AND (
+					a.title LIKE CONCAT('%', #{pageBean.params.query_content}, '%')
+					OR a.content LIKE CONCAT('%', #{pageBean.params.query_content}, '%')
+					OR c.company_name LIKE CONCAT('%', #{pageBean.params.query_content}, '%')
+				)
+			</if>
+			<if test="@com.everwing.coreservice.platform.util.Assert@notEmpty(pageBean.params.status)">
+				AND a.`status` = #{pageBean.params.status}
+			</if>
+		</where>
+		order by a.status desc,a.create_date desc
+	</select>
+
+	<select id="listAppPkgByPage" resultMap="AppPkgBaseResultMap"  resultType="java.util.Map">
+		SELECT
+			 ap.*, a1.account_name AS uploadUserName, a2.account_name AS enableUserName
+		FROM
+			app_pkg ap
+		LEFT JOIN account a1 ON ap.upload_account_id = a1.account_id
+		LEFT JOIN account a2 ON ap.available_account_id = a2.account_id
+		<where>
+			<if test="@com.everwing.coreservice.platform.util.Assert@notEmpty(pageBean.params.version)">
+				AND ap.version LIKE CONCAT('%',#{pageBean.params.version},'%')
+			</if>
+			<if test="@com.everwing.coreservice.platform.util.Assert@notEmpty(pageBean.params.timeStart)">
+				AND ap.upload_time &gt;= #{pageBean.params.timeStart}
+			</if>
+			<if test="@com.everwing.coreservice.platform.util.Assert@notEmpty(pageBean.params.timeEnd)">
+				AND ap.upload_time &lt;= #{pageBean.params.timeEnd}
+			</if>
+			<if test="@com.everwing.coreservice.platform.util.Assert@notEmpty(pageBean.params.type)">
+				AND ap.type = #{pageBean.params.type}
+			</if>
+		</where>
+		order by ap.status desc,ap.upload_time desc
+	</select>
+	
+	<select id="listCompanyApprovalByPage" resultMap="CompanyApprovalBaseResultMap"  resultType="java.util.Map">
+		SELECT
+			a.account_name accountName, ai.email,ai.mobile ,ca.*
+		FROM
+			company_approval ca
+		JOIN account a ON ca.account_id = a.account_id
+		JOIN account_identity ai ON ai.account_id = ca.account_id
+		<where>
+			<if test="@com.everwing.coreservice.platform.util.Assert@notEmpty(pageBean.params.status)">
+				AND ca.`status` = #{pageBean.params.status,jdbcType=INTEGER}
+			</if>
+			<if test="@com.everwing.coreservice.platform.util.Assert@notEmpty(pageBean.params.query_content)">
+				AND (
+					ca.company_name LIKE CONCAT('%', #{pageBean.params.query_content}, '%')
+					OR a.account_name LIKE CONCAT('%', #{pageBean.params.query_content}, '%')
+					OR ai.email LIKE CONCAT('%', #{pageBean.params.query_content}, '%')
+					OR ai.mobile LIKE CONCAT('%', #{pageBean.params.query_content}, '%')
+					OR ca.biz_registry_license_num LIKE CONCAT('%', #{pageBean.params.query_content}, '%')
+					OR ai.identity_code LIKE CONCAT('%', #{pageBean.params.query_content}, '%')
+					OR ca.company_address LIKE CONCAT('%', #{pageBean.params.query_content}, '%')
+					OR ca.company_location LIKE CONCAT('%', #{pageBean.params.query_content}, '%')
+				)
+			</if>
+		</where>
+		order by ca.status desc,ca.create_date desc
+	</select>
+
+</mapper>

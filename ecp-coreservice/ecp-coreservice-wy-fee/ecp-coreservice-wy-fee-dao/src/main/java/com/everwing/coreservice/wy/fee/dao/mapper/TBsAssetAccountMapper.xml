@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.everwing.coreservice.wy.fee.dao.mapper.TBsAssetAccountMapper">
+		
+		<resultMap type="com.everwing.coreservice.common.wy.entity.configuration.assetaccount.TBsAssetAccount" id="BaseResultMap">
+			<id column="id" property="id"/>
+			<result column="building_code" property="buildingCode"/>
+			<result column="type" property="type"/>
+			<result column="account_balance" property="accountBalance"/>
+			<result column="use_status" property="useStatus"/>
+			<result column="project_id" property="projectId"/>
+			<result column="project_name" property="projectName"/>
+			<result column="create_time" property="createTime"/>
+			<result column="create_id" property="createId"/>
+			<result column="create_name" property="createName"/>
+			<result column="modify_id" property="modifyId"/>
+			<result column="modify_name" property="modifyName"/>
+			<result column="full_name" property="fullName"/>
+			<result column="modify_time" property="modifyTime"/>
+		</resultMap>
+
+	<sql id="Sqlfield">
+		id,building_code,type,account_balance,use_status,project_id,project_name,
+		create_time,create_id,create_name,modify_id,modify_name,full_name,modify_time
+	</sql>
+
+
+		<select id="findByBuildingCodeAndItems" resultMap="BaseResultMap">
+			SELECT * FROM t_bs_asset_account
+			WHERE building_code = #{buildingCode}
+			<if test="null != items">
+                AND type IN
+                <foreach collection="items" item="item" open="(" separator="," close=")">
+                	#{item}
+                </foreach>
+            </if>
+		</select>
+
+	<update id="update" parameterType="com.everwing.coreservice.common.wy.entity.configuration.assetaccount.TBsAssetAccount">
+		update t_bs_asset_account
+		<set>
+			<if test="null != accountBalance">
+				account_balance = #{accountBalance},
+			</if>
+			<if test="null != useStatus">
+				use_status = #{useStatus},
+			</if>
+			<if test="null != modifyId">
+				modify_id = #{modifyId},
+			</if>
+			modify_time = sysdate()
+		</set>
+		where id = #{id}
+	</update>
+
+	<select id="getAccountsByBuildingCode" resultMap="BaseResultMap">
+		select
+		<include refid="Sqlfield"/>
+		from t_bs_asset_account
+		where building_code=#{buildingCode}
+	</select>
+
+
+	<update id="updateAccountAndTypeAndAmount" >
+		update t_bs_asset_account set account_balance=account_balance+#{amount}
+		where building_code =
+		(select building_code from tc_building
+		where house_code=#{houseCodeNew}) and type=#{type}
+	</update>
+
+</mapper>

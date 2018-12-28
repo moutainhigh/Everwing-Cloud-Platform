@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration    PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <setting name="logImpl" value="STDOUT_LOGGING" />
+    </settings>
+    <typeAliases>
+        <typeAlias type="com.everwing.coreservice.common.dynamicreports.entity.system.rights.TRightsMenu" alias="TRightsMenu"/>
+        <typeAlias type="com.everwing.coreservice.common.dynamicreports.entity.system.rights.TRightsMenuQO" alias="TRightsMenuQO"/>
+        <typeAlias type="com.everwing.coreservice.common.dynamicreports.entity.system.rights.TRightsMenuVO" alias="TRightsMenuVO"/>
+        <typeAlias type="com.everwing.coreservice.common.dynamicreports.entity.system.rights.TRightsResource" alias="TRightsResource"/>
+        <typeAlias type="com.everwing.coreservice.common.dynamicreports.entity.system.rights.TRightsResourceQO" alias="TRightsResourceQO"/>
+        <typeAlias type="com.everwing.coreservice.common.dynamicreports.entity.system.rights.TRightsResourceVO" alias="TRightsResourceVO"/>
+        <typeAlias type="com.everwing.coreservice.common.dynamicreports.entity.system.rights.TRightsRole" alias="TRightsRole"/>
+        <typeAlias type="com.everwing.coreservice.common.dynamicreports.entity.system.rights.TRightsRoleQO" alias="TRightsRoleQO"/>
+        <typeAlias type="com.everwing.coreservice.common.dynamicreports.entity.system.rights.TRightsRoleVO" alias="TRightsRoleVO"/>
+        <typeAlias type="com.everwing.coreservice.common.dynamicreports.entity.system.rights.TRightsUser" alias="TRightsUser"/>
+        <typeAlias type="com.everwing.coreservice.common.dynamicreports.entity.system.rights.TRightsUserQO" alias="TRightsUserQO"/>
+        <typeAlias type="com.everwing.coreservice.common.dynamicreports.entity.system.rights.TRightsUserVO" alias="TRightsUserVO"/>
+        <typeAlias type="com.everwing.coreservice.common.dynamicreports.entity.system.rights.TRightsUserRole" alias="TRightsUserRole"/>
+        <typeAlias type="com.everwing.coreservice.common.dynamicreports.entity.system.rights.TRightsRoleResource" alias="TRightsRoleResource"/>
+        <typeAlias type="com.everwing.coreservice.common.dynamicreports.entity.system.datasource.TSysDataSource" alias="TSysDataSource"/>
+
+        <typeAlias type="com.everwing.coreservice.common.dynamicreports.entity.system.initData.TSysLookup" alias="TSysLookup"/>
+        <typeAlias type="com.everwing.coreservice.common.dynamicreports.entity.system.initData.TSysLookupQO" alias="TSysLookupQO"/>
+        <typeAlias type="com.everwing.coreservice.common.dynamicreports.entity.system.initData.TSysLookupVO" alias="TSysLookupVO"/>
+        <typeAlias type="com.everwing.coreservice.common.dynamicreports.entity.system.initData.TSysLookupItem" alias="TSysLookupItem"/>
+        <typeAlias type="com.everwing.coreservice.common.dynamicreports.entity.system.initData.TSysLookupItemQO" alias="TSysLookupItemQO"/>
+        <typeAlias type="com.everwing.coreservice.common.dynamicreports.entity.system.initData.TSysLookupItemVO" alias="TSysLookupItemVO"/>
+        <typeAlias type="com.everwing.coreservice.common.dynamicreports.entity.system.initData.TSysLookupSelectQO" alias="TSysLookupSelectQO"/>
+        <typeAlias type="com.everwing.coreservice.common.dynamicreports.entity.system.initData.TSysLookupSelectVO" alias="TSysLookupSelectVO"/>
+    </typeAliases>
+    <plugins>
+        <plugin interceptor="com.everwing.coreservice.dynamicreports.dao.plugins.SqlInterceptor">
+            <property name="dialect" value="mysql" />
+            <property name="pageSqlId" value=".*listPage.*" />
+        </plugin>
+    </plugins>
+</configuration>

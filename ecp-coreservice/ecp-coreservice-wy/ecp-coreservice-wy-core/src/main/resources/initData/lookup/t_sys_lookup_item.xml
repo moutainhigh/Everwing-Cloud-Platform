@@ -1,0 +1,669 @@
+<?xml version="1.0" standalone="yes"?>
+<RECORDS>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568e0001" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c6"
+            code="1" parent_code="011" name="1天" description="1天" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568e0002" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c6"
+            code="2" parent_code="011" name="2天" description="2天" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568e0003" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c6"
+            code="3" parent_code="011" name="3天" description="3天" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568e0004" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c6"
+            code="4" parent_code="011" name="4天" description="4天" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568e0005" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c6"
+            code="5" parent_code="011" name="5天" description="5天" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568e0006" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c6"
+            code="6" parent_code="011" name="6天" description="6天" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568e0007" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c6"
+            code="7" parent_code="011" name="7天" description="7天" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568e0008" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c6"
+            code="8" parent_code="011" name="8天" description="8天" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568e0009" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c6"
+            code="9" parent_code="011" name="9天" description="9天" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568e0010" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c6"
+            code="10" parent_code="011" name="10天" description="10天" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568e0011" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c6"
+            code="11" parent_code="011" name="11天" description="11天" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568e0012" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c6"
+            code="12" parent_code="011" name="12天" description="12天" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568e0013" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c6"
+            code="13" parent_code="011" name="13天" description="13天" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568e0014" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c6"
+            code="14" parent_code="011" name="14天" description="14天" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568e0015" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c6"
+            code="15" parent_code="011" name="15天" description="15天" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568e0016" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c6"
+            code="16" parent_code="011" name="16天" description="16天" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568e0017" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c6"
+            code="17" parent_code="011" name="17天" description="17天" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568e0018" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c6"
+            code="18" parent_code="011" name="18天" description="18天" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568e0019" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c6"
+            code="19" parent_code="011" name="19天" description="19天" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568e0020" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c6"
+            code="20" parent_code="011" name="20天" description="20天" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568e0021" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c6"
+            code="21" parent_code="011" name="21天" description="21天" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568e0022" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c6"
+            code="22" parent_code="011" name="22天" description="22天" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568e0023" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c6"
+            code="23" parent_code="011" name="23天" description="23天" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568e0024" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c6"
+            code="24" parent_code="011" name="24天" description="24天" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568e0025" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c6"
+            code="25" parent_code="011" name="25天" description="25天" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568e0026" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c6"
+            code="26" parent_code="011" name="26天" description="26天" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568e0027" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c6"
+            code="27" parent_code="011" name="27天" description="27天" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568e0028" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c6"
+            code="28" parent_code="011" name="28天" description="28天" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568e0029" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c6"
+            code="29" parent_code="011" name="29天" description="29天" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568e0030" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c6"
+            code="30" parent_code="011" name="30天" description="30天" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568e0031" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c6"
+            code="31" parent_code="011" name="31天" description="31天" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568f0001" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c7"
+            code="1" parent_code="012" name="1月" description="1月" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568f0002" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c7"
+            code="2" parent_code="012" name="2月" description="2月" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568f0003" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c7"
+            code="3" parent_code="012" name="3月" description="3月" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568f0004" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c7"
+            code="4" parent_code="012" name="4月" description="4月" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568f0005" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c7"
+            code="5" parent_code="012" name="5月" description="5月" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568f0006" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c7"
+            code="6" parent_code="012" name="6月" description="6月" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568f0007" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c7"
+            code="7" parent_code="012" name="7月" description="7月" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568f0008" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c7"
+            code="8" parent_code="012" name="8月" description="8月" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568f0009" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c7"
+            code="9" parent_code="012" name="9月" description="9月" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568f0010" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c7"
+            code="10" parent_code="012" name="10月" description="10月" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568f0011" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c7"
+            code="11" parent_code="012" name="11月" description="11月" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568f0012" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c7"
+            code="12" parent_code="012" name="12月" description="12月" item_order="0"/>
+    <RECORD lookup_item_id="fe824deb-3f89-11e7-bdf4-000000000001" lookup_id="fe824deb-3f89-11e7-bdf4-0050568e00c6"
+            code="1" parent_code="013" name="读数循环" description="读数循环" item_order="0"/>
+    <RECORD lookup_item_id="fe824deb-3f89-11e7-bdf4-000000000002" lookup_id="fe824deb-3f89-11e7-bdf4-0050568e00c6"
+            code="2" parent_code="013" name="读数错误" description="读数错误" item_order="1"/>
+    <RECORD lookup_item_id="d98d31c6-9ddd-11e7-80c8-0050568e00c5" lookup_id="fe824deb-3f89-11e7-bdf4-0050568e00c6"
+            code="3" parent_code="013" name="资产变更抄表" description="资产变更抄表" item_order="2"/>
+    <RECORD lookup_item_id="9a10d602-6520-11e7-80c8-0050568e00c5" lookup_id="8f5c4783-6520-11e7-80c8-0050568e00c5"
+            code="1" parent_code="accountOrder" name="1" description="" item_order="0"/>
+    <RECORD lookup_item_id="9d2e5bb8-6520-11e7-80c8-0050568e00c5" lookup_id="8f5c4783-6520-11e7-80c8-0050568e00c5"
+            code="2" parent_code="accountOrder" name="2" description="" item_order="0"/>
+    <RECORD lookup_item_id="9fa27e84-6520-11e7-80c8-0050568e00c5" lookup_id="8f5c4783-6520-11e7-80c8-0050568e00c5"
+            code="3" parent_code="accountOrder" name="3" description="" item_order="0"/>
+    <RECORD lookup_item_id="a31539a5-6520-11e7-80c8-0050568e00c5" lookup_id="8f5c4783-6520-11e7-80c8-0050568e00c5"
+            code="4" parent_code="accountOrder" name="4" description="" item_order="0"/>
+    <RECORD lookup_item_id="d52c7aa1-ca9b-11e7-80c8-0050568e00c5" lookup_id="be782361-ca9b-11e7-80c8-0050568e00c5"
+            code="buildingArea" parent_code="buildingAreaType" name="建筑面积" description="" item_order="0"/>
+    <RECORD lookup_item_id="e4076dec-ca9b-11e7-80c8-0050568e00c5" lookup_id="be782361-ca9b-11e7-80c8-0050568e00c5"
+            code="usableArea" parent_code="buildingAreaType" name="套内面积" description="" item_order="1"/>
+
+    <RECORD lookup_item_id="5ac06c8a-2344-11e7-bcf9-0050568e00c5" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c5"
+            code="qi" parent_code="buildingType" name="父节点-期" description="父节点-期" item_order="0"/>
+    <RECORD lookup_item_id="5ac32c9b-2344-11e7-bcf9-0050568e00c5" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c5"
+            code="qu" parent_code="buildingType" name="父节点-区" description="父节点-区" item_order="3"/>
+    <RECORD lookup_item_id="5b9b5d3a-2344-11e7-bcf9-0050568e00c5" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c5"
+            code="dongzuo" parent_code="buildingType" name="父节点-栋/座" description="父节点-栋/座" item_order="5"/>
+    <RECORD lookup_item_id="5b9e8fcc-2344-11e7-bcf9-0050568e00c5" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c5"
+            code="danyuanrukou" parent_code="buildingType" name="父节点-单元/入口" description="父节点-单元/入口" item_order="7"/>
+    <RECORD lookup_item_id="5ba1e96b-2344-11e7-bcf9-0050568e00c5" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c5"
+            code="ceng" parent_code="buildingType" name="父节点-层" description="父节点-层" item_order="9"/>
+    <RECORD lookup_item_id="d39a458e-2fd5-11e8-9c0c-0050568e0e15" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c5"
+            code="parentOther" parent_code="buildingType" name="父节点-其他" description="父节点-其他" item_order="11"/>
+    <RECORD lookup_item_id="5ba5c81f-2344-11e7-bcf9-0050568e00c5" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c5"
+            code="house" parent_code="buildingType" name="住宅" description="叶节点-住宅" item_order="13"/>
+    <RECORD lookup_item_id="7bf1c3a7-24d1-11e7-bcf9-0050568e00c5" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c5"
+            code="store" parent_code="buildingType" name="商铺" description="叶节点-商铺" item_order="15"/>
+    <RECORD lookup_item_id="7bf4260e-24d1-11e7-bcf9-0050568e00c5" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c5"
+            code="parkspace" parent_code="buildingType" name="车位" description="叶节点-车位" item_order="17"/>
+    <RECORD lookup_item_id="eefb16ef-7112-11e7-80c8-0050568e00c5" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c5"
+            code="publicbuilding" parent_code="buildingType" name="公建" description="叶节点-公建" item_order="19"/>
+    <RECORD lookup_item_id="dd53099a-cc3d-11e8-9a3f-0050568e00c5" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c5"
+            code="thirdparty" parent_code="buildingType" name="第三方资产" description="第三方资产" item_order="21"/>
+    <RECORD lookup_item_id="e7c4d031-cc3d-11e8-9a3f-0050568e00c5" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c5"
+            code="Engineering" parent_code="buildingType" name="工程施工" description="工程施工" item_order="23"/>
+    <RECORD lookup_item_id="f0ce343d-cc3d-11e8-9a3f-0050568e00c5" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c5"
+            code="jianzhuzulin" parent_code="buildingType" name="建筑租赁" description="建筑租赁" item_order="25"/>
+    <RECORD lookup_item_id="166a6dc6-2fd6-11e8-9c0c-0050568e0e15" lookup_id="f5225686-2343-11e7-bcf9-0050568e00c5"
+            code="leafOther" parent_code="buildingType" name="其他" description="叶节点-其他" item_order="28"/>
+
+    <RECORD lookup_item_id="20d28e8e-77f3-11e7-80c8-0050568e00c5" lookup_id="7d3e9f29-6062-11e7-bdf4-0050568e00c5"
+            code="5421" parent_code="card_type" name="学生证" description="" item_order="0"/>
+    <RECORD lookup_item_id="928f0d1c-8ec5-11e7-80c8-0050568e00c5" lookup_id="83a5fc5d-8ec5-11e7-80c8-0050568e00c5"
+            code="0" parent_code="collectionType" name="银联托收" description="银联托收" item_order="0"/>
+    <RECORD lookup_item_id="99fa1862-8ec5-11e7-80c8-0050568e00c5" lookup_id="83a5fc5d-8ec5-11e7-80c8-0050568e00c5"
+            code="1" parent_code="collectionType" name="金融联托收" description="金融联托收" item_order="0"/>
+    <RECORD lookup_item_id="9fa4576e-8ec5-11e7-80c8-0050568e00c5" lookup_id="83a5fc5d-8ec5-11e7-80c8-0050568e00c5"
+            code="2" parent_code="collectionType" name="关闭托收" description="关闭托收" item_order="0"/>
+    <RECORD lookup_item_id="7c833db7-ae2e-11e7-80c8-0050568e00c5" lookup_id="4afa5870-ae2e-11e7-80c8-0050568e00c5"
+            code="renter" parent_code="customerPropertyRelation" name="租客" description="租客" item_order="0"/>
+    <RECORD lookup_item_id="bc21e0e3-ae2e-11e7-80c8-0050568e00c5" lookup_id="4afa5870-ae2e-11e7-80c8-0050568e00c5"
+            code="owner" parent_code="customerPropertyRelation" name="业主" description="业主" item_order="1"/>
+    <RECORD lookup_item_id="dabf70c6-ae23-11e7-80c8-0050568e00c5" lookup_id="b55be09e-ae23-11e7-80c8-0050568e00c5"
+            code="person" parent_code="customerType" name="个人客户" description="个人客户" item_order="0"/>
+    <RECORD lookup_item_id="e4089f0b-ae23-11e7-80c8-0050568e00c5" lookup_id="b55be09e-ae23-11e7-80c8-0050568e00c5"
+            code="enterprise" parent_code="customerType" name="企业客户" description="企业客户" item_order="1"/>
+    <RECORD lookup_item_id="e1ded199-bde7-11e7-80c8-0050568e00c5" lookup_id="bbb87257-bde7-11e7-80c8-0050568e00c5"
+            code="villa" parent_code="decorationServiceObject" name="别墅" description="别墅" item_order="0"/>
+    <RECORD lookup_item_id="f0cf064c-bde7-11e7-80c8-0050568e00c5" lookup_id="bbb87257-bde7-11e7-80c8-0050568e00c5"
+            code="store" parent_code="decorationServiceObject" name="商铺" description="商铺" item_order="1"/>
+    <RECORD lookup_item_id="ff7ec216-bde7-11e7-80c8-0050568e00c5" lookup_id="bbb87257-bde7-11e7-80c8-0050568e00c5"
+            code="house" parent_code="decorationServiceObject" name="住宅" description="住宅" item_order="2"/>
+    <RECORD lookup_item_id="14e9b026-bde8-11e7-80c8-0050568e00c5" lookup_id="bbb87257-bde7-11e7-80c8-0050568e00c5"
+            code="apartment" parent_code="decorationServiceObject" name="公寓" description="公寓" item_order="3"/>
+    <RECORD lookup_item_id="29d5121d-bde8-11e7-80c8-0050568e00c5" lookup_id="bbb87257-bde7-11e7-80c8-0050568e00c5"
+            code="officeBuilding" parent_code="decorationServiceObject" name="写字楼" description="写字楼" item_order="4"/>
+    <RECORD lookup_item_id="6dc8207f-f66a-11e7-80c8-0050568e00c5" lookup_id="e8e9cb80-f669-11e7-80c8-0050568e00c5"
+            code="draft" parent_code="depositState" name="待退" description="待退" item_order="0"/>
+    <RECORD lookup_item_id="77bfd40b-f66a-11e7-80c8-0050568e00c5" lookup_id="e8e9cb80-f669-11e7-80c8-0050568e00c5"
+            code="rollback" parent_code="depositState" name="回退" description="回退" item_order="1"/>
+    <RECORD lookup_item_id="813b1e5c-f66a-11e7-80c8-0050568e00c5" lookup_id="e8e9cb80-f669-11e7-80c8-0050568e00c5"
+            code="done" parent_code="depositState" name="已退" description="已退" item_order="2"/>
+    <RECORD lookup_item_id="f81020e1-50d9-11e7-bdf4-0050568e00c5" lookup_id="cc49a036-50d9-11e7-bdf4-0050568e00c5"
+            code="0" parent_code="documentType" name="身份证" description="身份证" item_order="0"/>
+    <RECORD lookup_item_id="21f59180-5d6f-11e7-bdf4-0050568e00c5" lookup_id="cc49a036-50d9-11e7-bdf4-0050568e00c5"
+            code="1" parent_code="documentType" name="护照" description="护照" item_order="1"/>
+    <RECORD lookup_item_id="280264b0-5d6f-11e7-bdf4-0050568e00c5" lookup_id="cc49a036-50d9-11e7-bdf4-0050568e00c5"
+            code="2" parent_code="documentType" name="其他" description="其他" item_order="2"/>
+    <RECORD lookup_item_id="d04e5c7f-2331-11e7-bcf9-0050568e00c5" lookup_id="75aea594-2331-11e7-bcf9-0050568e00c5"
+            code="enable" parent_code="enableDisable " name="启用" description="启用" item_order="0"/>
+    <RECORD lookup_item_id="d050714c-2331-11e7-bcf9-0050568e00c5" lookup_id="75aea594-2331-11e7-bcf9-0050568e00c5"
+            code="disable" parent_code="enableDisable " name="禁用" description="禁用" item_order="0"/>
+    <RECORD lookup_item_id="197a4cc8-a4eb-11e7-80c8-0050568e00c5" lookup_id="0621d942-580e-4ed6-8f7e-9fddd6dbed2f"
+            code="007" parent_code="houseProperty" name="别墅" description="别墅" item_order="0"/>
+    <RECORD lookup_item_id="25f4744c-dfa5-11e7-80c8-0050568e00c5" lookup_id="0621d942-580e-4ed6-8f7e-9fddd6dbed2f"
+            code="009" parent_code="houseProperty" name="其他" description="其他" item_order="0"/>
+    <RECORD lookup_item_id="dc03b0bb-dfa4-11e7-80c8-0050568e00c5" lookup_id="0621d942-580e-4ed6-8f7e-9fddd6dbed2f"
+            code="008" parent_code="houseProperty" name="花园洋房" description="花园洋房" item_order="0"/>
+    <RECORD lookup_item_id="0459abbc-9415-4d63-997c-2a18ad53df41" lookup_id="0621d942-580e-4ed6-8f7e-9fddd6dbed2f"
+            code="001" parent_code="houseProperty" name="多层" description="多层" item_order="1"/>
+    <RECORD lookup_item_id="6413ddb7-a00d-49ee-af42-4c2772048ea1" lookup_id="0621d942-580e-4ed6-8f7e-9fddd6dbed2f"
+            code="004" parent_code="houseProperty" name="超高层" description="超高层" item_order="2"/>
+    <RECORD lookup_item_id="7531a7bd-0180-46fe-bd5d-21a31b3abdfa" lookup_id="0621d942-580e-4ed6-8f7e-9fddd6dbed2f"
+            code="003" parent_code="houseProperty" name="高层" description="高层" item_order="3"/>
+    <RECORD lookup_item_id="d008af2f-a5ab-418e-88a3-97d5bf961d76" lookup_id="0621d942-580e-4ed6-8f7e-9fddd6dbed2f"
+            code="002" parent_code="houseProperty" name="小高层" description="小高层" item_order="4"/>
+    <RECORD lookup_item_id="e64f9c45-4b2a-11e7-bdf4-0050568e00c5" lookup_id="0621d942-580e-4ed6-8f7e-9fddd6dbed2f"
+            code="005" parent_code="houseProperty" name="洋房" description="洋房" item_order="5"/>
+    <RECORD lookup_item_id="66d8f615-deea-11e7-80c8-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="032" parent_code="houseType" name="一房" description="一房" item_order="0"/>
+    <RECORD lookup_item_id="4913d2c1-1682-11e7-bcf9-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="002" parent_code="houseType" name="一房一厅" description="一房一厅" item_order="1"/>
+    <RECORD lookup_item_id="49162d48-1682-11e7-bcf9-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="003" parent_code="houseType" name="一房两厅" description="一房两厅" item_order="2"/>
+    <RECORD lookup_item_id="49187b09-1682-11e7-bcf9-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="004" parent_code="houseType" name="一房两厅一卫" description="两房一厅" item_order="3"/>
+    <RECORD lookup_item_id="491ba791-1682-11e7-bcf9-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="005" parent_code="houseType" name="一房两厅两卫" description="两房一厅" item_order="4"/>
+    <RECORD lookup_item_id="f60c4d6f-deea-11e7-80c8-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="041" parent_code="houseType" name="一房二厅" description="一房二厅" item_order="5"/>
+    <RECORD lookup_item_id="f45f4308-dee9-11e7-80c8-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="028" parent_code="houseType" name="三室二厅三卫" description="三室二厅三卫" item_order="6"/>
+    <RECORD lookup_item_id="4e46e5f6-dee5-11e7-80c8-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="021" parent_code="houseType" name="三房" description="三房" item_order="7"/>
+    <RECORD lookup_item_id="4932d0dc-1682-11e7-bcf9-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="012" parent_code="houseType" name="三房两厅" description="三房两厅" item_order="8"/>
+    <RECORD lookup_item_id="492fa89a-1682-11e7-bcf9-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="011" parent_code="houseType" name="三房两厅两卫" description="两房一厅" item_order="9"/>
+    <RECORD lookup_item_id="dbd229c5-deea-11e7-80c8-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="040" parent_code="houseType" name="三房二厅" description="三房二厅" item_order="10"/>
+    <RECORD lookup_item_id="8b21fe75-deea-11e7-80c8-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="036" parent_code="houseType" name="三房二厅二卫" description="三房二厅二卫" item_order="11"/>
+    <RECORD lookup_item_id="0e505cd4-deea-11e7-80c8-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="030" parent_code="houseType" name="两室二厅三卫" description="两室二厅三卫" item_order="12"/>
+    <RECORD lookup_item_id="4914a7a4-dee5-11e7-80c8-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="020" parent_code="houseType" name="两房" description="两房" item_order="13"/>
+    <RECORD lookup_item_id="491ef187-1682-11e7-bcf9-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="006" parent_code="houseType" name="两房一厅" description="两房一厅" item_order="14"/>
+    <RECORD lookup_item_id="492203e5-1682-11e7-bcf9-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="007" parent_code="houseType" name="两房两厅" description="两房两厅" item_order="15"/>
+    <RECORD lookup_item_id="4925de60-1682-11e7-bcf9-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="008" parent_code="houseType" name="两房两厅一卫" description="两房一厅" item_order="16"/>
+    <RECORD lookup_item_id="492c4d83-1682-11e7-bcf9-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="010" parent_code="houseType" name="两房两厅三卫" description="两房一厅" item_order="17"/>
+    <RECORD lookup_item_id="49291066-1682-11e7-bcf9-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="009" parent_code="houseType" name="两房两厅两卫" description="两房一厅" item_order="18"/>
+    <RECORD lookup_item_id="017cac1d-deea-11e7-80c8-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="029" parent_code="houseType" name="二室二厅三卫" description="二室二厅三卫" item_order="19"/>
+    <RECORD lookup_item_id="ec67d478-dee9-11e7-80c8-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="027" parent_code="houseType" name="二室二厅二卫" description="二室二厅二卫" item_order="20"/>
+    <RECORD lookup_item_id="7635f5c7-deea-11e7-80c8-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="034" parent_code="houseType" name="二室二厅四卫" description="二室二厅四卫" item_order="21"/>
+    <RECORD lookup_item_id="cffbcdb9-deea-11e7-80c8-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="039" parent_code="houseType" name="二房二厅" description="二房二厅" item_order="22"/>
+    <RECORD lookup_item_id="7e96511f-deea-11e7-80c8-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="035" parent_code="houseType" name="二房二厅一卫" description="二房二厅一卫" item_order="23"/>
+    <RECORD lookup_item_id="c956f459-deea-11e7-80c8-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="038" parent_code="houseType" name="二房二厅三卫" description="二房二厅三卫" item_order="24"/>
+    <RECORD lookup_item_id="c139c35c-deea-11e7-80c8-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="037" parent_code="houseType" name="二房二厅二卫" description="二房二厅二卫" item_order="25"/>
+    <RECORD lookup_item_id="e38752ae-dee9-11e7-80c8-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="026" parent_code="houseType" name="五房" description="五房" item_order="26"/>
+    <RECORD lookup_item_id="49395ec1-1682-11e7-bcf9-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="014" parent_code="houseType" name="五房两厅" description="五房两厅" item_order="27"/>
+    <RECORD lookup_item_id="d0474fd1-dee9-11e7-80c8-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="024" parent_code="houseType" name="五房两厅三卫" description="五房两厅三卫" item_order="28"/>
+    <RECORD lookup_item_id="6e2e937b-deea-11e7-80c8-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="033" parent_code="houseType" name="六房" description="六房" item_order="29"/>
+    <RECORD lookup_item_id="493fff74-1682-11e7-bcf9-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="016" parent_code="houseType" name="别墅" description="别墅" item_order="31"/>
+    <RECORD lookup_item_id="4911e889-1682-11e7-bcf9-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="001" parent_code="houseType" name="单房" description="单房" item_order="32"/>
+    <RECORD lookup_item_id="cd5f3bf4-dee5-11e7-80c8-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="022" parent_code="houseType" name="单身公寓" description="单身公寓" item_order="33"/>
+    <RECORD lookup_item_id="db02ab15-dee9-11e7-80c8-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="025" parent_code="houseType" name="四房" description="四房" item_order="34"/>
+    <RECORD lookup_item_id="493646c0-1682-11e7-bcf9-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="013" parent_code="houseType" name="四房两厅" description="四房两厅" item_order="35"/>
+    <RECORD lookup_item_id="5f714586-deea-11e7-80c8-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="031" parent_code="houseType" name="四房两厅三卫" description="四房两厅三卫" item_order="36"/>
+    <RECORD lookup_item_id="c5cfbaf6-dee9-11e7-80c8-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="023" parent_code="houseType" name="四房两厅两卫" description="四房两厅两卫" item_order="37"/>
+    <RECORD lookup_item_id="2e94e157-36f6-11e7-bdf4-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="017" parent_code="houseType" name="复式" description="复式" item_order="38"/>
+    <RECORD lookup_item_id="52330fc9-dfa4-11e7-80c8-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="045" parent_code="houseType" name="花园洋房" description="花园洋房" item_order="39"/>
+    <RECORD lookup_item_id="493ca568-1682-11e7-bcf9-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="015" parent_code="houseType" name="连排" description="连排" item_order="40"/>
+    <RECORD lookup_item_id="2e9a83ca-36f6-11e7-bdf4-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="018" parent_code="houseType" name="错层复式" description="错层复式" item_order="41"/>
+    <RECORD lookup_item_id="2e9ff8cb-36f6-11e7-bdf4-0050568e00c5" lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff"
+            code="019" parent_code="houseType" name="其他" description="其他" item_order="42"/>
+    <RECORD lookup_item_id="cbfba228-36de-11e7-bdf4-0050568e00c5" lookup_id="42b12ded-36de-11e7-bdf4-0050568e00c5"
+            code="doing" parent_code="importExportState" name="执行中" description="执行中" item_order="0"/>
+    <RECORD lookup_item_id="cbfdbcbc-36de-11e7-bdf4-0050568e00c5" lookup_id="42b12ded-36de-11e7-bdf4-0050568e00c5"
+            code="succeed" parent_code="importExportState" name="全部成功" description="全部导入成功" item_order="0"/>
+    <RECORD lookup_item_id="cc0027ca-36de-11e7-bdf4-0050568e00c5" lookup_id="42b12ded-36de-11e7-bdf4-0050568e00c5"
+            code="partial_success" parent_code="importExportState" name="部分成功" description="部分导入成功" item_order="0"/>
+    <RECORD lookup_item_id="cc028d7a-36de-11e7-bdf4-0050568e00c5" lookup_id="42b12ded-36de-11e7-bdf4-0050568e00c5"
+            code="failed" parent_code="importExportState" name="全部失败" description="全部导入失败" item_order="0"/>
+    <RECORD lookup_item_id="7f3026d8-16a7-11e7-bcf9-0050568e00c5" lookup_id="4e731040-16a7-11e7-bcf9-0050568e00c5"
+            code="001" parent_code="marketState" name="未售" description="未售" item_order="1"/>
+    <RECORD lookup_item_id="7f3234a7-16a7-11e7-bcf9-0050568e00c5" lookup_id="4e731040-16a7-11e7-bcf9-0050568e00c5"
+            code="002" parent_code="marketState" name="已售" description="已售" item_order="2"/>
+    <RECORD lookup_item_id="e0232c8a-548d-11e7-bdf4-0050568e00c5" lookup_id="cbe77adc-548d-11e7-bdf4-0050568e00c5"
+            code="company" parent_code="oganizationType" name="公司" description="公司" item_order="0"/>
+    <RECORD lookup_item_id="eb03dd9d-548d-11e7-bdf4-0050568e00c5" lookup_id="cbe77adc-548d-11e7-bdf4-0050568e00c5"
+            code="department" parent_code="oganizationType" name="部门" description="部门" item_order="1"/>
+    <RECORD lookup_item_id="fa1ef303-548d-11e7-bdf4-0050568e00c5" lookup_id="cbe77adc-548d-11e7-bdf4-0050568e00c5"
+            code="project" parent_code="oganizationType" name="项目" description="项目" item_order="2"/>
+    <RECORD lookup_item_id="068f7978-548e-11e7-bdf4-0050568e00c5" lookup_id="cbe77adc-548d-11e7-bdf4-0050568e00c5"
+            code="role" parent_code="oganizationType" name="岗位" description="岗位" item_order="3"/>
+    <RECORD lookup_item_id="227dae31-548e-11e7-bdf4-0050568e00c5" lookup_id="cbe77adc-548d-11e7-bdf4-0050568e00c5"
+            code="staff" parent_code="oganizationType" name="员工" description="员工" item_order="4"/>
+    <RECORD lookup_item_id="6b2d9f59-b541-11e7-80c8-0050568e00c5" lookup_id="4ea009fb-b541-11e7-80c8-0050568e00c5"
+            code="cash" parent_code="payType" name="现金支付" description="现金支付" item_order="0"/>
+    <RECORD lookup_item_id="749a326d-b541-11e7-80c8-0050568e00c5" lookup_id="4ea009fb-b541-11e7-80c8-0050568e00c5"
+            code="charge" parent_code="payType" name="刷卡" description="刷卡" item_order="1"/>
+    <RECORD lookup_item_id="7bdf0d4f-b541-11e7-80c8-0050568e00c5" lookup_id="4ea009fb-b541-11e7-80c8-0050568e00c5"
+            code="alipay" parent_code="payType" name="支付宝" description="支付宝" item_order="2"/>
+    <RECORD lookup_item_id="8411e1e3-b541-11e7-80c8-0050568e00c5" lookup_id="4ea009fb-b541-11e7-80c8-0050568e00c5"
+            code="weixinpay" parent_code="payType" name="微信支付" description="微信支付" item_order="3"/>
+    <RECORD lookup_item_id="878eafb1-f765-11e7-80c8-0050568e00c5" lookup_id="4ea009fb-b541-11e7-80c8-0050568e00c5"
+            code="bank" parent_code="payType" name="银行收款" description="银行收款" item_order="4"/>
+    <RECORD lookup_item_id="1548892c-8326-11e8-af29-0050568e0e15" lookup_id="505090d8-8325-11e8-af29-0050568e0e15"
+            code="001" parent_code="placeAttribute" name="架空层" description="架空层" item_order="0"/>
+    <RECORD lookup_item_id="1a3eb5d7-8326-11e8-af29-0050568e0e15" lookup_id="505090d8-8325-11e8-af29-0050568e0e15"
+            code="004" parent_code="placeAttribute" name="地下室" description="地下室" item_order="0"/>
+    <RECORD lookup_item_id="1eb1612c-8326-11e8-af29-0050568e0e15" lookup_id="505090d8-8325-11e8-af29-0050568e0e15"
+            code="007" parent_code="placeAttribute" name="人防" description="人防" item_order="0"/>
+    <RECORD lookup_item_id="22e85549-8326-11e8-af29-0050568e0e15" lookup_id="505090d8-8325-11e8-af29-0050568e0e15"
+            code="010" parent_code="placeAttribute" name="道路" description="道路" item_order="0"/>
+    <RECORD lookup_item_id="27509ee2-8326-11e8-af29-0050568e0e15" lookup_id="505090d8-8325-11e8-af29-0050568e0e15"
+            code="013" parent_code="placeAttribute" name="广场" description="广场" item_order="0"/>
+    <RECORD lookup_item_id="2c16ddde-8326-11e8-af29-0050568e0e15" lookup_id="505090d8-8325-11e8-af29-0050568e0e15"
+            code="016" parent_code="placeAttribute" name="空地" description="架空层" item_order="0"/>
+    <RECORD lookup_item_id="30ecbb2a-8326-11e8-af29-0050568e0e15" lookup_id="505090d8-8325-11e8-af29-0050568e0e15"
+            code="019" parent_code="placeAttribute" name="绿地" description="绿地" item_order="0"/>
+    <RECORD lookup_item_id="20c6e484-8c97-11e7-80c8-0050568e00c5" lookup_id="10ebabea-8c97-11e7-80c8-0050568e00c5"
+            code="months" parent_code="preferentialType" name="月卡" description="月卡" item_order="0"/>
+    <RECORD lookup_item_id="275fba7a-8c97-11e7-80c8-0050568e00c5" lookup_id="10ebabea-8c97-11e7-80c8-0050568e00c5"
+            code="quarter" parent_code="preferentialType" name="季卡" description="季卡" item_order="1"/>
+    <RECORD lookup_item_id="2edb3dd9-8c97-11e7-80c8-0050568e00c5" lookup_id="10ebabea-8c97-11e7-80c8-0050568e00c5"
+            code="halfaYear " parent_code="preferentialType" name="半年卡" description="半年卡" item_order="2"/>
+    <RECORD lookup_item_id="3b9612a1-8c97-11e7-80c8-0050568e00c5" lookup_id="10ebabea-8c97-11e7-80c8-0050568e00c5"
+            code="year" parent_code="preferentialType" name="年卡" description="年卡" item_order="3"/>
+    <RECORD lookup_item_id="3a3cea82-a592-11e7-80c8-0050568e00c5" lookup_id="2f16e417-a592-11e7-80c8-0050568e00c5"
+            code="draft" parent_code="productOrderState" name="新建" description="新建" item_order="0"/>
+    <RECORD lookup_item_id="42ac75f0-a592-11e7-80c8-0050568e00c5" lookup_id="2f16e417-a592-11e7-80c8-0050568e00c5"
+            code="doing" parent_code="productOrderState" name="交易中" description="交易中" item_order="1"/>
+    <RECORD lookup_item_id="4dd30557-a592-11e7-80c8-0050568e00c5" lookup_id="2f16e417-a592-11e7-80c8-0050568e00c5"
+            code="rollback" parent_code="productOrderState" name="回退" description="回退" item_order="2"/>
+    <RECORD lookup_item_id="55d6a2bb-a592-11e7-80c8-0050568e00c5" lookup_id="2f16e417-a592-11e7-80c8-0050568e00c5"
+            code="success" parent_code="productOrderState" name="交易成功" description="交易成功" item_order="3"/>
+    <RECORD lookup_item_id="50052fb6-a5a6-11e7-80c8-0050568e00c5" lookup_id="2f16e417-a592-11e7-80c8-0050568e00c5"
+            code="invalid" parent_code="productOrderState" name="作废" description="作废" item_order="4"/>
+    <RECORD lookup_item_id="6b45fc21-8edb-11e7-80c8-0050568e00c5" lookup_id="55622d25-8edb-11e7-80c8-0050568e00c5"
+            code="draft" parent_code="productState" name="制单" description="制单" item_order="0"/>
+    <RECORD lookup_item_id="7deca352-8edb-11e7-80c8-0050568e00c5" lookup_id="55622d25-8edb-11e7-80c8-0050568e00c5"
+            code="effective" parent_code="productState" name="上架" description="上架" item_order="1"/>
+    <RECORD lookup_item_id="8c7d97a8-8edb-11e7-80c8-0050568e00c5" lookup_id="55622d25-8edb-11e7-80c8-0050568e00c5"
+            code="ineffective" parent_code="productState" name="下架" description="下架" item_order="2"/>
+    <RECORD lookup_item_id="7e379b7c-8c60-11e7-80c8-0050568e00c5" lookup_id="57689915-8c60-11e7-80c8-0050568e00c5"
+            code="buildingLease" parent_code="productType" name="建筑租赁" description="建筑租赁" item_order="0"/>
+    <RECORD lookup_item_id="875b7311-8c60-11e7-80c8-0050568e00c5" lookup_id="57689915-8c60-11e7-80c8-0050568e00c5"
+            code="carParksCard" parent_code="productType" name="停车优惠卡" description="停车优惠卡" item_order="1"/>
+    <RECORD lookup_item_id="b3e85e38-8c60-11e7-80c8-0050568e00c5" lookup_id="57689915-8c60-11e7-80c8-0050568e00c5"
+            code="fixedCarPark" parent_code="productType" name="固定车位" description="固定车位" item_order="2"/>
+    <RECORD lookup_item_id="a2030206-8c60-11e7-80c8-0050568e00c5" lookup_id="57689915-8c60-11e7-80c8-0050568e00c5"
+            code="entranceGuardCard" parent_code="productType" name="门禁卡" description="门禁卡" item_order="3"/>
+    <RECORD lookup_item_id="99aa911f-8c60-11e7-80c8-0050568e00c5" lookup_id="57689915-8c60-11e7-80c8-0050568e00c5"
+            code="decorationService" parent_code="productType" name="装修服务" description="装修服务" item_order="4"/>
+    <RECORD lookup_item_id="bc11d77b-8c60-11e7-80c8-0050568e00c5" lookup_id="57689915-8c60-11e7-80c8-0050568e00c5"
+            code="commonService" parent_code="productType" name="普通服务" description="普通服务" item_order="5"/>
+    <RECORD lookup_item_id="bfa092c3-bab6-11e7-80c8-0050568e00c5" lookup_id="586d0609-bab6-11e7-80c8-0050568e00c5"
+            code="001" parent_code="productUnit" name="个" description="个" item_order="0"/>
+    <RECORD lookup_item_id="c63870c3-bab6-11e7-80c8-0050568e00c5" lookup_id="586d0609-bab6-11e7-80c8-0050568e00c5"
+            code="003" parent_code="productUnit" name="小时" description="小时" item_order="1"/>
+    <RECORD lookup_item_id="ef590c0d-f66a-11e7-80c8-0050568e00c5" lookup_id="586d0609-bab6-11e7-80c8-0050568e00c5"
+            code="005" parent_code="productUnit" name="平米" description="平米" item_order="2"/>
+    <RECORD lookup_item_id="9d360c36-8339-11e8-af29-0050568e0e15" lookup_id="8c0e5754-8339-11e8-af29-0050568e0e15"
+            code="001" parent_code="propertyAttributes" name="私人" description="私人" item_order="0"/>
+    <RECORD lookup_item_id="c5c0af30-8339-11e8-af29-0050568e0e15" lookup_id="8c0e5754-8339-11e8-af29-0050568e0e15"
+            code="004" parent_code="propertyAttributes" name="企业" description="企业" item_order="0"/>
+    <RECORD lookup_item_id="cc83bdd0-8339-11e8-af29-0050568e0e15" lookup_id="8c0e5754-8339-11e8-af29-0050568e0e15"
+            code="007" parent_code="propertyAttributes" name="政府" description="政府" item_order="0"/>
+    <RECORD lookup_item_id="d0e23f43-8339-11e8-af29-0050568e0e15" lookup_id="8c0e5754-8339-11e8-af29-0050568e0e15"
+            code="009" parent_code="propertyAttributes" name="公共权益" description="公共权益" item_order="0"/>
+    <RECORD lookup_item_id="f7e0c9f0-3093-11e8-9c0c-0050568e0e15" lookup_id="1b149558-2c08-11e8-9c0c-0050568e0e15"
+            code="005" parent_code="propertyRightType" name="商品房" description="商品房" item_order="0"/>
+    <RECORD lookup_item_id="381a62eb-2c08-11e8-9c0c-0050568e0e15" lookup_id="1b149558-2c08-11e8-9c0c-0050568e0e15"
+            code="001" parent_code="propertyRightType" name="平凡商品房" description="平凡商品房" item_order="1"/>
+    <RECORD lookup_item_id="4cae01b6-2c08-11e8-9c0c-0050568e0e15" lookup_id="1b149558-2c08-11e8-9c0c-0050568e0e15"
+            code="002" parent_code="propertyRightType" name="经济适用房" description="经济适用房" item_order="3"/>
+    <RECORD lookup_item_id="5b246122-2c08-11e8-9c0c-0050568e0e15" lookup_id="1b149558-2c08-11e8-9c0c-0050568e0e15"
+            code="003" parent_code="propertyRightType" name="房改房" description="房改房" item_order="5"/>
+    <RECORD lookup_item_id="65ab948d-2c08-11e8-9c0c-0050568e0e15" lookup_id="1b149558-2c08-11e8-9c0c-0050568e0e15"
+            code="006" parent_code="propertyRightType" name="军产房" description="军产房" item_order="7"/>
+    <RECORD lookup_item_id="6b460e2f-2c08-11e8-9c0c-0050568e0e15" lookup_id="1b149558-2c08-11e8-9c0c-0050568e0e15"
+            code="009" parent_code="propertyRightType" name="小产权房" description="小产权房" item_order="9"/>
+    <RECORD lookup_item_id="f4724255-23ff-11e7-bcf9-0050568e00c5" lookup_id="d668bcc7-23ff-11e7-bcf9-0050568e00c5"
+            code="house" parent_code="propertyType" name="住宅" description="住宅" item_order="0"/>
+    <RECORD lookup_item_id="f47464fc-23ff-11e7-bcf9-0050568e00c5" lookup_id="d668bcc7-23ff-11e7-bcf9-0050568e00c5"
+            code="publicbuilding" parent_code="propertyType" name="公建" description="公建" item_order="0"/>
+    <RECORD lookup_item_id="f4773434-23ff-11e7-bcf9-0050568e00c5" lookup_id="d668bcc7-23ff-11e7-bcf9-0050568e00c5"
+            code="store" parent_code="propertyType" name="商铺" description="商铺" item_order="0"/>
+    <RECORD lookup_item_id="f4799ce8-23ff-11e7-bcf9-0050568e00c5" lookup_id="d668bcc7-23ff-11e7-bcf9-0050568e00c5"
+            code="parkspace" parent_code="propertyType" name="车位" description="车位" item_order="0"/>
+    <RECORD lookup_item_id="f47c4e0b-23ff-11e7-bcf9-0050568e00c5" lookup_id="d668bcc7-23ff-11e7-bcf9-0050568e00c5"
+            code="pool" parent_code="propertyType" name="公摊" description="公摊" item_order="0"/>
+    <RECORD lookup_item_id="81c0fa27-2c0b-11e8-9c0c-0050568e0e15" lookup_id="535c7fbc-2c0b-11e8-9c0c-0050568e0e15"
+            code="001" parent_code="propertyUsage" name="住宅" description="住宅" item_order="0"/>
+    <RECORD lookup_item_id="89f523de-2c0b-11e8-9c0c-0050568e0e15" lookup_id="535c7fbc-2c0b-11e8-9c0c-0050568e0e15"
+            code="004" parent_code="propertyUsage" name="商业" description="商业" item_order="1"/>
+    <RECORD lookup_item_id="947c9b44-2c0b-11e8-9c0c-0050568e0e15" lookup_id="535c7fbc-2c0b-11e8-9c0c-0050568e0e15"
+            code="007" parent_code="propertyUsage" name="车位" description="车位" item_order="2"/>
+    <RECORD lookup_item_id="a8a32b77-2c0b-11e8-9c0c-0050568e0e15" lookup_id="535c7fbc-2c0b-11e8-9c0c-0050568e0e15"
+            code="013" parent_code="propertyUsage" name="公建" description="公建" item_order="3"/>
+    <RECORD lookup_item_id="921a6d5e-2c0c-11e8-9c0c-0050568e0e15" lookup_id="7981c064-2c0c-11e8-9c0c-0050568e0e15"
+            code="gj001" parent_code="publicBuildingType" name="消防站" description="消防站" item_order="0"/>
+    <RECORD lookup_item_id="98b088b1-2c0c-11e8-9c0c-0050568e0e15" lookup_id="7981c064-2c0c-11e8-9c0c-0050568e0e15"
+            code="gj003" parent_code="publicBuildingType" name="居委会" description="居委会" item_order="1"/>
+    <RECORD lookup_item_id="a270363b-2c0c-11e8-9c0c-0050568e0e15" lookup_id="7981c064-2c0c-11e8-9c0c-0050568e0e15"
+            code="gj005" parent_code="publicBuildingType" name="警察局" description="警察局" item_order="2"/>
+    <RECORD lookup_item_id="8645964a-50aa-11e7-bdf4-0050568e00c5" lookup_id="60bd3942-50aa-11e7-bdf4-0050568e00c5"
+            code="male" parent_code="sex" name="男" description="男" item_order="0"/>
+    <RECORD lookup_item_id="96535e91-50aa-11e7-bdf4-0050568e00c5" lookup_id="60bd3942-50aa-11e7-bdf4-0050568e00c5"
+            code="female" parent_code="sex" name="女" description="女" item_order="0"/>
+    <RECORD lookup_item_id="34708615-50a3-11e7-bdf4-0050568e00c5" lookup_id="ee4ec6c3-50a0-11e7-bdf4-0050568e00c5"
+            code="draft" parent_code="staffState" name="未审核" description="未审核" item_order="0"/>
+    <RECORD lookup_item_id="551c0974-50a3-11e7-bdf4-0050568e00c5" lookup_id="ee4ec6c3-50a0-11e7-bdf4-0050568e00c5"
+            code="joined" parent_code="staffState" name="已入职" description="已入职" item_order="0"/>
+    <RECORD lookup_item_id="7ffdf608-50a3-11e7-bdf4-0050568e00c5" lookup_id="ee4ec6c3-50a0-11e7-bdf4-0050568e00c5"
+            code="left" parent_code="staffState" name="离职" description="离职" item_order="0"/>
+    <RECORD lookup_item_id="e33ec0c0-50ae-11e7-bdf4-0050568e00c5" lookup_id="ee4ec6c3-50a0-11e7-bdf4-0050568e00c5"
+            code="failed" parent_code="staffState" name="审核不通过" description="审核不通过" item_order="0"/>
+    <RECORD lookup_item_id="197daeed-5169-11e7-bdf4-0050568e00c5" lookup_id="af9829b8-5168-11e7-bdf4-0050568e00c5"
+            code="systemAdmin" parent_code="staffType" name="物业平台管理员" description="物业平台管理员" item_order="0"/>
+    <RECORD lookup_item_id="198018ff-5169-11e7-bdf4-0050568e00c5" lookup_id="af9829b8-5168-11e7-bdf4-0050568e00c5"
+            code="staff" parent_code="staffType" name="普通用户" description="普通用户" item_order="0"/>
+    <RECORD lookup_item_id="3e619a8a-57b4-11e7-bdf4-0050568e00c5" lookup_id="af9829b8-5168-11e7-bdf4-0050568e00c5"
+            code="project" parent_code="staffType" name="项目员工" description="项目员工" item_order="0"/>
+    <RECORD lookup_item_id="bdff41ba-28bd-11e7-bcf9-0050568e00c5" lookup_id="8515fbb9-28bd-11e7-bcf9-0050568e00c5"
+            code="009_001" parent_code="stationProperty" name="标准车位" description="标准车位" item_order="0"/>
+    <RECORD lookup_item_id="be016c4f-28bd-11e7-bcf9-0050568e00c5" lookup_id="8515fbb9-28bd-11e7-bcf9-0050568e00c5"
+            code="009_002" parent_code="stationProperty" name="微型车位" description="微型车位" item_order="1"/>
+    <RECORD lookup_item_id="be051d99-28bd-11e7-bcf9-0050568e00c5" lookup_id="8515fbb9-28bd-11e7-bcf9-0050568e00c5"
+            code="009_003" parent_code="stationProperty" name="子母车位" description="子母车位" item_order="2"/>
+    <RECORD lookup_item_id="990f3899-2ca3-11e8-9c0c-0050568e0e15" lookup_id="8515fbb9-28bd-11e7-bcf9-0050568e00c5"
+            code="009_004" parent_code="stationProperty" name="机械车位" description="机械车位" item_order="3"/>
+    <RECORD lookup_item_id="4de9ccf9-6c33-11e7-80c8-0050568e00c5" lookup_id="331b489e-6c33-11e7-80c8-0050568e00c5"
+            code="001" parent_code="stationType" name="流动车位" description="流动车位" item_order="0"/>
+    <RECORD lookup_item_id="6081af0b-6c33-11e7-80c8-0050568e00c5" lookup_id="331b489e-6c33-11e7-80c8-0050568e00c5"
+            code="003" parent_code="stationType" name="私家车位" description="私家车位" item_order="2"/>
+    <RECORD lookup_item_id="5e4e3ae9-3f8a-11e7-bdf4-0050568e00c5" lookup_id="fe824deb-3f89-11e7-bdf4-0050568e00c5"
+            code="001" parent_code="storeType" name="小商铺" description="小商铺" item_order="0"/>
+    <RECORD lookup_item_id="5e50812a-3f8a-11e7-bdf4-0050568e00c5" lookup_id="fe824deb-3f89-11e7-bdf4-0050568e00c5"
+            code="002" parent_code="storeType" name="写字楼" description="写字楼" item_order="0"/>
+    <RECORD lookup_item_id="5e564955-3f8a-11e7-bdf4-0050568e00c5" lookup_id="fe824deb-3f89-11e7-bdf4-0050568e00c5"
+            code="003" parent_code="storeType" name="商业公寓" description="商业公寓" item_order="0"/>
+    <RECORD lookup_item_id="5e59023e-3f8a-11e7-bdf4-0050568e00c5" lookup_id="fe824deb-3f89-11e7-bdf4-0050568e00c5"
+            code="004" parent_code="storeType" name="酒店" description="酒店" item_order="0"/>
+    <RECORD lookup_item_id="5e5bc43b-3f8a-11e7-bdf4-0050568e00c5" lookup_id="fe824deb-3f89-11e7-bdf4-0050568e00c5"
+            code="005" parent_code="storeType" name="商业综合体" description="商业综合体" item_order="0"/>
+    <RECORD lookup_item_id="5e5edc29-3f8a-11e7-bdf4-0050568e00c5" lookup_id="fe824deb-3f89-11e7-bdf4-0050568e00c5"
+            code="006" parent_code="storeType" name="产业用房" description="产业用房" item_order="0"/>
+    <RECORD lookup_item_id="e1cf1084-2c0c-11e8-9c0c-0050568e0e15" lookup_id="fe824deb-3f89-11e7-bdf4-0050568e00c5"
+            code="009" parent_code="storeType" name="商铺" description="商铺" item_order="0"/>
+    <RECORD lookup_item_id="e9e22e61-2c0c-11e8-9c0c-0050568e0e15" lookup_id="fe824deb-3f89-11e7-bdf4-0050568e00c5"
+            code="012" parent_code="storeType" name="商场" description="商场" item_order="0"/>
+    <RECORD lookup_item_id="4b3974ed-b3b4-11e7-80c8-0050568e00c5" lookup_id="ef1d1a71-b3b3-11e7-80c8-0050568e00c5"
+            code="days" parent_code="timeUnit" name="天" description="天" item_order="0"/>
+    <RECORD lookup_item_id="6e1e031c-b3b4-11e7-80c8-0050568e00c5" lookup_id="ef1d1a71-b3b3-11e7-80c8-0050568e00c5"
+            code="months" parent_code="timeUnit" name="月" description="月" item_order="1"/>
+    <RECORD lookup_item_id="dc879b78-943b-11e7-80c8-0050568e00c5" lookup_id="bf808307-943b-11e7-80c8-0050568e00c5"
+            code="0100" parent_code="unionBankNo" name="邮政储蓄银行" description="" item_order="0"/>
+    <RECORD lookup_item_id="e28de224-943b-11e7-80c8-0050568e00c5" lookup_id="bf808307-943b-11e7-80c8-0050568e00c5"
+            code="0102" parent_code="unionBankNo" name="中国工商银行" description="" item_order="1"/>
+    <RECORD lookup_item_id="e8e88cd4-943b-11e7-80c8-0050568e00c5" lookup_id="bf808307-943b-11e7-80c8-0050568e00c5"
+            code="0103" parent_code="unionBankNo" name="中国农业银行" description="" item_order="2"/>
+    <RECORD lookup_item_id="1d48312d-943c-11e7-80c8-0050568e00c5" lookup_id="bf808307-943b-11e7-80c8-0050568e00c5"
+            code="0104" parent_code="unionBankNo" name="中国银行" description="" item_order="3"/>
+    <RECORD lookup_item_id="ede0c636-943b-11e7-80c8-0050568e00c5" lookup_id="bf808307-943b-11e7-80c8-0050568e00c5"
+            code="0105" parent_code="unionBankNo" name="中国建设银行" description="" item_order="4"/>
+    <RECORD lookup_item_id="f2e82221-943b-11e7-80c8-0050568e00c5" lookup_id="bf808307-943b-11e7-80c8-0050568e00c5"
+            code="0302" parent_code="unionBankNo" name="中信银行" description="" item_order="5"/>
+    <RECORD lookup_item_id="f8c7b1ed-943b-11e7-80c8-0050568e00c5" lookup_id="bf808307-943b-11e7-80c8-0050568e00c5"
+            code="0303" parent_code="unionBankNo" name="中国光大银行" description="" item_order="6"/>
+    <RECORD lookup_item_id="fe9c972c-943b-11e7-80c8-0050568e00c5" lookup_id="bf808307-943b-11e7-80c8-0050568e00c5"
+            code="0305" parent_code="unionBankNo" name="中国民生银行" description="" item_order="7"/>
+    <RECORD lookup_item_id="05007e1a-943c-11e7-80c8-0050568e00c5" lookup_id="bf808307-943b-11e7-80c8-0050568e00c5"
+            code="0306" parent_code="unionBankNo" name="广东发展银行" description="" item_order="8"/>
+    <RECORD lookup_item_id="0ac12fbe-943c-11e7-80c8-0050568e00c5" lookup_id="bf808307-943b-11e7-80c8-0050568e00c5"
+            code="0308" parent_code="unionBankNo" name="招商银行" description="" item_order="9"/>
+    <RECORD lookup_item_id="0fe33485-943c-11e7-80c8-0050568e00c5" lookup_id="bf808307-943b-11e7-80c8-0050568e00c5"
+            code="0309" parent_code="unionBankNo" name="兴业银行" description="" item_order="10"/>
+    <RECORD lookup_item_id="178d89e6-943c-11e7-80c8-0050568e00c5" lookup_id="bf808307-943b-11e7-80c8-0050568e00c5"
+            code="0310" parent_code="unionBankNo" name="上海浦东发展银行" description="" item_order="11"/>
+    <RECORD lookup_item_id="46cb8342-8c82-11e7-80c8-0050568e00c5" lookup_id="37189454-8c82-11e7-80c8-0050568e00c5"
+            code="unitPrice" parent_code="valuationType" name="单价" description="单价" item_order="0"/>
+    <RECORD lookup_item_id="575dabd5-8c82-11e7-80c8-0050568e00c5" lookup_id="37189454-8c82-11e7-80c8-0050568e00c5"
+            code="totalPrice" parent_code="valuationType" name="总价" description="总价" item_order="1"/>
+    <RECORD lookup_item_id="76c5d493-28bd-11e7-bcf9-0050568e00c5" lookup_id="5aa36a09-28bd-11e7-bcf9-0050568e00c5"
+            code="Yes" parent_code="yesNo" name="是" description="是" item_order="0"/>
+    <RECORD lookup_item_id="76c7c2bb-28bd-11e7-bcf9-0050568e00c5" lookup_id="5aa36a09-28bd-11e7-bcf9-0050568e00c5"
+            code="No" parent_code="yesNo" name="否" description="否" item_order="0"/>
+    <!-- demo，一级数据 -->
+    <RECORD lookup_item_id="0747bc0b-8b1a-11e8-af29-0050568e0e15" lookup_id="c1b71a29-8b19-11e8-af29-0050568e0e15"
+            code="project1" parent_code="demo" name="项目1" description="项目1" item_order="0"/>
+    <RECORD lookup_item_id="0d374468-8b1a-11e8-af29-0050568e0e15" lookup_id="c1b71a29-8b19-11e8-af29-0050568e0e15"
+            code="project2" parent_code="demo" name="项目2" description="项目2" item_order="1"/>
+    <!-- demo，二级数据 -->
+    <RECORD lookup_item_id="66dd17d7-8b1a-11e8-af29-0050568e0e15" lookup_id="c1b71a29-8b19-11e8-af29-0050568e0e15"
+            code="department1" parent_code="project1" name="部门1" description="部门1" item_order="0"/>
+    <RECORD lookup_item_id="6c18e516-8b1a-11e8-af29-0050568e0e15" lookup_id="c1b71a29-8b19-11e8-af29-0050568e0e15"
+            code="department2" parent_code="project1" name="部门2" description="部门2" item_order="1"/>
+    <!-- demo，二级数据 -->
+    <RECORD lookup_item_id="a47e7a0d-8b1a-11e8-af29-0050568e0e15" lookup_id="c1b71a29-8b19-11e8-af29-0050568e0e15"
+            code="department3" parent_code="project2" name="部门3" description="部门3" item_order="0"/>
+    <RECORD lookup_item_id="a9db12d1-8b1a-11e8-af29-0050568e0e15" lookup_id="c1b71a29-8b19-11e8-af29-0050568e0e15"
+            code="department4" parent_code="project2" name="部门4" description="部门4" item_order="1"/>
+    <!-- demo，三级数据 -->
+    <RECORD lookup_item_id="eeaf5a72-8b1e-11e8-af29-0050568e0e15" lookup_id="c1b71a29-8b19-11e8-af29-0050568e0e15"
+            code="role1" parent_code="department1" name="岗位1" description="岗位1" item_order="0"/>
+    <RECORD lookup_item_id="f424df30-8b1e-11e8-af29-0050568e0e15" lookup_id="c1b71a29-8b19-11e8-af29-0050568e0e15"
+            code="role2" parent_code="department2" name="岗位2" description="岗位2" item_order="0"/>
+    <RECORD lookup_item_id="177d5a5f-8b1f-11e8-af29-0050568e0e15" lookup_id="c1b71a29-8b19-11e8-af29-0050568e0e15"
+            code="role3" parent_code="department3" name="岗位3" description="岗位3" item_order="0"/>
+    <RECORD lookup_item_id="1c08ccb4-8b1f-11e8-af29-0050568e0e15" lookup_id="c1b71a29-8b19-11e8-af29-0050568e0e15"
+            code="role4" parent_code="department4" name="岗位4" description="岗位4" item_order="0"/>
+
+    <RECORD lookup_item_id="dd0c2b50-8be8-11e8-af29-0050568e0e15" lookup_id="30f7c3ed-8be8-11e8-af29-0050568e0e15"
+            code="start" parent_code="billingStatus" name="开始" description="开始" item_order="0"/>
+    <RECORD lookup_item_id="e4b1921e-8be8-11e8-af29-0050568e0e15" lookup_id="30f7c3ed-8be8-11e8-af29-0050568e0e15"
+            code="end" parent_code="billingStatus" name="结束" description="结束" item_order="1"/>
+
+    <RECORD lookup_item_id="de0983d5-8be9-11e8-af29-0050568e0e15" lookup_id="9868bddc-8be8-11e8-af29-0050568e0e15"
+            code="squareMeter" parent_code="company" name="平方米" description="平方米" item_order="0"/>
+    <RECORD lookup_item_id="5040b718-8e49-11e8-af29-0050568e0e15" lookup_id="9868bddc-8be8-11e8-af29-0050568e0e15"
+            code="individual" parent_code="company" name="个" description="个" item_order="1"/>
+
+    <RECORD lookup_item_id="60d47c1d-8e26-11e8-af29-0050568e0e15" lookup_id="423f4dd4-8e25-11e8-af29-0050568e0e15"
+            code="indoor" parent_code="meterReadingMethod" name="室内" description="室内" item_order="0"/>
+    <RECORD lookup_item_id="a13b4354-8e26-11e8-af29-0050568e0e15" lookup_id="423f4dd4-8e25-11e8-af29-0050568e0e15"
+            code="outdoor" parent_code="meterReadingMethod" name="室外" description="室外" item_order="1"/>
+    <RECORD lookup_item_id="b14cd2d5-8e26-11e8-af29-0050568e0e15" lookup_id="423f4dd4-8e25-11e8-af29-0050568e0e15"
+            code="longRange" parent_code="meterReadingMethod" name="远程" description="远程" item_order="2"/>
+
+    <RECORD lookup_item_id="252fe694-8e27-11e8-af29-0050568e0e15" lookup_id="8536fa35-8e25-11e8-af29-0050568e0e15"
+            code="commercial" parent_code="useProperty" name="商用" description="商用" item_order="0"/>
+    <RECORD lookup_item_id="8aa84e9f-8e28-11e8-af29-0050568e0e15" lookup_id="8536fa35-8e25-11e8-af29-0050568e0e15"
+            code="business" parent_code="useProperty" name="民用" description="民用" item_order="1"/>
+    <RECORD lookup_item_id="93169ae6-8e28-11e8-af29-0050568e0e15" lookup_id="8536fa35-8e25-11e8-af29-0050568e0e15"
+            code="administrative" parent_code="useProperty" name="管理处" description="管理处" item_order="2"/>
+
+    <RECORD lookup_item_id="2eb821be-8e29-11e8-af29-0050568e0e15" lookup_id="9cc93052-8e25-11e8-af29-0050568e0e15"
+            code="enable" parent_code="waterMeterState" name="启用" description="启用" item_order="0"/>
+    <RECORD lookup_item_id="68d5fe97-8e29-11e8-af29-0050568e0e15" lookup_id="9cc93052-8e25-11e8-af29-0050568e0e15"
+            code="discontinuation" parent_code="waterMeterState" name="停用" description="停用" item_order="1"/>
+
+    <RECORD lookup_item_id="9f5cd4b5-8e2a-11e8-af29-0050568e0e15" lookup_id="a4531bac-8e25-11e8-af29-0050568e0e15"
+            code="one" parent_code="waterMeterLevel" name="一级水表" description="一级水表" item_order="0"/>
+    <RECORD lookup_item_id="d17bfb91-8e2a-11e8-af29-0050568e0e15" lookup_id="a4531bac-8e25-11e8-af29-0050568e0e15"
+            code="two" parent_code="waterMeterLevel" name="二级水表" description="二级水表" item_order="1"/>
+    <RECORD lookup_item_id="0614d3a4-8e2b-11e8-af29-0050568e0e15" lookup_id="a4531bac-8e25-11e8-af29-0050568e0e15"
+            code="three" parent_code="waterMeterLevel" name="三级水表" description="三级水表" item_order="2"/>
+    <RECORD lookup_item_id="0f9fc21e-8e2b-11e8-af29-0050568e0e15" lookup_id="a4531bac-8e25-11e8-af29-0050568e0e15"
+            code="four" parent_code="waterMeterLevel" name="四级水表" description="四级水表" item_order="3"/>
+
+    <RECORD lookup_item_id="bdb2414f-8ee8-11e8-af29-0050568e0e15" lookup_id="27dfe138-8bff-11e8-af29-0050568e0e15"
+            code="0031256" parent_code="type" name="商业" description="商业" item_order="0"/>
+
+
+    <RECORD lookup_item_id="918ca635-a99e-11e8-8fb4-0050568e0e15" lookup_id="0bdcfe10-a99e-11e8-8fb4-0050568e0e15"
+            code="0031256" parent_code="constructionState" name="施工中" description="施工中" item_order="0"/>
+    <RECORD lookup_item_id="d6f1c08b-a99e-11e8-8fb4-0050568e0e15" lookup_id="0bdcfe10-a99e-11e8-8fb4-0050568e0e15"
+            code="0031249" parent_code="constructionState" name="暂停" description="暂停" item_order="0"/>
+
+    <RECORD lookup_item_id="773680ca-dc22-11e8-8fb4-0050568e0e15" lookup_id="486551eb-dc1c-11e8-8fb4-0050568e0e15"
+            code="roof" parent_code="location" name="天台" description="天台" item_order="0"/>
+    <RECORD lookup_item_id="7cd538f1-dc22-11e8-8fb4-0050568e0e15" lookup_id="486551eb-dc1c-11e8-8fb4-0050568e0e15"
+            code="basement" parent_code="location" name="地下室" description="地下室" item_order="1"/>
+    <RECORD lookup_item_id="800c0e2a-dc22-11e8-8fb4-0050568e0e15" lookup_id="486551eb-dc1c-11e8-8fb4-0050568e0e15"
+            code="emptySpace" parent_code="location" name="架空层" description="架空层" item_order="2"/>
+    <RECORD buildings="859397f3-dc22-11e8-8fb4-0050568e0e15" lookup_id="486551eb-dc1c-11e8-8fb4-0050568e0e15"
+            code="buildings" parent_code="location" name="建筑物" description="建筑物" item_order="3"/>
+    <RECORD lookup_item_id="89964b78-dc22-11e8-8fb4-0050568e0e15" lookup_id="486551eb-dc1c-11e8-8fb4-0050568e0e15"
+            code="park" parent_code="location" name="园林" description="园林" item_order="4"/>
+    <RECORD lookup_item_id="8c4d3e88-dc22-11e8-8fb4-0050568e0e15" lookup_id="486551eb-dc1c-11e8-8fb4-0050568e0e15"
+            code="indoor" parent_code="location" name="室内" description="室内" item_order="5"/>
+    <RECORD lookup_item_id="8fbe33d8-dc22-11e8-8fb4-0050568e0e15" lookup_id="486551eb-dc1c-11e8-8fb4-0050568e0e15"
+            code="outerWall" parent_code="location" name="外墙" description="外墙" item_order="6"/>
+    <RECORD lookup_item_id="936da7a0-dc22-11e8-8fb4-0050568e0e15" lookup_id="486551eb-dc1c-11e8-8fb4-0050568e0e15"
+            code="road" parent_code="location" name="道路" description="道路" item_order="7"/>
+    <RECORD lookup_item_id="970f5417-dc22-11e8-8fb4-0050568e0e15" lookup_id="486551eb-dc1c-11e8-8fb4-0050568e0e15"
+            code="swimmingPool" parent_code="location" name="游泳池" description="游泳池" item_order="8"/>
+    <RECORD lookup_item_id="9a66d8f3-dc22-11e8-8fb4-0050568e0e15" lookup_id="486551eb-dc1c-11e8-8fb4-0050568e0e15"
+            code="restRoom" parent_code="location" name="卫生间" description="卫生间" item_order="9"/>
+
+
+
+
+    <RECORD lookup_item_id="dd4384b1-dc23-11e8-8fb4-0050568e0e15" lookup_id="55a7b52f-dc1c-11e8-8fb4-0050568e0e15"
+            code="baseStation" parent_code="holdpurpose" name="基站" description="基站" item_order="0"/>
+    <RECORD lookup_item_id="e0d4f20d-dc23-11e8-8fb4-0050568e0e15" lookup_id="55a7b52f-dc1c-11e8-8fb4-0050568e0e15"
+            code="businessOutlets" parent_code="holdpurpose" name="经营网点" description="经营网点" item_order="1"/>
+    <RECORD lookup_item_id="e4780722-dc23-11e8-8fb4-0050568e0e15" lookup_id="55a7b52f-dc1c-11e8-8fb4-0050568e0e15"
+            code="office" parent_code="holdpurpose" name="办公室" description="办公室" item_order="2"/>
+    <RECORD lookup_item_id="e816cf58-dc23-11e8-8fb4-0050568e0e15" lookup_id="55a7b52f-dc1c-11e8-8fb4-0050568e0e15"
+            code="waterSupply" parent_code="holdpurpose" name="给水" description="给水" item_order="3"/>
+    <RECORD lookup_item_id="ec10d770-dc23-11e8-8fb4-0050568e0e15" lookup_id="55a7b52f-dc1c-11e8-8fb4-0050568e0e15"
+            code="environment" parent_code="holdpurpose" name="环境" description="环境" item_order="4"/>
+    <RECORD lookup_item_id="f0586c0c-dc23-11e8-8fb4-0050568e0e15" lookup_id="55a7b52f-dc1c-11e8-8fb4-0050568e0e15"
+            code="fireControl" parent_code="holdpurpose" name="消防" description="消防" item_order="5"/>
+    <RECORD lookup_item_id="f487bb41-dc23-11e8-8fb4-0050568e0e15" lookup_id="55a7b52f-dc1c-11e8-8fb4-0050568e0e15"
+            code="swimmingPool" parent_code="holdpurpose" name="游泳池" description="游泳池" item_order="6"/>
+    <RECORD lookup_item_id="f889449c-dc23-11e8-8fb4-0050568e0e15" lookup_id="55a7b52f-dc1c-11e8-8fb4-0050568e0e15"
+            code="light" parent_code="holdpurpose" name="照明" description="照明" item_order="7"/>
+    <RECORD lookup_item_id="fd42f187-dc23-11e8-8fb4-0050568e0e15" lookup_id="55a7b52f-dc1c-11e8-8fb4-0050568e0e15"
+            code="dorm" parent_code="holdpurpose" name="宿舍" description="宿舍" item_order="8"/>
+    <RECORD lookup_item_id="00b2a6bb-dc24-11e8-8fb4-0050568e0e15" lookup_id="55a7b52f-dc1c-11e8-8fb4-0050568e0e15"
+            code="restRoom" parent_code="holdpurpose" name="卫生间" description="卫生间" item_order="9"/>
+    <RECORD lookup_item_id="052ba594-dc24-11e8-8fb4-0050568e0e15" lookup_id="55a7b52f-dc1c-11e8-8fb4-0050568e0e15"
+            code="warehouse" parent_code="holdpurpose" name="仓库" description="仓库" item_order="10"/>
+    <RECORD lookup_item_id="08dfbe5b-dc24-11e8-8fb4-0050568e0e15" lookup_id="55a7b52f-dc1c-11e8-8fb4-0050568e0e15"
+            code="advertising" parent_code="holdpurpose" name="广告" description="广告" item_order="11"/>
+
+    <RECORD lookup_item_id="169a7c6d-dc26-11e8-8fb4-0050568e0e15" lookup_id="58d038e0-dc1c-11e8-8fb4-0050568e0e15"
+            code="house" parent_code="purpose" name="住宅" description="住宅" item_order="0"/>
+    <RECORD lookup_item_id="2a3771da-dc26-11e8-8fb4-0050568e0e15" lookup_id="58d038e0-dc1c-11e8-8fb4-0050568e0e15"
+            code="store" parent_code="purpose" name="商业" description="商业" item_order="1"/>
+    <RECORD lookup_item_id="324bdba9-dc26-11e8-8fb4-0050568e0e15" lookup_id="58d038e0-dc1c-11e8-8fb4-0050568e0e15"
+            code="publicbuilding" parent_code="purpose" name="公建" description="公建" item_order="2"/>
+    <RECORD lookup_item_id="3744cb61-dc26-11e8-8fb4-0050568e0e15" lookup_id="58d038e0-dc1c-11e8-8fb4-0050568e0e15"
+            code="plant" parent_code="purpose" name="厂房" description="厂房" item_order="3"/>
+    <!-- 企业委托人 -->
+    <RECORD lookup_item_id="0478c7c2-fc50-11e8-8a9e-0050568e63cd" lookup_id="c4050806-fc4f-11e8-8a9e-0050568e63cd"
+            code="admin" parent_code="relation" name="管理员" description="管理员" item_order="0"/>
+    <RECORD lookup_item_id="4c5db735-fc50-11e8-8a9e-0050568e63cd" lookup_id="c4050806-fc4f-11e8-8a9e-0050568e63cd"
+            code="principal" parent_code="relation" name="企业委托人" description="企业委托人" item_order="1"/>
+    <RECORD lookup_item_id="5219b218-fc50-11e8-8a9e-0050568e63cd" lookup_id="c4050806-fc4f-11e8-8a9e-0050568e63cd"
+            code="officeClerk" parent_code="relation" name="普通职员" description="普通职员" item_order="2"/>
+
+    <!-- 固定车位销售状态 -->
+    <RECORD lookup_item_id="79c859e1-f2a5-11e8-8fb4-0050568e0e15" lookup_id="4f13bda6-f2a4-11e8-8fb4-0050568e0e15"
+            code="001" parent_code="fixedCarParkSalesStatus" name="未售" description="未售" item_order="1"/>
+    <RECORD lookup_item_id="98e7087b-f2a5-11e8-8fb4-0050568e0e15" lookup_id="4f13bda6-f2a4-11e8-8fb4-0050568e0e15"
+            code="002" parent_code="fixedCarParkSalesStatus" name="已售" description="已售" item_order="5"/>
+    <RECORD lookup_item_id="9e7f7ec8-f2a5-11e8-8fb4-0050568e0e15" lookup_id="4f13bda6-f2a4-11e8-8fb4-0050568e0e15"
+            code="003" parent_code="fixedCarParkSalesStatus" name="空置" description="空置" item_order="8"/>
+
+    <!-- mq同步数据类型 -->
+    <RECORD lookup_item_id="ed872ba0-033d-11e9-8a9e-0050568e63cd" lookup_id="2f875b0d-033d-11e9-8a9e-0050568e63cd"
+            code="insert" parent_code="mqOperationType" name="插入" description="插入" item_order="1"/>
+    <RECORD lookup_item_id="f2243dc7-033d-11e9-8a9e-0050568e63cd" lookup_id="2f875b0d-033d-11e9-8a9e-0050568e63cd"
+            code="batchInsert" parent_code="mqOperationType" name="批量插入" description="批量插入" item_order="3"/>
+    <RECORD lookup_item_id="f716472a-033d-11e9-8a9e-0050568e63cd" lookup_id="2f875b0d-033d-11e9-8a9e-0050568e63cd"
+            code="del" parent_code="mqOperationType" name="删除" description="删除" item_order="5"/>
+    <RECORD lookup_item_id="fb8a7426-033d-11e9-8a9e-0050568e63cd" lookup_id="2f875b0d-033d-11e9-8a9e-0050568e63cd"
+            code="batchDel" parent_code="mqOperationType" name="批量删除" description="批量删除" item_order="7"/>
+    <RECORD lookup_item_id="000a92c0-033e-11e9-8a9e-0050568e63cd" lookup_id="2f875b0d-033d-11e9-8a9e-0050568e63cd"
+            code="modify" parent_code="mqOperationType" name="修改" description="修改" item_order="9"/>
+    <RECORD lookup_item_id="044ee888-033e-11e9-8a9e-0050568e63cd" lookup_id="2f875b0d-033d-11e9-8a9e-0050568e63cd"
+            code="batchModify" parent_code="mqOperationType" name="批量修改" description="批量修改" item_order="11"/>
+    <RECORD lookup_item_id="0806ea2b-033e-11e9-8a9e-0050568e63cd" lookup_id="2f875b0d-033d-11e9-8a9e-0050568e63cd"
+            code="insertOrModify" parent_code="mqOperationType" name="插入或修改" description="插入或修改" item_order="13"/>
+
+    <!-- mq同步数据优先级 -->
+    <RECORD lookup_item_id="7ddeccfb-033e-11e9-8a9e-0050568e63cd" lookup_id="4926b0e3-033e-11e9-8a9e-0050568e63cd"
+            code="1" parent_code="mqSyncPriorityLevel" name="高" description="高" item_order="1"/>
+    <RECORD lookup_item_id="8248a4c5-033e-11e9-8a9e-0050568e63cd" lookup_id="4926b0e3-033e-11e9-8a9e-0050568e63cd"
+            code="2" parent_code="mqSyncPriorityLevel" name="中" description="中" item_order="3"/>
+    <RECORD lookup_item_id="86dbbdc0-033e-11e9-8a9e-0050568e63cd" lookup_id="4926b0e3-033e-11e9-8a9e-0050568e63cd"
+            code="3" parent_code="mqSyncPriorityLevel" name="低" description="低" item_order="5"/>
+
+    <!-- mq同步数据状态 -->
+    <RECORD lookup_item_id="a72b7a5e-033e-11e9-8a9e-0050568e63cd" lookup_id="4e3aac44-033e-11e9-8a9e-0050568e63cd"
+            code="draft" parent_code="mqSyncState" name="未同步" description="未同步" item_order="1"/>
+    <RECORD lookup_item_id="ae19366b-033e-11e9-8a9e-0050568e63cd" lookup_id="4e3aac44-033e-11e9-8a9e-0050568e63cd"
+            code="done" parent_code="mqSyncState" name="已同步" description="已同步" item_order="3"/>
+    <RECORD lookup_item_id="b23f185f-033e-11e9-8a9e-0050568e63cd" lookup_id="4e3aac44-033e-11e9-8a9e-0050568e63cd"
+            code="error" parent_code="mqSyncState" name="同步失败" description="同步失败" item_order="5"/>
+</RECORDS>

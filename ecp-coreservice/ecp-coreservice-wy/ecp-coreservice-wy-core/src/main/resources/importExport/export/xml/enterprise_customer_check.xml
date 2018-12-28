@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<excel id="enterprise_customer_check">
+    <sheet label="企业客户">
+        <list>
+            <sql id="a65f26ea-5f25-43cf-a795-f79af57d37a4">
+                <![CDATA[
+					SELECT 
+					a.unit_number AS unitNumber,
+					case a.manage_type when 0 then '餐饮类' when 1 then '服务类' when 2 then '零售类' when 3 then '娱乐类' else '其他' end AS manageType,
+					a.enterprise_name AS enterpriseName ,
+					a.address ,
+					pc.name AS  representative,
+				    a.office_phone AS officePhone ,
+					a.e_mail AS email,a.register_date AS s_registerDate,
+					case a.enterprise_property when 0 then '个人独资' when 1 then '独资企业' when 2 then '公司' else '其他' end AS enterpriseProperty,
+					a.emergency_contact AS emergencyContact,
+					a.emergency_contact_phone AS emergencyContactPhone,
+					a.principal,a.business_address AS businessAddress,
+					tp.project_id AS projectId FROM tc_enterprise_cust a
+					LEFT JOIN tc_person_cust pc ON pc.cust_id=a.representative
+					LEFT JOIN tc_person_building b ON a.enterprise_id=b.enterprise_id
+					LEFT JOIN tc_building tb ON b.building_id=tb.id
+					LEFT JOIN t_sys_project tp ON tp.code=tb.project_id
+					WHERE a.enterprise_id IS NOT NULL
+
+					<#if enterpriseName ??>
+                        AND a.enterprise_name like '%${enterpriseName}%'
+                     </#if>
+                     <#if manageType ??>
+                        AND a.manage_type = '${manageType}'
+                     </#if>
+                     <#if officePhone ??>
+                        AND a.office_phone like '%${officePhone}%'
+                     </#if>
+                     <#if enterpriseProperty ??>
+                        AND a.enterprise_property = '${enterpriseProperty}'
+                     </#if>
+                     <#if principal ??>
+                        AND a.principal = '${principal}'
+                     </#if>
+                     <#if email ??>
+                        AND a.e_mail = '${email}'
+                     </#if>
+                     <#if emergencyContact ??>
+                        AND a.emergency_contact like '%${emergencyContact}%'
+                     </#if>
+                     <#if projectId??>
+                        AND a.project_id = '${projectId}'
+                     </#if>
+					
+                    GROUP BY a.enterprise_id
+					ORDER BY a.unit_number
+                ]]>
+            </sql>
+            <!-- 查询结果字段和excel表头标题的映射，column的值一定要和SQL语句的AS别名一致 -->
+            <field column="unitNumber" label="企业编号" type="String"></field>
+			 <field column="enterpriseName" label="企业名称" type="String"></field>
+			 <field column="manageType" label="经营类型" type="String"></field>
+			 <field column="address" label="注册地址" type="String"></field>
+			 <field column="representative" label="法人代表" type="String"></field>
+			 <field column="officePhone" label="企业办公电话" type="String"></field>
+			 <field column="email" label="企业电子邮件" type="String"></field>
+			 <field column="s_registerDate" label="注册日期" type="Date" format="yyyy-MM-dd"></field>
+			 <field column="enterpriseProperty" label="企业类型" type="String"></field>
+			 <field column="emergencyContact" label="紧急联系人" type="String"></field>
+			 <field column="emergencyContactPhone" label="紧急联系人电话" type="String"></field>
+			 <field column="principal" label="企业委托人" type="String"></field>
+			 <field column="businessAddress" label="企业地址" type="String"></field>
+        </list>
+    </sheet>
+</excel>

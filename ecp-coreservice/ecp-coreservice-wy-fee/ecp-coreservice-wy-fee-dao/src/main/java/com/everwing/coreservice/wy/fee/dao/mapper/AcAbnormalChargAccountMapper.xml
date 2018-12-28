@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.coreservice.wy.fee.dao.mapper.AcAbnormalChargAccountMapper">
+
+
+
+  <select id="listPageAbnormalChargAccount"  parameterType="com.everwing.coreservice.common.wy.fee.dto.AbnormalChargeAcccountDto" resultType="com.everwing.coreservice.common.wy.fee.dto.AbnormalChargeAcccountDto">
+    select x.id,x.houseCode,x.buildingName,x.buildingCode,max(x.wy) wy,max(x.bt)bt,max(x.water)water,max(x.elect) elect,x.common_deposit_amount as common
+    FROM(
+    SELECT b.id,b.house_code houseCode,b.building_full_name buildingName,b.building_code buildingCode,
+    if(lbfi.account_type=1,concat(lbfi.last_bill_fee),0) wy,
+    if(lbfi.account_type=2,concat(lbfi.last_bill_fee),0) bt,
+    if(lbfi.account_type=3,concat(lbfi.last_bill_fee),0) water,
+    if(lbfi.account_type=4,concat(lbfi.last_bill_fee),0) elect,
+    ac.common_deposit_amount
+    FROM tc_building b,t_ac_last_bill_fee_info lbfi,t_ac_account ac
+    where  b.house_code=lbfi.house_code_new  and b.house_code=ac.house_code_new
+    and b.project_id in
+    <foreach collection="projectList" item="item" index="index" open="(" close=")" separator=",">
+      '${item}'
+    </foreach>
+    <if test="houseCode!=null and houseCode!=''">
+      AND b.house_code=#{houseCode}
+    </if>
+    <if test="buildingName!=null and buildingName!=''">
+      AND b.house_code in(select house_code FROM  tc_building WHERE building_full_name like CONCAT('%', #{buildingName}, '%'))
+
+    </if>
+    <if test="projectId!=null and projectId!=''">
+      AND b.project_id =#{projectId}
+
+    </if>
+    ) x
+    GROUP BY x.buildingCode
+  </select>
+
+  <select id="listPageAbnormalCurest"  parameterType="com.everwing.coreservice.common.wy.fee.dto.AbnormalChargeAcccountDto" resultType="com.everwing.coreservice.common.wy.fee.dto.AbnormalChargeAcccountDto">
+
+    SELECT tt.house_code houseCode,
+    group_concat( CASE WHEN x1.cust_id IS NULL THEN enterprise_name ELSE NAME END ) ownerName
+
+    FROM
+    tc_person_building x1
+    LEFT JOIN tc_enterprise_cust x2 ON x1.enterprise_id = x2.enterprise_id
+    LEFT JOIN tc_person_cust x3 ON x1.cust_id = x3.cust_id
+    ,tc_building tt  WHERE tt.building_code = x1.building_code
+    and  tt.project_id in
+    <foreach collection="projectList" item="item" index="index" open="(" close=")" separator=",">
+      '${item}'
+    </foreach>
+    <if test="houseCode!=null and houseCode!=''">
+      AND tt.house_code=#{houseCode}
+    </if>
+    <if test="buildingName!=null and buildingName!=''">
+      AND tt.house_code in(select house_code FROM  tc_building WHERE building_full_name like CONCAT('%', #{buildingName}, '%'))
+
+    </if>
+    <if test="projectId!=null and projectId!=''">
+      AND tt.project_id =#{projectId}
+
+    </if>
+
+    GROUP BY tt.building_code
+  </select>
+
+  <select id="personBuildingRelation" parameterType="java.lang.String" resultType="java.util.Map">
+
+    select cust_id as custId,enterprise_id as enterpriseId from tc_person_building where building_code = (select building_code from tc_building where house_code = #{houseCode})
+
+  </select>
+
+  <select id="personCustList"  resultType="java.lang.String">
+
+    select name  from
+
+    <if test="type==1">
+      tc_person_cust
+
+    </if>
+    <if test="type==2">
+      tc_enterprise_cust
+    </if>
+
+    where cust_id = #{custId}
+
+  </select>
+  <update id="updateAcAccountByHouseCodeNew" parameterType="com.everwing.coreservice.common.wy.fee.entity.AcAbnormalCharge">
+    update t_ac_account
+    set
+    last_arrears_amount =  last_arrears_amount+ #{amount,jdbcType=DECIMAL}
+    where house_code_new = #{houseCode,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateAcAccountByHouseCodeNewForAccount" parameterType="com.everwing.coreservice.common.wy.fee.entity.AcAbnormalCharge">
+    update t_ac_account
+    set
+    last_arrears_amount =  last_arrears_amount + #{amount,jdbcType=DECIMAL}
+    where house_code_new = #{houseCode,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByHouseCodeAndAccountType" parameterType="com.everwing.coreservice.common.wy.fee.entity.AcAbnormalCharge">
+    update t_ac_last_bill_fee_info set last_bill_fee = last_bill_fee - #{amount ,jdbcType=DECIMAL}  where
+    house_code_new=#{houseCode} and account_type=#{accountType}
+  </update>
+
+  <update id="updateByHouseCodeAndAccountTypeForAccount" parameterType="com.everwing.coreservice.common.wy.fee.entity.AcAbnormalCharge">
+    update t_ac_last_bill_fee_info set last_bill_fee = last_bill_fee + #{amount ,jdbcType=DECIMAL}
+    where house_code_new=#{houseCode} and account_type=#{accountType}
+  </update>
+</mapper>

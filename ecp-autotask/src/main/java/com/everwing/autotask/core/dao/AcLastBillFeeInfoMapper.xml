@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.autotask.core.dao.AcLastBillFeeInfoMapper">
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.fee.entity.AcLastBillFeeInfo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="house_code_new" jdbcType="VARCHAR" property="houseCodeNew" />
+    <result column="last_bill_fee" jdbcType="DECIMAL" property="lastBillFee" />
+    <result column="account_id" jdbcType="VARCHAR" property="accountId" />
+    <result column="project_id" jdbcType="VARCHAR" property="projectId" />
+    <result column="project_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="create_id" jdbcType="VARCHAR" property="createId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_id" jdbcType="VARCHAR" property="modifyId" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="account_type" jdbcType="SMALLINT" property="accountType" />
+    <result column="signature" jdbcType="VARCHAR" property="signature" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, house_code_new, last_bill_fee, account_id, project_id, project_name, create_id, 
+    create_time, modify_id, modify_time, account_type, signature
+  </sql>
+  <select id="selectByProjectAndAccountType" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_ac_last_bill_fee_info where project_id = #{projectId} and account_type = #{accountType} and last_bill_fee > 0
+  </select>
+</mapper>

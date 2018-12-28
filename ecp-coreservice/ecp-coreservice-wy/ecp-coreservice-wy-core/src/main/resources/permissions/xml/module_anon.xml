@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modulegroup id="35ce0d97-f123-4715-b4e0-cb14c0292a31" name="" desc="">
+	<module id="28e4fa02-12e3-4148-8dc2-2267e7e51817" name="anon" desc="公共模块白名单集合" permission="anon">
+		<operation id="22517901-8b67-4670-9089-cf04a8c8e3d9" name="anon" desc="anon" permission="anon" url="/system/LoginController/login"/>
+		<operation id="d80d413b-ce87-4053-a568-8d937de1baee" name="anon" desc="anon" permission="anon" url="/system/LoginController/loginOut"/>
+		<operation id="bab3685d-fd51-43db-8d73-590bfbaa2c2b" name="anon" desc="anon" permission="anon" url="/system/LoginController/findMenuByLoginNameAndPid/*"/>
+		<operation id="30fa1beb-7f3b-4385-9961-320c251aa65e" name="anon" desc="anon" permission="anon" url="/system/TSysOrganizationController/findOrganizationalChartsByStaffNumber"/>
+		<operation id="62e5b2df-9933-4c59-904c-52a2d3f11c21" name="anon" desc="anon" permission="anon" url="/system/TSysOrganizationController/findOrganizationalChartsByCompanyId"/>
+		<operation id="5b4b0e30-f90d-4c4d-97a1-32a79fb270a3" name="anon" desc="anon" permission="anon" url="/system/TSysOrganizationController/findOrganizationalChartsByProjectId/*"/>
+	</module>
+</modulegroup>

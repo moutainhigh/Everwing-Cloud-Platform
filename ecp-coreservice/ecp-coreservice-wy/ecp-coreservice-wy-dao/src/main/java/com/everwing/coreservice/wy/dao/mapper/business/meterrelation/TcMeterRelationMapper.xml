@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.business.meterrelation.TcMeterRelationMapper">
+	<resultMap id="BaseResultMap" type="TcMeterRelation">
+		<result property="id" column="id" jdbcType="VARCHAR"/>
+		<result property="buildingCode" column="building_code" jdbcType="VARCHAR"/>
+		<result property="relationId" column="relation_id" jdbcType="VARCHAR"/>
+		<result property="type" column="type" jdbcType="INTEGER"/>
+	</resultMap>
+	
+	<select id="getRelationByMeterCode" parameterType="TcMeterRelation" resultMap="BaseResultMap">
+		select * from tc_meterfeeobj_relation
+		where relation_id = #{relationId}
+		<if test="null != type">
+			and type = #{type}
+		</if>
+	</select>
+	
+	<insert id="batchAdd" parameterType="java.util.List">
+		insert into tc_meterfeeobj_relation
+		values
+		<foreach collection="list" item="item" separator=",">
+		(
+		  UPPER(UUID()),
+		  #{item.buildingCode},
+		  #{item.relationId},
+		  #{item.type}
+		)
+		</foreach>
+	</insert>
+	
+	<insert id="add" parameterType="TcMeterRelation">
+		insert into tc_meterfeeobj_relation
+		values
+		(
+		  UPPER(UUID()),
+		  #{buildingCode},
+		  #{relationId},
+		  #{type}
+		)
+	</insert>
+	
+	<delete id="del" parameterType="TcMeterRelation">
+		delete from tc_meterfeeobj_relation
+		where id = #{id}
+	</delete>
+	
+	<delete id="batchDelByObjs" parameterType="java.util.List">
+		delete from tc_meterfeeobj_relation
+		where id in 
+		<foreach collection="list" item="item" open="(" close=")" separator=",">
+			#{item.id}
+		</foreach>
+	</delete>
+	
+	<delete id="batchDelByIds" parameterType="java.util.List">
+		delete from tc_meterfeeobj_relation
+		where id in 
+		<foreach collection="list" item="id" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<select id="countMetersByPositionList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT IFNULL(COUNT(t.code),0) AS COUNT 
+		from (
+			select t1.code 
+			FROM tc_water_meter t1 , tc_meterfeeobj_relation t2
+			WHERE t1.code = t2.relation_id
+			AND t1.state = 0 
+			<if test="null != positions">
+				AND t2.building_code IN 
+				<foreach collection="positions" open="(" item="pst" close=")" separator=",">
+					#{pst}
+				</foreach>
+			</if>
+			<if test="null != type">
+				and t2.type = #{type}
+			</if>
+			GROUP BY t1.code
+		) t
+	</select>
+	
+	<!-- 根据传入的scheduleId集合,删除计划下所有任务对应的任务/建筑关系 -->
+	<delete id="batchDelByscheduleIds" parameterType="java.util.List">
+		DELETE 
+		FROM tc_meterfeeobj_relation
+		WHERE relation_id IN (
+		   SELECT id FROM tc_reading_task WHERE schedule_id IN 
+		   <foreach collection="list" item="id" open="(" separator="," close=")">
+		   		#{id}
+		   </foreach>
+		   group by id
+		)
+	</delete>
+
+	
+	<!-- 根据传入的electMeterId集合，删除电表对应的电表/建筑关系 -->
+	<delete id="batchDelByElectMeterCodes" parameterType="java.util.List">
+		delete from tc_meterfeeobj_relation
+		where relation_id in (
+			select id from tc_electricity_meter where code in
+			<foreach collection="list" item="id" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+		)
+	</delete>
+	
+	<!-- 替换表时，修改关联关系 -->
+	<update id="updateByrelationId" parameterType="java.util.Map">
+		update tc_meterfeeobj_relation set relation_id=#{newId} where relation_id=#{oldId}
+	</update>
+
+
+	
+	<!-- 获取任务/建筑专用 -->
+	<select id="getTaskRelationListByTaskId" parameterType="String" resultMap="BaseResultMap">
+		select * from tc_meterfeeobj_relation 
+		where relation_id = #{0}
+		and type = 3
+	</select>
+	
+	<!-- 根据关联水电表id删除关联信息 -->
+	<delete id="bachDelByRelationIds" parameterType="java.util.List">
+		DELETE FROM tc_meterfeeobj_relation 
+		WHERE relation_id IN 
+			<foreach collection="list" open="(" item="id" close=")" separator=",">
+				#{id}
+			</foreach>
+	</delete>
+	
+	<delete id="delByRelationId" parameterType="String">
+		delete from tc_meterfeeobj_relation
+		where relation_id = #{0}
+	</delete>
+	
+	<!-- 根据任务的实时绑定表,来获的关联关系 -->
+	<select id="findPositionByDatas" parameterType="TcReadingTask" resultType="String">
+	   SELECT t1.position 
+	     FROM
+	     	<if test="meterType == 1">
+		     	tc_electricity_meter t1
+	     	</if> 
+	     	<if test="meterType == 0">
+	     		tc_water_meter t1
+	     	</if>
+		WHERE t1.code in 
+		<foreach collection="datas" item="item" open="(" close=")" separator=",">
+			#{item.meterCode}
+		</foreach>
+		GROUP BY t1.position
+	</select>
+	<select id="findAllDatasByTaskId" parameterType="String" resultMap="BaseResultMap">
+		select * from tc_meter_data where task_id = #{0}
+	</select>
+</mapper>

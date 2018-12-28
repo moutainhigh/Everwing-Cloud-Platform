@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+	http://code.alibabatech.com/schema/dubbo
+	http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-3.1.xsd"
+       default-lazy-init="false">
+    <dubbo:registry address="${wy-coreservice-api.dubbo.registry.address}" protocol="zookeeper" file="${catalina.home}/dubbo-registry/dubbo-registry.properties"/>
+
+    <!-- 公共 S -->
+    <dubbo:reference id="tSysLookupService"
+                     interface="com.everwing.coreservice.common.wy.service.sys.TSysLookupService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <dubbo:reference id="tSysRoleService"
+                     interface="com.everwing.coreservice.common.wy.service.sys.TSysRoleService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <dubbo:reference id="tSysUserService"
+                     interface="com.everwing.coreservice.common.wy.service.sys.TSysUserService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <dubbo:reference id="tSysOperationLogService"
+                     interface="com.everwing.coreservice.common.wy.service.sys.TSysOperationLogService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <dubbo:reference id="tSysImportExportService"
+                     interface="com.everwing.coreservice.common.wy.service.sys.TSysImportExportService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <dubbo:reference id="tSysCompanyService"
+                     interface="com.everwing.coreservice.common.wy.service.sys.TSysCompanyService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <dubbo:reference id="tSysDepartmentService"
+                     interface="com.everwing.coreservice.common.wy.service.sys.TSysDepartmentService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <dubbo:reference id="tSysOrganizationService"
+                     interface="com.everwing.coreservice.common.wy.service.sys.TSysOrganizationService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <dubbo:reference id="tSysProjectService"
+                     interface="com.everwing.coreservice.common.wy.service.sys.TSysProjectService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <dubbo:reference id="tSysAreasService"
+                     interface="com.everwing.coreservice.common.wy.service.sys.TSysAreasService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <dubbo:reference id="tSysCodeService"
+                     interface="com.everwing.coreservice.common.wy.service.sys.TSysCodeService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <dubbo:reference id="tFieldsService"
+                     interface="com.everwing.coreservice.common.wy.service.common.TFieldsService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <dubbo:reference id="synchrodataService"
+                     interface="com.everwing.coreservice.common.wy.service.common.SynchrodataService"
+                     check="false" timeout="50000" retries="0"/>
+    <!-- 公共 E -->
+
+
+    <dubbo:reference id="personCustService"
+                     interface="com.everwing.coreservice.common.wy.service.cust.person.PersonCustService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <dubbo:reference id="personCustImportService"
+                     interface="com.everwing.coreservice.common.wy.service.cust.person.PersonCustImportService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <dubbo:reference id="personCustRelationService"
+                     interface="com.everwing.coreservice.common.wy.service.cust.person.relation.PersonCustRelationService"
+                     check="false" timeout="50000" retries="0"/>
+
+
+    <dubbo:reference id="personBuildingService"
+                     interface="com.everwing.coreservice.common.wy.service.personbuilding.PersonbuildingService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <dubbo:reference id="enterpreiseCustStaffService"
+                     interface="com.everwing.coreservice.common.wy.service.cust.enterprise.staff.EnterpriseCustStaffService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <dubbo:reference id="enterpriseCustService"
+                     interface="com.everwing.coreservice.common.wy.service.cust.enterprise.EnterpriseCustService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <dubbo:reference id="enterpriseCustImportService"
+                     interface="com.everwing.coreservice.common.wy.service.cust.enterprise.EnterpriseCustImportService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <dubbo:reference id="personbuildingService"
+                     interface="com.everwing.coreservice.common.wy.service.personbuilding.PersonbuildingService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <!-- 建筑 -->
+    <dubbo:reference id="tcBuildingService"
+                     interface="com.everwing.coreservice.common.wy.service.building.TcBuildingService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <!-- 公共资产 -->
+    <dubbo:reference id="tcPublicAssetService"
+                     interface="com.everwing.coreservice.common.wy.service.TcPublicAsset.TcPublicAssetService"
+                     check="false" timeout="50000" retries="0"/>
+
+
+    <!-- 操作日志 -->
+    <dubbo:reference id="OperationService"
+                     interface ="com.everwing.coreservice.common.wy.service.operation.OperationService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <!-- 工程施工操作日志 -->
+    <dubbo:reference id="EngineeringlogService"
+                     interface ="com.everwing.coreservice.common.wy.service.engineeringlog.EngineeringlogService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <!-- 水表操作日志 -->
+    <dubbo:reference id="WaterlogService"
+                     interface ="com.everwing.coreservice.common.wy.service.Waterlog.WaterlogService"
+                     check="false" timeout="50000" retries="0"/>
+    <!-- 电表操作日志 -->
+    <dubbo:reference id="ElectlogService"
+                     interface ="com.everwing.coreservice.common.wy.service.Electlog.ElectlogService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <!-- 工程施工 -->
+    <dubbo:reference id="TcConstructionService"
+                     interface="com.everwing.coreservice.common.wy.service.TcConstruction.TcConstructionService"
+                     check="false" timeout="50000" retries="0"/>
+    <!-- 水表 -->
+    <dubbo:reference id="TcSurfaceWaterService"
+                     interface="com.everwing.coreservice.common.wy.service.TcSurfaceWater.TcSurfaceWaterService"
+                     check="false" timeout="50000" retries="0"/>
+    <!-- 电表 -->
+    <dubbo:reference id="TcSurfaceElectService"
+                     interface="com.everwing.coreservice.common.wy.service.TcSurfaceElectService.TcSurfaceElectService"
+                     check="false" timeout="50000" retries="0"/>
+
+
+
+    <!-- 门控 -->
+    <dubbo:reference id="gatingService"
+                     interface="com.everwing.coreservice.common.wy.service.gating.GatingService"
+                     check="false" timeout="50000" retries="0"/>
+
+
+    <!-- 物业业务 -->
+    <!-- 水表 -->
+    <dubbo:reference id="tcWaterMeterService"
+                     interface="com.everwing.coreservice.common.wy.service.business.watermeter.TcWaterMeterService"
+                     check="false" timeout="50000" retries="0"/>
+    <!-- 电表 -->
+    <dubbo:reference id="tcElectMeterService"
+                     interface="com.everwing.coreservice.common.wy.service.business.electmeter.TcElectMeterService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <!-- 抄表计划 -->
+    <dubbo:reference id="tcReadingScheduleService"
+                     interface="com.everwing.coreservice.common.wy.service.business.readingSchedule.TcReadingScheduleService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <!-- 抄表任务 -->
+    <dubbo:reference id="tcReadingTaskService"
+                     interface="com.everwing.coreservice.common.wy.service.business.readingtask.TcReadingTaskService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <!-- 抄表数据 -->
+    <dubbo:reference id="tcMeterDataService"
+                     interface="com.everwing.coreservice.common.wy.service.business.meterdata.TcMeterDataService"
+                     check="false" timeout="50000" retries="0"/>
+
+
+    <!-- 附件 -->
+    <dubbo:reference id="annexService" interface="com.everwing.coreservice.common.wy.service.annex.AnnexService"
+                     check="false" timeout="50000" retries="0"/>
+
+
+    <!-- 工单 start-->
+    <dubbo:reference id="tcOrderCompleteService"
+                     interface="com.everwing.coreservice.common.wy.service.order.TcOrderCompleteService"
+                     check="false" timeout="50000" retries="0"/> <!-- 完成工单 -->
+
+    <dubbo:reference id="tcOrderComplaintService"
+                     interface="com.everwing.coreservice.common.wy.service.order.TcOrderComplaintService"
+                     check="false" timeout="50000" retries="0"/> <!-- 投诉工单 -->
+
+    <!-- 工单 end -->
+
+
+    <!-- 收费计费 start -->
+    <dubbo:reference id="tBsProjectService"
+                     interface="com.everwing.coreservice.common.wy.service.configuration.project.TBsProjectService"
+                     check="false" timeout="50000" retries="0"/> <!-- 收费计费项目 -->
+    <dubbo:reference id="tBsWaterSchemeService"
+                     interface="com.everwing.coreservice.common.wy.service.configuration.project.TBsWaterSchemeService"
+                     check="false" timeout="50000" retries="0"/> <!-- 收费计费项目水费方案 -->
+    <dubbo:reference id="tBsWaterElectBillingService"
+                     interface="com.everwing.coreservice.common.wy.service.configuration.project.TBsWaterElectBillingService"
+                     check="false" timeout="50000" retries="0"/> <!-- 水电费一些公用 方案类型，关联等-->
+    <dubbo:reference id="tBsChargingSchemeService"
+                     interface="com.everwing.coreservice.common.wy.service.configuration.project.TBsChargingSchemeService"
+                     check="false" timeout="50000" retries="0"/> <!-- 计费方案-->
+    <dubbo:reference id="tBsShareBasicService"
+                     interface="com.everwing.coreservice.common.wy.service.configuration.project.TBsShareBasicService"
+                     check="false" timeout="50000" retries="0"/> <!-- 分摊-->
+    <dubbo:reference id="tBsShareRelatedTaskService"
+                     interface="com.everwing.coreservice.common.wy.service.configuration.project.TBsShareRelatedTaskService"
+                     check="false" timeout="50000" retries="0"/> <!--水电表分摊关联任务 -->
+    <!-- 每期计费总额 -->
+    <dubbo:reference id="tBsBillTotalService"
+                     interface="com.everwing.coreservice.common.wy.service.configuration.bill.TBsBillTotalService"
+                     check="false" timeout="50000" retries="0"/>
+    <!-- 每期计费详情 -->
+    <dubbo:reference id="tBsBillHistoryService"
+                     interface="com.everwing.coreservice.common.wy.service.configuration.bill.TBsBillHistoryService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <!-- 计费任务 -->
+    <!-- 物业手动计费 -->
+    <dubbo:reference id="wyBillingTaskService"
+                     interface="com.everwing.coreservice.common.wy.service.configuration.task.WyBillingTaskService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <!--水电费手动计费 -->
+    <dubbo:reference id="waterAndElectBillingTaskService"
+                     interface="com.everwing.coreservice.common.wy.service.configuration.task.WaterAndElectBillingTaskService"
+                     check="false" timeout="50000" retries="0"/>
+
+
+    <dubbo:reference id="waterElectShareTaskService"
+                     interface="com.everwing.coreservice.common.wy.service.configuration.task.WaterElectShareTaskService"
+                     check="false" timeout="50000" retries="0"/>
+
+	<!-- 为财务推送业主的计费，交费数据 -->
+	<dubbo:reference id="pushPayInfoToFinanceService"
+                     interface="com.everwing.coreservice.common.wy.service.configuration.payinfo.PushPayInfoToFinanceService"
+                     check="false" timeout="50000" retries="0"/>
+	
+    <!-- 计费任务 -->
+    <!-- 计费常量 -->
+    <dubbo:reference id="tBsConstantService"
+                     interface="com.everwing.coreservice.common.wy.service.configuration.bsconstant.TBsConstantService"
+                     check="false"
+                     timeout="50000" retries="0"/>
+    <!-- 费用类型 -->
+    <dubbo:reference id="tBsChargingTypeService"
+                     interface="com.everwing.coreservice.common.wy.service.configuration.project.TBsChargingTypeService"
+                     check="false"
+                     timeout="50000" retries="0"/>
+
+    <!-- 账单生成 -->
+    <dubbo:reference id="tBsBillMgrService"
+                     interface="com.everwing.coreservice.common.wy.service.configuration.billmgr.BillMgrService"
+                     timeout="50000" retries="0" check="false"/>
+
+    <!-- 重计费信息 -->
+    <dubbo:reference id="TBsRebillingInfoService"
+                     interface="com.everwing.coreservice.common.wy.service.configuration.rebilling.TBsRebillingInfoService"
+                     check="false" timeout="50000" retries="0"/>
+                     
+    <!-- 缴费 -->
+    <dubbo:reference id="TBsPayInfoService"
+                     interface="com.everwing.coreservice.common.wy.service.business.pay.TBsPayInfoService"
+                     check="false" timeout="50000" retries="0"/>  
+                     
+    <!-- 账户流水查询 -->   
+    <dubbo:reference id="tBsAssetAccountStreamService"
+                     interface="com.everwing.coreservice.common.wy.service.configuration.tbcassetacount.TBsAssetAccountStreamService"
+                     check="false" timeout="50000" retries="0"/>              
+                     
+    <!-- 收费计费 end -->
+
+
+    <!--  定时任务 start -->
+    <!-- 抄表数据 -->
+    <dubbo:reference id="meterDataTaskService"
+                     interface="com.everwing.coreservice.common.wy.service.quartz.business.MeterDataTaskService"
+                     check="false" timeout="200000" retries="0"/>
+    <!-- 计费项目历史数据 定时任务  tBsProject-->
+    <dubbo:reference id="tBsProjectTaskService"
+                     interface="com.everwing.coreservice.common.wy.service.configuration.task.TBsProjectTaskService"
+                     check="false" timeout="200000" retries="0"/>
+    <!-- 通用账户扣取 -->
+    <dubbo:reference id="cmacBillingService"
+                     interface="com.everwing.coreservice.common.wy.service.configuration.cmac.CmacBillingService"
+                     check="false" timeout="200000" retries="0"/>
+    <!-- 物业管理费通用账户扣取 -->
+    <dubbo:reference id="cmacWyService"
+                     interface="com.everwing.coreservice.common.wy.service.configuration.cmac.service.CmacWyService"
+                     check="false" timeout="200000" retries="0"/>
+    <!-- 本体基金通用账户扣取 -->
+    <dubbo:reference id="cmacBtService"
+                     interface="com.everwing.coreservice.common.wy.service.configuration.cmac.service.CmacBtService"
+                     check="false" timeout="200000" retries="0"/>
+    <!-- 水费通用账户扣取 -->
+    <dubbo:reference id="cmacWaterService"
+                     interface="com.everwing.coreservice.common.wy.service.configuration.cmac.service.CmacWaterService"
+                     check="false" timeout="200000" retries="0"/>
+    <!-- 电费通用账户扣取 -->
+    <dubbo:reference id="cmacElectService"
+                     interface="com.everwing.coreservice.common.wy.service.configuration.cmac.service.CmacElectService"
+                     check="false" timeout="200000" retries="0"/>
+
+    <!-- 违约金计算service -->
+    <dubbo:reference id="lateFeeService"
+                     interface="com.everwing.coreservice.common.wy.service.configuration.latefee.LateFeeService"
+                     check="false" timeout="200000" retries="0"/>
+
+    <!-- 水电费重新计费service -->
+    <dubbo:reference id="waterElectRebillingService"
+                     interface="com.everwing.coreservice.common.wy.service.configuration.task.WaterElectRebillingService"
+                     check="false" timeout="200000" retries="0"/>
+    <!-- 物业管理费、水费、电费、本体基金账户 -->
+    <dubbo:reference id="tBsAssetAccountServie"
+                     interface="com.everwing.coreservice.common.wy.service.configuration.tbcassetacount.TBsAssetAccountServie"
+                     check="false" timeout="200000" retries="0"/>
+    <!--  定时任务 end -->
+
+    <!-- 导入 S-->
+    <dubbo:reference id="tcBuildingImportService"
+                     interface="com.everwing.coreservice.common.wy.service.building.TcBuildingImportService"
+                     check="false" timeout="50000" retries="0" group="importBuilding"/>
+
+    <dubbo:reference id="tcBuildingImportTempService"
+                     interface="com.everwing.coreservice.common.wy.service.building.TcBuildingImportService"
+                     check="false" timeout="50000" retries="0" group="importBuildingTemp"/>
+
+    <dubbo:reference id="tcElectMeterImportService"
+                     interface="com.everwing.coreservice.common.wy.service.business.electmeter.TcElectMeterImportService"
+                     check="false" timeout="50000" retries="0"/>
+    <dubbo:reference id="tcWaterMeterImportService"
+                     interface="com.everwing.coreservice.common.wy.service.business.watermeter.TcWaterMeterImportService"
+                     check="false" timeout="50000" retries="0"/>
+    <dubbo:reference id="tcElectMeterReadingImportService"
+                     interface="com.everwing.coreservice.common.wy.service.business.meterdata.TcElectMeterReadingImportService"
+                     check="false" timeout="50000" retries="0"/>
+    <dubbo:reference id="tcWaterMeterReadingImportService"
+                     interface="com.everwing.coreservice.common.wy.service.business.meterdata.TcWaterMeterReadingImportService"
+                     check="false" timeout="50000" retries="0"/>
+    <!-- 导入 E-->
+
+    <dubbo:reference id="tBsVehicleService"
+                     interface="com.everwing.coreservice.common.wy.service.business.vehicle.TBsVehicleService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <dubbo:reference id="propertyService" interface="com.everwing.coreservice.common.wy.service.building.PropertyService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <dubbo:reference id="tProductService" interface="com.everwing.coreservice.common.wy.service.product.TProductService"
+                     check="false" timeout="50000" retries="0"/>
+		     
+    <dubbo:reference id="attachmentService" interface="com.everwing.coreservice.common.wy.service.common.AttachmentService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <dubbo:reference id="tProductPaymentService" interface="com.everwing.coreservice.common.wy.service.product.TProductPaymentService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <dubbo:reference id="tProductOrderService" interface="com.everwing.coreservice.common.wy.service.product.TProductOrderService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <dubbo:reference id="tDepositService" interface="com.everwing.coreservice.common.wy.service.product.TDepositService"
+                     check="false" timeout="50000" retries="0"/>
+					 
+	<!-- 托收 S -->
+	<dubbo:reference id="tBcProjectService" interface="com.everwing.coreservice.common.wy.service.configuration.bc.project.TBcProjectService"
+					 check="false" timeout="50000" retries="0"/>
+	<dubbo:reference id="tBcCollectionTotalService" interface="com.everwing.coreservice.common.wy.service.configuration.bc.collection.TBcCollectionService"
+					 check="false" timeout="50000" retries="0"/>
+	<!-- 托收 E -->
+
+
+
+    <!-- 银账交割S -->
+    <dubbo:reference id="tJgAccountReceivableService"
+                     interface="com.everwing.coreservice.common.wy.service.delivery.TJgAccountReceivableService"
+                     check="false" timeout="50000" retries="0"></dubbo:reference>
+    <dubbo:reference id="tJgDepositReceiptService"
+                     interface="com.everwing.coreservice.common.wy.service.delivery.TJgDepositReceiptService"
+                     check="false" timeout="50000" retries="0"></dubbo:reference>
+    <dubbo:reference id="tJgGiveAccountDetailService"
+                     interface="com.everwing.coreservice.common.wy.service.delivery.TJgGiveAccountDetailService"
+                     check="false" timeout="50000" retries="0"></dubbo:reference>
+    <dubbo:reference id="tJgStaffGropService"
+                     interface="com.everwing.coreservice.common.wy.service.delivery.TJgStaffGropService"
+                     check="false" timeout="50000" retries="0"></dubbo:reference>
+    <dubbo:reference id="tJgTotalCalculationService"
+                     interface="com.everwing.coreservice.common.wy.service.delivery.TJgTotalCalculationService"
+                     check="false" timeout="50000" retries="0"></dubbo:reference>
+    <!-- 银账交割E -->
+    <!-- 银行托收S -->
+    <dubbo:reference id="collectionService"
+                     interface="com.everwing.coreservice.common.wy.service.cust.CollectionService"
+                     check="false" timeout="50000" retries="0"></dubbo:reference>
+    <!-- 银行托收E -->
+
+
+    <dubbo:reference id="wyCommonService"
+                     interface="com.everwing.coreservice.common.wy.service.common.WyCommonService"
+                     check="false" timeout="50000" retries="0"></dubbo:reference>
+
+    <dubbo:reference id="wyOtherService"
+                     interface="com.everwing.coreservice.common.wy.service.other.WyOtherService"
+                     check="false" timeout="50000" retries="0"></dubbo:reference>
+     <!-- 汇总M级表的计费费用 -->
+     <dubbo:reference id="sumMmeterBillToProjectService"
+                      interface="com.everwing.coreservice.common.wy.service.configuration.project.SumMmeterBillToProjectService"
+                      check="false" timeout="50000" retries="0"/>
+
+    <!-- 复杂报表组件-->
+    <dubbo:reference id="complexReportExportService"
+                     interface="com.everwing.coreservice.common.wy.service.common.ComplexReportExportService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <dubbo:reference id="quillEditorService"
+                     interface="com.everwing.coreservice.common.wy.service.common.QuillEditorService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <context:component-scan base-package="com.everwing.coreservice.common.exception"/>
+</beans>

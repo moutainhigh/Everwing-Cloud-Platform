@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.account.relation.AccountRelationMapper" >
+  <resultMap id="BaseResultMap" type="AccountRelation" >
+    <id column="account_relation_id" property="accountRelationId" jdbcType="VARCHAR" />
+    <result column="account_id" property="accountId" jdbcType="VARCHAR" />
+    <result column="asset_account" property="assetAccount" jdbcType="VARCHAR" />
+  </resultMap>
+ 
+ <resultMap type="AccountRelation" id="QueryAssetAccountsMap" extends="BaseResultMap">
+ 	<association property="account" column="asset_account" select="com.flf.mapper.AssetAccountMapper.getAssetAccountById"></association>
+ </resultMap>
+ 
+  <insert id="insertAccountRelation" parameterType="AccountRelation" >
+    insert into tc_account_relation (account_relation_id, account_id, asset_account
+      )
+    values (#{accountRelationId,jdbcType=VARCHAR}, #{accountId,jdbcType=VARCHAR}, #{assetAccount,jdbcType=VARCHAR}
+      )
+  </insert>
+
+<select id="getAccountRelationByAccountId" parameterType="String" resultMap="QueryAssetAccountsMap">
+	select * from tc_account_relation where account_id=#{0}
+</select>
+
+  <update id="updateAccountRelation" parameterType="AccountRelation" >
+    update tc_account_relation
+    <set >
+      <if test="accountId != null" >
+        account_id = #{accountId,jdbcType=VARCHAR},
+      </if>
+      <if test="assetAccount != null" >
+        asset_account = #{assetAccount,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where account_relation_id = #{accountRelationId,jdbcType=VARCHAR}
+  </update>
+
+	<!-- 批量插入关联表数据  王洲  2016.04.19   -->
+	<insert id="insertRelationList" parameterType="java.util.List">
+		insert into tc_account_relation (account_relation_id, account_id, asset_account)
+		values 
+   	<foreach collection="list" item="item" index="index" separator=",">
+	    (#{item.accountRelationId,jdbcType=VARCHAR}, #{item.accountId,jdbcType=VARCHAR}, #{item.assetAccount,jdbcType=VARCHAR})
+      </foreach>
+	</insert>
+	
+	<!-- 根据个人账户id和资产账户id查询是否存在数据  王洲 2016.04.19 -->
+	<select id="getAssetRelationByParams" parameterType="String" resultMap="BaseResultMap">
+		select * from tc_account_relation where account_id = #{0} and asset_account = #{1}
+	</select>
+	
+	<delete id="deleteAccountRelation" parameterType="String">
+		delete from tc_account_relation where account_relation_id = #{0}
+	</delete>
+	
+	<delete id="deleteByEntity" parameterType="AccountRelation">
+		delete from tc_account_relation 
+		where account_id = #{accountId,jdbcType=VARCHAR}
+		and asset_account = #{assetAccount,jdbcType=VARCHAR}
+	</delete>
+	
+	<delete id="deleteAccountRelationByCustId" parameterType="java.lang.String">
+		DELETE FROM tc_account_relation 
+		WHERE account_id IN (
+		  SELECT account_id FROM (
+			  SELECT t2.account_id FROM tc_account t2
+			  WHERE t2.cust_id = #{custId,jdbcType=VARCHAR}
+		  ) AS tmp
+		)
+	</delete>
+ 
+</mapper>

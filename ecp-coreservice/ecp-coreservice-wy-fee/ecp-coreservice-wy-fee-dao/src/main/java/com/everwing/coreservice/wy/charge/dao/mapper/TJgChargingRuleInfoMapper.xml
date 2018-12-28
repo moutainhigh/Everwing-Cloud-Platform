@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.charge.dao.mapper.TJgChargingRuleInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.charging.entity.TJgChargingRuleInfo" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="billing_item_id" property="billingItemId" jdbcType="VARCHAR" />
+    <result column="rule_description" property="ruleDescription" jdbcType="VARCHAR" />
+    <result column="project_id" property="projectId" jdbcType="VARCHAR" />
+    <result column="project_name" property="projectName" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_id" property="createId" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_jg_charging_rule_info
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.everwing.coreservice.common.wy.charging.entity.TJgChargingRuleInfo" >
+    <selectKey resultType="java.lang.String" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_jg_charging_rule_info (billing_item_id, rule_description, project_id, 
+      project_name, create_time, create_id
+      )
+    values (#{billingItemId,jdbcType=VARCHAR}, #{ruleDescription,jdbcType=VARCHAR}, #{projectId,jdbcType=VARCHAR}, 
+      #{projectName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createId,jdbcType=VARCHAR}
+      )
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="com.everwing.coreservice.common.wy.charging.entity.TJgChargingRuleInfo" >
+    update t_jg_charging_rule_info
+    set billing_item_id = #{billingItemId,jdbcType=VARCHAR},
+      rule_description = #{ruleDescription,jdbcType=VARCHAR},
+      project_id = #{projectId,jdbcType=VARCHAR},
+      project_name = #{projectName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_id = #{createId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select id, billing_item_id, rule_description, project_id, project_name, create_time, 
+    create_id
+    from t_jg_charging_rule_info
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, billing_item_id, rule_description, project_id, project_name, create_time, 
+    create_id
+    from t_jg_charging_rule_info
+  </select>
+</mapper>

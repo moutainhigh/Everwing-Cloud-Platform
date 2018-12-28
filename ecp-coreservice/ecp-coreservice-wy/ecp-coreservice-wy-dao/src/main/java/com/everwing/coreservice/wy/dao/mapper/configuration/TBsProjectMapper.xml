@@ -1,0 +1,639 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.configuration.TBsProjectMapper">
+	<resultMap type="TBsProject" id="BaseResultMap">
+		<result property="id" column="id" jdbcType="VARCHAR"/>
+		<result property="projectId" column="project_id"  jdbcType="VARCHAR"/>
+		<result property="projectName" column="project_name"  jdbcType="VARCHAR"/>
+		<result property="billingTime" column="billing_time"  jdbcType="TIMESTAMP"/>
+		<result property="wyStatus" column="wy_status"  jdbcType="TINYINT"/>
+		<result property="btStatus" column="bt_status"  jdbcType="TINYINT"/>
+		<result property="waterStatus" column="water_status"  jdbcType="TINYINT"/>
+		<result property="electStatus" column="elect_status"  jdbcType="TINYINT"/>
+		<result property="commonStatus" column="common_status"  jdbcType="TINYINT"/>
+		<result property="currentFee" column="current_fee"  jdbcType="DOUBLE"/>
+		<result property="lastOwedFee" column="last_owed_fee" jdbcType="DOUBLE"/>
+		<result property="totalFee" column="total_fee"  jdbcType="DOUBLE"/>
+		<result property="status" column="status"  jdbcType="TINYINT"/>
+		<result property="wyOrder" column="wy_order"  jdbcType="TINYINT"/>
+		<result property="btOrder" column="bt_order"  jdbcType="TINYINT"/>
+		<result property="waterOrder" column="water_order"  jdbcType="TINYINT"/>
+		<result property="electOrder" column="elect_order"  jdbcType="TINYINT"/>
+		<result property="isGenBill" column="is_gen_bill" jdbcType="TINYINT"/>
+		<result property="createId" column="create_id"  jdbcType="VARCHAR"/>
+		<result property="createTime" column="create_time"  jdbcType="TIMESTAMP"/>
+		<result property="modifyId" column="modify_id"  jdbcType="VARCHAR"/>
+		<result property="modifyTime" column="modify_time"  jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+	<select id="findAllByObj" parameterType="TBsProject" resultMap="BaseResultMap">
+		SELECT  t1.*
+		  FROM  t_bs_project t1,
+				t_sys_project t2
+		 WHERE  t1.project_id = t2.code
+		   AND  t1.status = 0
+		   and  t2.status = "enable"
+		   <if test="null != wyStatus">
+		   		and t1.wy_status = #{wyStatus}
+		   </if>
+		   <if test="null != btStatus">
+		   		AND t1.bt_status = #{btStatus}
+		   </if>
+		   <if test="null != waterStatus">
+		   		and t1.water_status = #{waterStatus}
+		   </if>
+		   <if test="null != electStatus">
+		   		and t1.elect_status = #{electStatus}
+		   </if>
+		   <if test="null != status">
+		   		and t1.status = #{status}
+		   </if>
+		   <if test="null != projectId">
+		   		and t1.project_id = #{projectId}
+		   </if>
+		   <if test="null != commonStatus">
+		   		and t1.common_status = #{commonStatus}
+		   </if>
+		   <if test="null != billingTime">
+		   		and date_format(t1.billing_time,'%Y-%m') = date_format(#{billingTime},'%Y-%m')
+		   </if>
+		   <if test="null != id">
+		   		and t1.id = #{id}
+		   </if>
+	</select>
+	
+	<select id="findByObj" parameterType="TBsProject" resultMap="BaseResultMap">
+		SELECT  t1.*
+		  FROM  t_bs_project t1,
+				t_sys_project t2
+		 WHERE  t1.project_id = t2.code
+		   AND  t1.status = 0
+		   and  t2.status = "enable"
+		   <if test="null != wyStatus">
+		   		and t1.wy_status = #{wyStatus}
+		   </if>
+		   <if test="null != btStatus">
+		   		AND t1.bt_status = #{btStatus}
+		   </if>
+		   <if test="null != waterStatus">
+		   		and t1.water_status = #{waterStatus}
+		   </if>
+		   <if test="null != electStatus">
+		   		and t1.elect_status = #{electStatus}
+		   </if>
+		   <if test="null != status">
+		   		and t1.status = #{status}
+		   </if>
+		   <if test="null != projectId">
+		   		and t1.project_id = #{projectId}
+		   </if>
+
+		   <if test="null != commonStatus">
+		   		and t1.common_status = #{commonStatus}
+		   </if>
+		   <if test="null != billingTime">
+		   		and date_format(t1.billing_time,'%Y-%m') = date_format(#{billingTime},'%Y-%m')
+		   </if>
+		   <if test="null != id">
+		   		and t1.id = #{id}
+		   </if>
+		   <if test="null == id or '' == id">
+		   		order by billing_time desc
+		   		limit 0,1
+		   </if>
+
+	</select>
+	
+	
+	<select id="findUsingProject" resultMap="BaseResultMap">
+		SELECT  t1.*
+		  FROM  t_bs_project t1,
+				t_sys_project t2
+		 WHERE t1.project_id = t2.code
+		   AND t1.status = 0
+		   and t2.status = 'enable'
+	</select>
+	
+	<select id="listPageProject" parameterType="TBsProject" resultMap="BaseResultMap">
+		select 
+			t1.*
+		from t_bs_project t1
+		where 1 = 1
+		<if test="null != searchCode">
+			and project_name like CONCAT('%',#{searchCode},'%')		
+		</if>
+		<if test="null != searchTime">
+			and DATE_FORMAT(billing_time,'%Y-%m') = #{searchTime}
+		</if>
+	</select>
+	
+	<select id="countProject" resultType="java.util.Map">
+		SELECT * FROM (
+			(SELECT COUNT(id) AS useCount FROM t_bs_project WHERE STATUS = 0 AND DATE_FORMAT(billing_time,'%Y-%m') = DATE_FORMAT(SYSDATE(),'%Y-%m')) t1,
+			(SELECT COUNT(id) AS notUseCount FROM t_bs_project WHERE STATUS = 1 AND DATE_FORMAT(billing_time,'%Y-%m') = DATE_FORMAT(SYSDATE(),'%Y-%m')) t2 
+		) 
+	</select>
+
+	<select id="findById" parameterType="String" resultMap="BaseResultMap">
+		select * from t_bs_project where id = #{0}
+	</select>
+
+	<insert id="insert" parameterType="TBsProject">
+		insert into t_bs_project
+		(
+			id,
+			project_id,
+			project_name,
+			billing_time,
+			wy_status,
+			bt_status,
+			water_status,
+			elect_status,
+			common_status,
+			current_fee,
+			last_owed_fee,
+			total_fee,
+			status,
+			wy_order,
+			bt_order,
+			water_order,
+			elect_order,
+			is_gen_bill,
+			create_id,
+			create_time,
+			modify_id,
+			modify_time
+		)
+		values
+		(
+			#{id},
+			#{projectId},
+			#{projectName},
+			#{billingTime},
+			#{wyStatus},
+			#{btStatus},
+			#{waterStatus},
+			#{electStatus},
+			#{commonStatus},
+			#{currentFee},
+			#{lastOwedFee},
+			#{totalFee},
+			#{status},
+			#{wyOrder},
+			#{btOrder},
+			#{waterOrder},
+			#{electOrder},
+			#{isGenBill},
+			#{createId},
+			sysdate(),
+			#{modifyId},
+			sysdate()
+		)
+	</insert>
+	
+	<insert id="batchInsert" parameterType="java.util.List" >
+		insert into t_bs_project
+		(
+			id,
+			project_id,
+			project_name,
+			billing_time,
+			wy_status,
+			bt_status,
+			water_status,
+			elect_status,
+			common_status,
+			current_fee,
+			last_owed_fee,
+			total_fee,
+			status,
+			wy_order,
+			bt_order,
+			water_order,
+			elect_order,
+			is_gen_bill,
+			create_id,
+			create_time,
+			modify_id,
+			modify_time
+		)
+		values
+		<foreach collection="list" item="item" open="" close="" separator=",">
+		(
+			#{item.id},
+			#{item.projectId},
+			#{item.projectName},
+			#{item.billingTime},
+			#{item.wyStatus},
+			#{item.btStatus},
+			#{item.waterStatus},
+			#{item.electStatus},
+			#{item.commonStatus},
+			#{item.currentFee},
+			#{item.lastOwedFee},
+			#{item.totalFee},
+			#{item.status},
+			#{item.wyOrder},
+			#{item.btOrder},
+			#{item.waterOrder},
+			#{item.electOrder},
+			#{item.isGenBill},
+			#{item.createId},
+			sysdate(),
+			#{item.modifyId},
+			sysdate()
+		)
+		
+		</foreach>
+	</insert>
+
+	<update id="update" parameterType="TBsProject">
+		update t_bs_project
+		<set>
+			<if test="null != projectName">
+				project_name = #{projectName},
+			</if>
+			<if test="null != billingTime">
+				billing_time = #{billingTime},
+			</if>
+			<if test="null != wyStatus">
+				wy_status = #{wyStatus},
+			</if>
+			<if test="null != btStatus">
+				bt_status = #{btStatus},
+			</if>
+			<if test="null != waterStatus">
+				water_status = #{waterStatus},
+			</if>
+			<if test="null != electStatus">
+				elect_status = #{electStatus},
+			</if>
+			<if test="null != commonStatus">
+				common_status = #{commonStatus},
+			</if>
+			<if test="null != currentFee">
+				current_fee = #{currentFee},
+			</if>
+			<if test="null != lastOwedFee">
+				last_owed_fee = #{lastOwedFee},
+			</if>
+			<if test="null != totalFee">
+				total_fee = #{totalFee},
+			</if>
+			<if test="null != status">
+				status = #{status},
+			</if>
+			<if test="null != wyOrder">
+				wy_order = #{wyOrder},
+			</if>
+			<if test="null != btOrder">
+				bt_order = #{btOrder},
+			</if>
+			<if test="null != waterOrder">
+				water_order = #{waterOrder},
+			</if>
+			<if test="null != electOrder">
+				elect_order = #{electOrder},
+			</if>
+			<if test="null != isGenBill">
+				is_gen_bill = #{isGenBill},
+			</if>
+			<if test="null != modifyId">
+				modify_id = #{modifyId},
+			</if>
+			modify_time = sysdate()
+		</set>
+		where id = #{id}
+	</update>
+	
+	<!-- t_sys_project项目修改时 , t_bs_project级联更新 -->
+	<update id="updateWhenTSysProjectUpdate" parameterType="TBsProject">
+		update t_bs_project
+		<set>
+			<if test="null != projectName">
+				project_name = #{projectName},
+			</if>
+			<if test="null != billingTime">
+				billing_time = #{billingTime},
+			</if>
+			<if test="null != wyStatus">
+				wy_status = #{wyStatus},
+			</if>
+			<if test="null != btStatus">
+				bt_status = #{btStatus},
+			</if>
+			<if test="null != waterStatus">
+				water_status = #{waterStatus},
+			</if>
+			<if test="null != electStatus">
+				elect_status = #{electStatus},
+			</if>
+			<if test="null != commonStatus">
+				common_status = #{commonStatus},
+			</if>
+			<if test="null != currentFee">
+				current_fee = #{currentFee},
+			</if>
+			<if test="null != lastOwedFee">
+				last_owed_fee = #{lastOwedFee},
+			</if>
+			<if test="null != totalFee">
+				total_fee = #{totalFee},
+			</if>
+			<if test="null != status">
+				status = #{status},
+			</if>
+			<if test="null != wyOrder">
+				wy_order = #{wyOrder},
+			</if>
+			<if test="null != btOrder">
+				bt_order = #{btOrder},
+			</if>
+			<if test="null != waterOrder">
+				water_order = #{waterOrder},
+			</if>
+			<if test="null != electOrder">
+				elect_order = #{electOrder},
+			</if>
+			<if test="null != isGenBill">
+				is_gen_bill = #{isGenBill},
+			</if>
+			<if test="null != modifyId">
+				modify_id = #{modifyId},
+			</if>
+			modify_time = sysdate()
+		</set>
+		where project_id = #{projectId}
+	</update>
+	
+	<select id="findNeedGenProjects" resultMap="BaseResultMap">
+		SELECT t.* FROM t_bs_project t
+		 WHERE DATE_FORMAT(SYSDATE(),'%Y-%m') = DATE_FORMAT(DATE_ADD(t.billing_time,INTERVAL 1 MONTH),'%Y-%m')
+		  AND t.billing_time = (
+					  				SELECT MAX(billing_time) 
+					  				FROM t_bs_project 
+					  				WHERE project_id = t.project_id
+				  				)
+	</select>
+	
+	<select id="findCanBillingProjects" parameterType="java.util.Map" resultMap="BaseResultMap">
+			 SELECT
+			  		t1.*
+			   FROM t_bs_project t1,
+			  		t_bs_charging_scheme t2,
+			  		t_sys_project t3
+			  WHERE t1.project_id = t3.code
+			    AND t3.status = 'enable'
+			    AND t1.project_id = t2.project_id
+			    AND t2.is_used = #{isUsed}
+			    AND SYSDATE() BETWEEN t2.start_using_date AND t2.end_using_date
+			    AND DATE(CURDATE()) = CONCAT(DATE_FORMAT(SYSDATE(),'%Y-%m'),"-",t2.charge_data)
+			    AND t2.charging_type = #{chargeType}
+			    and t2.scheme_type = #{schemeType}
+			    AND t1.status = #{status}
+			    <if test="null != wyStatus">
+			    	and t1.wy_status = #{wyStatus}
+			    </if>
+			    <if test="null != btStatus">
+			    	and t1.bt_status = #{btStatus}
+			    </if>
+			    <if test="null != waterStatus">
+			    	and t1.water_status = #{waterStatus}
+			    </if>
+			    <if test="null != electStatus">
+			    	and t1.elect_status = #{electStatus}
+			    </if>
+		   GROUP BY t1.id
+	</select>
+	
+	
+	<select id="findShareBillingProjects" parameterType="java.util.Map" resultMap="BaseResultMap">
+			SELECT 
+				  * 
+				FROM
+				  t_bs_project t1,
+				  t_bs_charging_scheme t2,
+				  t_sys_project t3 
+				WHERE t1.project_id = t3.code 
+				  AND t3.status = 'enable' 
+				  AND t1.project_id = t2.project_id 
+				  AND t2.is_used = 0 
+				  AND t2.scheme_type = #{schemeType} 
+				  AND SYSDATE() BETWEEN t2.start_using_date 
+				  AND t2.end_using_date 
+				  AND t1.status = 0 
+				  AND DATE(CURDATE()) = CONCAT(
+				    DATE_FORMAT(SYSDATE(), '%Y-%m'),
+				    "-",
+				    t2.charge_data-1
+				  )
+				  AND SUBSTRING(SYSDATE(),1,7) = SUBSTRING(t1.billing_time,1,7)
+				 <if test="null != wyStatus">
+			    	AND t1.wy_status = 1
+			    </if>
+			    <if test="null != btStatus">
+			    	AND t1.bt_status = 1
+			    </if>
+			    <if test="null != waterStatus">
+			    	AND t1.water_status = 1
+			    </if>
+			    <if test="null != electStatus">
+			    	AND t1.elect_status = 1
+			    </if>
+	</select>
+	
+	
+	<select id="findCanBillingCmacProject" resultMap="BaseResultMap">
+		SELECT * 
+		  FROM t_bs_project 
+		 WHERE DATE_FORMAT(billing_time,'%Y-%m') = DATE_FORMAT(SYSDATE(),'%Y-%m')
+		   AND common_status = 0
+		   AND `status` = 0 
+	</select>
+	
+	<update id="updateFee" parameterType="TBsProject">
+		 UPDATE t_bs_project 
+			SET current_fee = (
+					SELECT SUM(current_fee) 
+					  FROM t_bs_charge_bill_total t1 
+					 WHERE t1.project_id = project_id 
+					   AND DATE_FORMAT(t1.billing_time,'%Y-%m') = DATE_FORMAT(billing_time,'%Y-%m')
+				),
+				    last_owed_fee = (
+					SELECT SUM(last_owed_fee) 
+					  FROM t_bs_charge_bill_total t1 
+					 WHERE t1.project_id = project_id 
+					   AND DATE_FORMAT(t1.billing_time,'%Y-%m') = DATE_FORMAT(billing_time,'%Y-%m')
+				),
+			    total_fee = (
+					SELECT SUM(total_fee) 
+					  FROM t_bs_charge_bill_total t1 
+					 WHERE t1.project_id = project_id 
+					   AND DATE_FORMAT(t1.billing_time,'%Y-%m') = DATE_FORMAT(billing_time,'%Y-%m')
+				)
+			WHERE project_id = #{projectId}
+			AND DATE_FORMAT(billing_time,'%Y-%m') = DATE_FORMAT(#{billingTime},'%Y-%m');
+	</update>
+	
+	<select id="findCanReGenBillingProject" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select * 
+		  from t_bs_project
+		 where project_id = #{projectId}
+		   and is_gen_bill = 1
+		   and DATE_FORMAT(billing_time,'%Y-%m') in 
+		   <foreach collection="times" open="(" separator="," close=")" item="time">
+		   		#{time}
+		   </foreach> 
+		 order by billing_time asc
+	</select>
+	
+	<select id="findCanGenBillProject" resultMap="BaseResultMap">
+		SELECT t1.* 
+		  FROM t_bs_project t1,
+		       t_sys_project t2
+		 WHERE t1.project_id = t2.code
+		   AND t2.bill_status = 0
+		   AND DATE_FORMAT(t1.billing_time,'%Y-%m') = DATE_FORMAT(SYSDATE(),'%Y-%m')
+		   AND t1.status = 0
+		   AND t1.is_gen_bill = 0
+		 ORDER BY billing_time asc
+	</select>
+	
+		<!-- 根据水费计费状态，类型，项目编号及计费时间来查询 -->
+	<select id="findByItemStatueAndBilltime" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select 
+			t1.*
+		from t_bs_project t1
+		where 1 = 1
+		and DATE_FORMAT(billing_time,'%Y-%m') = DATE_FORMAT(#{billingTime},'%Y-%m')
+		<if test="meterFlag==3">
+			and (water_status=1 or water_status=4)
+		</if>
+		<if test="meterFlag==4">
+			and (elect_status=1 or elect_status=4)
+		</if>
+		and project_id=#{projectId}
+	</select>
+	
+	<select id="findCurrentMonthAndBilltime" resultMap="BaseResultMap">
+		select 
+				t1.*
+			from t_bs_project t1
+			where 1 = 1
+			and DATE_FORMAT(billing_time,'%Y-%m') = DATE_FORMAT(#{billingTime},'%Y-%m')
+			and project_id=#{projectId}
+			and status=0
+	</select>
+	
+	<!-- 查询当月所有可用的项目 -->
+	<select id="findCurrentAllUseProjects" resultMap="BaseResultMap">
+		select 
+				t1.*
+			from t_bs_project t1
+			where 1 = 1
+			and DATE_FORMAT(billing_time,'%Y-%m') = DATE_FORMAT(#{billingTime},'%Y-%m')
+			and status=0
+	</select>
+	<!-- 根据计费ID来查询,计费状态在未计费或者是部分计费的单 -->
+	<select id="findByItemStatueAndId" parameterType="TBsProject" resultMap="BaseResultMap">
+		SELECT  t1.*
+		  FROM  t_bs_project t1,
+				t_sys_project t2
+		 WHERE  t1.project_id = t2.code
+		   AND  t1.status = 0
+		   and  t2.status = "enable"
+		   <if test="wyStatus !=null">
+		   and (t1.wy_status=1 or t1.wy_status=4)
+		   </if>
+		   <if test="btStatus !=null">
+		   and (t1.bt_status=1 or t1.bt_status=4)
+		   </if>
+		   <if test="waterStatus !=null">
+		   and (t1.water_status=1 or t1.water_status=4)
+		   </if>
+		   <if test="electStatus !=null">
+		   and (t1.elect_status=1 or t1.elect_status=4)
+		   </if>
+		   <if test="id !=null">
+		   	and id=#{id}
+		   </if>
+		   <if test="status !=null">
+		   and status=#{status}
+		   </if>
+		   
+	</select>
+	
+		<!-- 水电费能计费的项目，主要是因为水电费的单独计费 -->
+	<select id="findCanNewBillingProjects" parameterType="java.util.Map" resultMap="BaseResultMap">
+		 SELECT
+			  		t1.*
+			   FROM t_bs_project t1,
+			  		t_bs_charging_scheme t2,
+			  		t_sys_project t3
+			  WHERE t1.project_id = t3.code
+			    AND t3.status = 'enable'
+			    AND t1.project_id = t2.project_id
+			    AND t2.is_used = #{isUsed}
+			    AND SYSDATE() BETWEEN t2.start_using_date AND t2.end_using_date
+			    AND DATE(CURDATE()) = CONCAT(DATE_FORMAT(SYSDATE(),'%Y-%m'),"-",t2.charge_data)
+			    <if test="chargeType !=null">
+			    AND t2.charging_type = #{chargeType}
+			    </if>
+			    AND t1.status = #{status}
+			    <if test="null != wyStatus">
+			    	and (t1.wy_status =1 or t1.wy_status=4)
+			    </if>
+			    <if test="null != btStatus">
+			    	and (t1.bt_status =1 or t1.bt_status =4})
+			    </if>
+			    <if test="null != waterStatus">
+			    	and (t1.water_status =1 or t1.water_status =4)
+			    </if>
+			    <if test="null != electStatus">
+			    	and (t1.elect_status =1 or t1.elect_status=4)
+			    </if>
+		   GROUP BY t1.id
+	</select>
+	
+	<delete id="deleteByCode">
+		delete from t_bs_project where project_id = #{projectId}
+	</delete>
+	
+	<update id="flushItems">
+		UPDATE t_bs_project t1, 
+		(
+			SELECT SUM(tt1.current_fee) AS current_fee ,SUM(tt1.last_owed_fee) AS last_owed_fee,SUM(tt1.total_fee) AS total_fee
+			  FROM t_bs_charge_bill_total tt1 , t_bs_charge_bill_total tt2
+		     WHERE tt1.project_id = #{projectId}
+			   AND tt1.id = tt2.last_total_id
+		       AND tt1.billing_time IS NOT NULL
+		       AND DATE_FORMAT(tt1.billing_time,'%y-%M') = DATE_FORMAT(SYSDATE(),'%y-%M')
+		) t2
+		SET t1.current_fee = t2.current_fee,
+		    t1.last_owed_fee = t2.last_owed_fee,
+		    t1.total_fee = t2.total_fee
+		WHERE DATE_FORMAT(t1.billing_time,'%y-%M') = DATE_FORMAT(SYSDATE(),'%y-%M')
+		AND t1.project_id = #{projectId}
+	</update>
+	
+	<select id="findCommonStatus" resultType="Integer">
+		SELECT IFNULL(t1.common_status,1) FROM t_bs_project t1, t_jg_staff_grop t2
+		 WHERE t1.project_id = t2.project_id
+		   AND t2.user_id = #{userId}
+		   <![CDATA[
+			   AND billing_time < DATE_ADD(SYSDATE(), INTERVAL 1 MONTH) 
+		   ]]>
+		 ORDER BY billing_time DESC 
+		 LIMIT 1
+	</select>
+	
+	<select id="findCurrentProjectByBuildingCode" resultMap="BaseResultMap">
+		select t1.*
+		  from t_bs_project t1, tc_building t2
+		 where t1.project_id = t2.project_id
+		   and t2.building_code = #{buildingCode}
+		 order by t1.billing_time desc 
+		 limit 1
+	</select>
+	
+</mapper>

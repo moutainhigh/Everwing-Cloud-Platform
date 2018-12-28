@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.sys.TSysRoleResourceMapper" >
+	<resultMap type="TSysRoleResource" id="BaseResultMap">
+		<result property="id" column="id"/>
+		<result property="roleId" column="role_id"/>
+		<result property="srcId" column="src_id"/>
+		<result property="srcType" column="src_type"/>
+	</resultMap>
+
+  	<select id="findByCondition" resultMap="BaseResultMap" parameterType="TSysRoleResource">
+	  SELECT * FROM t_sys_role_resource t WHERE 1=1
+	  <if test="srcType != null and srcType != ''">
+		  AND src_type = #{srcType}
+	  </if>
+	  <if test="roleId != null and roleId != ''">
+		  AND role_id = #{roleId}
+	  </if>
+	  <if test="srcId != null and srcId != ''">
+		  AND src_id = #{srcId}
+	  </if>
+  	</select>
+
+	<!-- 获取角色已被分配的菜单id -->
+	<select id="findMenuIdGroupByRoleId" resultMap="BaseResultMap" parameterType="TSysRoleResource">
+		SELECT rs.role_id,max(rs.src_id) AS src_id FROM t_sys_role_resource rs WHERE rs.src_type = 'm' GROUP BY rs.role_id
+	</select>
+
+	<insert id="batchInsert" parameterType="java.util.List">
+  		insert into t_sys_role_resource(id,role_id,src_id,src_type) values
+  			<foreach collection="list" item="item" index="index" separator=",">
+					(#{item.id},
+					#{item.roleId},
+					#{item.srcId},
+  					#{item.srcType}
+  					)
+  			</foreach>
+  	</insert>
+  
+  	<delete id="deleteRoleResourceByRoleId" parameterType="String">
+  		delete from t_sys_role_resource where role_id = #{0}
+  	</delete>
+  
+  	<delete id="deleteRoleResourceByRoleIds" parameterType="java.util.List">
+  		delete from t_sys_role_resource where role_id in
+  		<foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+  			#{item}
+  		</foreach>
+  	</delete>
+
+	<delete id="deleteRoleResourceBySrcId" parameterType="String">
+		delete from t_sys_role_resource where src_type = #{0} AND src_id =#{1}
+	</delete>
+
+	<!-- 删除指定角色的资源 -->
+	<delete id="deleteRoleResourceByRoleIdAndSrcId" parameterType="String">
+		delete from t_sys_role_resource where role_id = #{0} AND src_id =#{1}
+	</delete>
+</mapper>

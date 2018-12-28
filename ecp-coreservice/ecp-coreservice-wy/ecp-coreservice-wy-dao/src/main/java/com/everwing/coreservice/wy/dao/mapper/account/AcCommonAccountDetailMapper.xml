@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.account.AcCommonAccountDetailMapper">
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.fee.entity.AcCommonAccountDetail">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="account_id" jdbcType="VARCHAR" property="accountId" />
+    <result column="house_code_new" jdbcType="VARCHAR" property="houseCodeNew" />
+    <result column="before_amount" jdbcType="DECIMAL" property="beforeAmount" />
+    <result column="after_amount" jdbcType="DECIMAL" property="afterAmount" />
+    <result column="change_amount" jdbcType="DECIMAL" property="changeAmount" />
+    <result column="business_type" jdbcType="INTEGER" property="businessType" />
+    <result column="dikou_type" jdbcType="INTEGER" property="dikouType" />
+    <result column="bill_detail_id" jdbcType="VARCHAR" property="billDetailId" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="project_id" jdbcType="VARCHAR" property="projectId" />
+    <result column="project_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_id" jdbcType="VARCHAR" property="createId" />
+    <result column="opera_id" jdbcType="VARCHAR" property="operaId" />
+  </resultMap>
+
+  <select id="getPushDataForCommonAccount" parameterType="java.util.Map" resultMap="BaseResultMap">
+    SELECT house_code_new,change_amount,dikou_type,create_time from t_ac_common_account_detail where  project_id=#{projectId} and business_type=2
+
+    <if test=" null != lastPushDate and '' != lastPushDate ">
+      <![CDATA[
+					AND create_time > #{lastPushDate}
+				]]>
+    </if>
+    <if test=" null != intervalDays and '' != intervalDays ">
+      <![CDATA[
+					AND create_time < #{intervalDays}
+				]]>
+    </if>
+
+</select>
+
+</mapper>

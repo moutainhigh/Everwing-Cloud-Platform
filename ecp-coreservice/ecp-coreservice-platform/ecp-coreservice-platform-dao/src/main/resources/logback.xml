@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<property name="characterEncoding" value="UTF-8"/>
+	<property name="logFolder" value="${filter.log.path}"/>
+	
+	<appender name="FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${logFolder}/linyin-server.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- 原则上每天分隔一个log文件，并通过zip压缩 -->
+			<fileNamePattern>${logFolder}/linyin-server.%d{yyyyMMdd}.%i.log.zip</fileNamePattern>
+			<!-- 最多保留90个log归档文件 -->
+			<maxHistory>90</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<!-- 若同一天的log文件超过100MB，则每100MB拆分新文件 -->
+				<maxFileSize>100MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%date %level [%thread] %logger{30} %msg%n
+			</pattern>
+			<charset>${characterEncoding}</charset>
+		</encoder>
+	</appender>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%date %level [%thread] %logger{30} %msg%n</pattern>
+			<charset>${characterEncoding}</charset>
+		</encoder>
+	</appender>
+
+	<logger name="com.everwing" additivity="false"
+		level="DEBUG">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+	</logger>
+	
+	<logger name="org.apache.http.headers" additivity="false"
+		level="INFO">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+	</logger>
+	
+	<logger name="org.apache.http.wire" additivity="false"
+		level="INFO">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+	</logger>
+	
+	<logger name="org.springframework.core.type.classreading.AnnotationAttributesReadingVisitor" additivity="false"
+		level="INFO">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+	</logger>
+	
+	<logger name="org.springframework" additivity="false"
+		level="INFO">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+	</logger>
+
+	<root level="DEBUG">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+	</root>
+</configuration>

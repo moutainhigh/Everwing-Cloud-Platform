@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.delivery.TJgGiveAccountDetailMapper">
+	<resultMap id="BaseResultMap" type="TJgGiveAccountDetail">
+		<result column="id" property="id" jdbcType="VARCHAR" />
+		<result column="opr_num" property="oprNum" jdbcType="VARCHAR" />
+		<result column="opr_amount" property="oprAmount" jdbcType="DOUBLE" />
+		<result column="type" property="type" jdbcType="TINYINT" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+		<result column="opr_id" property="oprId" jdbcType="VARCHAR" />
+		<result column="opr_name" property="oprName" jdbcType="VARCHAR" />
+		<result column="receive_id" property="receiveId" jdbcType="VARCHAR" />
+		<result column="receive_name" property="receiveName" jdbcType="VARCHAR" />
+		<result column="total_id" property="totalId" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="project_id" property="projectId" jdbcType="VARCHAR" />
+		<result column="project_name" property="projectName" jdbcType="VARCHAR" />
+		<result column="opr_type" property="oprType" jdbcType="TINYINT" />
+		<result column="opr_start_time" property="oprStartTime" jdbcType="TIMESTAMP" />
+		<result column="opr_end_time" property="oprEndTime" jdbcType="TIMESTAMP" />
+		<result column="next_total_id" property="nextTotalId" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<insert id="addGiveAccountDetail" parameterType="TJgGiveAccountDetail">
+		INSERT INTO t_jg_give_account_detail 
+		VALUES(
+			#{id},
+			#{oprNum},
+			#{oprAmount},
+			#{type},
+			#{status},
+			#{oprId},
+			#{oprName},
+			#{receiveId},
+			#{receiveName},
+			#{projectId},
+			#{projectName},
+			#{totalId},
+			#{remark},
+			#{oprType},
+			SYSDATE(),
+			#{oprEndTime},
+			#{nextTotalId}
+		)
+	
+	</insert>
+	
+	<!-- 查询交账记录 -->
+	<select id="listPageGiveCashInfo" parameterType="TJgGiveAccountDetail" resultMap="BaseResultMap">
+		SELECT 
+			opr_num,
+			opr_amount,
+			TYPE,
+			STATUS,
+			opr_id,
+			opr_name,
+			receive_id,
+			receive_name,
+			opr_start_time
+		FROM t_jg_give_account_detail WHERE opr_id=#{oprId}  AND project_id=#{projectId} ORDER BY opr_start_time DESC
+	</select>
+	
+	<!-- 查询收账记录，以上级身份 -->
+	<select id="listPageReceiveCashInfo" parameterType="TJgGiveAccountDetail" resultMap="BaseResultMap">
+		SELECT
+			id,
+		    opr_num,
+			opr_amount,
+			TYPE,
+			STATUS,
+			opr_id,
+			opr_name,
+			receive_id,
+			receive_name,
+			opr_start_time,
+			total_id,
+			remark
+		FROM
+		  t_jg_give_account_detail
+		WHERE receive_id = #{oprId}
+		  AND project_id = #{projectId}
+		<if test=" null != oprName ">
+			AND opr_name  LIKE CONCAT('%',#{oprName},'%') 
+		</if>
+		<if test=" null != status and '' != status ">
+			AND status = #{status}
+		</if>
+		  
+		ORDER BY opr_start_time DESC,
+		  opr_id
+	</select>
+	
+	<update id="updateTotalId" parameterType="TJgGiveAccountDetail">
+		UPDATE t_jg_give_account_detail SET total_id=#{totalId}  WHERE opr_id=#{oprId} AND project_id=#{projectId} AND total_id IS NULL AND status != 2
+	</update>
+	
+	<!-- 收银组长退回交账 -->
+	<update id="returnOrConfirmGiveInfo" parameterType="java.util.Map" >
+		UPDATE t_jg_give_account_detail SET STATUS=#{status} ,opr_end_time =NOW()
+			WHERE receive_id=#{receiveId} AND project_id=#{projectId} 
+				AND status=1
+				AND id IN 
+		<foreach collection="list" item="id" open="(" close=")" separator=",">
+  			#{id}
+  		</foreach>
+	</update>
+	
+	
+	
+	
+	<select id="listPageGiveAccountByTotalId" parameterType="TJgGiveAccountDetail" resultMap="BaseResultMap">
+		SELECT
+		  opr_num,
+		  opr_amount,
+		  STATUS,
+		  TYPE,
+		  opr_id,
+		  opr_name,
+		  receive_id,
+		  receive_name,
+		  opr_start_time,
+		  opr_end_time
+		FROM
+		  t_jg_give_account_detail
+		WHERE STATUS != 2 AND total_id = #{totalId}
+	</select>
+	
+	
+	<update id="updateStatusBatchs" parameterType="java.util.List">
+		UPDATE t_jg_give_account_detail SET STATUS=3 
+		WHERE STATUS=1 AND total_id IN 
+		<foreach collection="list" item="id" open="(" close=")" separator=",">
+  			#{id}
+  		</foreach>
+	</update>
+	
+	<!-- 组长退回结算 -->
+	<update id="updateStatusBatchsForReturn" parameterType="java.util.List">
+		UPDATE t_jg_give_account_detail SET total_id = NULL 
+		WHERE STATUS != 2 AND total_id IN 
+		<foreach collection="list" item="id" open="(" close=")" separator=",">
+  			#{id}
+  		</foreach>
+	</update>
+	
+	
+	<select id="listPageAccountReceivables" parameterType="TJgGiveAccountDetail" resultMap="BaseResultMap">
+		SELECT
+		    opr_num,
+		  	opr_amount,
+		  	STATUS,
+		  	TYPE,
+		  	opr_id,
+		  	opr_name,
+		  	receive_id,
+			receive_name,
+			opr_start_time,
+			opr_end_time,
+			total_id
+		FROM
+		  t_jg_give_account_detail
+		WHERE total_id IN
+		  (SELECT
+		    id
+		  FROM
+		    t_jg_total_calculation
+		  WHERE total_id =#{totalId})
+		  AND STATUS = 3
+	</select>
+	
+	
+	<select id="listPageAccountReceivableByOpr" parameterType="TJgGiveAccountDetail" resultMap="BaseResultMap">
+		SELECT
+		    opr_num,
+		  	opr_amount,
+		  	STATUS,
+		  	TYPE,
+		  	opr_id,
+		  	opr_name,
+		  	receive_id,
+			receive_name,
+			opr_start_time,
+			opr_end_time,
+			total_id
+		FROM
+		  t_jg_give_account_detail
+		WHERE total_id IN
+		  (SELECT
+		    id
+		  FROM
+		    t_jg_total_calculation
+		  WHERE receive_id=#{receiveId} AND project_id=#{projectId} AND total_id IS NULL)
+		  AND STATUS = 3
+	</select>
+	
+	
+	<!-- 出纳根据自己的用户id查询待交账的现金收账信息 -->
+	<select id="listPageGiveAccountForCN"  parameterType="TJgGiveAccountDetail" resultMap="BaseResultMap">
+		SELECT
+		  *
+		FROM
+		  t_jg_give_account_detail
+		WHERE total_id IN
+		  (SELECT
+		    t1.id
+		  FROM
+		    t_jg_total_calculation t1
+		  WHERE t1.total_id IN
+		    (SELECT
+		      id
+		    FROM
+		      t_jg_total_calculation
+		    WHERE receive_id = #{receiveId}
+		      AND project_id = #{projectId}
+		      AND total_id IS NULL
+		      AND STATUS = 3))
+	</select>
+	
+	
+	
+</mapper>

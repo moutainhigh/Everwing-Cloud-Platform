@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<excel id="pay_info_small_program">
+    <sheet label="小程序交费明细导出">
+        <list>
+            <sql id="8861010b-d29c-11e8-ba6f-00163e02f7ae">
+                <![CDATA[
+                    SELECT * from 
+					(
+					select building_code bpcode,batch_no batchNo,create_time payTime,IFNULL(wy_amount,0.00) wyAmount,IFNULL(bt_amount,0.00) btAmount ,
+					IFNULL(water_amount,0.00) waterAmount,IFNULL(elect_amount,0.00) electAmount ,IFNULL(common_amount,0.00) commonAmount,
+					(IFNULL(wy_amount,0.00) + IFNULL(bt_amount,0.00) +IFNULL(water_amount,0.00) + IFNULL(elect_amount,0.00) + IFNULL(common_amount,0.00)) totalAmount
+					from t_bs_pay_info where pay_type = 8 
+					<#if projectId ??>
+                      	 AND project_id = '${projectId}'
+                  	</#if>
+					<#if startTime ??>
+						AND create_time >= '${startTime}'
+					</#if>
+					<#if endTime ??>
+						AND create_time <= '${endTime}'
+					</#if>
+					<#if oneDay ??>
+						AND DATE_FORMAT(create_time,'%Y-%m-%d') = '${oneDay}'
+					</#if>
+					) tt1 LEFT JOIN
+					(
+					SELECT
+					 tt.building_code buildingCode,tt.house_code houseCode,tt.building_full_name buildingFullName,tsp.description,
+					 group_concat( CASE WHEN x1.cust_id IS NULL THEN enterprise_name ELSE x3.NAME END ) custName
+					FROM
+					 tc_person_building x1
+					LEFT JOIN tc_enterprise_cust x2 ON x1.enterprise_id = x2.enterprise_id
+					LEFT JOIN tc_person_cust x3 ON x1.cust_id = x3.cust_id
+					LEFT JOIN tc_building tt on tt.building_code = x1.building_code
+					LEFT JOIN t_sys_project tsp ON tt.project_id = tsp.code
+					WHERE 
+					<#if projectId ??>
+                      	tt.project_id = '${projectId}'
+                  	</#if>
+					
+					GROUP BY tt.building_code ORDER BY x1.building_code) tt2 ON tt1.bpcode = tt2.buildingCode
+                ]]>
+            </sql>
+            <!-- 查询结果字段和excel表头标题的映射，column的值一定要和SQL语句的AS别名一致 -->
+             <field column="houseCode" label="房号" type="String"></field>
+			 <field column="buildingFullName" label="房屋名称" type="String"></field>
+			 <field column="description" label="项目名" type="String"></field>
+			 <field column="custName" label="业主姓名" type="String"></field>
+			 <field column="batchNo" label="交费单号" type="String"></field>
+			 <field column="wyAmount" label="管理费金额" type="Double" format="0.00"></field>
+			 <field column="btAmount" label="本体基金金额" type="Double" format="0.00"></field>
+			 <field column="waterAmount" label="水费金额" type="Double" format="0.00"></field>
+			 <field column="electAmount" label="电费金额" type="Double" format="0.00"></field>
+			 <field column="commonAmount" label="通用账户金额" type="Double" format="0.00"></field>
+			 <field column="totalAmount" label="交费总金额" type="Double" format="0.00"></field>
+			 <field column="payTime" label="交费日期" type="Date" format="yyyy-MM-dd"></field>
+        </list>
+    </sheet>
+</excel>

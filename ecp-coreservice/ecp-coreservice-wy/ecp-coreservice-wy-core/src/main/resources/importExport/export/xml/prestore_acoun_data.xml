@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<excel id="prestore_acoun_data">
+    <sheet label="预收账户收入">
+        <list>
+            <sql id="4fcb29df-7f2a-11e8-b69d-0050568e00c5">
+                <![CDATA[
+           select
+
+                    c.house_code as houseCode,
+                    c.building_full_name as buildingFull,
+                   (case a.type
+                   when 0 then '通用账户'
+                   when 1 then '物业管理费'
+                   when 2 then '本体基金'
+                   when 3 then '水费'
+                   when 4 then '电费'
+                   when 5 then '污水处理费'
+                   when 6 then '垃圾费'
+                    end) as aT ,
+
+                  (case b.pay_type
+                   when 1 then '现金'
+                   when 2 then '微信支付'
+                   when 3 then '刷卡'
+                   when 4 then '混合支付'
+                   when 5 then  '银行托收'
+                   when 6 then '银行收款'
+                   when 7 then '支付宝'
+                   end) as pT,
+                    a.amount as moneyZ,
+                 (case a.business_type
+                   when 1 then '预存'
+                   when 2 then '抵扣'
+                   when 3 then '退款'
+
+                   end) as T,
+                    a.create_time as createTime
+      from t_project_prestore_detail a
+    left join  t_bs_pay_info b on a.business_opera_detail_id =b.batch_no
+    left join tc_building c on a.house_code_new=c.house_code
+    where a.prestore_account in(
+    select id from t_project_prestore_account
+    where project_account_id =
+    (select id from t_project_account
+    where  project_id='${projectId}' )
+    )
+    <#if  accountType?? >
+      AND type='${accountType}'
+    </#if>
+
+    <#if businessType??>
+      AND  business_type='${businessType}'
+    </#if>
+      <#if startTime?? && startTime !="">
+         and a.create_time >='${startTime}'
+        </#if>
+
+        <#if endTime?? && endTime != "" >
+        and a.create_time <= '${endTime}'
+        </#if>
+
+            <#if payType?? >
+                and business_opera_detail_id in(
+                select batch_no FROM t_bs_pay_info where pay_type= '${payType}')
+            </#if>
+              ]]>
+            </sql>
+
+            <field column="houseCode" label="房屋编号"></field>
+            <field column="buildingFull" label="房屋地址"></field>
+            <field column="aT" label="计费项"></field>
+            <field column="pT" label="支付方式"></field>
+            <field column="T" label="业务类型"></field>
+            <field column="moneyZ" label="金额" type="Double" format="0.00"></field>
+            <field column="bt" label="业务类型"></field>
+            <field column="createTime" label="时间" type="Date" format="yyyy-MM-dd HH:mm:ss"></field>
+
+        </list>
+    </sheet>
+
+</excel>

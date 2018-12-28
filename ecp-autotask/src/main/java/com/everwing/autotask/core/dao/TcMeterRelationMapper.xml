@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.autotask.core.dao.TcMeterRelationMapper">
+
+    <resultMap id="BaseResultMap" type="TcMeterRelation">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="buildingCode" column="building_code" jdbcType="VARCHAR"/>
+        <result property="relationId" column="relation_id" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="findPositionByDatas" parameterType="TcReadingTask" resultType="String">
+        SELECT t1.position
+        FROM
+        <if test="meterType == 1">
+            tc_electricity_meter t1
+        </if>
+        <if test="meterType == 0">
+            tc_water_meter t1
+        </if>
+        WHERE t1.code in
+        <foreach collection="datas" item="item" open="(" close=")" separator=",">
+            #{item.meterCode}
+        </foreach>
+        GROUP BY t1.position
+    </select>
+    <insert id="batchAdd" parameterType="java.util.List">
+        insert into tc_meterfeeobj_relation
+        values
+        <foreach collection="list" item="item" separator=",">
+            (
+            UPPER(UUID()),
+            #{item.buildingCode},
+            #{item.relationId},
+            #{item.type}
+            )
+        </foreach>
+    </insert>
+    <!-- 获取任务/建筑专用 -->
+    <select id="getTaskRelationListByTaskId" parameterType="String" resultMap="BaseResultMap">
+        select * from tc_meterfeeobj_relation
+        where relation_id = #{0}
+        and type = 3
+    </select>
+</mapper>

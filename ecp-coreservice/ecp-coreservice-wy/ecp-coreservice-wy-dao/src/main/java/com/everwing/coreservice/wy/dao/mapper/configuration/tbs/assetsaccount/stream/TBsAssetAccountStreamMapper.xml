@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.configuration.tbs.assetsaccount.stream.TBsAssetAccountStreamMapper">
+	
+	<resultMap type="TBsAssetAccountStream" id="BaseResultMap">
+		<result column="id" property="id"/>
+		<result column="parent_id" property="parentId"/>
+		<result column="chang_money" property="changMoney"/>
+		<result column="occurrence_time" property="occurrenceTime"/>
+		<result column="create_id" property="createId"/>
+		<result column="create_name" property="createName"/>
+		<result column="purpose" property="purpose"/>
+	</resultMap>
+	
+	
+	<select id="listPage" parameterType="TBsAssetAccountStream" resultMap="BaseResultMap">
+		select t1.id,
+			   t2.type as parent_id,
+			   t1.chang_money,
+			   t1.occurrence_time,
+			   t1.create_id,
+			   t1.create_name,
+			   t1.purpose
+	      from t_bs_asset_account_stream t1,
+	           t_bs_asset_account t2
+	     where t1.parent_id = t2.id
+	       and t2.building_code = #{buildingCode}
+	       <if test="null != type">
+	       		and t2.type = #{type}
+	       </if>
+	       <if test="null != startTime">
+	       		<![CDATA[
+	       			and t1.occurrence_time >= #{startTime}
+	       		]]>
+	       </if>
+	       <if test="null != endTime">
+	       		<![CDATA[
+	       			and t1.occurrence_time <= #{endTime}
+	       		]]>
+	       </if>
+	      order by t1.occurrence_time desc
+	</select>
+	
+	<update id="stream" parameterType="TBsAssetAccountStream">
+		update t_bs_asset_account_stream
+		<set>
+			<if test="null != changMoney">
+				chang_money = #{changMoney},
+			</if>
+			<if test="null != occurrenceTime">
+				occurrence_time = #{occurrenceTime},
+			</if>
+			<if test="null != purpose">
+				purpose = #{purpose},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<!-- 单个新增 -->
+	<insert id="singleInsert" parameterType="TBsAssetAccountStream">
+		INSERT INTO t_bs_asset_account_stream 
+		    (
+		       id, parent_id,chang_money,occurrence_time,create_id,create_name,purpose
+		    )
+			VALUES (
+				UUID(),
+				#{parentId},
+				#{changMoney},
+				NOW(),
+				#{createId},
+				#{createName},
+				#{purpose}
+			)
+	
+	</insert>
+	
+	<insert id="batchInsert" parameterType="TBsAssetAccountStream">
+			INSERT INTO t_bs_asset_account_stream 
+			(id, parent_id,chang_money,occurrence_time,create_id,create_name,purpose)
+			VALUES 
+			<foreach collection="list" item="item" open="" close="" separator=",">
+				(
+					#{item.id},
+					#{item.parentId},
+					#{item.changMoney},
+					NOW(),
+					#{item.createId},
+					#{item.createName},
+					#{item.purpose}
+				)
+			</foreach>
+	</insert>
+</mapper>

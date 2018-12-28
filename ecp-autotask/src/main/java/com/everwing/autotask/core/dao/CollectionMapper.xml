@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.autotask.core.dao.CollectionMapper">
+    <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.entity.cust.TBcCollection">
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="cust_id" jdbcType="VARCHAR" property="custId" />
+        <result column="cust_name" jdbcType="VARCHAR" property="custName" />
+        <result column="create_bank" jdbcType="INTEGER" property="createBank" />
+        <result column="card_num" jdbcType="VARCHAR" property="cardNum" />
+        <result column="province" jdbcType="VARCHAR" property="province" />
+        <result column="city" jdbcType="VARCHAR" property="city" />
+        <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+        <result column="contract_no" jdbcType="VARCHAR" property="contractNo" />
+        <result column="relate_building_code" jdbcType="VARCHAR" property="relateBuildingCode" />
+        <result column="charging_items" jdbcType="VARCHAR" property="chargingItems" />
+        <result column="attachment" jdbcType="VARCHAR" property="attachment" />
+        <result column="relate_building_full_name" jdbcType="VARCHAR" property="relateBuildingFullName" />
+        <result column="status" jdbcType="INTEGER" property="status" />
+        <result column="project_id" jdbcType="VARCHAR" property="projectId" />
+        <result column="card_type" jdbcType="INTEGER" property="cardType" />
+        <result column="card_no" jdbcType="VARCHAR" property="cardNo" />
+    </resultMap>
+
+    <select id="findByBuildingCode" parameterType="String" resultMap="BaseResultMap">
+        select * from t_bc_collection
+        where relate_building_code = #{buildingCode}
+        and status = 1
+        order by start_time desc
+        limit 1
+    </select>
+</mapper>

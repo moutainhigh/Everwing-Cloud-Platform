@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.configuration.project.TBsShareBasicsInfoMapper">
+	<resultMap type="TBsShareBasicsInfo" id="BaseResultMap">
+		<result property="id" column="id" jdbcType="VARCHAR"/>
+		<result property="shareName" column="share_name"  jdbcType="VARCHAR"/>
+		<result property="shareFrequency" column="share_frequency"  jdbcType="INTEGER"/>
+		<result property="isUsed" column="is_used"  jdbcType="TINYINT"/>
+		<result property="startMode" column="start_mode"  jdbcType="TINYINT"/>
+		<result property="effectTime" column="effect_time"  jdbcType="TIMESTAMP"/>
+		<result property="invalidTime" column="invalid_time"  jdbcType="TIMESTAMP"/>
+		<result property="lastExecuteTime" column="last_execute_time"  jdbcType="TIMESTAMP"/>
+		<result property="shareAmount" column="share_amount"  jdbcType="DOUBLE"/>
+		<result property="shareType" column="share_type"  jdbcType="TINYINT"/>
+		<result property="projectId" column="project_id"  jdbcType="VARCHAR"/>
+		<result property="projectName" column="project_name"  jdbcType="VARCHAR"/>
+		<result property="createBy" column="create_by"  jdbcType="VARCHAR"/>
+		<result property="createTime" column="create_time"  jdbcType="TIMESTAMP"/>
+	</resultMap>
+
+	<!-- 插入方案关联收费类型数据信息 -->
+	<insert id="insertShare" parameterType="TBsShareBasicsInfo">
+		INSERT INTO t_bs_share_basics_info 
+			VALUES
+			  (
+			  	#{id},
+			  	#{shareName},
+			  	#{shareFrequency},
+			  	#{isUsed},
+			  	#{startMode},
+			  	#{effectTime},
+			  	#{invalidTime},
+			  	#{lastExecuteTime},
+			  	#{shareAmount},
+			  	#{shareType},
+			  	#{projectId},
+			  	#{projectName},
+			  	#{createBy},
+			  	NOW()
+			  )
+	</insert>
+
+	<!-- 修改sql片段 -->
+	<sql id="sqlForUpdate">
+		 <if test=" null != shareName  and '' != shareName ">
+	        share_name = #{shareName},
+	     </if>
+	     <if test=" null != shareFrequency and '' != shareFrequency">
+	        share_frequency = #{shareFrequency},
+	      </if>
+	     <if test=" null != invalidTime and '' != invalidTime ">
+	         invalid_time = #{invalidTime},
+	      </if>
+	      <if test=" null != shareAmount and '' != shareAmount ">
+	         share_amount = #{shareAmount},
+	      </if>
+	      <if test=" null != isUsed and '' != isUsed">       
+	      	is_used = #{isUsed}
+	      </if>
+	</sql>
+
+	<!-- 修改，编辑创建好的分摊信息 -->
+	<update id="updateShare" parameterType="TBsShareBasicsInfo">
+		<set>
+			<include refid="sqlForUpdate"></include>
+	    </set>
+		    WHERE  id = #{id}
+	</update>
+	
+	<!-- 按条件分页查询分摊信息表 -->
+	<select id="listPageShareInfos" parameterType="TBsShareBasicsInfo" resultMap="BaseResultMap">
+		SELECT 
+		  * 
+		FROM
+		  t_bs_share_basics_info 
+		WHERE 1=1 
+			<if test="null != shareName">
+				AND share_name LIKE CONCAT('%',#{shareName},'%') 
+			</if>
+			<if test="null != shareType">
+			    AND share_type = #{shareType} 
+			</if>
+			<if test="null != id">
+				AND id=#{id}
+			</if>
+			AND project_id=#{projectId}
+		ORDER BY is_used,
+		  create_time DESC 
+	</select>
+	
+	<select id="getUsedShareInfo" parameterType="java.lang.String" resultMap="BaseResultMap">
+		  SELECT 
+			  * 
+			FROM
+			  t_bs_share_basics_info 
+			WHERE project_id = #{0} 
+			  AND share_type = #{1}
+			  AND is_used = '0' 
+			  AND effect_time &lt; NOW() 
+			  AND invalid_time > NOW() 
+			  AND (
+			    last_execute_time IS NULL 
+			    OR (
+			      SUBSTRING(
+			        (
+			          DATE_ADD(last_execute_time,INTERVAL share_frequency MONTH)
+			        ),1,7) = SUBSTRING(NOW(), 1, 7)
+			    )
+			  )
+	</select>
+
+
+	<!-- 获取唯一的一条分摊信息 -->
+	<select id="getShareBasicInfoOne" parameterType="TBsShareBasicsInfo" resultMap="BaseResultMap">
+		SELECT 
+		  * 
+		FROM
+		  t_bs_share_basics_info WHERE 1=1
+		  <if test="null != shareName">
+		  	AND share_name=#{shareName}
+		  </if>
+		  <if test="null != id">
+		  	AND id=#{id}
+		  </if>
+	</select>
+
+	<!-- 用户多选进行删除操作 -->
+	<delete id="batchDelShares" parameterType="java.util.List">
+		DELETE FROM t_bs_share_basics_info WHERE id IN(
+		<foreach collection="list" item="id" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<update id="updateShareBasic" parameterType="TBsShareBasicsInfo">
+		UPDATE t_bs_share_basics_info
+			<set>
+				<if test="null != shareName">
+					share_name=#{shareName},
+				</if>
+				<if test="null != shareFrequency">
+					share_frequency=#{shareFrequency},
+				</if>
+				<if test="null != isUsed">
+					is_used=#{isUsed},
+				</if>
+				<if test="null != effectTime">
+					effect_time=#{effectTime},
+				</if>
+				<if test="null != invalidTime">
+					invalid_time=#{invalidTime},
+				</if>
+				<if test="null != shareAmount">
+					share_amount=#{shareAmount},
+				</if>
+				<if test="null != lastExecuteTime">
+					last_execute_time=#{lastExecuteTime},
+				</if>
+			</set>
+			WHERE id=#{id}
+	</update>
+	
+	
+	<update id="updateShareBasicInfo" parameterType="java.util.List">
+		UPDATE t_bs_share_basics_info SET last_execute_time = sysdate()
+		  WHERE id IN 
+		  	<foreach collection="list" item="id" open="(" close=")" separator=",">
+				#{id}
+			</foreach>
+	</update>
+	
+	
+	<select id="checkIsHasShared" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM t_bs_share_basics_info WHERE id=#{shareId} AND last_execute_time IS NOT NULL
+	</select>
+	
+	<delete id="deleteShareBasicById" parameterType="java.lang.String">
+		DELETE FROM t_bs_share_basics_info WHERE id=#{id}
+	</delete>
+	
+	<update id="innvalidShareBasic" parameterType="java.lang.String">
+		UPDATE t_bs_share_basics_info SET is_used='1' WHERE id=#{id}
+	</update>
+	
+</mapper>

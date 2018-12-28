@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+
+
+
+
+
+
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop.xsd"
+       default-lazy-init="false">
+
+    <description>admin api dubbo client</description>
+
+    <context:component-scan base-package="com.everwing.coreservice.admin.api"/>
+    <aop:aspectj-autoproxy />
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <array>
+                <value>file:/app/coreservice/admin/dubbo/dubbo-admin-api.properties</value>
+            </array>
+        </property>
+        <property name="ignoreResourceNotFound" value="true" />
+        <property name="ignoreUnresolvablePlaceholders" value="true" />
+        <property name="properties" ref="adminApiProperties" />
+    </bean>
+
+    <bean name="adminApiProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <array>
+                <value>classpath:/config/dubbo-admin-api.properties</value>
+            </array>
+        </property>
+    </bean>
+
+    <import resource="classpath:spring/spring-dubbo-api-admin.xml"/>
+
+</beans>

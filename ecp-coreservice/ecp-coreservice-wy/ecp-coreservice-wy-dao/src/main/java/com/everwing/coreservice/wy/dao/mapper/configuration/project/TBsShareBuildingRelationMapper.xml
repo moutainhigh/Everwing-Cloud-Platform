@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.configuration.project.TBsShareBuildingRelationMapper">
+	<resultMap type="TBsShareBuildingRelation" id="BaseResultMap">
+		<result property="id" column="id" jdbcType="VARCHAR"/>
+		<result property="shareTaskId" column="share_task_id"  jdbcType="VARCHAR"/>
+		<result property="relationBuildingCode" column="relation_building_code"  jdbcType="VARCHAR"/>
+		<result property="relationBuildingName" column="relation_building_name"  jdbcType="VARCHAR"/>
+		<result property="relationBuildingPid" column="relation_building_pid" jdbcType="VARCHAR"/>
+	</resultMap>
+
+	<!-- 批量插入分摊任务下的  资产，任务关联信息 -->
+	<insert id="batchInsert"  parameterType="java.util.List">
+		INSERT INTO t_bs_share_building_relation
+		values
+		<foreach collection="list" item="item" index="index" separator="," >
+			(
+				UPPER(UUID()),
+				#{item.shareTaskId},
+				#{item.relationBuildingCode},
+				#{item.relationBuildingName},
+				#{item.relationBuildingPid}
+			)
+		</foreach>
+	</insert>
+
+	<!-- 根据任务id查询  资产和任务关联信息 -->
+	<select id="selectAssetsByTaskId" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT 
+		  * 
+		FROM
+		  t_bs_share_building_relation
+		WHERE share_task_id = #{taskId}
+	</select>
+
+	<delete id="deleteRelationBuilding" parameterType="java.lang.String">
+		DELETE FROM t_bs_share_building_relation WHERE share_task_id=#{taskId}
+	</delete>
+
+
+	<!-- 根据分摊任务查询任务下已经关联的建筑信息 -->
+	<select id="loadRelationTaskBuiling" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT 
+		  tb.id,
+		  tb.building_code,
+		  tb.building_full_name,
+		  tb.building_name,
+		  tb.building_type,
+		  tb.pid 
+		FROM
+		  tc_building tb 
+		WHERE EXISTS 
+		  (SELECT 
+		    1 
+		  FROM
+		    t_bs_share_building_relation sr 
+		  WHERE sr.share_task_id = #{1}
+		    AND sr.relation_building_code = tb.building_code) 
+		  AND tb.project_id = #{0}
+	<!-- 	  AND tb.building_code = '1001_20170727172034178_10000'  -->
+	</select>
+
+	<delete id="deleteByShareBasicId" parameterType="java.lang.String">
+		DELETE 
+		FROM
+		  t_bs_share_building_relation 
+		WHERE share_task_id IN 
+		  (SELECT 
+		    id 
+		  FROM
+		    t_bs_share_related_task 
+		  WHERE share_basics_id = #{shareId})
+	</delete>
+	
+	<!-- 用户多选进行删除操作 -->
+	<!-- <delete id="batchDelTaskRelation" parameterType="java.util.List">
+		DELETE FROM t_bs_share_building_relation WHERE id IN
+		<foreach collection="list" item="id" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+	</delete> -->
+
+</mapper>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+
+
+        http://www.springframework.org/schema/rabbit
+        http://www.springframework.org/schema/rabbit/spring-rabbit-1.3.xsd">
+
+    <!--配置connection-factory，指定连接rabbit server参数-->
+    <bean id="connectionFactory" class="org.springframework.amqp.rabbit.connection.CachingConnectionFactory">
+        <property name="host" value="${rabbitmq.host}" />
+        <property name="port" value="${rabbitmq.port}" />
+        <property name="username" value="${rabbitmq.username}" />
+        <property name="password" value="${rabbitmq.password}" />
+        <property name="virtualHost" value="${rabbitmq.virtualHost}" />
+        <property name="cacheMode" value="CHANNEL"/>
+
+        <!-- 默认通道缓存25,多线程环境中，较小的缓存意味着通道的创建和关闭将以很高的速率运行.加大默认缓存大小可避免这种开销
+         如果达到了限制,调用线程将会阻塞，直到某个通道可用或者超时, 在后者的情况中，将抛出 AmqpTimeoutException异常.-->
+        <property name="channelCacheSize" value="${rabbit.channelCacheSize}"/>
+
+        <!-- channelCheckoutTimeout属性. 当此属性的值大于０时， channelCacheSize会变成连接上创建通道数目的限制. -->
+        <property name="channelCheckoutTimeout" value="${rabbit.channelCheckoutTimeout}"/>
+
+    </bean>
+
+    <!--通过指定下面的admin信息，当前producer中的exchange和queue会在rabbitmq服务器上自动生成-->
+    <rabbit:admin auto-startup="true" connection-factory="connectionFactory"/>
+
+    <bean id="jsonMessageConverter" class="com.everwing.coreservice.common.convert.FastJsonMessageConverter" />
+
+    <rabbit:template exchange="${exchange.account.name}" id="amqpTemplate"  connection-factory="connectionFactory"  message-converter="jsonMessageConverter" />
+
+    <bean id="acCommonDetailListener" class="com.everwing.coreservice.wy.fee.core.mq.AcCommonDetailListener" />
+
+    <bean id="acBillInfoListener" class="com.everwing.coreservice.wy.fee.core.mq.AcBillInfoListener" />
+
+    <bean id="acChargeDetailListener" class="com.everwing.coreservice.wy.fee.core.mq.AcChargeDetailListener" />
+
+    <bean id="acLastBillFeeListener" class="com.everwing.coreservice.wy.fee.core.mq.AcLastBillFeeListener" />
+
+    <bean id="acLateFeeListener" class="com.everwing.coreservice.wy.fee.core.mq.AcLateFeeListener" />
+
+    <bean id="acSpecialDetailListener" class="com.everwing.coreservice.wy.fee.core.mq.AcSpecialDetailListener" />
+
+    <bean id="acChargeDetailUpdateListener" class="com.everwing.coreservice.wy.fee.core.mq.AcChargeDetailUpdateListener" />
+    
+    <bean id="acChargeDetailBatchRechargeListener" class="com.everwing.coreservice.wy.fee.core.mq.AcChargeDetailBatchRechargeListener" />
+    
+<!--     <bean id="acChargeDetailSunFictitiousListener" class="com.everwing.coreservice.wy.fee.core.mq.AcChargeDetailSunFictitiousListener" /> -->
+
+	<bean id="acLateFeeReductionListener" class="com.everwing.coreservice.wy.fee.core.mq.AcLateFeeReductionListener" />
+
+	<bean id="acDepositAccountRefundListener" class="com.everwing.coreservice.wy.fee.core.mq.AcDepositAccountRefundListener" />
+
+    <bean id="projectProductListener" class="com.everwing.coreservice.wy.fee.core.mq.ProjectProductListener" />
+    <bean id="acRollbackOperationListener" class="com.everwing.coreservice.wy.fee.core.mq.AcRollbackOperationListener" />
+    <bean id="acBusinessOperaListener" class="com.everwing.coreservice.wy.fee.core.mq.AcBusinessOperaListener" />
+    <bean id="acCycleOrderDetailListener" class="com.everwing.coreservice.wy.fee.core.mq.AcCycleOrderDetailListener" />
+    <rabbit:listener-container requeue-rejected="false" connection-factory="connectionFactory" acknowledge="manual" message-converter="jsonMessageConverter" >
+        <rabbit:listener ref="acCommonDetailListener" queue-names="${queue.tcAccount.commonAccountDetail.name}"/>
+        <rabbit:listener ref="acBillInfoListener" queue-names="${queue.tcAccount.billDetail.name}" />
+        <rabbit:listener ref="acChargeDetailListener" queue-names="${queue.tcAccount.chargeDetail.name}" />
+        <rabbit:listener ref="acLastBillFeeListener" queue-names="${queue.tcAccount.lastBillFee.name}" />
+        <rabbit:listener ref="acLateFeeListener" queue-names="${queue.tcAccount.lateFeeDetail.name}" />
+        <rabbit:listener ref="acSpecialDetailListener" queue-names="${queue.tcAccount.specialDetail.name}" />
+        <rabbit:listener ref="acChargeDetailUpdateListener" queue-names="${queue.acAccount.currentChargeDetail.update.name}" />
+        <rabbit:listener ref="acChargeDetailBatchRechargeListener" queue-names="${queue.acAccount.chargeDetail.batchRecharge.name}" />
+<!--         <rabbit:listener ref="acChargeDetailBatchRechargeListener" queue-names="${queue.acAccount.chargeDetail.sunFictitious.name}" /> -->
+        <rabbit:listener ref="acLateFeeReductionListener" queue-names="${queue.acAccount.chargeDetail.lateFeeReduction.name}" />
+        <rabbit:listener ref="acDepositAccountRefundListener" queue-names="${queue.acAccount.deposit.refund.name}" />
+        <rabbit:listener ref="projectProductListener" queue-names="${queue.project.productDetail.name}" />
+        <rabbit:listener ref="acRollbackOperationListener" queue-names="${queue.project.rollback.operation.name}" />
+        <rabbit:listener ref="acBusinessOperaListener" queue-names="${queue.acAccount.businessOpera.name}" />
+        <rabbit:listener ref="acCycleOrderDetailListener" queue-names="${queue.acAccount.cycleOrderDetail.name}" />
+    </rabbit:listener-container>
+</beans>

@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.coreservice.wy.fee.dao.mapper.ProjectProductDetailMapper">
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.fee.entity.ProjectProductDetail">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="project_account_id" jdbcType="VARCHAR" property="projectAccountId" />
+    <result column="money" jdbcType="DECIMAL" property="money" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="is_asset" jdbcType="INTEGER" property="isAsset" />
+    <result column="house_code_new" jdbcType="VARCHAR" property="houseCodeNew" />
+    <result column="rate_after" jdbcType="DECIMAL" property="rateAfter" />
+    <result column="rate" jdbcType="DECIMAL" property="rate" />
+    <result column="rate_fee" jdbcType="DECIMAL" property="rateFee" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="ProjectProductDetail">
+    <result column="order_detail" jdbcType="LONGVARCHAR" property="orderDetail" />
+  </resultMap>
+  <resultMap id="hasScheduleInfoResultMap" extends="BaseResultMap" type="com.everwing.coreservice.common.wy.fee.entity.AccountAddProductDetail">
+
+    <result column="pay_type" jdbcType="VARCHAR" property="payType" />
+    <result column="building_full_name" jdbcType="VARCHAR" property="buildingFullName" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+
+    <result column="countId" jdbcType="INTEGER" property="countId" />
+    <result column="accountMoney" jdbcType="DECIMAL" property="accountMoney" />
+    <result column="afterTaxAmountTotal" jdbcType="DECIMAL" property="afterTaxAmountTotal" />
+    <result column="taxAmountTotal" jdbcType="DECIMAL" property="taxAmountTotal" />
+    <result column="house_code" jdbcType="VARCHAR" property="houseCode" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, project_account_id, money, create_by, create_time, description, order_id, is_asset, 
+    house_code_new, rate_after, rate, rate_fee
+  </sql>
+  <sql id="Blob_Column_List">
+    order_detail
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    from t_project_product_detail
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="listPageSelectProjectProductDetail" resultMap="hasScheduleInfoResultMap">
+    select
+    a.*,
+    (case c.pay_type
+    when 'cash' then 1
+    when 'weixinpay' then 2
+    when 'charge' then 3
+ /*   when 4 then '混合支付'
+    when 5 then  '银行托收'*/
+    when 'bank' then 6
+    when 'alipay' then 7
+    end) as pay_type
+    ,b.product_name,d.building_full_name,d.house_code
+    from t_project_product_detail a left join t_product_order b on a.order_id=b.id
+    left join t_product_payment_detail c on a.order_id=c.order_id
+    left join tc_building d on a.house_code_new=d.house_code
+    WHERE project_account_id in(
+
+    select id from t_project_account
+    where  company_id=#{companyId} and project_id=#{projectId} )
+
+    <if test="projectProductName != null and projectProductName != ''">
+      and a.order_id in(
+      select batch_no from t_product_order where product_name=#{projectProductName})
+    </if>
+    <if test="startTime != null and startTime != ''">
+      AND  DATE_FORMAT(#{startTime},'%Y-%m-%d %H:%i:%S') <![CDATA[ <= ]]>  DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i:%S')
+    </if>
+    <if test="endTime != null and endTime != ''">
+      AND  DATE_FORMAT(#{endTime},'%Y-%m-%d %H:%i:%S') <![CDATA[ >= ]]>  DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i:%S')
+    </if>
+    <if test="payType != null and payType != ''">
+      and a.order_id in(
+      select order_id from t_product_payment_detail where pay_type=#{payType}
+      )
+    </if>
+  </select>
+  <select id="countProjectProductDetail" resultMap="hasScheduleInfoResultMap">
+    select count(id)countid,ifnull(sum(money),0) accountMoney,ifnull(sum(rate_after),0)afterTaxAmountTotal,ifnull(sum(rate_fee),0)taxAmountTotal
+     from t_project_product_detail
+    WHERE project_account_id in
+     (select id from t_project_account
+    where  company_id=#{companyId} and project_id=#{projectId} )
+
+    <if test="projectProductName != null and projectProductName != ''">
+      and order_id in(
+      select batch_no from t_product_order where product_name=#{projectProductName})
+    </if>
+    <if test="startTime != null and startTime != ''">
+      AND  DATE_FORMAT(#{startTime},'%Y-%m-%d %H:%i:%S') <![CDATA[ <= ]]>  DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%S')
+    </if>
+    <if test="endTime != null and endTime != ''">
+      AND  DATE_FORMAT(#{endTime},'%Y-%m-%d %H:%i:%S') <![CDATA[ >= ]]>  DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%S')
+    </if>
+    <if test="payType != null and payType != ''">
+      and order_id in(
+      select order_id from t_product_payment_detail where pay_type=#{payType}
+      )
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_project_product_detail
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="ProjectProductDetail">
+    insert into t_project_product_detail (id, project_account_id, money, 
+      create_by, create_time, description, 
+      order_id, is_asset, house_code_new, 
+      rate_after, rate, rate_fee, 
+      order_detail)
+    values (#{id,jdbcType=VARCHAR}, #{projectAccountId,jdbcType=VARCHAR}, #{money,jdbcType=DECIMAL}, 
+      #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{description,jdbcType=VARCHAR}, 
+      #{orderId,jdbcType=VARCHAR}, #{isAsset,jdbcType=INTEGER}, #{houseCodeNew,jdbcType=VARCHAR}, 
+      #{rateAfter,jdbcType=DECIMAL}, #{rate,jdbcType=DECIMAL}, #{rateFee,jdbcType=DECIMAL}, 
+      #{orderDetail,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="ProjectProductDetail">
+    insert into t_project_product_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="projectAccountId != null">
+        project_account_id,
+      </if>
+      <if test="money != null">
+        money,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="isAsset != null">
+        is_asset,
+      </if>
+      <if test="houseCodeNew != null">
+        house_code_new,
+      </if>
+      <if test="rateAfter != null">
+        rate_after,
+      </if>
+      <if test="rate != null">
+        rate,
+      </if>
+      <if test="rateFee != null">
+        rate_fee,
+      </if>
+      <if test="orderDetail != null">
+        order_detail,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="projectAccountId != null">
+        #{projectAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null">
+        #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="isAsset != null">
+        #{isAsset,jdbcType=INTEGER},
+      </if>
+      <if test="houseCodeNew != null">
+        #{houseCodeNew,jdbcType=VARCHAR},
+      </if>
+      <if test="rateAfter != null">
+        #{rateAfter,jdbcType=DECIMAL},
+      </if>
+      <if test="rate != null">
+        #{rate,jdbcType=DECIMAL},
+      </if>
+      <if test="rateFee != null">
+        #{rateFee,jdbcType=DECIMAL},
+      </if>
+      <if test="orderDetail != null">
+        #{orderDetail,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="ProjectProductDetail">
+    update t_project_product_detail
+    <set>
+      <if test="projectAccountId != null">
+        project_account_id = #{projectAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null">
+        money = #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="isAsset != null">
+        is_asset = #{isAsset,jdbcType=INTEGER},
+      </if>
+      <if test="houseCodeNew != null">
+        house_code_new = #{houseCodeNew,jdbcType=VARCHAR},
+      </if>
+      <if test="rateAfter != null">
+        rate_after = #{rateAfter,jdbcType=DECIMAL},
+      </if>
+      <if test="rate != null">
+        rate = #{rate,jdbcType=DECIMAL},
+      </if>
+      <if test="rateFee != null">
+        rate_fee = #{rateFee,jdbcType=DECIMAL},
+      </if>
+      <if test="orderDetail != null">
+        order_detail = #{orderDetail,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="ProjectProductDetail">
+    update t_project_product_detail
+    set project_account_id = #{projectAccountId,jdbcType=VARCHAR},
+      money = #{money,jdbcType=DECIMAL},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      description = #{description,jdbcType=VARCHAR},
+      order_id = #{orderId,jdbcType=VARCHAR},
+      is_asset = #{isAsset,jdbcType=INTEGER},
+      house_code_new = #{houseCodeNew,jdbcType=VARCHAR},
+      rate_after = #{rateAfter,jdbcType=DECIMAL},
+      rate = #{rate,jdbcType=DECIMAL},
+      rate_fee = #{rateFee,jdbcType=DECIMAL},
+      order_detail = #{orderDetail,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="ProjectProductDetail">
+    update t_project_product_detail
+    set project_account_id = #{projectAccountId,jdbcType=VARCHAR},
+      money = #{money,jdbcType=DECIMAL},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      description = #{description,jdbcType=VARCHAR},
+      order_id = #{orderId,jdbcType=VARCHAR},
+      is_asset = #{isAsset,jdbcType=INTEGER},
+      house_code_new = #{houseCodeNew,jdbcType=VARCHAR},
+      rate_after = #{rateAfter,jdbcType=DECIMAL},
+      rate = #{rate,jdbcType=DECIMAL},
+      rate_fee = #{rateFee,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

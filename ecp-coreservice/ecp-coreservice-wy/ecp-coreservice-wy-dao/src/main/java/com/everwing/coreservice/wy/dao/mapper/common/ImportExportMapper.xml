@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.common.ImportExportMapper">
+    <resultMap id="baseMap" type="TSysImportExport">
+        <result property="id" column="id"/>
+        <result property="uploadFileId" column="upload_file_id"/>
+        <result property="uploadMessageId" column="upload_message_id"/>
+        <result property="moduleDescription" column="module_description"/>
+        <result property="description" column="description"/>
+        <result property="fileName" column="file_name"/>
+        <result property="fileSize" column="file_size"/>
+        <result property="fileType" column="file_type"/>
+        <result property="fileDir" column="file_dir"/>
+        <result property="operationType" column="operation_type"/>
+        <result property="status" column="status"/>
+        <result property="batchNo" column="batch_no"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="createrId" column="creater_id"/>
+        <result property="createrName" column="creater_name"/>
+    </resultMap>
+
+    <resultMap id="listResultMap" type="TSysImportExportList" extends="baseMap">
+        <result property="timeDifference" column="time_difference"/>
+        <result property="statusName" column="status_name"/>
+    </resultMap>
+
+    <select id="listPage" parameterType="TSysImportExportSearch" resultMap="listResultMap">
+        SELECT
+        t.*,
+        TIMESTAMPDIFF(SECOND,t.start_time,t.end_time) AS time_difference,
+        (SELECT li.`name` FROM t_sys_lookup l,t_sys_lookup_item li WHERE l.`code` = li.parent_code and l.`code` = '${@com.everwing.coreservice.common.wy.common.enums.LookupEnum@importExportState.name()}' AND li.`code` = t.`status`) as status_name
+        FROM t_sys_import_export t WHERE 1=1
+        <if test="operationType != null and operationType != ''">
+            AND t.operation_type = #{operationType}
+        </if>
+        <if test="batchNo != null and batchNo != ''">
+            AND t.batch_no LIKE CONCAT('%',#{batchNo},'%')
+        </if>
+        <if test="fileName != null and fileName != ''">
+            AND t.file_name LIKE CONCAT('%',#{fileName},'%')
+        </if>
+        <if test="status != null and status != ''">
+            AND t.status = #{status}
+        </if>
+        <if test="createrName != null and createrName != ''">
+            AND t.creater_id = #{createrName}
+        </if>
+        ORDER BY start_time DESC
+    </select>
+
+    <!-- 获取指定条件的信息 -->
+    <select id="findByCondtion" parameterType="TSysImportExportSearch" resultMap="listResultMap">
+        SELECT
+        t.*
+        FROM t_sys_import_export t WHERE 1=1
+        <if test="uploadFileId != null and uploadFileId != ''">
+            AND t.upload_file_id = #{uploadFileId}
+        </if>
+        <if test="operationType != null and operationType != ''">
+            AND t.operation_type = #{operationType}
+        </if>
+        <if test="batchNo != null and batchNo != ''">
+            AND t.batch_no = #{batchNo}
+        </if>
+        <if test="status != null and status != ''">
+            AND t.status = #{status}
+        </if>
+        <if test="moduleDescription != null and moduleDescription != ''">
+            AND t.module_description = #{moduleDescription}
+        </if>
+    </select>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO t_sys_import_export (
+        id,
+        upload_file_id,
+        upload_message_id,
+        module_description,
+        description,
+        file_name,
+        file_size,
+        file_type,
+        file_dir,
+        operation_type,
+        status,
+        batch_no,
+        start_time,
+        end_time,
+        creater_id,
+        creater_name
+        )
+        VALUES
+        <foreach collection="list" index="index" item="item" separator=",">
+            (
+            UUID(),
+            #{item.uploadFileId},
+            #{item.uploadMessageId},
+            #{item.moduleDescription},
+            #{item.description},
+            #{item.fileName},
+            #{item.fileSize},
+            #{item.fileType},
+            #{item.fileDir},
+            #{item.operationType},
+            #{item.status},
+            #{item.batchNo},
+            sysdate(),
+            #{item.endTime},
+            #{item.createrId},
+            #{item.createrName}
+            )
+        </foreach>
+    </insert>
+
+    <update id="modify" parameterType="TSysImportExport">
+        UPDATE t_sys_import_export
+        <set>
+            id = id
+            <if test="status != null and status != ''">
+                , status= #{status}
+            </if>
+            <if test="fileSize != null and fileSize != ''">
+                , file_size= #{fileSize}
+            </if>
+            <if test="uploadFileId != null and uploadFileId != ''">
+                , upload_file_id= #{uploadFileId}
+            </if>
+            <if test="uploadMessageId != null and uploadMessageId != ''">
+                , upload_message_id= #{uploadMessageId}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                , end_time= sysdate()
+            </if>
+        </set>
+        WHERE batch_no = #{batchNo}
+    </update>
+
+    <select id="findBySql" parameterType="java.util.Map" resultType="java.util.Map">
+        ${sql}
+    </select>
+</mapper>

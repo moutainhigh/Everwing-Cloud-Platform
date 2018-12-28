@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.cust.person.relation.PersonCustRelationMapper">
+    <resultMap id="BaseResultMap" type="PersonCustRelation" >
+        <result column="person_relationid" property="personRelationid"/>
+        <result column="cust_id" property="custId"/>
+        <result column="cust_code" property="custCode"/>
+        <result column="name" property="name"/>
+        <result column="register_phone" property="registerPhone"/>
+        <result column="relatetion_id" property="relatetionId"/>
+        <result column="relation" property="relation"/>
+        <result column="create_id" property="createId"/>
+        <result column="create_name" property="createName"/>
+        <result column="modify_id" property="modifyId"/>
+        <result column="modify_name" property="modifyName"/>
+        <result column="crate_time" property="createTime"/>
+        <result column="modify_time" property="modifyTime"/>
+    </resultMap>
+
+
+
+    <select id="listPagePersonCustRelation" parameterType = "PersonCustRelationSearch" resultMap = "BaseResultMap">
+        select * from tc_person_relation where 1 = 1
+        <if test="null != relatetionId and '' != relatetionId">
+            and relatetion_id = #{relatetionId}
+        </if>
+        <if test="null != name and '' != name">
+            and name like CONCAT('%',#{name},'%')
+        </if>
+        <if test="null != registerPhone and '' != registerPhone">
+            and register_phone like CONCAT('%',#{registerPhone},'%')
+        </if>
+    </select>
+
+
+    <select id="getPersonCustRelationByID" parameterType = "string" resultMap = "BaseResultMap">
+        select * from tc_person_relation where 1 = 1
+        and relatetion_id = #{0}
+    </select>
+    <select id="getRelationByCustcode"  parameterType = "string" resultType="java.lang.Integer">
+        select COUNT(0) from tc_person_relation where i =1
+        and
+    </select>
+
+    <delete id="delete" parameterType="string">
+        delete from tc_person_relation where person_relationid = #{personRelationid}
+    </delete>
+
+
+    <insert id="insert"  parameterType = "PersonCustRelation">
+        insert into tc_person_relation
+        (
+        person_relationid,
+        cust_id,
+        cust_code,
+        name,
+        register_phone,
+        relatetion_id,
+        relation,
+        create_id,
+        create_name,
+        crate_time
+        ) VALUES (
+        UUID(),
+        #{custId},
+        #{custCode},
+        #{name},
+        #{registerPhone},
+        #{relatetionId},
+        #{relation},
+        #{createId},
+        #{createName},
+        now()
+        )
+
+    </insert>
+
+
+
+</mapper>

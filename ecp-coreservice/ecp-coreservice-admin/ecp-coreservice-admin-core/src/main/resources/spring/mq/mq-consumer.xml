@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+
+
+            http://www.springframework.org/schema/rabbit
+            http://www.springframework.org/schema/rabbit/spring-rabbit-1.0.xsd">
+            
+   		
+	    <!-- 消息消费者 , 服务监听 ,监听该队列发送过来的消息-->
+		<!-- wycore端监听junit发送的消息 -->
+		<rabbit:listener-container connection-factory="connectionFactory" acknowledge="auto" message-converter="jsonMessageConverter" >
+	    	<rabbit:listener queues="${queue.personCust.name}" ref="personCustListener"/>
+	    	<rabbit:listener queues="${queue.personBuilding.name}" ref="personBuildingListener"/>
+	    	<rabbit:listener queues="${queue.gating.name}" ref="gatingListener"/>
+	    	<rabbit:listener queues="${queue.buildingGate.name}" ref="buildingGateListener"/>
+			<rabbit:listener queues="${queue.wy2platform.building.name}" ref="wy2platform4buildingListener"/>
+		</rabbit:listener-container> 
+		
+                
+                
+                
+                
+</beans>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<excel id="before_asset_account">
+    <sheet index="0">
+        <list index="0" startRow="1" class="com.everwing.coreservice.common.wy.entity.configuration.assetaccount.importEntity.TBsAssetAccountImportBean">
+            <field index="1" property="id" required="true"></field>
+            <field index="2" property="fullName" required="true"></field>
+            <field index="3" property="wyAmount" type="Double" required="true" regex="^(([1-9][0-9]*)|((([1-9][0-9]*)|0)\.[0-9]{1,2}))$" regexErrMsg="该项只能输入是数字"></field>
+            <field index="4" property="wyLateFee" type="Double" required="true" regex="^(([1-9][0-9]*)|((([1-9][0-9]*)|0)\.[0-9]{1,2}))$" regexErrMsg="该项只能输入是数字"></field>
+            <field index="5" property="btAmount" type="Double" required="true" regex="^(([1-9][0-9]*)|((([1-9][0-9]*)|0)\.[0-9]{1,2}))$" regexErrMsg="该项只能输入是数字"></field>
+            <field index="6" property="waterAmount" type="Double" required="true" regex="^(([1-9][0-9]*)|((([1-9][0-9]*)|0)\.[0-9]{1,2}))$" regexErrMsg="该项只能输入是数字"></field>
+            <field index="7" property="electAmount" type="Double" required="true" regex="^(([1-9][0-9]*)|((([1-9][0-9]*)|0)\.[0-9]{1,2}))$" regexErrMsg="该项只能输入是数字"></field>
+        </list>
+    </sheet>
+</excel>

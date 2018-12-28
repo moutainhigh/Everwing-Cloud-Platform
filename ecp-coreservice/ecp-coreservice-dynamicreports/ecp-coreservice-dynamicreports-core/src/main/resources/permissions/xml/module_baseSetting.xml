@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- modulegroup节点从main.xml里面复制过来的，id属性值要和main里面的一样，name和desc属性必须保留，但值可以空 -->
+<modulegroup id="1a6debab-f513-4b3f-9d21-2b5249c3ec11" name="" desc="">
+	<module id="6c73459c-fcd6-4fc8-b606-9dedc5d87c23" name="User Management" desc="员工列表" order="1" page="user" url="index.baseSetting.userManagement" img="img/menu/user.png">
+		<operation id="2f9112cb-de08-4622-9e65-72c35b7a827c" name="Add" desc="邀请入职" url="/system/TSysUserController/add"/>
+		<operation id="f40a4a64-3d2c-46d3-bd3a-10014f737e5c" name="Search" desc="查询用户列表" url="/system/TSysUserController/listPageUser"/>
+		<operation id="abb0e7f2-eb0f-408b-9502-457633b1a376" name="Enable" desc="离职" url="/system/TSysUserController/changeStatus"/>
+		<operation id="f989abe9-8459-42e1-acfb-47a60af1aaac" name="Search" desc="查询员工分配情况" url="/system/TSysUserController/listPageUserResourceList"/>
+		<operation id="545bea12-cba1-4db9-b93b-e552eddeb713" name="anon" desc="anon" permission="anon" url="/system/TSysUserController/getUserInfoByLoginName/*"/>
+		<operation id="a101e91f-1fb8-45eb-88dd-e91da6377f87" name="anon" desc="anon" permission="anon" url="/system/TSysUserController/getUserResourceListByStaffNumber/*"/>
+	</module>
+</modulegroup>

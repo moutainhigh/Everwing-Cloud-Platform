@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.autotask.core.dao.TcOrderCompleteMapper">
+
+    <resultMap type="TcOrderComplete" id="BaseResultMap">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="orderCode" column="order_code" jdbcType="VARCHAR"/>
+        <result property="completeContent" column="complete_content" jdbcType="VARCHAR"/>
+        <result property="complaintOrderId" column="complaint_order_id" jdbcType="VARCHAR"/>
+        <result property="relationId" column="relation_id" jdbcType="VARCHAR"/>
+        <result property="exceptionReason" column="exception_reason" jdbcType="TINYINT"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="createId" column="create_id" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="modifyId" column="modify_id" jdbcType="VARCHAR"/>
+        <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+        <result property="isAlreadyBilling" column="is_already_billing" jdbcType="TINYINT"/>
+        <result property="completePeakReading" column="complete_peak_reading" jdbcType="DOUBLE"/>
+        <result property="completeVallyReading" column="complete_vally_reading" jdbcType="DOUBLE"/>
+        <result property="completeCommonReading" column="complete_common_reading" jdbcType="DOUBLE"/>
+    </resultMap>
+
+    <resultMap  id="getNoBillMap" type="java.util.Map">
+        <result property="relationBuilding" column="building_code"/>
+        <result property="buildingFullName" column="building_full_name"/>
+        <result property="meterType" column="meter_type"/>
+        <result property="meterCode" column="meter_code"/>
+        <result property="peakCount" column="peak_count"/>
+        <result property="vallyCount" column="vally_count"/>
+        <result property="commonCount" column="common_count"/>
+        <result property="useCount" column="use_count"/>
+        <result property="lastTotalReading" column="last_total_reading"/>
+        <result property="totalReading" column="total_reading"/>
+        <result property="id" column="id"/>
+    </resultMap>
+
+    <sql id="updateSql">
+        <if test="orderCode !=null">
+            ,order_code=#{orderCode}
+        </if>
+        <if test="completeContent !=null">
+            ,complete_content=#{completeContent}
+        </if>
+        <if test="completePeakReading !=null">
+            ,complete_peak_reading=#{completePeakReading}
+        </if>
+        <if test="completeVallyReading !=null">
+            ,complete_vally_reading=#{completeVallyReading}
+        </if>
+        <if test="completeCommonReading !=null">
+            ,complete_common_reading=#{completeCommonReading}
+        </if>
+        <if test="complaintOrderId !=null">
+            ,complaint_order_id=#{complaintOrderId}
+        </if>
+        <if test="relationId !=null">
+            ,relation_id=#{relationId}
+        </if>
+        <if test="exceptionReason !=null">
+            ,exception_reason=#{exceptionReason}
+        </if>
+        <if test="isAlreadyBilling !=null">
+            ,is_already_billing=#{isAlreadyBilling}
+        </if>
+    </sql>
+
+    <update id="singleUpdate" parameterType="TcOrderComplete">
+        update tc_order_complete set modify_time = sysdate()
+        <include refid="updateSql"/>
+        where id=#{id}
+    </update>
+
+    <select id="findById" parameterType="String" resultMap="BaseResultMap">
+        select * from tc_order_complete where id = #{0}
+    </select>
+
+    <select id="getNoBill" parameterType="String" resultMap="getNoBillMap">
+        SELECT
+        tcpla.building_code,
+        tcb.building_full_name,
+        mete.meter_type,
+        mete.meter_code,
+        mete.peak_count,
+        mete.vally_count,
+        mete.common_count,
+        mete.use_count,
+        mete.last_total_reading,
+        mete.total_reading,
+        tccom.id
+        FROM
+        tc_order_complaint tcpla,
+        tc_order_complete tccom,
+        tc_meter_data mete,
+        tc_building tcb
+        WHERE
+        tccom.order_code = tcpla.id
+        and mete.task_id=tccom.id
+        and tcb.building_code=tcpla.building_code
+        AND tccom.is_already_billing = 0
+        and tcpla.order_type=1
+        AND tcpla.project_id = #{1}
+        AND tcpla.building_code = #{0}
+    </select>
+</mapper>

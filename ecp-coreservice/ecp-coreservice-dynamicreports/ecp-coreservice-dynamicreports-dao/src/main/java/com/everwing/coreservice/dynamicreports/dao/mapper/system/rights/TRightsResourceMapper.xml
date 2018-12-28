@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.dynamicreports.dao.mapper.system.rights.TRightsResourceMapper">
+    <resultMap type="TRightsResource" id="TRightsResourceResultMap">
+        <result property="srcId" column="src_id"/>
+        <result property="menuId" column="menu_id"/>
+        <result property="srcName" column="src_name"/>
+        <result property="srcDesc" column="src_desc"/>
+        <result property="srcPermission" column="src_permission"/>
+        <result property="srcUrl" column="src_url"/>
+        <result property="createId" column="creater_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyId" column="modify_id"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <resultMap id="TRightsResourceVOResultMap" type="TRightsResourceVO" extends="TRightsResourceResultMap">
+    </resultMap>
+
+    <select id="findByCondition" parameterType="TRightsResourceQO" resultMap="TRightsResourceVOResultMap">
+        SELECT * FROM t_rights_resource sr WHERE 1=1
+        <if test="srcUrl != null and srcUrl != ''">
+            <![CDATA[ AND sr.src_url LIKE CONCAT('%',#{srcUrl},'%')]]>
+        </if>
+        <if test="srcId != null and srcId != ''">
+            sr.src_id = #{srcId}
+        </if>
+    </select>
+
+    <select id="findNonWhiteListByAdmin" resultMap="TRightsResourceVOResultMap">
+        SELECT
+            sr.src_id,
+            sr.src_name,
+            sr.src_desc,
+            sr.src_permission,
+            sr.src_url,
+            sr.menu_id
+        FROM t_rights_resource sr
+        WHERE sr.src_permission != 'anon'
+    </select>
+
+    <select id="findWhiteListByAdmin" resultMap="TRightsResourceVOResultMap">
+        SELECT
+            sr.src_id,
+            sr.src_name,
+            sr.src_desc,
+            sr.src_permission,
+            sr.src_url
+        FROM t_rights_resource sr
+        WHERE sr.src_permission = 'anon'
+    </select>
+
+    <select id="findNonWhiteListByRole" parameterType="TRightsResourceQO" resultMap="TRightsResourceVOResultMap">
+        SELECT
+            DISTINCT
+            sr.src_id,
+            sr.src_name,
+            sr.src_desc,
+            sr.src_permission,
+            sr.src_url,
+            sr.menu_id
+        FROM t_rights_role_resource srr,t_rights_resource sr
+        WHERE srr.src_id = sr.src_id
+        AND sr.src_permission != 'anon'
+        AND srr.src_type='r'
+        <if test="roleIdList != null">
+            AND srr.role_id IN
+            <foreach collection="roleIdList" item="roleId" index="index" open="(" close=")" separator=",">
+                '${roleId}'
+        </foreach>
+        </if>
+    </select>
+
+    <select id="findWhiteListByRole" parameterType="TRightsResourceQO" resultMap="TRightsResourceVOResultMap">
+        SELECT
+            DISTINCT
+            sr.src_id,
+            sr.src_name,
+            sr.src_desc,
+            sr.src_permission,
+            sr.src_url
+        FROM t_rights_role_resource srr,t_rights_resource sr
+        WHERE srr.src_id = sr.src_id
+        AND sr.src_permission = 'anon'
+        AND srr.src_type='r'
+        <if test="roleIdList != null">
+            AND srr.role_id IN
+            <foreach collection="roleIdList" item="roleId" index="index" open="(" close=")" separator=",">
+                '${roleId}'
+            </foreach>
+        </if>
+    </select>
+
+    <select id="findApplicationWhiteList" resultMap="TRightsResourceVOResultMap">
+        SELECT
+            sr.src_id,
+            sr.src_name,
+            sr.src_desc,
+            sr.src_permission,
+            sr.src_url
+        FROM t_rights_resource sr,t_sys_menu m
+        WHERE sr.menu_id = m.menu_id AND m.menu_permission = 'anon'
+    </select>
+
+    <select id="findWhiteListByMenuId" parameterType="String" resultMap="TRightsResourceVOResultMap">
+        SELECT
+            sr.src_id,
+            sr.src_name,
+            sr.src_desc,
+            sr.src_permission,
+            sr.src_url
+        FROM t_rights_resource sr
+        WHERE sr.src_permission = 'anon' AND sr.menu_id = #{0}
+    </select>
+
+    <select id="findResourceTreeByRoleId" parameterType="String" resultType="java.util.Map">
+        SELECT
+            DISTINCT
+            r.src_id,
+            r.src_name,
+            r.src_desc,
+            r.menu_id,
+            IF(toRole.src_id IS NULL,'false','true') AS checked
+        FROM t_rights_resource r
+        LEFT JOIN (SELECT srs.src_id FROM t_rights_role_resource srs WHERE srs.src_type='r' AND srs.role_id = #{0}) toRole
+        ON r.src_id = toRole.src_id
+        WHERE r.src_permission != 'anon'
+        ORDER BY r.src_name ASC
+    </select>
+
+    <insert id="insert" parameterType="TRightsResource">
+        insert into t_rights_resource
+        (
+            src_id ,
+            menu_id,
+            src_name,
+            src_desc,
+            src_permission,
+            src_url,
+            creater_id,
+            create_time,
+            modify_id,
+            modify_time
+        )
+        values
+        (
+            UUID(),
+            #{menuId},
+            #{srcName},
+            #{srcDesc},
+            #{srcPermission},
+            #{srcUrl},
+            #{createrId},
+            SYSDATE(),
+            '',
+            SYSDATE()
+        )
+    </insert>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        insert into t_rights_resource
+        (
+            src_id ,
+            menu_id,
+            src_name,
+            src_desc,
+            src_permission,
+            src_url,
+            creater_id,
+            create_time,
+            modify_id,
+            modify_time
+        )
+        values
+        <foreach collection="list" index="index" item="item" separator=",">
+            (
+                UUID(),
+                #{item.menuId},
+                #{item.srcName},
+                #{item.srcDesc},
+                #{item.srcPermission},
+                #{item.srcUrl},
+                #{item.createrId},
+                SYSDATE(),
+                '',
+                SYSDATE()
+            )
+        </foreach>
+    </insert>
+
+    <delete id="deleteAll">
+        delete from t_rights_resource
+    </delete>
+</mapper>

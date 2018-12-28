@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="excel">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="sheet" minOccurs="1" maxOccurs="5"/>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="sheet">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="list" minOccurs="0" maxOccurs="1"/>
+			</xs:sequence>
+			<xs:attribute name="index" type="xs:int" use="required"/>
+			<xs:attribute name="label" type="xs:string" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="list">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="field" minOccurs="1" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="index" type="xs:int" use="optional"/>
+			<xs:attribute name="label" type="xs:string" use="optional"/>
+			<xs:attribute name="startRow" type="xs:int" use="required"/>
+			<xs:attribute name="class" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="field">
+		<xs:complexType>
+			<xs:attribute name="index" type="xs:string" use="required"/>
+			<xs:attribute name="property" type="xs:string" use="required"/>
+			<xs:attribute name="required" type="xs:string" use="optional"/>
+			<xs:attribute name="type" type="xs:string" use="optional"/>
+			<xs:attribute name="regex" type="xs:string" use="optional"/>
+			<xs:attribute name="regexErrMsg" type="xs:string" use="optional"/>
+			<xs:attribute name="lookupCode" type="xs:string" use="optional"/>
+			<xs:attribute name="parentCode" type="xs:string" use="optional"/>
+			<xs:attribute name="format" type="xs:string" use="optional"/>
+			<xs:attribute name="pattern" type="xs:string" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

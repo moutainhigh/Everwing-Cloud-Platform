@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.property.TVehicleMapper">
+    <resultMap id="BaseResultMap" type="TVehicle">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="project_id" property="projectId" jdbcType="VARCHAR"/>
+        <result column="house_code_new" property="houseCodeNew" jdbcType="VARCHAR"/>
+        <result column="vehicle_number" property="vehicleNumber" jdbcType="VARCHAR"/>
+        <result column="vehicle_license" property="vehicleLicense" jdbcType="VARCHAR"/>
+        <result column="attained_vehicle_license_date" property="attainedVehicleLicenseDate" jdbcType="DATE"/>
+        <result column="customer_id" property="customerId" jdbcType="VARCHAR"/>
+        <result column="holder_type" property="holderType" jdbcType="VARCHAR"/>
+        <result column="brand" property="brand" jdbcType="VARCHAR"/>
+        <result column="vehicle_type" property="vehicleType" jdbcType="VARCHAR"/>
+        <result column="engine_no" property="engineNo" jdbcType="VARCHAR"/>
+        <result column="vehicle_register_date" property="vehicleRegisterDate" jdbcType="DATE"/>
+        <result column="vehicle_register_person" property="vehicleRegisterPerson" jdbcType="VARCHAR"/>
+        <result column="vehicle_color" property="vehicleColor" jdbcType="VARCHAR"/>
+        <result column="can_carry_passengers_number" property="canCarryPassengersNumber" jdbcType="INTEGER"/>
+        <result column="model_number" property="modelNumber" jdbcType="VARCHAR"/>
+        <result column="creater_id" property="createrId" jdbcType="VARCHAR"/>
+        <result column="creater_name" property="createrName" jdbcType="VARCHAR"/>
+        <result column="modify_id" property="modifyId" jdbcType="VARCHAR"/>
+        <result column="modify_name" property="modifyName" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap id="ListResultMap" type="TVehicleList" extends="BaseResultMap">
+        <result column="address" property="address"/>
+        <result column="project_name" property="projectName"/>
+        <result column="customer_type" property="customerType"/>
+        <result column="customer_id" property="customerId"/>
+        <result column="customer_name" property="customerName"/>
+        <result column="holder_type_name" property="holderTypeName"/>
+    </resultMap>
+
+    <select id="listPage" resultMap="ListResultMap" parameterType="TVehicleSearch">
+        SELECT
+            t.*
+        FROM(
+            SELECT
+                v.id,
+                v.project_id,
+                p.`name` AS project_name,
+                v.house_code_new,
+                v.vehicle_number,
+                v.vehicle_license,
+                v.attained_vehicle_license_date,
+                SPLIT_STR(v.customer_id, ';', 1) AS customer_type,
+                SPLIT_STR(v.customer_id, ';', 2) AS customer_id,
+                SPLIT_STR(v.customer_id, ';', 3) AS customer_name,
+                v.customer_id,
+                v.holder_type,
+                (SELECT li.`name` FROM t_sys_lookup_item li WHERE li.parent_code = 'customerPropertyRelation' AND li.`code` = v.holder_type) as holder_type_name,
+                v.brand,
+                v.vehicle_type,
+                v.engine_no,
+                v.vehicle_register_date,
+                v.vehicle_register_person,
+                v.vehicle_color,
+                v.can_carry_passengers_number,
+                v.model_number,
+                v.creater_id,
+                v.creater_name,
+                v.modify_id,
+                v.modify_name,
+                v.create_time,
+                v.modify_time,
+                b.building_full_name AS address
+            FROM t_vehicle v LEFT JOIN tc_building b ON v.house_code_new = b.house_code_new LEFT JOIN t_sys_project p ON v.project_id = p.`code`
+        ) t WHERE 1=1
+        <if test="vehicleNumber != null and vehicleNumber != ''">
+            AND t.vehicle_number LIKE CONCAT('%',#{vehicleNumber},'%')
+        </if>
+        <if test="projectId != null and projectId != ''">
+            AND t.project_id = #{projectId}
+        </if>
+        <if test="customerId != null and customerId != ''">
+            AND t.customer_id = #{customerId}
+        </if>
+        <if test="houseCodeNew != null and houseCodeNew != ''">
+            AND t.house_code_new = #{houseCodeNew}
+        </if>
+        ORDER BY t.create_time DESC
+    </select>
+
+    <select id="findByCondition" resultMap="ListResultMap" parameterType="TVehicleSearch">
+        select * from t_vehicle v WHERE 1=1
+        <if test="id != null and id != ''">
+            AND v.id = #{id}
+        </if>
+        <if test="projectId != null and projectId != ''">
+            AND v.project_id = #{projectId}
+        </if>
+        <if test="houseCodeNew != null and houseCodeNew != ''">
+            AND v.house_code_new = #{houseCodeNew}
+        </if>
+        <if test="customerId != null and customerId != ''">
+            AND v.customer_id LIKE CONCAT('%',#{customerId},'%')
+        </if>
+    </select>
+
+    <delete id="delete" parameterType="TVehicle">
+        delete from t_vehicle WHERE id = #{id}
+    </delete>
+
+    <insert id="insert" parameterType="TVehicle">
+        insert into t_vehicle
+        (
+            id,
+            project_id,
+            house_code_new,
+            vehicle_number,
+            vehicle_license,
+            attained_vehicle_license_date,
+            customer_id,
+            holder_type,
+            brand,
+            vehicle_type,
+            engine_no,
+            vehicle_register_date,
+            vehicle_register_person,
+            vehicle_color,
+            can_carry_passengers_number,
+            model_number,
+            creater_id,
+            creater_name,
+            create_time,
+            modify_id,
+            modify_name,
+            modify_time
+        )
+        values (
+            UUID(),
+            #{projectId,jdbcType=VARCHAR},
+            #{houseCodeNew,jdbcType=VARCHAR},
+            #{vehicleNumber,jdbcType=VARCHAR},
+            #{vehicleLicense,jdbcType=VARCHAR},
+            #{attainedVehicleLicenseDate,jdbcType=DATE},
+            #{customer_id,jdbcType=VARCHAR},
+            #{holderType,jdbcType=VARCHAR},
+            #{brand,jdbcType=VARCHAR},
+            #{vehicleType,jdbcType=VARCHAR},
+            #{engineNo,jdbcType=VARCHAR},
+            sysdate(),
+            #{createrName,jdbcType=VARCHAR},
+            #{vehicleColor,jdbcType=VARCHAR},
+            #{canCarryPassengersNumber,jdbcType=INTEGER},
+            #{modelNumber,jdbcType=VARCHAR},
+            #{createrId,jdbcType=VARCHAR},
+            #{createrName,jdbcType=VARCHAR},
+            sysdate(),
+            '',
+            '',
+            sysdate()
+        )
+    </insert>
+
+    <update id="update" parameterType="TVehicle">
+        update t_vehicle
+        set
+            house_code_new = #{houseCodeNew,jdbcType=VARCHAR},
+            vehicle_number = #{vehicleNumber,jdbcType=VARCHAR},
+            vehicle_license = #{vehicleLicense,jdbcType=VARCHAR},
+            attained_vehicle_license_date = #{attainedVehicleLicenseDate,jdbcType=DATE},
+            customer_id = #{customerId,jdbcType=VARCHAR},
+            holder_type = #{holderType,jdbcType=VARCHAR},
+            brand = #{brand,jdbcType=VARCHAR},
+            vehicle_type = #{vehicleType,jdbcType=VARCHAR},
+            engine_no = #{engineNo,jdbcType=VARCHAR},
+            vehicle_register_date = #{vehicleRegisterDate,jdbcType=DATE},
+            vehicle_register_person = #{vehicleRegisterPerson,jdbcType=VARCHAR},
+            vehicle_color = #{vehicleColor,jdbcType=VARCHAR},
+            can_carry_passengers_number = #{canCarryPassengersNumber,jdbcType=INTEGER},
+            model_number = #{modelNumber,jdbcType=VARCHAR},
+            modify_id = #{modifyId,jdbcType=VARCHAR},
+            modify_name = #{modifyName,jdbcType=VARCHAR},
+            modify_time = sysdate()
+        WHERE id = #{id}
+    </update>
+</mapper>

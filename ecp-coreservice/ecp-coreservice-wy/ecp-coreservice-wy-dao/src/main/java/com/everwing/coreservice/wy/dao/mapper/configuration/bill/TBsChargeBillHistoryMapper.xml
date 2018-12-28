@@ -1,0 +1,859 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.configuration.bill.TBsChargeBillHistoryMapper">
+		<resultMap type="TBsChargeBillHistory" id="BaseResultMap">
+			<result property="id" column="id" jdbcType="VARCHAR"/>
+			<result property="chargeTotalId" column="charge_total_id" jdbcType="VARCHAR"/>
+			<result property="projectId" column="project_id" jdbcType="VARCHAR"/>
+			<result property="buildingCode" column="building_code" jdbcType="VARCHAR"/>
+			<result property="fullName" column="full_name" jdbcType="VARCHAR"/>
+			<result property="lastBillFee" column="last_bill_fee" jdbcType="DOUBLE"/>
+			<result property="lastPayed" column="last_payed" jdbcType="DOUBLE"/>
+			<result property="currentFee" column="current_fee" jdbcType="DOUBLE"/>
+			<result property="lateFee" column="late_fee" jdbcType="DOUBLE"/>
+			<result property="currentBillFee" column="current_bill_fee" jdbcType="DOUBLE"/>
+			<result property="accountBalance" column="account_balance" jdbcType="DOUBLE"/>
+			<result property="billingTime" column="billing_time" jdbcType="TIMESTAMP"/>
+			<result property="lastBillId" column="last_bill_id" jdbcType="VARCHAR"/>
+			<result property="isUsed" column="is_used" jdbcType="TINYINT"/>
+			<result property="shareFee" column="share_fee" jdbcType="DOUBLE"/>
+			<result property="commonDesummoney" column="common_desummoney" jdbcType="DOUBLE"/>
+			<result property="noCommonDesummoney" column="no_common_desummoney" jdbcType="DOUBLE"/>
+			<result property="tax" column="tax" jdbcType="DOUBLE"/>
+			<result property="createId" column="create_id" jdbcType="VARCHAR"/>
+			<result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+			<result property="modifyId" column="modify_id" jdbcType="VARCHAR"/>
+			<result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+			<result property="feeItemDetail" column="fee_item_detail" jdbcType="VARCHAR"/>
+			<result property="lastOwedInfo" column="last_owed_info" jdbcType="VARCHAR"/>
+			<result property="currentKqAmount" column="current_kq_amount" jdbcType="DOUBLE"/>
+			<result property="isZipComplete" column="is_zip_complete" jdbcType="TINYINT"/>
+			<result property="aduitStatus" column="aduit_status" jdbcType="TINYINT"/>
+			<result property="temporaryBill" column="temporary_bill" jdbcType="VARCHAR"/>
+		</resultMap>
+	
+	<resultMap type="TBsChargeBillHistory" id="assembleMap" extends="BaseResultMap">
+		<result property="type" column="type" jdbcType="TINYINT"/>
+	</resultMap>
+	
+	
+	<select id="findByObj" parameterType="TBsChargeBillHistory" resultMap="BaseResultMap">
+		select * from t_bs_charge_bill_history
+		 where charge_total_id = #{chargeTotalId}
+		   and building_code = #{buildingCode}
+		   and is_used = 0
+		   and aduit_status = 1
+	</select>
+	
+	<select id="listPage" parameterType="TBsChargeBillHistory" resultMap="BaseResultMap">
+			select id,
+				   charge_total_id,
+				   project_id,
+				   building_code,
+				   full_name,
+				   IFNULL(last_bill_fee,0) as last_bill_fee,
+				   IFNULL(last_payed,0) as last_payed,
+				   IFNULL(current_fee,0) as current_fee,
+				   IFNULL(late_fee,0) as late_fee,
+				   IFNULL(current_bill_fee,0) as current_bill_fee,
+				   IFNULL(account_balance,0) as account_balance,
+				   billing_time,
+				   last_bill_id,
+				   is_used,
+				   IFNULL(share_fee,0) as share_fee,
+				   IFNULL(common_desummoney,0) as common_desummoney,
+				   IFNULL(no_common_desummoney,0) as no_common_desummoney,
+				   IFNULL(tax,0) as tax,
+				   create_id,
+				   create_time,
+				   modify_id,
+				   modify_time
+			from t_bs_charge_bill_history
+			where 1 = 1 AND is_used = 0
+			<if test="null != searchCode">
+				and (
+						full_name like CONCAT('%',#{searchCode},'%')
+					or 
+						building_code in 
+							(
+							  SELECT * FROM 
+							  (
+									  SELECT t1.building_code 
+									    FROM tc_building t1,
+										     tc_person_building t2,
+										     tc_person_cust t3
+									   WHERE t1.id = t2.building_id
+										 AND t3.cust_id = t2.cust_id
+										 AND t3.name LIKE CONCAT('%',#{searchCode},'%') 
+									   GROUP BY t1.building_code
+								  
+								  UNION ALL
+								  
+									   SELECT t1.building_code
+									     FROM tc_building t1,
+										  tc_person_building t2,
+										  tc_enterprise_cust t3
+									    WHERE t1.id = t2.building_id
+									      AND t3.enterprise_id = t2.enterprise_id
+									      AND t3.enterprise_name LIKE CONCAT('%',#{searchCode},'%')
+									    GROUP BY t1.building_code
+							   ) t GROUP BY t.building_code
+							)
+				)
+			</if>
+			<if test="null != chargeTotalId">
+				and charge_total_id = #{chargeTotalId}
+			</if>
+			order by building_code asc
+	</select>
+	
+	<!-- 根据建筑code，总计表id查询 -->
+	<select id="selectChargeHistoryOne" parameterType="TBsChargeBillHistory" resultMap="BaseResultMap">
+		SELECT 
+		  * 
+		FROM
+		  t_bs_charge_bill_history 
+		WHERE building_code = #{buildingCode} 
+		  AND charge_total_id = #{chargeTotalId}
+		  AND is_used=0
+  		  ORDER BY create_time DESC LIMIT 1
+	</select>
+	
+	<!-- 查询上期账单信息 -->
+	<select id="selectLastChargeHistory" parameterType="TBsChargeBillHistory" resultMap="BaseResultMap">
+		SELECT 
+		  * 
+		FROM
+		  t_bs_charge_bill_history 
+		WHERE charge_total_id = 
+		  (SELECT 
+		    id 
+		  FROM
+		    t_bs_charge_bill_total 
+		  WHERE TYPE = 4 
+		    AND project_id = #{projectId}
+		    AND audit_status = '1' 
+		    <![CDATA[
+		    AND billing_time < NOW()
+		    ]]>
+		  ORDER BY create_time DESC 
+		  LIMIT 1) 
+		  AND is_used = 0 
+		LIMIT 1 
+	</select>
+	
+	<insert id="insertBillHistory" parameterType="TBsChargeBillHistory">
+		INSERT INTO t_bs_charge_bill_history
+				(
+					id,
+					charge_total_id,
+					project_id,
+					building_code,
+					full_name,
+					last_bill_fee,
+					last_payed,
+					current_fee,
+					late_fee,
+					current_bill_fee,
+					account_balance,
+					billing_time,
+					last_bill_id,
+					is_used,
+					share_fee,
+					common_desummoney,
+					no_common_desummoney,
+					create_id,
+					create_time,
+					modify_id,
+					modify_time,
+					fee_item_detail,
+					last_owed_info,
+					current_kq_amount,
+					is_zip_complete,
+					tax,
+					aduit_status,
+					temporary_bill
+				)
+				values(
+						#{id},
+						#{chargeTotalId},
+						#{projectId},
+						#{buildingCode},
+						#{fullName},
+						#{lastBillFee},
+						#{lastPayed},
+						#{currentFee},
+						#{lateFee},
+						#{currentBillFee},
+						#{accountBalance},
+						#{billingTime},
+						#{lastBillId},
+						#{isUsed},
+						0.0,
+						#{commonDesummoney},
+						#{noCommonDesummoney},
+						#{createId},
+						#{createTime},
+						#{modifyId},
+						#{modifyTime},
+						#{feeItemDetail},
+						#{lastOwedInfo},
+						#{currentKqAmount},
+						0,
+						#{tax},
+						0,
+						#{temporaryBill}
+				)
+	</insert>
+	
+	
+	<sql id="updateSql">
+		<set>
+			<if test="null != fullName">
+				full_name = #{fullName},
+			</if>
+			<if test="null != buildingCode">
+				building_code = #{buildingCode},
+			</if>
+			<if test="null != lastBillFee">
+				last_bill_fee = #{lastBillFee},
+			</if>
+			<if test="null != lastPayed">
+				last_payed = #{lastPayed},
+			</if>
+			<if test="null != currentFee">
+				current_fee = #{currentFee},
+			</if>
+			<if test="null != lateFee">
+				late_fee = #{lateFee},
+			</if>
+			<if test="null != currentBillFee">
+				current_bill_fee = #{currentBillFee},
+			</if>
+			<if test="null != accountBalance">
+				account_balance = #{accountBalance},
+			</if>
+			<if test="null != billingTime">
+				billing_time = #{billingTime},
+			</if>
+			<if test="null != lastBillId">
+				last_bill_id = #{lastBillId},
+			</if>
+			<if test="null != isUsed">
+				is_used = #{isUsed},
+			</if>
+			<if test="null != modifyId">
+				modify_id = #{modifyId},
+			</if>
+			<if test="null != feeItemDetail">
+				fee_item_detail = #{feeItemDetail},
+			</if>
+			<if test="null != lastOwedInfo">
+				last_owed_info = #{lastOwedInfo},
+			</if>
+			<if test="null != commonDesummoney">
+				common_desummoney = #{commonDesummoney},
+			</if>
+			<if test="null != noCommonDesummoney">
+				no_common_desummoney = #{noCommonDesummoney},
+			</if>
+			<if test="null != currentKqAmount">
+				current_kq_amount = #{currentKqAmount},
+			</if>
+			<if test="null != isZipComplete">
+				is_zip_complete = #{isZipComplete},
+			</if>
+			<if test="null != tax">
+				tax = #{tax},
+			</if>
+			<if test="aduitStatus !=null">
+				aduit_status=#{aduitStatus},
+			</if>
+			<if test="temporaryBill !=null">
+				temporary_bill=#{temporaryBill},
+			</if>
+			modify_time = sysdate()
+		</set>
+	</sql>
+	
+	<update id="updateBillHistory" parameterType="TBsChargeBillHistory">
+		UPDATE t_bs_charge_bill_history
+			<include refid="updateSql"></include>
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 获取某建筑的本月账单 -->
+	<select id="findCurrentDetailBill" parameterType="TBsChargeBillHistory" resultMap="BaseResultMap">
+		SELECT * 
+		  FROM t_bs_charge_bill_history
+		 WHERE project_id = #{projectId}
+		   AND building_code = #{buildingCode}
+		   AND charge_total_id = #{chargeTotalId}
+		   AND is_used = 0
+		   AND billing_time IS NULL
+	</select>
+	
+	<!-- 根据本次bill账单的last_bill_id 获取上个周期的bill详情 -->
+	<select id="selectLastBillById" parameterType="String" resultMap="BaseResultMap">
+		SELECT t1.* 
+		  FROM t_bs_charge_bill_history t1,
+		       t_bs_charge_bill_total t2
+		 WHERE t1.charge_total_id = t2.id
+		   AND t2.audit_status = 1
+		   AND t1.is_used = 0
+		   AND t1.id = #{0}
+	</select>
+	
+	
+	<!-- 批量插入数据 -->
+	<insert id="batchInsert" parameterType="java.util.List">
+		INSERT INTO t_bs_charge_bill_history
+				(
+					id,
+					charge_total_id,
+					project_id,
+					building_code,
+					full_name,
+					last_bill_fee,
+					last_payed,
+					current_fee,
+					late_fee,
+					current_bill_fee,
+					account_balance,
+					billing_time,
+					last_bill_id,
+					is_used,
+					share_fee,
+					common_desummoney,
+					no_common_desummoney,
+					create_id,
+					create_time,
+					modify_id,
+					modify_time,
+					fee_item_detail,
+					last_owed_info,
+					current_kq_amount,
+					is_zip_complete,
+					tax,
+					aduit_status,
+					temporary_bill
+				)
+				values
+				<foreach collection="list" item="item" separator=",">
+					(
+						#{item.id},
+						#{item.chargeTotalId},
+						#{item.projectId},
+						#{item.buildingCode},
+						#{item.fullName},
+						#{item.lastBillFee},
+						#{item.lastPayed},
+						#{item.currentFee},
+						#{item.lateFee},
+						#{item.currentBillFee},
+						#{item.accountBalance},
+						#{item.billingTime},
+						#{item.lastBillId},
+						#{item.isUsed},
+						0.0,
+						#{item.commonDesummoney},
+						#{item.noCommonDesummoney},
+						#{item.createId},
+						#{item.createTime},
+						#{item.modifyId},
+						#{item.modifyTime},
+						#{item.feeItemDetail},
+						#{item.lastOwedInfo},
+						#{item.currentKqAmount},
+						0,
+						#{item.tax},
+						0,
+						#{item.temporaryBill}
+					)
+				</foreach>
+	</insert>
+	
+	
+	<!-- 批量更新数据 -->
+	<update id="batchUpdate" parameterType="java.util.List">
+		<foreach collection="list" separator=";" item="item" index="index">
+			update t_bs_charge_bill_history 
+				<set>
+					<if test="null != item.fullName">
+						full_name = #{item.fullName},
+					</if>
+					<if test="null != item.buildingCode">
+						building_code = #{item.buildingCode},
+					</if>
+					<if test="null != item.lastBillFee">
+						last_bill_fee = #{item.lastBillFee},
+					</if>
+					<if test="null != item.lastPayed">
+						last_payed = #{item.lastPayed},
+					</if>
+					<if test="null != item.currentFee">
+						current_fee = #{item.currentFee},
+					</if>
+					<if test="null != item.lateFee">
+						late_fee = #{item.lateFee},
+					</if>
+					<if test="null != item.currentBillFee">
+						current_bill_fee = #{item.currentBillFee},
+					</if>
+					<if test="null != item.accountBalance">
+						account_balance = #{item.accountBalance},
+					</if>
+					<if test="null != item.billingTime">
+						billing_time = #{item.billingTime},
+					</if>
+					<if test="null != item.lastBillId">
+						last_bill_id = #{item.lastBillId},
+					</if>
+					<if test="null != item.isUsed">
+						is_used = #{item.isUsed},
+					</if>
+					<if test="null != item.modifyId">
+						modify_id = #{item.modifyId},
+					</if>
+					<if test="null != item.feeItemDetail">
+						fee_item_detail = #{item.feeItemDetail},
+					</if>
+					<if test="null != item.lastOwedInfo">
+						last_owed_info = #{item.lastOwedInfo},
+					</if>
+					<if test="null != item.currentKqAmount">
+						current_kq_amount = #{item.currentKqAmount},
+					</if>
+					<if test="null != item.isZipComplete">
+						is_zip_complete = #{item.isZipComplete},
+					</if>
+					<if test="null != item.tax">
+						tax = #{item.tax},
+					</if>
+					<if test="item.aduitStatus !=null">
+						aduit_status= #{item.aduitStatus},
+					</if>
+					<if test="item.temporaryBill !=null">
+						temporary_bill=#{item.temporaryBill},
+					</if>
+					modify_time = sysdate()
+				</set>		
+			where id = #{item.id}
+		</foreach>
+	</update>
+	
+	
+	<!-- 如果是每户等价分摊，分摊成功后集体修改账单元数据的分摊金额 -->
+	<update id="updateChargeHistoryForShare" parameterType="TBsChargeBillHistory">
+		UPDATE t_bs_charge_bill_history SET share_fee=#{shareFee} WHERE charge_total_id =#{chargeTotalId}
+		<if test=" null != buildingCode ">
+			AND	building_code = #{buildingCode} 
+		</if>
+		AND is_used=0
+	</update>
+	
+	
+	<select id="findAllByTotalId" parameterType="String" resultMap="BaseResultMap">
+		select * 
+		from t_bs_charge_bill_history 
+		where charge_total_id = #{0}
+		and is_used = 0
+<!-- 		and aduit_status !=1 -->
+	</select>
+	
+	<select id="findNextHistory" parameterType="TBsChargeBillHistory" resultMap="BaseResultMap">
+		select * 
+		from t_bs_charge_bill_history
+		where last_bill_id = #{id}
+		and is_used = 0
+	</select>
+	
+	<select id="findAllOwedFeeByTotalId" parameterType="String" resultType="Double">
+		SELECT (SUM(IFNULL(late_fee,0)) + SUM(IFNULL(account_balance,0))) 
+		FROM t_bs_charge_bill_history
+		WHERE 1 = 1
+		<![CDATA[
+			and account_balance <= 0
+		]]>
+	</select>
+	
+	<select id="selectByAccountId" parameterType="String" resultMap="BaseResultMap">
+		SELECT
+			   t1.*
+		  FROM t_bs_charge_bill_history t1,
+			   t_bs_asset_account t2,
+		       t_bs_charge_bill_total t3
+		 WHERE t1.building_code = t2.building_code
+		   AND t1.billing_time IS NULL
+		   AND t1.charge_total_id = t3.id
+		   AND t3.type = #{type,jdbcType=INTEGER}
+		   AND t2.id = #{accountId,jdbcType=VARCHAR}
+	</select>
+	
+	<update id="updateLateFeeByProjectId" parameterType="String">
+	 UPDATE t_bs_charge_bill_history t
+		SET t.late_fee = (
+							SELECT SUM(t1.total_late_fee)
+							  FROM t_bs_owed_history t1,
+							       t_bs_asset_account t2
+							 WHERE t1.is_used = 0
+							   AND t1.account_id = t2.id
+							   AND t2.building_code = t.building_code
+						  GROUP BY t2.building_code
+						)
+	  WHERE t.charge_total_id = (
+	  								SELECT id
+	  								  FROM (
+			  								SELECT id ,create_time
+										      FROM t_bs_charge_bill_total
+										     WHERE TYPE = 1
+										       AND billing_time IS NULL
+										       AND project_id = #{0}
+							   		   	  GROUP BY id
+							   		   	  ) t
+						   		   	ORDER BY t.create_time DESC
+						   		   	LIMIT 0,1
+					    		)
+	   AND t.billing_time IS NULL
+	</update>
+	
+	<select id="findAllPayedByTotalId" parameterType="String" resultType="java.lang.Double">
+		SELECT ifnull(SUM(last_payed),0) FROM t_bs_charge_bill_history WHERE charge_total_id = #{0} and is_used = 0
+	</select>
+	
+	<select id="findNewLastId" parameterType="String" resultType="java.lang.String">
+		    SELECT t1.id 
+		      FROM t_bs_charge_bill_history t1
+			 WHERE t1.building_code = #{1}
+			   AND t1.is_used = 0
+			   AND charge_total_id = (
+						SELECT last_total_id 
+						  FROM t_bs_charge_bill_total 
+						 WHERE id = #{0}
+			 )
+			 group by t1.id
+	</select>
+	
+	<select id="findCurrPayedByTotalId" parameterType="String" resultType="java.lang.Double">
+		SELECT SUM(common_desummoney) + SUM(no_common_desummoney) 
+		FROM t_bs_charge_bill_history 
+		WHERE charge_total_id = #{0}
+		AND is_used = 0
+	</select>
+	
+	<select id="findAllByObjAfterTime" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select t1.* 
+		  from t_bs_charge_bill_history t1,
+		  	   t_bs_charge_bill_total t2
+		 where t1.building_code = #{buildingCode}
+		   and 
+			<![CDATA[
+				DATE_FORMAT(t1.billing_time,'%Y-%m') >= DATE_FORMAT(#{startTime},'%Y-%m')
+			]]>
+		   and t1.charge_total_id = t2.id
+		   and t2.type = #{type}
+		   and t1.is_used = 0
+		order by t1.billing_time asc
+	</select>
+	
+	<select id="findCurrentBillByBuildingCode" parameterType="String" resultMap="assembleMap">
+		select t1.* ,t2.type
+		  from t_bs_charge_bill_history t1,
+		       t_bs_charge_bill_total t2
+		 where t1.building_code = #{0}
+		   and t1.charge_total_id = t2.id
+		   and t1.is_used = 0
+		   and DATE_FORMAT(t1.billing_time,'%Y-%m') = DATE_FORMAT(sysdate(),"%Y-%m")
+		 order by t2.type 
+	</select>
+	
+	<!-- 将分单置为打包完成状态 -->
+	<update id="updateZipCompleteByObj" parameterType="TBsChargeBillHistory">
+		UPDATE t_bs_charge_bill_history
+		SET is_zip_complete = #{isZipComplete}
+		WHERE project_id = #{projectId}
+			  AND DATE_FORMAT(billing_time,'%Y-%m') = DATE_FORMAT(#{billingTime},'%Y-%m')
+			  AND building_code in (
+				select * from(		SELECT
+								  d.building_code
+								  FROM
+								  tc_building a
+								  LEFT JOIN tc_building b ON a.building_code = b.pid
+								LEFT JOIN tc_building c ON b.building_code = c.pid
+							   LEFT JOIN tc_building d ON c.building_code = d.pid
+								WHERE
+								a.building_type = 'dongzuo'
+								AND d.id IS NOT NULL
+																													AND a.building_code = #{buildingCode}
+							 ) e UNION ALL (
+								SELECT
+								c.building_code
+								FROM
+								tc_building a
+								LEFT JOIN tc_building b ON a.building_code = b.pid
+							  	LEFT JOIN tc_building c ON b.building_code = c.pid
+								 WHERE
+								 a.building_type = 'dongzuo'
+								 AND c.id IS NOT NULL
+									   AND a.building_code = #{buildingCode}
+				   			 )
+						  )
+	</update>
+	<update id="updateBilledBuilding">
+		UPDATE t_bs_charge_bill_history
+		SET is_zip_complete = #{chargeBillHistory.isZipComplete}
+		WHERE project_id = #{chargeBillHistory.projectId}
+			  AND DATE_FORMAT(billing_time,'%Y-%m') = DATE_FORMAT(#{chargeBillHistory.billingTime},'%Y-%m')
+			  and building_code in
+		<foreach collection="buildingCodes" index="index" item="item" open="(" separator="," close=")">
+		               #{item}
+        </foreach>
+	</update>
+
+	<select id="findNotZipByObj" parameterType="TBsChargeBillHistory" resultType="Integer">
+		SELECT count(1)
+		FROM t_bs_charge_bill_history t1
+		WHERE t1.project_id = #{projectId}
+			  AND t1.is_zip_complete = 0
+			  AND DATE_FORMAT(t1.billing_time,'%Y-%m') = DATE_FORMAT(#{billingTime},'%Y-%m')
+	</select>
+	
+	<!-- 根据总单id、buildCode和未审核状态查询 -->
+	<select id="getBytotalIdAndBuildCode" parameterType="String" resultMap="BaseResultMap">
+		select * from t_bs_charge_bill_history where charge_total_id=#{0} and building_code=#{1} and aduit_status=0
+	</select>
+	
+	<!-- 根据总单id,buildCode来查询 -->
+	<select id="findByTotalIdAndBuildCode" parameterType="String" resultMap="BaseResultMap">
+		select * from t_bs_charge_bill_history where charge_total_id=#{0} and building_code=#{1}
+	</select>
+	
+	<select id="getBytotalIdBuildCode" parameterType="String" resultMap="BaseResultMap">
+		select * from t_bs_charge_bill_history where charge_total_id=#{0} and building_code=#{1}
+	</select>
+	
+	<!-- 查询下一个单是否生成  getBylastBilllIdAndBuildCode-->
+	<select id="getBylastBilllIdAndBuildCode" parameterType="String" resultMap="BaseResultMap">
+		select * from t_bs_charge_bill_history where last_bill_id=#{0} and building_code=#{1}
+	</select>
+	
+	
+	<resultMap type="java.util.Map" id="queryNewHistoryMap">
+		<result property="billingTime" column="billing_time"/>
+		<result property="currentFee" column="current_fee"/>
+		<result property="currentBillFee" column="current_bill_fee"/>
+		<result property="accountBalance" column="account_balance"/>
+	</resultMap>
+	
+	<!-- 根据buildCode和projectId查找最新的一个数据 -->
+	<select id="getBillByBuildCode" parameterType="String" resultMap="queryNewHistoryMap">
+		SELECT
+			hs.billing_time,
+		    hs.current_fee,
+		    hs.current_bill_fee,
+			hs.account_balance
+		FROM
+			t_bs_charge_bill_history hs,t_bs_charge_bill_total tol
+		WHERE
+		hs.charge_total_id = tol.id
+		and tol.type=#{0}
+		and	hs.project_id =#{1}
+		AND hs.building_code = #{2}
+		and hs.billing_time is not null
+		and hs.aduit_status=1
+		and hs.is_used=0
+		ORDER BY
+			hs.create_time DESC
+		LIMIT 0,1
+	</select>
+	
+	<select id="findById" parameterType="String" resultMap="BaseResultMap">
+		select * from t_bs_charge_bill_history 
+		where id = #{0}
+	</select>
+	
+	<select id="selectCurrentBillByCodeAndType" resultMap="BaseResultMap">
+		  SELECT t1.* FROM t_bs_charge_bill_history t1,
+	      		 t_bs_charge_bill_total t2
+		   WHERE t1.building_code = #{buildingCode}
+			 AND t1.charge_total_id = t2.id
+			 AND t2.type = #{type}
+			 AND t1.is_used = 0
+			 AND t1.aduit_status = 1
+			 AND t1.billing_time IS NOT NULL
+		   ORDER BY t1.billing_time DESC
+			LIMIT 0,1
+	</select>
+	
+	<select id ="getBillingDataForFinece" parameterType="java.util.Map" resultType="PushPayInfoToFinance">
+		SELECT
+		  t1.current_fee incomeMoney,
+		  (CASE when t4.house_code is null then t4.building_code else t4.house_code end)  housesCode ,
+		  t3.tax_rate tariff,
+		  'RMB' currency,
+		  DATE_FORMAT(t2.billing_time,'%Y-%m-%d') tollDate ,
+		  FORMAT((CASE WHEN t1.current_fee * t3.tax_rate IS NULL THEN 0 ELSE t1.current_fee * t3.tax_rate/100 END ),2) taxMoney
+		FROM
+		  t_bs_charge_bill_history t1,
+		  t_bs_charge_bill_total t2,
+		  t_bs_charging_scheme t3,
+		  tc_building t4
+		WHERE t1.charge_total_id = t2.id
+		  AND t2.scheme_id = t3.id
+		  AND t4.building_code = t1.building_code
+		  AND t2.type = #{type}
+		  AND t2.project_id = #{projectId}
+		  AND audit_status = 1
+		  AND t1.is_used = 0
+		  AND t2.billing_time IS NOT NULL
+		  AND t4.house_code is not NULL
+		  AND LENGTH(t4.house_code) = 15
+		  <if test=" null != lastPushDate and '' != lastPushDate ">
+		  	AND t2.billing_time >= #{lastPushDate}
+		  </if>
+	</select>
+	
+	<select id="selectNotBillingByObj" resultMap="BaseResultMap">
+		select t2.* from t_bs_charge_bill_history t2, t_bs_charge_bill_total t1
+		 where t1.id = t2.charge_total_id 
+		   and t2.building_code = #{buildingCode}
+		   and t1.`type` = #{type}
+		   and t2.is_used = 0
+		   and t2.billing_time is null
+		 order by t2.create_time desc
+		 limit 0,1
+	</select>
+	
+
+	<select id="listPageInCustomerService" parameterType="TBsChargeBillHistory" resultMap="BaseResultMap">
+			SELECT
+				  t1.id,
+				  t2.type as charge_total_id,
+				  t1.project_id,
+				  t1.building_code,
+				  t1.full_name,
+				  IFNULL(t1.last_bill_fee,0) AS last_bill_fee,
+				  IFNULL(t1.last_payed,0) AS last_payed,
+				  IFNULL(t1.current_fee,0) AS current_fee,
+				  IFNULL(t1.late_fee,0) AS late_fee,
+				  IFNULL(t1.current_bill_fee,0) AS current_bill_fee,
+				  IFNULL(t1.account_balance,0) AS account_balance,
+				  t1.billing_time,
+				  t1.last_bill_id,
+				  t1.is_used,
+				  IFNULL(t1.share_fee,0) AS share_fee,
+				  IFNULL(t1.common_desummoney,0) AS common_desummoney,
+				  IFNULL(t1.no_common_desummoney,0) AS no_common_desummoney,
+				  IFNULL(t1.tax,0)   AS tax,
+				  t1.create_id,
+				  t1.create_time,
+				  t1.modify_id,
+				  t1.modify_time
+		     FROM t_bs_charge_bill_history t1 , t_bs_charge_bill_total t2
+			WHERE t1.charge_total_id = t2.id
+			  and t1.billing_time is not null
+			  and t1.building_code = #{buildingCode}
+			  and t1.aduit_status=1
+			  and date_format(t1.billing_time,'%Y') = #{searchTime}
+		    order by t1.billing_time desc
+	</select>
+
+	<!-- 根据总单Id来查询M虚拟表的分单，-->
+	<select id="selectMByTotalId"  resultMap="BaseResultMap">
+		select bill.* 
+		from 
+		  t_bs_charge_bill_history bill,
+		  <if test="meterType==4">
+		  tc_electricity_meter meter
+		  </if>
+		  <if test="meterType==3">
+		  tc_water_meter meter
+		  </if>
+		where bill.building_code = meter.relation_building
+		and bill.charge_total_id=#{totalId}
+		and meter.project_id=#{projectId}
+		and meter.meter_level=11
+		and bill.billing_time is not null
+		and bill.modify_time is null
+	</select>
+	
+	<!--  根据buildCode和totalID查询-->
+	<select id="selectCByBuildCodeAndTotalId"  resultMap="BaseResultMap">
+		select * from t_bs_charge_bill_history
+		where charge_total_id=#{totalId}
+		and building_code in
+		<foreach collection="buildCodes" separator="," item="buildingCode" index="index" open="(" close=")">
+		 (#{buildingCode})
+		</foreach>
+	</select>
+	
+	<select id="findByBuildingCodeAndItems" resultMap="assembleMap">
+		SELECT *
+		  FROM (SELECT
+		              t1.*,
+		              t2.type
+		            FROM t_bs_charge_bill_history t1,
+		              t_bs_charge_bill_total t2
+		            WHERE t1.building_code = #{buildingCode}
+		                AND t2.id = t1.charge_total_id
+		                AND t1.billing_time IS NOT NULL
+		                AND t1.aduit_status = 1
+                		AND t1.is_used = 0
+		                <if test="null != items">
+			                AND t2.type IN
+			                <foreach collection="items" item="item" open="(" separator="," close=")">
+			                	#{item}
+			                </foreach>
+		                </if>
+		            ORDER BY t1.billing_time DESC) t
+	      GROUP BY t.type
+	</select>
+	<select id="findLastBillTime" resultType="java.util.Date">
+		SELECT billing_time FROM  t_bs_charge_bill_total where id= (
+			SELECT last_total_id
+			FROM t_bs_charge_bill_total
+			WHERE id = (
+				SELECT charge_total_id
+				FROM t_bs_charge_bill_history
+				WHERE id = #{id}
+			)
+		)
+	</select>
+	<select id="findListTBsChargeBillHistory" resultType="com.everwing.coreservice.common.wy.entity.configuration.bill.TBsChargeBillHistoryDto">
+		select
+
+		building_code AS buildingCode,
+		IFNULL(SUM(case when t2.type =1 then IFNULL(t1.current_fee,0) END ),0.0) wyamount,
+		IFNULL(SUM(case when t2.type =2 then IFNULL(t1.current_fee,0) END ),0.0) btamount,
+		IFNULL(SUM(case when t2.type =3 then IFNULL(t1.current_fee,0) END ),0.0) wateramount,
+		IFNULL(SUM(case when t2.type =4 then IFNULL(t1.current_fee,0) END ),0.0) electamount
+		from (
+		select * from t_bs_charge_bill_history where id is not null and aduit_status=1 and building_code in(
+		select building_code from tc_building  where project_id=#{projectId}
+		) ) t1,
+		t_bs_charge_bill_total t2 where t1.charge_total_id = t2.id group by building_code
+
+	</select>
+	<select id="findDateCharge" resultType="com.everwing.coreservice.common.wy.entity.configuration.bill.TBsChargeBillHistoryDto">
+		select
+		building_code AS buildingCode,
+		readTime,
+		IFNULL(SUM(case when t2.type =1 then IFNULL(t1.current_fee,0) END ),0.0) wyamount,
+		IFNULL(SUM(case when t2.type =2 then IFNULL(t1.current_fee,0) END ),0.0) btamount,
+		IFNULL(SUM(case when t2.type =3 then IFNULL(t1.current_fee,0) END ),0.0) wateramount,
+		IFNULL(SUM(case when t2.type =4 then IFNULL(t1.current_fee,0) END ),0.0) electamount
+
+		from (
+		select *,date_format(billing_time,'%Y-%m') AS readTime
+			from t_bs_charge_bill_history
+			where id is not null and aduit_status=1 and building_code in(
+				select building_code from tc_building where building_code=#{buildingCode}
+				)
+		) t1,
+		t_bs_charge_bill_total t2 where t1.charge_total_id = t2.id group by readTime
+
+	</select>
+
+
+</mapper>

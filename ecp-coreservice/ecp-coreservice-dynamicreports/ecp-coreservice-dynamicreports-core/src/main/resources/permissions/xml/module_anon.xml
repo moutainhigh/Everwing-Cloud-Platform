@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modulegroup id="c92a1d53-0a23-11e8-80c8-0050568e00c5" name="" desc="">
+	<module id="ce4cce1b-0a23-11e8-80c8-0050568e00c5" name="anon" desc="公共模块白名单集合" permission="anon">
+		<operation id="d2cbdb11-0a23-11e8-80c8-0050568e00c5" name="anon" desc="anon" permission="anon" url="/system/LoginController/login"/>
+		<operation id="d74f47b6-0a23-11e8-80c8-0050568e00c5" name="anon" desc="anon" permission="anon" url="/system/LoginController/loginOut"/>
+		<operation id="db93970c-0a23-11e8-80c8-0050568e00c5" name="anon" desc="anon" permission="anon" url="/system/LoginController/findMenuByLoginNameAndPid/*"/>
+		<operation id="e07322f0-0a23-11e8-80c8-0050568e00c5" name="anon" desc="anon" permission="anon" url="/system/LoginController/getResourceWhenRefresh/*"/>
+		<operation id="e5f5e291-0a23-11e8-80c8-0050568e00c5" name="anon" desc="anon" permission="anon" url="/system/LoginController/getResourceWhenRefresh/*"/>
+	</module>
+</modulegroup>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<excel id="jrl_datas">
+    <sheet label="金融联回盘数据">
+        <list>
+            <sql id="2AB5FA73-26D4-4371-8F01-1C8707592E7E">
+                <![CDATA[
+                <#if headId ??>
+				SELECT * FROM (
+						SELECT t1.name, 
+							   t2.house_code,
+							   t2.building_full_name,
+							   t3.account_name,
+							   t4.bank_name,
+							   t3.account,
+							   t3.amount,
+							   t3.wy_amount,
+							   t3.bt_amount,
+							   t3.water_amount,
+							   t3.elect_amount,
+							   t3.bank_resp_ps,
+							   DATE_FORMAT(t3.create_time,'%Y-%m-%d %T')  AS create_time
+						  FROM t_bc_jrl_body t3 
+						  LEFT JOIN t_sys_project t1 ON t3.project_id = t1.code
+						  LEFT JOIN tc_building t2 ON t3.building_code = t2.building_code
+						  LEFT JOIN t_bank_info t4 ON ( 
+						  									(t3.bank_type IS NOT NULL  AND t3.bank_type = t4.bank_type) 
+						  								OR 
+						  									(t3.bank_type IS NULL AND t3.bank_code = t4.bank_no)
+						  							)
+						 WHERE t3.type = 1
+						   AND t3.head_id = '${headId}'
+						 ORDER BY t2.house_code ASC
+						) t1
+					UNION ALL
+						SELECT * FROM(
+							SELECT "总计" AS `name`, 
+							       ''AS house_code, 
+							       '' building_full_name, 
+							       '' account_name, 
+							       '' bank_name, 
+							       '' account, 
+								   CAST(SUM(amount) AS DECIMAL(10,2)) as amount, 
+								   CAST(SUM(wy_amount) AS DECIMAL(10,2)) as wy_amount,
+							       CAST(SUM(bt_amount) AS DECIMAL(10,2)) as bt_amount,
+							       CAST(SUM(water_amount) AS DECIMAL(10,2)) as water_amount,
+							       CAST(SUM(elect_amount)AS DECIMAL(10,2)) as elect_amount,
+							       '' bank_resp_ps,
+							       '' create_time
+							  FROM t_bc_jrl_body 
+							 WHERE head_id = '${headId}'
+							   AND TYPE = 1
+						) t2
+					UNION ALL
+						SELECT * FROM(
+							SELECT "成功金额总计" AS `name`, 
+							       ''AS house_code, 
+							       '' building_full_name, 
+							       '' account_name, 
+							       '' bank_name, 
+							       '' account, 
+								   CAST(SUM(amount) AS DECIMAL(10,2)) as amount, 
+								   CAST(SUM(wy_amount) AS DECIMAL(10,2)) as wy_amount,
+								   CAST(SUM(bt_amount) AS DECIMAL(10,2)) as bt_amount,
+								   CAST(SUM(water_amount) AS DECIMAL(10,2)) as water_amount,
+								   CAST(SUM(elect_amount)AS DECIMAL(10,2)) as elect_amount,
+								   '' bank_resp_ps,
+								   '' create_time
+							FROM t_bc_jrl_body 
+							WHERE head_id = '${headId}' 
+							AND TYPE = 1
+							AND bank_resp_code = "FSBR0000"
+						) t3
+			   </#if>
+			   <#if totalId ??>
+					SELECT t.* FROM (
+									SELECT t1.name, t2.house_code,t2.building_code,t2.building_full_name,t3.account_name,t4.bank_name,t3.account,t3.amount,t3.wy_amount,t3.bt_amount,t3.water_amount,t3.elect_amount,t3.bank_resp_ps,
+										   DATE_FORMAT(t3.create_time,'%Y-%m-%d %T')  AS create_time
+									  FROM t_bc_jrl_body t3 
+									  LEFT JOIN t_sys_project t1 ON t3.project_id = t1.code
+									  LEFT JOIN tc_building t2 ON t3.building_code = t2.building_code
+									  LEFT JOIN t_bank_info t4 ON ( (t3.bank_type IS NOT NULL  AND t3.bank_type = t4.bank_type) OR (t3.bank_type IS NULL AND t3.bank_code = t4.bank_no))
+									  LEFT JOIN t_bc_jrl_head t5 ON t3.head_id = t5.id
+									 WHERE t3.type = 1
+									   AND t5.total_id = '${totalId}'
+									   AND t3.bank_resp_code = "FSBR0000"
+									 GROUP BY t2.house_code
+								
+								UNION ALL 
+								
+									SELECT * 
+									  FROM (
+											SELECT t1.name, t2.house_code,t2.building_code,t2.building_full_name,t3.account_name,t4.bank_name,t3.account,t3.amount,t3.wy_amount,t3.bt_amount,t3.water_amount,t3.elect_amount,t3.bank_resp_ps,
+											       DATE_FORMAT(t3.create_time,'%Y-%m-%d %T')  AS create_time
+											  FROM t_bc_jrl_body t3 
+											  LEFT JOIN t_sys_project t1 ON t3.project_id = t1.code
+											  LEFT JOIN tc_building t2 ON t3.building_code = t2.building_code
+											  LEFT JOIN t_bank_info t4 ON ( (t3.bank_type IS NOT NULL  AND t3.bank_type = t4.bank_type) OR (t3.bank_type IS NULL AND t3.bank_code = t4.bank_no))
+											  LEFT JOIN t_bc_jrl_head t5 ON t3.head_id = t5.id
+											 WHERE t3.type = 1
+											   AND t5.total_id = '${totalId}'
+											   AND t3.bank_resp_code != "FSBR0000"
+											 ORDER BY t3.create_time DESC
+										   ) t 
+									 GROUP BY t.house_code
+						      ) t
+						GROUP BY t.house_code
+						
+						UNION ALL 
+						
+							SELECT '总金额' NAME, 
+							       '' house_code,
+							       '' building_code,
+							       '' building_full_name,
+							       '' account_name,
+							       '' bank_name,
+							       '' account,
+							       CAST(SUM(t.amount) AS DECIMAL(10,2)) AS amount,
+							       CAST(SUM(t.wy_amount) AS DECIMAL(10,2)) AS wy_amount,
+							       CAST(SUM(t.bt_amount) AS DECIMAL(10,2)) AS bt_amount,
+							       CAST(SUM(t.water_amount) AS DECIMAL(10,2)) AS water_amount,
+							       CAST(SUM(t.elect_amount) AS DECIMAL(10,2)) AS elect_amount,
+							       '' bank_resp_ps,
+							       '' AS create_time 
+							FROM (
+									SELECT t1.name, t2.house_code,t2.building_code,t2.building_full_name,t3.account_name,t4.bank_name,t3.account,t3.amount,t3.wy_amount,t3.bt_amount,t3.water_amount,t3.elect_amount,t3.bank_resp_ps,
+									       ''  AS create_time
+									  FROM t_bc_jrl_body t3 
+									  LEFT JOIN t_sys_project t1 ON t3.project_id = t1.code
+									  LEFT JOIN tc_building t2 ON t3.building_code = t2.building_code
+									  LEFT JOIN t_bank_info t4 ON ( (t3.bank_type IS NOT NULL  AND t3.bank_type = t4.bank_type) OR (t3.bank_type IS NULL AND t3.bank_code = t4.bank_no))
+									  LEFT JOIN t_bc_jrl_head t5 ON t3.head_id = t5.id
+									 WHERE t3.type = 1
+									   AND t5.total_id = '${totalId}'
+									   AND t3.bank_resp_code = "FSBR0000"
+									 GROUP BY t2.house_code
+						
+								UNION ALL 
+						
+									SELECT * 
+									  FROM (
+											SELECT t1.name, t2.house_code,t2.building_code,t2.building_full_name,t3.account_name,t4.bank_name,t3.account,t3.amount,t3.wy_amount,t3.bt_amount,t3.water_amount,t3.elect_amount,t3.bank_resp_ps,
+												   ''  AS create_time
+											  FROM t_bc_jrl_body t3 
+											  LEFT JOIN t_sys_project t1 ON t3.project_id = t1.code
+											  LEFT JOIN tc_building t2 ON t3.building_code = t2.building_code
+											  LEFT JOIN t_bank_info t4 ON ( (t3.bank_type IS NOT NULL  AND t3.bank_type = t4.bank_type) OR (t3.bank_type IS NULL AND t3.bank_code = t4.bank_no))
+											  LEFT JOIN t_bc_jrl_head t5 ON t3.head_id = t5.id
+											 WHERE t3.type = 1
+											   AND t5.total_id = '${totalId}'
+											   AND t3.bank_resp_code != "FSBR0000"
+											 ORDER BY t3.create_time DESC
+										  ) t 
+									 GROUP BY t.house_code
+							) t
+						
+						UNION ALL 
+						
+							SELECT '成功金额合计' NAME, 
+							       '' house_code,
+							       '' building_code,
+							       '' building_full_name,
+							       '' account_name,
+							       '' bank_name,
+							       '' account,
+							       CAST(SUM(t3.amount) AS DECIMAL(10,2)) AS amount,
+							       CAST(SUM(t3.wy_amount) AS DECIMAL(10,2)) AS wy_amount,
+							       CAST(SUM(t3.bt_amount) AS DECIMAL(10,2)) AS bt_amount,
+							       CAST(SUM(t3.water_amount) AS DECIMAL(10,2)) AS water_amount,
+							       CAST(SUM(t3.elect_amount) AS DECIMAL(10,2)) AS elect_amount,
+							       '' bank_resp_ps,
+							       ''  AS create_time 
+							 FROM t_bc_jrl_body t3 
+							 LEFT JOIN t_sys_project t1 ON t3.project_id = t1.code
+							 LEFT JOIN tc_building t2 ON t3.building_code = t2.building_code
+							 LEFT JOIN t_bank_info t4 ON ( (t3.bank_type IS NOT NULL  AND t3.bank_type = t4.bank_type) OR (t3.bank_type IS NULL AND t3.bank_code = t4.bank_no))
+							 LEFT JOIN t_bc_jrl_head t5 ON t3.head_id = t5.id
+							WHERE t3.type = 1
+							  AND t5.total_id = '${totalId}'
+							  AND t3.bank_resp_code = "FSBR0000"
+			   </#if>
+                ]]>
+            </sql>
+            <!-- 查询结果字段和excel表头标题的映射，column的值一定要和SQL语句的AS别名一致 -->
+			 <field column="name" label="项目名称" type="String"></field>
+			 <field column="house_code" label="房屋编码" type="String"></field>
+			 <field column="building_full_name" label="房屋全名" type="String"></field>
+			 <field column="account_name" label="账户名" type="String"></field>
+             <field column="bank_name" label="银行名称" type="String"></field>
+			 <field column="account" label="银行卡号" type="String"></field>
+			 <field column="amount" label="扣款金额" type="Double"></field>
+			 <field column="wy_amount" label="物业管理费" type="Double"></field>
+			 <field column="bt_amount" label="本体基金" type="Double"></field>
+			 <field column="water_amount" label="水费" type="Double"></field>
+			 <field column="elect_amount" label="电费" type="Double"></field>
+			 <field column="bank_resp_ps" label="银行返回信息" type="String"></field>
+			 <field column="create_time" label="回盘时间" type="String"></field>
+        </list>
+    </sheet>
+</excel>

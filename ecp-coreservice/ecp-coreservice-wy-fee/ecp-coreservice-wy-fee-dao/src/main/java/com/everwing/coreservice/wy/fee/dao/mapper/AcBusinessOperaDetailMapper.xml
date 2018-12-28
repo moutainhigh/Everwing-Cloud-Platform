@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.coreservice.wy.fee.dao.mapper.AcBusinessOperaDetailMapper">
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.fee.entity.AcBusinessOperaDetail">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="operation_id" jdbcType="VARCHAR" property="operationId" />
+    <result column="operation_time" jdbcType="TIMESTAMP" property="operationTime" />
+    <result column="business_type" jdbcType="INTEGER" property="businessType" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="project_id" jdbcType="VARCHAR" property="projectId" />
+    <result column="project_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="signature" jdbcType="VARCHAR" property="signature" />
+    <result column="person_type" jdbcType="INTEGER" property="personType" />
+    <result column="client_type" jdbcType="INTEGER" property="clientType" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, operation_id, operation_time, business_type, amount, project_id, project_name, 
+    remark, signature, person_type, client_type
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_ac_business_opera_detail
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByCondition" resultType="com.everwing.coreservice.common.wy.fee.entity.AcBusinessOperaDetail">
+    select
+    <include refid="Base_Column_List" />
+    from t_ac_business_opera_detail
+    WHERE 1=1
+    <if test="yearMonth!=null and yearMonth!=''">
+      and time_format(operation_time,'%Y-%m')=#{yearMonth}
+    </if>
+    <if test="businessType!=null and businessType!=''">
+      and business_type=#{businessType}
+    </if>
+    <if test="clientType!=null and clientType!=''">
+      and client_type=#{clientType}
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_ac_business_opera_detail
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.everwing.coreservice.common.wy.fee.entity.AcBusinessOperaDetail">
+    insert into t_ac_business_opera_detail (id, operation_id, operation_time, 
+      business_type, amount, project_id, 
+      project_name, remark, signature, 
+      person_type, client_type)
+    values (#{id,jdbcType=VARCHAR}, #{operationId,jdbcType=VARCHAR}, #{operationTime,jdbcType=TIMESTAMP}, 
+      #{businessType,jdbcType=INTEGER}, #{amount,jdbcType=DECIMAL}, #{projectId,jdbcType=VARCHAR}, 
+      #{projectName,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{signature,jdbcType=VARCHAR}, 
+      #{personType,jdbcType=INTEGER}, #{clientType,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.everwing.coreservice.common.wy.fee.entity.AcBusinessOperaDetail">
+    insert into t_ac_business_opera_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="operationId != null">
+        operation_id,
+      </if>
+      <if test="operationTime != null">
+        operation_time,
+      </if>
+      <if test="businessType != null">
+        business_type,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="projectId != null">
+        project_id,
+      </if>
+      <if test="projectName != null">
+        project_name,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="signature != null">
+        signature,
+      </if>
+      <if test="personType != null">
+        person_type,
+      </if>
+      <if test="clientType != null">
+        client_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="operationId != null">
+        #{operationId,jdbcType=VARCHAR},
+      </if>
+      <if test="operationTime != null">
+        #{operationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="businessType != null">
+        #{businessType,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="projectId != null">
+        #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="signature != null">
+        #{signature,jdbcType=VARCHAR},
+      </if>
+      <if test="personType != null">
+        #{personType,jdbcType=INTEGER},
+      </if>
+      <if test="clientType != null">
+        #{clientType,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.everwing.coreservice.common.wy.fee.entity.AcBusinessOperaDetail">
+    update t_ac_business_opera_detail
+    <set>
+      <if test="operationId != null">
+        operation_id = #{operationId,jdbcType=VARCHAR},
+      </if>
+      <if test="operationTime != null">
+        operation_time = #{operationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="businessType != null">
+        business_type = #{businessType,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="projectId != null">
+        project_id = #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        project_name = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="signature != null">
+        signature = #{signature,jdbcType=VARCHAR},
+      </if>
+      <if test="personType != null">
+        person_type = #{personType,jdbcType=INTEGER},
+      </if>
+      <if test="clientType != null">
+        client_type = #{clientType,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.everwing.coreservice.common.wy.fee.entity.AcBusinessOperaDetail">
+    update t_ac_business_opera_detail
+    set operation_id = #{operationId,jdbcType=VARCHAR},
+      operation_time = #{operationTime,jdbcType=TIMESTAMP},
+      business_type = #{businessType,jdbcType=INTEGER},
+      amount = #{amount,jdbcType=DECIMAL},
+      project_id = #{projectId,jdbcType=VARCHAR},
+      project_name = #{projectName,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      signature = #{signature,jdbcType=VARCHAR},
+      person_type = #{personType,jdbcType=INTEGER},
+      client_type = #{clientType,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <insert id="insertOperaDetail" parameterType="AcBusinessOperaDetailDto">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
+      SELECT uuid()
+    </selectKey>
+    INSERT INTO t_ac_business_opera_detail
+    (
+    `id`,
+    `operation_id`,
+    `operation_time`,
+    `business_type`,
+    `amount`,
+    `project_id`,
+    `project_name`,
+    `remark`,
+    `signature`,
+    `person_type`,
+    `client_type`)
+    VALUES
+    (
+    #{id},
+    #{operationId},
+    #{operationTime},
+    #{businessType},
+    #{amount},
+    #{projectId},
+    #{projectName},
+    #{remark},
+    #{signature},
+    #{personType},
+    #{clientType}
+    )
+  </insert>
+</mapper>

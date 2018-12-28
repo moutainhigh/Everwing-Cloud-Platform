@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.coreservice.wy.fee.dao.mapper.ProjectPrestoreAccountMapper">
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.fee.entity.ProjectPrestoreAccount">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="prestore_type" jdbcType="INTEGER" property="prestoreType" />
+    <result column="project_account_id" jdbcType="VARCHAR" property="projectAccountId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="signature" jdbcType="VARCHAR" property="signature" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, amount, prestore_type, project_account_id, create_time, update_time, signature
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_project_prestore_account
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByProjectAccountIdAndType" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_project_prestore_account
+    WHERE project_account_id=#{projectAccountId} and prestore_type=#{prestoreType}
+  </select>
+    <select id="selectByIdByHouseCodeNew" resultType="java.lang.String">
+      SELECT id FROM t_project_prestore_account where house
+    </select>
+  <select id="selectByProjectIdAndType" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" /> FROM t_project_prestore_account
+    where project_account_id=(SELECT id from t_project_account WHERE project_id=#{projectId})
+    and prestore_type=#{type}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_project_prestore_account
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="ProjectPrestoreAccount">
+    insert into t_project_prestore_account (id, amount, prestore_type, 
+      project_account_id, create_time, update_time, 
+      signature)
+    values (#{id,jdbcType=VARCHAR}, #{amount,jdbcType=DECIMAL}, #{prestoreType,jdbcType=INTEGER},
+      #{projectAccountId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{signature,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="ProjectPrestoreAccount">
+    insert into t_project_prestore_account
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="prestoreType != null">
+        prestore_type,
+      </if>
+      <if test="projectAccountId != null">
+        project_account_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="signature != null">
+        signature,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="prestoreType != null">
+        #{prestoreType,jdbcType=INTEGER},
+      </if>
+      <if test="projectAccountId != null">
+        #{projectAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="signature != null">
+        #{signature,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="ProjectPrestoreAccount">
+    update t_project_prestore_account
+    <set>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="prestoreType != null">
+        prestore_type = #{prestoreType,jdbcType=INTEGER},
+      </if>
+      <if test="projectAccountId != null">
+        project_account_id = #{projectAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="signature != null">
+        signature = #{signature,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="ProjectPrestoreAccount">
+    update t_project_prestore_account
+    set amount = #{amount,jdbcType=DECIMAL},
+      prestore_type = #{prestoreType,jdbcType=INTEGER},
+      project_account_id = #{projectAccountId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      signature = #{signature,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.autotask.core.dao.TcWaterMeterMapper">
+    <resultMap id="BaseResultMap" type="TcWaterMeter">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="code" column="code" jdbcType="VARCHAR"/>
+        <result property="waterMeterName" column="water_meter_name" jdbcType="VARCHAR"/>
+        <result property="position" column="position" jdbcType="VARCHAR"/>
+        <result property="relationBuilding" column="relation_building" jdbcType="VARCHAR"/>
+        <result property="companyCode" column="company_code" jdbcType="VARCHAR"/>
+        <result property="projectId" column="project_id" jdbcType="VARCHAR"/>
+        <result property="rate" column="rate" jdbcType="DOUBLE"/>
+        <result property="initAmount" column="init_amount" jdbcType="DOUBLE"/>
+        <result property="minAmount" column="min_amount" jdbcType="DOUBLE"/>
+        <result property="maxAmount" column="max_amount" jdbcType="DOUBLE"/>
+        <result property="isCircle" column="is_circle" jdbcType="TINYINT"/>
+        <result property="state" column="state" jdbcType="TINYINT"/>
+        <result property="type" column="type" jdbcType="TINYINT"/>
+        <result property="parentCode" column="parent_code" jdbcType="VARCHAR"/>
+        <result property="masterCode" column="master_code" jdbcType="VARCHAR"/>
+        <result property="userType" column="user_type" jdbcType="TINYINT"/>
+        <result property="isBilling" column="is_billing" jdbcType="TINYINT"/>
+        <result property="isPublic" column="is_public" jdbcType="TINYINT"/>
+        <result property="assetNo" column="asset_no" jdbcType="VARCHAR"/>
+        <result property="brand" column="brand" jdbcType="VARCHAR"/>
+        <result property="specs" column="specs" jdbcType="VARCHAR"/>
+        <result property="provider" column="provider" jdbcType="VARCHAR"/>
+        <result property="providerPhone" column="provider_phone" jdbcType="VARCHAR"/>
+        <result property="assemblePerson" column="assemble_person" jdbcType="VARCHAR"/>
+        <result property="assembleTime" column="assemble_time"/>
+        <result property="createId" column="create_id" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyId" column="modify_id" jdbcType="VARCHAR"/>
+        <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP" />
+        <result property="meterLevel" column="meter_level" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <select id="findMeterLevelBySomeParams" resultType="java.lang.Integer">
+        SELECT meter_level
+        FROM
+        <if test="historyType == 3">
+            tc_water_meter
+        </if>
+        <if test="historyType == 4">
+            tc_electricity_meter
+        </if>
+        WHERE project_id = #{projectId}
+        AND relation_building = #{buildingCode}
+    </select>
+
+    <select id="findByRelarionId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select * from tc_water_meter where project_id=#{0} and relation_building=#{1} and state=0
+    </select>
+
+    <select id="findMByBuildCodeAndProjectId" parameterType="String" resultMap="BaseResultMap">
+        select
+        *
+        from tc_water_meter
+        where project_id=#{0}
+        and relation_building=#{1}
+        and meter_level=11
+    </select>
+
+    <select id="getWaterMeterByCodeAndM" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select * from tc_water_meter
+        where code = #{0}
+        and project_id = #{1}
+        and meter_level=11
+    </select>
+
+    <select id="findMByCCodeAndProjectId" parameterType="String" resultMap="BaseResultMap">
+        SELECT
+        t2.*
+        FROM
+        tc_water_meter t1,
+        tc_water_meter t2
+        where t1.parent_code=t2.`code`
+        and t1.`code`= #{0}
+        and t1.project_id= #{1}
+        and t1.meter_level=12
+    </select>
+
+    <select id="getWaterMeterByCode" parameterType="String" resultMap="BaseResultMap">
+        select * from tc_water_meter
+        where code = #{0}
+        and project_id = #{1}
+    </select>
+
+    <select id="findByparentCodeAndProjectId" parameterType="String" resultType="java.lang.String">
+        select code from tc_electricity_meter
+        where project_id=#{1}
+        and parent_code=#{0}
+    </select>
+
+    <select id="findByBuildingCode" resultMap="BaseResultMap">
+        select * from tc_water_meter
+        where state = 0
+        and project_id = #{0}
+        and relation_building = #{1}
+        order by code desc
+        limit 1
+    </select>
+</mapper>

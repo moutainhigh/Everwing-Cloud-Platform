@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.charge.dao.mapper.TJfRuleBuildingRelationInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.charging.entity.TJfRuleBuildingRelationInfo" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="house_code" property="houseCode" jdbcType="VARCHAR" />
+    <result column="rule_id" property="ruleId" jdbcType="VARCHAR" />
+    <result column="create_id" property="createId" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMap" type="com.everwing.coreservice.common.wy.charging.dto.AbnormalRuleBindingDto" extends="BaseResultMap">
+    <result column="building_type" property="buildingType" jdbcType="Integer" />
+    <result column="building_full_name" property="buildingFullName" jdbcType="VARCHAR" />
+    <result column="cust_name" property="name" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="project_name" property="projectName" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_jf_rule_building_relation_info
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.everwing.coreservice.common.wy.charging.entity.TJfRuleBuildingRelationInfo" >
+    <selectKey resultType="java.lang.String" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_jf_rule_building_relation_info (house_code, rule_id, create_id, 
+      create_time)
+    values (#{houseCode,jdbcType=VARCHAR}, #{ruleId,jdbcType=VARCHAR}, #{createId,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="com.everwing.coreservice.common.wy.charging.entity.TJfRuleBuildingRelationInfo" >
+    update t_jf_rule_building_relation_info
+    set house_code = #{houseCode,jdbcType=VARCHAR},
+      rule_id = #{ruleId,jdbcType=VARCHAR},
+      create_id = #{createId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select id, house_code, rule_id, create_id, create_time
+    from t_jf_rule_building_relation_info
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, house_code, rule_id, create_id, create_time
+    from t_jf_rule_building_relation_info
+  </select>
+  <select id="listPageAbnormalRuleBinding" resultMap="ResultMap">
+
+    SELECT * from
+
+    (SELECT house_code,building_type,building_full_name
+    from tc_building where is_charge_obj='Yes' and building_code not in (
+
+    SELECT building_code from t_jf_rule_building_relation_info where rule_id in (
+
+    SELECT id  from t_jg_charging_rule_info where billing_item_id = (
+
+    SELECT id  from t_bs_charging_scheme  where project_id=#{projectId} and scheme_type=#{chargingType}
+
+    )
+
+    )
+
+    )) a LEFT JOIN
+
+
+    (SELECT * from
+    (SELECT t1.name,t1.phone_num,t3.house_code from  tc_person_cust t1,tc_person_building t2,tc_building t3
+
+    where t1.cust_id=t2.cust_id and t2.building_code=t3.building_code
+
+    <if test="name!=null and name!=''">
+      AND name = #{name}
+
+    </if>
+
+    <if test="phone!=null and phone!=''">
+      AND phone_num = #{phone}
+
+    </if>
+    LIMIT 1
+
+    UNION ALL
+
+
+    SELECT m1.enterprise_name,m1.office_phone,m3.house_code  from  tc_enterprise_cust m1,tc_person_building m2,tc_building m3
+
+    where m1.enterprise_id=m2.enterprise_id and m2.building_code=m3.building_code
+
+
+    <if test="name!=null and name!=''">
+      AND enterprise_name = #{name}
+
+    </if>
+
+    <if test="phone!=null and phone!=''">
+      AND office_phone = #{phone}
+
+    </if>
+    LIMIT 1
+
+    ) t) x  on a.house_code=x.house_code
+    <if test="buildingFullName!=null and buildingFullName!=''">
+      AND building_full_name = #{buildingFullName}
+
+    </if>
+    <if test="projectName!=null and projectName!=''">
+      AND project_name = #{projectName}
+
+    </if>
+    <if test="houseCode!=null and houseCode!=''">
+      AND house_code = #{houseCode}
+
+    </if>
+
+
+  </select>
+</mapper>

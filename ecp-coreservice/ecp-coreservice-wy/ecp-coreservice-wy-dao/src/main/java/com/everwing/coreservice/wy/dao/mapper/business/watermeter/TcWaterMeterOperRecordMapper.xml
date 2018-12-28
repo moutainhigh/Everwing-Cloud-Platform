@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.business.watermeter.TcWaterMeterOperRecordMapper">
+	<resultMap id="BaseResultMap" type="TcHydroMeterOperationRecord">
+		<result property="id" column="id" jdbcType="VARCHAR"/>
+		<result property="replaceBeforeCode" column="replace_before_code" jdbcType="VARCHAR"/>
+		<result property="replaceAfterCode" column="replace_after_code" jdbcType="VARCHAR"/>
+		<result property="usedAmount" column="used_amount" jdbcType="DOUBLE"/>
+		<result property="meterType" column="meter_type" jdbcType="TINYINT"/>
+		<result property="readingBefore" column="reading_before" jdbcType="DOUBLE"/>
+		<result property="readingAfter" column="reading_after" jdbcType="DOUBLE"/>
+		<result property="operationType" column="operation_type" jdbcType="TINYINT"/>
+		<result property="operationReason" column="operation_reason" jdbcType="VARCHAR"/>
+		<result property="operationUser" column="operation_user" jdbcType="VARCHAR"/>
+		<result property="operationTime" column="operation_time" jdbcType="TIMESTAMP"/>
+		<result property="fairValueBefore" column="fair_value_before" jdbcType="DOUBLE"/>
+		<result property="peakValueBefore" column="peak_value_before" jdbcType="DOUBLE"/>
+		<result property="valleyValueBefore" column="valley_value_before" jdbcType="DOUBLE"/>
+		<result property="fairValueAfter" column="fair_value_after" jdbcType="DOUBLE"/>
+		<result property="peakValueAfter" column="peak_value_after" jdbcType="DOUBLE"/>
+		<result property="valleyValueAfter" column="valley_value_after" jdbcType="DOUBLE"/>
+	</resultMap>
+	
+	
+	
+	<!-- 新增水电表操作记录信息记录 -->
+	<insert id="addWaerMeterOperRecord" parameterType="TcHydroMeterOperationRecord">
+		INSERT INTO tc_hydro_meter_operation_record
+		(id,
+		replace_before_code,
+		replace_after_code,
+		used_amount,
+		meter_type,
+		reading_before,
+		reading_after,
+		operation_type,
+		operation_reason,
+		operation_user,
+		operation_time,
+		fair_value_before,
+		peak_value_before,
+		valley_value_before,
+		fair_value_after,
+		peak_value_after,
+		valley_value_after,
+		used_peak_amount,
+		used_valley_amount,
+		used_fair_amount)
+		VALUES(
+		UUID(),
+		#{replaceBeforeCode},
+		#{replaceAfterCode},
+		#{usedAmount},
+		#{meterType},
+		#{readingBefore},
+		#{readingAfter},
+		#{operationType},
+		#{operationReason},
+		#{operationUser},
+		NOW(),
+		#{fairValueBefore},
+		#{peakValueBefore},
+		#{valleyValueBefore},
+		#{fairValueAfter},
+		#{peakValueAfter},
+		#{valleyValueAfter},
+		#{usedPeakAmount},
+		#{usedValleyAmount},
+		#{usedFairAmount});
+	</insert>
+	
+	<select id="getInfoByCodeAndTime" parameterType="java.util.Map" resultMap="BaseResultMap">
+			SELECT *
+			FROM tc_hydro_meter_operation_record t
+			WHERE 1=1
+			 AND t.REPLACE_AFTER_CODE = #{code}
+			 
+			<if test="null != operationType">
+				<![CDATA[
+				AND t.operation_type = #{operationType}
+				]]>
+			</if>
+			<if test="null != meterType">
+				<![CDATA[
+				AND t.meter_type=#{meterType}
+				]]>
+			</if>
+		    <if test="null != startTime">
+			    <![CDATA[
+				    AND T.operation_time > #{startTime}
+				]]>
+		    </if>
+		    <if test="null != endTime">
+		    	<![CDATA[
+				    AND T.operation_time <= #{endTime}
+				]]>
+		    </if>
+		    order by t.operation_time desc
+	</select>
+	
+</mapper>

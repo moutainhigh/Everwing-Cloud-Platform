@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.autotask.core.dao.TcElectMeterMapper">
+
+    <resultMap type="ElectMeter" id="electResultMap">
+        <id column="id" property="electmeterId"/>
+        <result column="code" property="code"/>
+        <result column="position" property="location"/>
+        <result column="position_name" property="locationName"/>
+        <result column="relation_building" property="relationbuilding"/>
+        <result column="relation_building_name" property="relationbuildingName"/>
+        <result column="company_code" property="companycode"/>
+        <result column="init_amount" property="initamount"/>
+        <result column="min_amount" property="minamount"/>
+        <result column="max_amount" property="maxamount"/>
+        <result column="electricitymeter_type" property="electricitymeterType"/>
+        <result column="is_circle" property="iscycle"/>
+        <result column="state" property="state"/>
+        <result column="type" property="type"/>
+        <result column="parent_code" property="parentcode"/>
+        <result column="master_code" property="mastercode"/>
+        <result column="user_type" property="usertype"/>
+        <result column="is_billing" property="isbilling"/>
+        <result column="is_public" property="ispublic"/>
+        <result column="asset_no" property="assetno"/>
+        <result column="brand" property="brand"/>
+        <result column="specs" property="specs"/>
+        <result column="provider" property="provider"/>
+        <result column="provider_phone" property="providerphone"/>
+        <result column="assemble_person" property="assembleperson"/>
+        <result column="assemble_person_id" property="assemblepersonId"/>
+        <result column="assemble_time" property="assembletime"/>
+        <result column="create_id" property="createid"/>
+        <result column="create_time" property="createtime"/>
+        <result column="modify_id" property="modifyid"/>
+        <result column="modify_time" property="modifytime"/>
+        <result column="init_peak_value" property="initpeakvalue"/>
+        <result column="init_valley_value" property="initvalleyvalue"/>
+        <result column="init_average_value" property="initaveragevalue"/>
+
+        <result column="max_peak_value" property="maxPeakValue"/>
+        <result column="max_valley_value" property="maxValleyValue"/>
+        <result column="max_average_value" property="maxAverageValue"/>
+
+        <result column="electricitymeter_name" property="electricitymetername"/>
+        <result column="rate" property="rate"/>
+        <result column="project_id" property="projectId"/>
+        <result column="project_name" property="projectName"/>
+        <result column="meter_level" property="meterLevel"/>
+    </resultMap>
+
+    <sql id="sqlfield">
+        id,code,position,position_name,relation_building,relation_building_name,company_code,init_amount,
+        min_amount,max_amount,electricitymeter_type,is_circle,state,
+        type,parent_code,master_code,user_type,is_billing,is_public,
+        asset_no,brand,specs,provider,provider_phone,assemble_person,assemble_person_id,assemble_time,
+        create_id,create_time,modify_id,modify_time,init_peak_value,init_valley_value,
+        max_peak_value,max_valley_value,max_average_value,
+        init_average_value,electricitymeter_name,rate,project_id,project_name,meter_level
+    </sql>
+
+    <select id="getElectMeterByReationId" parameterType="String" resultMap="electResultMap">
+        select
+        <include refid="sqlfield"/>
+        from tc_electricity_meter
+        where project_id=#{0}
+        and relation_building=#{1}
+        and state=0
+    </select>
+
+    <select id="getElectMeterByCodeAndM" parameterType="String" resultMap="electResultMap">
+        select <include refid="sqlfield" /> from tc_electricity_meter where code=#{0} and project_id=#{1} and meter_level=11
+    </select>
+
+    <select id="findMByCCodeAndProjectId" parameterType="String" resultMap="electResultMap">
+        SELECT
+        t2.*
+        FROM
+        tc_electricity_meter t1,
+        tc_electricity_meter t2
+        where t1.parent_code=t2.`code`
+        and t1.`code`= #{0}
+        and t1.project_id= #{1}
+        and t1.meter_level=12
+    </select>
+
+    <select id="getElectMeterByCode" parameterType="java.lang.String" resultMap="electResultMap">
+        select <include refid="sqlfield" /> from tc_electricity_meter where code=#{0} and project_id=#{1}
+    </select>
+
+    <select id="findByparentCodeAndProjectId" parameterType="String" resultType="java.lang.String">
+        select code from tc_electricity_meter
+        where project_id=#{1}
+        and parent_code=#{0}
+    </select>
+
+    <select id="findMByBuildCodeAndProjectId" parameterType="String" resultMap="electResultMap">
+        select
+        <include refid="sqlfield"/>
+        from tc_electricity_meter
+        where project_id=#{0}
+        and relation_building=#{1}
+        and meter_level=11
+    </select>
+</mapper>

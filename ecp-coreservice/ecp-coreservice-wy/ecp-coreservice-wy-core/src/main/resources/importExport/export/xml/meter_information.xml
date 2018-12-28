@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<excel id="meter_information">
+    <sheet label="水表信息">
+        <list>
+            <sql id="9c286a4c-c589-42e0-8692-8be75c00dbfc">
+                <![CDATA[
+                     SELECT CODE AS waterMeterCode,water_meter_name AS waterMeterName,b.building_full_name AS installationPosition,
+						init_amount AS initAmount,rate,min_amount AS minAmount,max_amount AS maxAmount,
+						(CASE  is_circle WHEN '0' THEN '是' ELSE '不是' END) AS isCircle,b.building_full_name AS relationBuilding,
+						(CASE  wm.state WHEN '0' THEN '使用中' WHEN 1 THEN '停用中' ELSE '未知状态' END) AS state,
+						(CASE  wm.type WHEN '0' THEN '室内' WHEN 1 THEN '室外' WHEN '2' THEN '远程' ELSE '未知方式' END) AS readingType,
+						(CASE  user_type WHEN '0' THEN '商用' WHEN 1 THEN '民用' WHEN '2' THEN '管理处' ELSE '未知类型' END) AS userType,
+						(CASE  is_billing WHEN '0' THEN '是' WHEN 1 THEN '不是' END) AS isBilling,
+						(CASE  is_public WHEN '0' THEN '是' WHEN 1 THEN '不是' END) AS isPublic,
+						(CASE wm.meter_level WHEN 1 THEN '一级水表' WHEN 2 THEN '二级水表' WHEN 3 THEN '三级水表' WHEN 4 THEN '四级水表' WHEN '5' THEN '五级水表' ELSE '' END) as meterLevel,
+						asset_no AS assetNo,brand,specs,provider,provider_phone AS providerPhone,
+						parent_code AS parentCode,master_code AS masterCode,
+						sf.staff_name AS assemblePerson,assemble_time AS assembleTime,wm.create_time createTime
+						FROM tc_water_meter wm
+						LEFT JOIN tc_building b ON wm.relation_building=b.building_code
+						LEFT JOIN t_sys_user sf ON wm.assemble_person=sf.user_id
+						WHERE CODE IS NOT NULL 
+						
+						<#if projectId??>
+                        	AND wm.project_id = '${projectId}'
+                    	</#if>
+						<#if queryParam ??>
+                        	AND (
+							CODE LIKE '%${queryParam}%'  
+							OR company_code LIKE '%${queryParam}%' 
+							OR water_meter_name LIKE '%${queryParam}%' 
+							OR b.building_full_name LIKE '%${queryParam}%' 
+							OR b.building_full_name LIKE '%${queryParam}%'  
+							) 
+                    	</#if>
+						ORDER BY wm.modify_time
+                ]]>
+            </sql>
+            <!-- 查询结果字段和excel表头标题的映射，column的值一定要和SQL语句的AS别名一致 -->
+			 <field column="waterMeterCode" label="水表编号" type="String"></field>
+			 <field column="waterMeterName" label="水表名称" type="String"></field>
+			 <field column="installationPosition" label="水表位置" type="String"></field>
+			 <field column="initAmount" label="初始读数" type="Float" format="#.00"></field>
+			 <field column="rate" label="倍率" type="Float" format="#.00"></field>
+			 <field column="minAmount" label="最小数值" type="Float" format="#.00"></field>
+			 <field column="maxAmount" label="最大数值" type="Float" format="#.00"></field>
+			 <field column="isCircle" label="是否循环使用" type="String"></field>
+			 <field column="relationBuilding" label="关联收费对象" type="String"></field>
+			 <field column="state" label="水表状态" type="String"></field>
+			 <field column="readingType" label="抄表方式" type="String"></field>
+			 <field column="userType" label="使用性质" type="String"></field>
+			 <field column="parentCode" label="父表编号" type="String"></field>
+			 <field column="masterCode" label="主表编号" type="String"></field>
+			 <field column="meterLevel" label="水表级别" type="String"></field>
+			 <field column="isBilling" label="是否计费" type="String"></field>
+			 <field column="isPublic" label="是否公用水表" type="String"></field>
+             <field column="assetNo" label="资产编号" type="String"></field>
+			 <field column="brand" label="品牌" type="String"></field>
+			 <field column="specs" label="规格" type="String"></field>
+			 <field column="provider" label="供应商" type="String"></field>
+			 <field column="providerPhone" label="联系电话" type="String"></field>
+			 <field column="assemblePerson" label="安装人" type="String"></field>
+			 <field column="assembleTime" label="安装日期" type="Date" format="yyyy-MM-dd"></field>
+			 <field column="createTime" label="创建时间" type="Date" format="yyyy-MM-dd"></field>
+<!-- 			 <field column="" label="创建人" type="String"></field> -->
+<!-- 			 <field column="assemblePerson" label="最后修改人" type="String"></field> -->
+<!-- 			 <field column="modifyTime" label="最后修改时间 " type="Date" format="yyyy-MM-dd"></field> -->
+        </list>
+    </sheet>
+</excel>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.sys.TSysCompanyMapper">
+    <resultMap id="baseResultMap" type="TSysCompany">
+        <result property="companyId" column="company_id"/>
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+        <result property="description" column="description"/>
+        <result property="leader" column="leader"/>
+        <result property="createrId" column="creater_id"/>
+        <result property="createrName" column="creater_name"/>
+        <result property="modifyId" column="modify_id"/>
+        <result property="modifyName" column="modify_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+
+    <resultMap id="listResultMap" type="TSysCompanyList" extends="baseResultMap">
+    </resultMap>
+
+    <select id="listPage" parameterType="TSysCompanySearch" resultMap="listResultMap">
+        SELECT t.* FROM t_sys_company t WHERE 1=1
+        <if test="code != null and code !=  ''">
+            AND t.code = #{code}
+        </if>
+        <if test="companyIdList != null">
+            AND t.company_id IN
+            <foreach collection="companyIdList" item="item" index="index" open="(" close=")" separator=",">
+                '${item}'
+            </foreach>
+        </if>
+        ORDER BY t.name
+    </select>
+
+    <select id="findByCondition" parameterType="TSysCompanySearch" resultMap="listResultMap">
+        SELECT * FROM t_sys_company t WHERE 1=1
+        <if test="code != null and code !=  ''">
+            AND t.code = #{code}
+        </if>
+        <if test="name != null and name != ''">
+            AND t.name = #{name}
+        </if>
+        <if test="companyId != null and companyId != ''">
+            AND t.company_id = #{companyId}
+        </if>
+        ORDER BY t.name
+    </select>
+
+    <insert id="insert" parameterType="TSysCompany">
+        INSERT INTO t_sys_company (
+            company_id,
+            code,
+            name,
+            description,
+            leader,
+            creater_id,
+            creater_name,
+            create_time
+        )
+        VALUES (
+            #{companyId},
+            #{code},
+            #{name},
+            #{description},
+            #{leader},
+            #{createrId},
+            #{createrName},
+            sysdate()
+        )
+    </insert>
+
+    <update id="modify" parameterType="TSysCompany">
+        UPDATE t_sys_company
+        <set>
+            name = #{name},
+            description = #{description},
+            leader = #{leader},
+            modify_id = #{modifyId},
+            modify_name = #{modifyName},
+            modify_time = sysdate()
+        </set>
+        WHERE  company_id = #{companyId}
+    </update>
+
+    <delete id="delete" parameterType="TSysCompany">
+        DELETE FROM t_sys_company WHERE company_id = #{companyId}
+    </delete>
+</mapper>

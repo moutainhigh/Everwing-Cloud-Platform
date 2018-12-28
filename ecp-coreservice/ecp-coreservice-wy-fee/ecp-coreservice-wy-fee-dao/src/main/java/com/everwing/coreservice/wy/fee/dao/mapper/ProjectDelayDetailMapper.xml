@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.coreservice.wy.fee.dao.mapper.ProjectDelayDetailMapper">
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.fee.entity.ProjectDelayDetail">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="delay_account_id" jdbcType="VARCHAR" property="delayAccountId" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="account_type" jdbcType="INTEGER" property="accountType" />
+    <result column="house_code_new" jdbcType="VARCHAR" property="houseCodeNew" />
+    <result column="charge_type" jdbcType="INTEGER" property="chargeType" />
+    <result column="business_opera_detail_id" jdbcType="VARCHAR" property="businessOperaDetailId" />
+  </resultMap>
+
+<resultMap id="hasScheduleInfoResultMap" extends="BaseResultMap" type="com.everwing.coreservice.common.wy.fee.entity.AccountAddDelayParameter">
+<result column="pay_type" jdbcType="INTEGER" property="payType" />
+<result column="building_full_name" jdbcType="VARCHAR" property="buildingFullName" />
+<result column="countId" jdbcType="INTEGER" property="countId" />
+<result column="accountMoney" jdbcType="DECIMAL" property="accountMoney" />
+  <result column="house_code" jdbcType="VARCHAR" property="houseCode" />
+</resultMap>
+  <sql id="Base_Column_List">
+    id, delay_account_id, amount, create_time, create_by, account_type, house_code_new, charge_type,
+    business_opera_detail_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_project_delay_detail
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <select id="counCycleDetailAmount" resultMap="hasScheduleInfoResultMap">
+    select COUNT(id) countId,ifnull(SUM(amount),0) accountMoney
+    from t_project_delay_detail
+    where delay_account_id  in(
+    select id from t_project_delay_account
+    where project_account_id =
+    (select id from t_project_account
+    where  company_id=#{companyId} and project_id=#{projectId} )
+    )
+    <if test="accountType != null and accountType != ''">
+      AND account_type=#{accountType}
+    </if>
+    <if test="chargeType  != null and chargeType  != ''">
+      AND charge_Type=#{chargeType }
+    </if>
+    <if test="startTime != null and startTime != ''">
+      AND  DATE_FORMAT(#{startTime},'%Y-%m-%d %H:%i:%S') <![CDATA[ <= ]]>  DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%S')
+    </if>
+    <if test="endTime != null and endTime != ''">
+      AND  DATE_FORMAT(#{endTime},'%Y-%m-%d %H:%i:%S') <![CDATA[ >= ]]>  DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%S')
+    </if>
+    <if test="payType != null and payType != ''">
+      and business_opera_detail_id in(
+      select batch_no  FROM t_bs_pay_info where pay_type= #{payType})
+    </if>
+  </select>
+  <select id="selectByOperaAndType"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_project_delay_detail
+    where business_opera_detail_id =#{businessOperaDetailId}
+
+  </select>
+
+  <select id="listPageSelectByAllDetailAndIdAll" resultMap="hasScheduleInfoResultMap">
+    select
+    a.*,c.building_full_name,b.pay_type,c.house_code
+    from t_project_delay_detail a
+    left join  t_bs_pay_info b on a.business_opera_detail_id =b.batch_no
+    left join tc_building c on a.house_code_new=c.house_code
+    where a.delay_account_id in
+    (
+    select id from t_project_delay_account
+    where project_account_id =
+    (select id from t_project_account
+    where    company_id=#{companyId} and project_id=#{projectId} )
+    )
+    <if test="accountType != null and accountType != ''">
+      AND account_type=#{accountType}
+    </if>
+    <if test="chargeType  != null and chargeType  != ''">
+      AND charge_type=#{chargeType }
+    </if>
+    <if test="startTime != null and startTime != ''">
+      AND  DATE_FORMAT(#{startTime},'%Y-%m-%d %H:%i:%S') <![CDATA[ <= ]]>  DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i:%S')
+    </if>
+    <if test="endTime != null and endTime != ''">
+      AND  DATE_FORMAT(#{endTime},'%Y-%m-%d %H:%i:%S') <![CDATA[ >= ]]>  DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i:%S')
+    </if>
+    <if test="payType != null and payType != ''">
+      and business_opera_detail_id in(
+      select batch_no FROM t_bs_pay_info where pay_type= #{payType})
+    </if>
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_project_delay_detail
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="ProjectDelayDetail">
+    insert into t_project_delay_detail (id, delay_account_id, amount, 
+      create_time, create_by, account_type, 
+      house_code_new, charge_type, business_opera_detail_id
+      )
+    values (#{id,jdbcType=VARCHAR}, #{delayAccountId,jdbcType=VARCHAR}, #{amount,jdbcType=DECIMAL}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, #{accountType,jdbcType=INTEGER},
+      #{houseCodeNew,jdbcType=VARCHAR}, #{chargeType,jdbcType=INTEGER}, #{businessOperaDetailId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="ProjectDelayDetail">
+    insert into t_project_delay_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="delayAccountId != null">
+        delay_account_id,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="accountType != null">
+        account_type,
+      </if>
+      <if test="houseCodeNew != null">
+        house_code_new,
+      </if>
+      <if test="chargeType != null">
+        charge_type,
+      </if>
+      <if test="businessOperaDetailId != null">
+        business_opera_detail_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="delayAccountId != null">
+        #{delayAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="accountType != null">
+        #{accountType,jdbcType=INTEGER},
+      </if>
+      <if test="houseCodeNew != null">
+        #{houseCodeNew,jdbcType=VARCHAR},
+      </if>
+      <if test="chargeType != null">
+        #{chargeType,jdbcType=INTEGER},
+      </if>
+      <if test="businessOperaDetailId != null">
+        #{businessOperaDetailId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="ProjectDelayDetail">
+    update t_project_delay_detail
+    <set>
+      <if test="delayAccountId != null">
+        delay_account_id = #{delayAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="accountType != null">
+        account_type = #{accountType,jdbcType=INTEGER},
+      </if>
+      <if test="houseCodeNew != null">
+        house_code_new = #{houseCodeNew,jdbcType=VARCHAR},
+      </if>
+      <if test="chargeType != null">
+        charge_type = #{chargeType,jdbcType=INTEGER},
+      </if>
+      <if test="businessOperaDetailId != null">
+        business_opera_detail_id = #{businessOperaDetailId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="ProjectDelayDetail">
+    update t_project_delay_detail
+    set delay_account_id = #{delayAccountId,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      account_type = #{accountType,jdbcType=INTEGER},
+      house_code_new = #{houseCodeNew,jdbcType=VARCHAR},
+      charge_type = #{chargeType,jdbcType=INTEGER},
+      business_opera_detail_id = #{businessOperaDetailId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

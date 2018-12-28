@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<excel id="show_cycle__data">
+    <sheet label="罚金收入">
+        <list>
+            <sql id="631f2864-7f2a-11e8-b69d-0050568e00c5">
+                <![CDATA[
+            select
+            order_id as orderId,
+            amount as amount,
+            create_time as createTime
+    from t_project_fine_detail
+    where project_account_id = (
+    select id from t_project_account
+    where  project_id='${projectId}'
+    )
+        <#if startTime?? && startTime !="">
+            and a.create_time >='${startTime}'
+        </#if>
+
+        <#if endTime?? && endTime != "" >
+        and a.create_time <= '${endTime}'
+        </#if>
+
+           ]]>
+            </sql>
+            <field column="orderId" label="订单号"></field>
+            <field column="amount" label="金额"  type="Double" format="0.00"></field>
+            <field column="createTime" label="时间" type="Date" format="yyyy-MM-dd HH:mm:ss"></field>
+
+
+        </list>
+    </sheet>
+</excel>

@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.sys.TSysProjectMapper">
+    <resultMap id="BaseResultMap" type="TSysProject">
+        <result property="projectId" column="project_id"/>
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+        <result property="description" column="description"/>
+        <result property="address" column="address"/>
+        <result property="status" column="status"/>
+        <result property="leader" column="leader"/>
+        <result property="billStatus" column="bill_status"/>
+        <result property="zipCode" column="zip_code"/>
+        <result property="province" column="province"/>
+        <result property="city" column="city"/>
+        <result property="area" column="area"/>
+        <result property="streets" column="streets"/>
+        <result property="createrId" column="creater_id"/>
+        <result property="createrName" column="creater_name"/>
+        <result property="modifyId" column="modify_id"/>
+        <result property="modifyName" column="modify_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+
+    <resultMap id="ListResultMap" type="TSysProjectList" extends="BaseResultMap">
+
+    </resultMap>
+
+    <select id="listPage" parameterType="TSysProjectSearch" resultMap="ListResultMap">
+        SELECT * FROM t_sys_project t WHERE 1=1
+        <if test="code != null and code !=  ''">
+            AND t.code = #{code}
+        </if>
+        <if test="name != null and name != ''">
+        
+            AND t.name like CONCAT('%',#{name},'%')
+        </if>
+        <if test="projectIdList != null">
+            AND t.project_id IN
+            <foreach collection="projectIdList" item="item" index="index" open="(" close=")" separator=",">
+                '${item}'
+            </foreach>
+        </if>
+        ORDER BY t.name
+    </select>
+
+    <select id="findByCondition" parameterType="TSysProjectSearch" resultMap="ListResultMap">
+        SELECT * FROM t_sys_project t WHERE 1=1
+        <if test="code != null and code !=  ''">
+            AND t.code = #{code}
+        </if>
+        <if test="name != null and name != ''">
+            AND t.name = #{name}
+        </if>
+        <if test="projectId != null and projectId != ''">
+            AND t.project_id = #{projectId}
+        </if>
+        <if test="projectIdList != null">
+            AND t.project_id IN
+            <foreach collection="projectIdList" item="item" index="index" open="(" close=")" separator=",">
+                '${item}'
+            </foreach>
+        </if>
+        ORDER BY t.name
+    </select>
+
+
+    <!-- 根据项目id汇总信息 -->
+    <select id="getSummaryInformationByProjectId" parameterType="String" resultType="java.util.Map">
+        SELECT
+            p.project_id,
+            p.`code`,
+            p.`name`,
+            p.leader,
+            asset.asset_count,
+            asset.building_area
+        FROM
+            t_sys_project p
+        LEFT JOIN (
+            SELECT
+                b.project_id AS project_code,
+                COUNT(*) AS asset_count,
+                SUM(b.building_area) AS building_area
+            FROM
+                tc_building b
+            WHERE
+                b.building_type IN ('house','store','parkspace')
+            GROUP BY
+                b.project_id
+        ) asset ON p.`code` = asset.project_code
+        WHERE p.project_id = #{0}
+    </select>
+
+
+    <insert id="insert" parameterType="TSysProject">
+        INSERT INTO t_sys_project (
+            project_id,
+            code,
+            name,
+            description,
+            address,
+            status,
+            leader,
+            bill_status,
+            zip_code,
+            province,
+            city,
+            area,
+            streets,
+            creater_id,
+            creater_name,
+            create_time
+        )
+        VALUES (
+            #{projectId},
+            #{code},
+            #{name},
+            #{description},
+            #{address},
+            #{status},
+            #{leader},
+            0,
+            #{zipCode},
+            #{province},
+            #{city},
+            #{area},
+            #{streets},
+            #{createrId},
+            #{createrName},
+            sysdate()
+        )
+    </insert>
+
+    <update id="modify" parameterType="TSysProject">
+        UPDATE t_sys_project
+        <set>
+            name = #{name},
+            description = #{description},
+            address = #{address},
+            status = #{status},
+            leader = #{leader},
+            bill_status = #{billStatus},
+            zip_code = #{zipCode},
+            province = #{province},
+            city = #{city},
+            area = #{area},
+            streets = #{streets},
+            modify_id = #{modifyId},
+            modify_name = #{modifyName},
+            modify_time = sysdate()
+        </set>
+        WHERE  project_id = #{projectId}
+    </update>
+
+    <delete id="delete" parameterType="TSysProject">
+        DELETE FROM t_sys_project WHERE project_id = #{projectId}
+    </delete>
+
+    
+    <select id="listPageAndCountMeters" parameterType="TSysProjectSearch" resultType="java.util.Map">
+    	SELECT t1.project_id as projectId,
+    		   t1.name,
+    		   t1.code,
+    		   0 as buildingArea,
+    		   t1.leader,
+    		   t1.status,
+    		   t2.name as companyName,
+    		   COUNT(t3.code) AS totalCount 
+          FROM t_sys_project t1
+	 LEFT JOIN t_sys_company t2 ON t2.company_id = #{companyId}
+	 LEFT JOIN <if test="0 == searchCondition">
+				   tc_water_meter t3
+			   </if>
+			   <if test="1 == searchCondition">
+			   	   tc_electricity_meter t3
+			   </if>
+	 			ON t3.project_id = t1.code
+		 WHERE 1 = 1
+		 	<if test="null != code">
+			 	and t1.code like CONCAT('%',#{code},'%')
+		 	</if>
+		 	<if test="null != name">
+		 		and t1.name like CONCAT('%',#{name},'%')
+		 	</if>
+		 	<if test="projectIdList != null">
+	            AND t1.project_id IN
+	            <foreach collection="projectIdList" item="item" index="index" open="(" close=")" separator=",">
+	                '${item}'
+	            </foreach>
+	        </if>
+	   group by t1.code
+    </select>	
+    
+    
+    <!-- 根据Code查询（不要再写这种多余的代码，完全可以使用findByCondition代替） -->
+    <select id="findByCode" parameterType="String" resultType="TSysProject">
+    	select * from  t_sys_project where code=#{0}
+    </select>
+</mapper>

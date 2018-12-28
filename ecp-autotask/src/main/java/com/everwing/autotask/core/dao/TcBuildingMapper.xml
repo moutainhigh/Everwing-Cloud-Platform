@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.autotask.core.dao.TcBuildingMapper">
+    <resultMap id="BaseResultMap" type="TcBuilding">
+        <result property="id" column="id"/>
+        <result property="buildingCode" column="building_code"/>
+        <result property="buildingName" column="building_name"/>
+        <result property="buildingFullName" column="building_full_name"/>
+        <result property="pid" column="pid"/>
+        <result property="projectId" column="project_id"/>
+        <result property="parcelId" column="parcel_id"/>
+        <result property="snAccount" column="sn_account"/>
+        <result property="buildingType" column="building_type"/>
+        <result property="isChargeObj" column="is_charge_obj"/>
+        <result property="password" column="password"/>
+        <result property="buildingArea" column="building_area"/>
+        <result property="usableArea" column="usable_area"/>
+        <result property="shareArea" column="share_area"/>
+        <result property="finishArea" column="finish_area"/>
+        <result property="finishDate" column="finish_date"/>
+        <result property="floorArea" column="floor_area"/>
+        <result property="houseCode" column="house_code"/>
+        <result property="companyId" column="company_id"/>
+        <result property="joinDate" column="join_date"/>
+        <result property="unitWyPrice" column="unit_wy_price"/>
+        <result property="unitBtPrice" column="unit_bt_price"/>
+        <result property="buildingCertificate" column="building_certificate"/>
+        <result property="marketState" column="market_state"/>
+        <result property="billAddress" column="bill_address"/>
+        <result property="associatedParkingSpaces" column="associated_parking_spaces"/>
+        <result property="createrId" column="creater_id"/>
+        <result property="createrName" column="creater_name"/>
+        <result property="modifyId" column="modify_id"/>
+        <result property="modifyName" column="modify_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+    <resultMap id="ListResultMap" type="TcBuildingList" extends="BaseResultMap">
+        <result column="building_type_name" property="buildingTypeName" jdbcType="VARCHAR" />
+        <result column="parcel_number" property="parcelNumber" jdbcType="VARCHAR" />
+        <result column="house_number" property="houseNum" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <select id="findHasBillsBuildings" resultMap="BaseResultMap">
+        SELECT
+            distinct b.*
+        FROM
+            ( select * from(		SELECT
+                                        d.*
+                                    FROM
+                                        tc_building a
+                                        LEFT JOIN tc_building b ON a.building_code = b.pid
+                                        LEFT JOIN tc_building c ON b.building_code = c.pid
+                                        LEFT JOIN tc_building d ON c.building_code = d.pid
+                                    WHERE
+                                        a.building_type = 'dongzuo'
+                                        AND d.id IS NOT NULL
+                                        AND a.building_code = #{buildingCode}
+                           ) e UNION ALL (
+                  SELECT
+                      c.*
+                  FROM
+                      tc_building a
+                      LEFT JOIN tc_building b ON a.building_code = b.pid
+                      LEFT JOIN tc_building c ON b.building_code = c.pid
+                  WHERE
+                      a.building_type = 'dongzuo'
+                      AND c.id IS NOT NULL
+                      AND a.building_code = #{buildingCode}
+              )
+
+            ) b,
+            (SELECT
+                 *
+             FROM
+                 t_bs_charge_bill_history
+             WHERE
+                 project_id = #{projectId}
+                 AND DATE_FORMAT(billing_time,'%Y-%m') = DATE_FORMAT(#{billingTime},'%Y-%m')
+            ) a
+        where a.building_code = b.building_code
+        GROUP BY a.building_code
+    </select>
+
+    <select id="findChargeBuildingByProjectCode" parameterType="String" resultMap="BaseResultMap">
+        select *
+        from tc_building
+        where project_id = #{0}
+        and is_charge_obj = 'Yes'
+    </select>
+    
+    <select id="getHouseCodeByBuildingCode" parameterType = "java.lang.String" resultType="java.lang.String">
+  		select house_code houseCode from tc_building where building_code = #{buildingCode} LIMIT 1
+  	</select>
+
+    <select id="findByCondition" parameterType="TcBuildingSearch" resultMap="ListResultMap">
+        SELECT
+        b.*,
+        p.`name` AS project_name,
+        pc.`code` as parcel_number,
+        (SELECT li.`name` FROM t_sys_lookup_item li WHERE li.parent_code = 'buildingType' AND li.`code` = b.building_type) as building_type_name
+        FROM tc_building b
+        LEFT JOIN t_sys_project p ON b.project_id = p.`code`
+        LEFT JOIN tc_parcel pc ON b.parcel_id = pc.parcel_id
+        WHERE 1=1
+        <if test="id != null and id != ''">
+            AND b.id = #{id}
+        </if>
+        <if test="projectId != null and projectId != ''">
+            AND b.project_id = #{projectId}
+        </if>
+        <if test="houseCode != null and houseCode != ''">
+            AND b.house_code = #{houseCode}
+        </if>
+        <if test="buildingCode != null and buildingCode != ''">
+            AND b.building_code = #{buildingCode}
+        </if>
+        <if test="associatedParkingSpaces != null and associatedParkingSpaces != ''">
+            AND b.associated_parking_spaces = #{associatedParkingSpaces}
+        </if>
+        <if test="pid != null and pid != ''">
+            AND b.pid = #{pid}
+        </if>
+        <if test="pidIsNullOrNotNull != null and pidIsNullOrNotNull != ''">
+            AND b.pid IS ${pidIsNullOrNotNull}
+        </if>
+        <if test="buildingName != null and buildingName != ''">
+            AND b.building_name = #{buildingName}
+        </if>
+        <if test="buildingType !=null and buildingType !=''">
+            AND b.building_type = #{buildingType}
+        </if>
+        <if test="buildingFullName != null and buildingFullName != ''">
+            AND b.building_full_name = #{buildingFullName}
+        </if>
+        <if test="buildingCodeList != null">
+            AND b.building_code IN
+            <foreach collection="buildingCodeList" item="item" index="index" open="(" close=")" separator=",">
+                '${item}'
+            </foreach>
+        </if>
+        ORDER BY b.building_full_name ASC
+    </select>
+</mapper>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.autotask.core.dao.PersonCustNewMapper">
+    <resultMap id="BaseResultMap" type="PersonCustNew" >
+        <result column="cust_id" property="custId" jdbcType="VARCHAR" />
+        <result column="cust_code" property="custCode" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="sex" property="sex" jdbcType="VARCHAR" />
+        <result column="native_place" property="nativePlace" jdbcType="VARCHAR" />
+        <result column="census" property="census" jdbcType="VARCHAR" />
+        <result column="birthday" property="birthday" jdbcType="DATE" />
+        <result column="card_type" property="cardType" jdbcType="VARCHAR" />
+        <result column="card_num" property="cardNum" jdbcType="VARCHAR" />
+        <result column="jiajia_num" property="jiajiaNum" jdbcType="VARCHAR" />
+        <result column="weixin_num" property="weixinNum" jdbcType="VARCHAR" />
+        <result column="work_units" property="workUnits" jdbcType="VARCHAR" />
+        <result column="position" property="position" jdbcType="VARCHAR" />
+        <result column="marrie_state" property="marrieState" jdbcType="TINYINT" />
+        <result column="edu_level" property="eduLevel" jdbcType="TINYINT" />
+        <result column="social" property="social" jdbcType="VARCHAR" />
+        <result column="landscape" property="landscape" jdbcType="TINYINT" />
+        <result column="hobby" property="hobby" jdbcType="VARCHAR" />
+        <result column="cust_level" property="custLevel" jdbcType="VARCHAR" />
+        <result column="is_enterprise" property="isEnterprise" jdbcType="TINYINT" />
+        <result column="urgent_contact_person" property="urgentContactPerson" jdbcType="VARCHAR" />
+        <result column="urgent_contact_phone" property="urgentContactPhone" jdbcType="VARCHAR" />
+        <result column="upload_image" property="uploadImage" jdbcType="VARCHAR" />
+        <result column="phone_num" property="phoneNum" jdbcType="VARCHAR" />
+        <result column="register_phone" property="registerPhone" jdbcType="VARCHAR" />
+        <result column="email" property="email" jdbcType="VARCHAR" />
+        <result column="applystatus" property="applystatus" jdbcType="VARCHAR" />
+        <result column="review_state" property="reviewState" jdbcType="VARCHAR" />
+        <result column="vip_id" property="vipId" jdbcType="VARCHAR" />
+        <result column="emphasis_id" property="emphasisId" jdbcType="VARCHAR" />
+        <result column="phone_num1" property="phoneNum1" jdbcType="VARCHAR" />
+        <result column="phone_num2" property="phoneNum2" jdbcType="VARCHAR" />
+        <result column="applystype" property="applystype" jdbcType="TINYINT" />
+        <result column="applystype1" property="applystype1" jdbcType="TINYINT" />
+        <result column="nation" property="nation" jdbcType="VARCHAR" />
+        <result column="remark" property="remark" jdbcType="VARCHAR" />
+        <result column="project_id" property="projectId" jdbcType="VARCHAR" />
+        <result column="company_id" property="companyId" jdbcType="VARCHAR" />
+        <result column="national" property="national" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="findNamesByBuildingCode" parameterType="String" resultMap="BaseResultMap">
+        SELECT  IFNULL(GROUP_CONCAT(t.name),"无") AS `name`,
+        IFNULL(GROUP_CONCAT(t.cust_code),"无") AS `cust_code`
+        FROM
+        (
+        SELECT t1.name,t1.cust_code
+        FROM tc_person_cust t1,
+        tc_person_building t2
+        WHERE t1.cust_id = t2.cust_id
+        AND t2.building_code = #{0}
+        GROUP BY t1.name
+
+        UNION ALL
+
+        SELECT t3.enterprise_name AS NAME,
+        t3.unit_number AS cust_code
+        FROM tc_enterprise_cust t3,
+        tc_person_building t4
+        WHERE t3.enterprise_id = t4.enterprise_id
+        AND t4.building_code = #{0}
+        GROUP BY t3.enterprise_name
+
+        ) t
+    </select>
+</mapper>

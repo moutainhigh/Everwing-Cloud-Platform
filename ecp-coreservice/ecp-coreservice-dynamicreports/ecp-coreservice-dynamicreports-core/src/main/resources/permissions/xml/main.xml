@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<systems>
+	<subsystem id="a152ab26-0a23-11e8-80c8-0050568e00c5" name="Everwing Tech" desc="翔恒科技报表平台">
+		<!-- 需要忽略校验的公共模块的URL请统一放在这里  -->
+		<modulegroup id="80bbcefa-0a23-11e8-80c8-0050568e00c5" name="anon" permission="anon" desc="公共模块白名单集合">
+			<path path = "permissions/xml/module_anon.xml"/>
+		</modulegroup>
+
+		<modulegroup id="8b9297ac-0a23-11e8-80c8-0050568e00c5" name="Base Setting" desc="基础配置" order="15" url="" img="">
+			<path path = "permissions/xml/module_baseSetting.xml"/>
+		</modulegroup>
+	</subsystem>
+</systems>

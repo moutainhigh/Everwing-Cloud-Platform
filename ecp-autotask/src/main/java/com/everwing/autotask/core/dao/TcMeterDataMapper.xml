@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.autotask.core.dao.TcMeterDataMapper">
+
+    <resultMap id="BaseResultMap" type="TcMeterData">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="peakReading" column="peak_reading" jdbcType="DOUBLE"/>
+        <result property="vallyReading" column="vally_reading" jdbcType="DOUBLE"/>
+        <result property="commonReading" column="common_reading" jdbcType="DOUBLE"/>
+        <result property="totalReading" column="total_reading" jdbcType="DOUBLE"/>
+        <result property="lastTotalReading" column="last_total_reading" jdbcType="DOUBLE"/>
+        <result property="lastPeakReading" column="last_peak_reading" jdbcType="DOUBLE"/>
+        <result property="lastVallyReading" column="last_vally_reading" jdbcType="DOUBLE"/>
+        <result property="lastCommonReading" column="last_common_reading" jdbcType="DOUBLE"/>
+        <result property="useCount" column="use_count" jdbcType="DOUBLE"/>
+        <result property="meterType" column="meter_type" jdbcType="TINYINT"/>
+        <result property="meterCode" column="meter_code" jdbcType="VARCHAR"/>
+        <result property="errorReading" column="error_reading" jdbcType="DOUBLE"/>
+        <result property="circleCorrection" column="circle_correction" jdbcType="DOUBLE"/>
+        <result property="correction" column="correction" jdbcType="DOUBLE"/>
+        <result property="correctionPersonId" column="correction_person_id" jdbcType="VARCHAR"/>
+        <result property="correctionTime" column="correction_time" jdbcType="TIMESTAMP"/>
+        <result property="auditStatus" column="audit_status" jdbcType="TINYINT"/>
+        <result property="readingPersonId" column="reading_person_id" jdbcType="VARCHAR"/>
+        <result property="readingPersonName" column="reading_person_name" jdbcType="VARCHAR"/>
+        <result property="readingTime" column="reading_time" jdbcType="TIMESTAMP"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="taskId" column="task_id" jdbcType="VARCHAR"/>
+        <result property="isUsed" column="is_used" jdbcType="TINYINT"/>
+        <result property="beforeTaskId" column="before_task_id" jdbcType="VARCHAR"/>
+        <result property="isReplaced" column="is_replaced" jdbcType="TINYINT"/>
+        <!-- 2017-06-08电表的分时表存在峰谷平都有循环修正量和修正量 -->
+        <result property="peakCircleCorrection" column="peak_circle_correction" jdbcType="DOUBLE"/>
+        <result property="valleyCircleCorrection" column="valley_circle_correction" jdbcType="DOUBLE"/>
+        <result property="averageCircleCorrection" column="average_circle_correction" jdbcType="DOUBLE"/>
+        <result property="peakCorrection" column="peak_correction" jdbcType="DOUBLE"/>
+        <result property="valleyCorrection" column="valley_correction" jdbcType="DOUBLE"/>
+        <result property="averageCorrection" column="average_correction" jdbcType="DOUBLE"/>
+        <!-- 2017-06-26 添加创建时间等字段-->
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+        <result property="createId" column="create_id" jdbcType="VARCHAR"/>
+        <result property="modifyId" column="modify_id" jdbcType="VARCHAR"/>
+        <!-- 添加项目 -->
+        <result property="projectId" column="project_id" jdbcType="VARCHAR"/>
+        <result property="projectName" column="project_name" jdbcType="VARCHAR"/>
+        <!-- 2017-07-24 异常状态 -->
+        <result property="exStatus" column="ex_status" jdbcType="TINYINT"/>
+
+        <!-- wyapp查询增加表描述，抄表数据图片 -->
+        <result property="meterName" column="meter_name" jdbcType="VARCHAR"/>
+        <result property="imgFileId" column="img_file_id" jdbcType="VARCHAR"/>
+
+    </resultMap>
+
+    <resultMap id="countAndFeeObjMap" type="java.util.Map">
+        <result property="relationBuilding" column="relation_building"/>
+        <result property="buildingFullName" column="building_full_name"/>
+        <result property="meterType" column="meter_type"/>
+        <result property="meterCode" column="meter_code"/>
+        <result property="peakCount" column="peak_count"/>
+        <result property="vallyCount" column="vally_count"/>
+        <result property="commonCount" column="common_count"/>
+        <result property="useCount" column="use_count"/>
+        <result property="lastTotalReading" column="last_total_reading"/>
+        <result property="totalReading" column="total_reading"/>
+        <result property="meterLevel" column="meter_level"/>
+    </resultMap>
+
+    <sql id="updateSql">
+        <set>
+            <if test="null != peakReading">
+                peak_reading = #{peakReading},
+            </if>
+            <if test="null != vallyReading">
+                vally_reading = #{vallyReading},
+            </if>
+            <if test="null != commonReading">
+                common_reading = #{commonReading},
+            </if>
+            <if test="null != totalReading">
+                total_reading = #{totalReading},
+            </if>
+            <if test="null != lastTotalReading">
+                last_total_reading = #{lastTotalReading},
+            </if>
+            <if test="null !=lastPeakReading">
+                last_peak_reading=#{lastPeakReading},
+            </if>
+            <if test="null !=lastVallyReading">
+                last_vally_reading=#{lastVallyReading},
+            </if>
+            <if test="null != lastCommonReading">
+                last_common_reading=#{lastCommonReading},
+            </if>
+            <if test="null != useCount">
+                use_count = #{useCount},
+            </if>
+            <if test="null !=peakCount">
+                peak_count=#{peakCount},
+            </if>
+            <if test="null !=vallyCount">
+                vally_count=#{vallyCount},
+            </if>
+            <if test="null !=commonCount">
+                common_count=#{commonCount},
+            </if>
+            <if test="null != meterType">
+                meter_type = #{meterType},
+            </if>
+            <if test="null != meterCode">
+                meter_code = #{meterCode},
+            </if>
+            <if test="null != errorReading">
+                error_reading = #{errorReading},
+            </if>
+            <if test="null != circleCorrection">
+                circle_correction = #{circleCorrection},
+            </if>
+            <if test="null != correction">
+                correction = #{correction},
+            </if>
+            <if test="null != correctionPersonId">
+                correction_person_id = #{correctionPersonId},
+            </if>
+            <if test="null != correctionTime">
+                correction_time = NOW(),
+            </if>
+            <if test="null != auditStatus">
+                audit_status = #{auditStatus},
+            </if>
+            <if test="null != readingPersonId">
+                reading_person_id = #{readingPersonId},
+            </if>
+            <if test="null != readingPersonName">
+                reading_person_name = #{readingPersonName},
+            </if>
+            <if test="null != readingTime">
+                reading_time = #{readingTime},
+            </if>
+            <if test="null != remark">
+                remark = #{remark},
+            </if>
+            <if test="null != taskId">
+                task_id = #{taskId},
+            </if>
+            <if test="null != isUsed">
+                is_used = #{isUsed},
+            </if>
+            <if test="null != beforeTaskId">
+                before_task_id = #{beforeTaskId},
+            </if>
+            <if test="null != isReplaced">
+                is_replaced = #{isReplaced},
+            </if>
+            <!-- 电表的峰平谷都有循环修正量和修正量 2016-6-8 -->
+            <if test="null != peakCircleCorrection">
+                peak_circle_correction = #{peakCircleCorrection},
+            </if>
+            <if test="null != valleyCircleCorrection">
+                valley_circle_correction = #{valleyCircleCorrection},
+            </if>
+            <if test="null != averageCircleCorrection">
+                average_circle_correction = #{averageCircleCorrection},
+            </if>
+            <if test="null != peakCorrection">
+                peak_correction = #{peakCorrection},
+            </if>
+            <if test="null != valleyCorrection">
+                valley_correction = #{valleyCorrection},
+            </if>
+            <if test="null != averageCorrection">
+                average_correction = #{averageCorrection},
+            </if>
+            <if test="null != modifyId">
+                modify_id = #{modifyId},
+            </if>
+            <if test="null != projectId">
+                project_id = #{projectId},
+            </if>
+            <if test="null != projectName">
+                project_name = #{projectName},
+            </if>
+            <if test="null != exStatus">
+                ex_status = #{exStatus},
+            </if>
+            modify_time = sysdate()
+        </set>
+    </sql>
+    <insert id="batchAdd" parameterType="java.util.List">
+        insert into tc_meter_data
+        (
+        id,
+        peak_reading,
+        vally_reading,
+        common_reading,
+        total_reading,
+        last_total_reading,
+        use_count,
+        meter_type,
+        meter_code,
+        error_reading,
+        circle_correction,
+        correction,
+        correction_person_id,
+        correction_time,
+        audit_status,
+        reading_person_id,
+        reading_person_name,
+        reading_time,
+        remark,
+        task_id,
+        is_used,
+        before_task_id,
+        create_id,
+        create_time,
+        modify_id,
+        modify_time,
+        project_id,
+        project_name,
+        ex_status
+        )
+        values
+        <foreach collection="list" index="index" separator="," item="item">
+            (
+            UPPER(UUID()),
+            #{item.peakReading},
+            #{item.vallyReading},
+            #{item.commonReading},
+            #{item.totalReading},
+            #{item.lastTotalReading},
+            #{item.useCount},
+            #{item.meterType},
+            #{item.meterCode},
+            #{item.errorReading},
+            #{item.circleCorrection},
+            #{item.correction},
+            #{item.correctionPersonId},
+            #{item.correctionTime},
+            #{item.auditStatus},
+            #{item.readingPersonId},
+            #{item.readingPersonName},
+            #{item.readingTime},
+            #{item.remark},
+            #{item.taskId},
+            #{item.isUsed},
+            #{item.beforeTaskId},
+            #{item.createId},
+            sysdate(),
+            #{item.modifyId},
+            sysdate(),
+            #{item.projectId},
+            #{item.projectName},
+            #{item.exStatus}
+            )
+        </foreach>
+    </insert>
+    <select id="getLastMeterReadingByCode" parameterType="java.lang.String" resultType="java.lang.Double">
+        SELECT
+        CASE
+        WHEN (
+        MAX(total_reading) - MIN(total_reading)
+        ) > 0
+        THEN (
+        MAX(total_reading) - MIN(total_reading)
+        )
+        ELSE MAX(total_reading)
+        END userAmount
+        FROM
+        tc_meter_data
+        WHERE meter_code = #{0}
+        AND reading_time IS NOT NULL
+        AND meter_type=#{2}
+        AND reading_time > SUBSTRING(
+        DATE_SUB(reading_time, INTERVAL #{1} MONTH),
+        1,
+        7
+        )
+        AND SYSDATE() > reading_time
+    </select>
+
+    <select id="findNextData" parameterType="TcMeterData" resultMap="BaseResultMap">
+        select * from tc_meter_data
+        where meter_code = #{meterCode}
+        <![CDATA[
+			and create_time > #{createTime}
+		]]>
+        and is_used = 0
+        order by create_time desc
+        limit 0 , 1
+    </select>
+
+    <select id="findByTaskIdsAndCodes" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select * from tc_meter_data
+        where project_id=#{projectId}
+        and task_id in
+        <foreach collection="taskIds" separator="," item="taskId" index="index" open="(" close=")">
+            (#{taskId})
+        </foreach>
+        <if test="meterType==0">
+            and	 meter_type=0
+        </if>
+        <if test="meterType==1">
+            and meter_type=1
+        </if>
+        and meter_code in
+        <foreach collection="codes" separator="," item="code" index="index" open="(" close=")">
+            (#{code})
+        </foreach>
+    </select>
+
+    <select id="findMByMeterCodeAndProIdTasks" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT
+        meterdata.*
+        FROM
+        tc_meter_data meterdata,
+        tc_reading_task task
+        where meterdata.task_id = task.id
+        and meterdata.meter_code=#{meterCode}
+        and meterdata.project_id=#{projectId}
+        and meterdata.meter_type=#{meterType}
+        and task.id in
+        <foreach collection="taskIds" separator="," item="taskId" index="index" open="(" close=")">
+            (#{taskId})
+        </foreach>
+    </select>
+
+    <update id="modify" parameterType="TcMeterData">
+        update tc_meter_data
+        <include refid="updateSql"></include>
+        where id = #{id}
+    </update>
+
+    <select id="findExistsData" parameterType="TcMeterData" resultMap="BaseResultMap">
+        SELECT t1.*
+        FROM tc_meter_data t1,
+        tc_reading_task t2,
+        tc_reading_schedule t3
+        WHERE t1.task_id = t2.id
+        AND t2.schedule_id = t3.id
+        AND t3.status = 1
+        AND DATE_FORMAT(t2.start_time , '%y-%M') = DATE_FORMAT(SYSDATE(),'%y-%M')
+        AND t1.meter_code = #{meterCode}
+        AND t1.meter_type = #{meterType}
+        AND t1.is_used = 0
+        and t1.reading_time is null
+    </select>
+
+    <select id="findComplatintData" parameterType="TcMeterData" resultMap="BaseResultMap">
+        SELECT t1.*
+        FROM   tc_meter_data t1,
+        tc_order_complaint t2
+        WHERE  t1.meter_code = #{meterCode}
+        AND    t1.task_id = t2.relation_id
+        AND    t1.before_task_id = #{taskId}
+        order by reading_time desc
+        limit 0 , 1
+    </select>
+
+    <select id="getCountAndFeeObjByProjct" parameterType="java.util.Map" resultMap="countAndFeeObjMap">
+        SELECT
+        telect.relation_building,
+        buil.building_full_name,
+        meterdate.meter_type,
+        meterdate.meter_code,
+        meterdate.peak_count,
+        meterdate.vally_count,
+        meterdate.common_count,
+        meterdate.use_count,
+        meterdate.last_total_reading,
+        meterdate.total_reading,
+        telect.meter_level
+        FROM
+        <if test="meterType==0">
+            tc_water_meter telect,
+        </if>
+        <if test="meterType==1">
+            tc_electricity_meter telect,
+        </if>
+        tc_building  buil,
+        (
+        SELECT
+        meter_code,
+        meter_type,
+        peak_count,
+        vally_count,
+        common_count,
+        use_count,
+        last_total_reading,
+        total_reading
+        FROM
+        tc_meter_data
+        WHERE
+        project_id = #{projectId}
+        and is_used=0
+        AND task_id IN (
+        SELECT
+        id
+        FROM
+        tc_reading_task
+        WHERE
+        audit_status = '1'
+        and
+        DATE_FORMAT(audit_end_time,'%Y-%m-%d') BETWEEN DATE_FORMAT(#{lastBillTime},'%Y-%m-%d') and DATE_FORMAT(sysdate(),'%Y-%m-%d')
+        )
+        ) meterdate
+        WHERE
+        telect.CODE = meterdate.meter_code
+        and buil.building_code =telect.relation_building
+        and buil.project_id=#{projectId}
+        <if test="relationBuilding !=null">
+            and telect.relation_building=#{relationBuilding}
+        </if>
+        <if test="state !=null">
+            and telect.state=#{state}
+        </if>
+    </select>
+
+    <select id="getCountAndFeeObjByProject" parameterType="java.util.Map" resultMap="countAndFeeObjMap">
+        SELECT
+        telect.relation_building,
+        buil.building_full_name,
+        meterdate.meter_type,
+        meterdate.meter_code,
+        meterdate.peak_count,
+        meterdate.vally_count,
+        meterdate.common_count,
+        meterdate.use_count,
+        meterdate.last_total_reading,
+        meterdate.total_reading,
+        telect.meter_level
+        FROM
+        <if test="meterType==0">
+            tc_water_meter telect,
+        </if>
+        <if test="meterType==1">
+            tc_electricity_meter telect,
+        </if>
+        tc_building buil,
+        (
+        SELECT
+        meter_code,
+        meter_type,
+        peak_count,
+        vally_count,
+        common_count,
+        use_count,
+        last_total_reading,
+        total_reading
+        FROM
+        tc_meter_data
+        WHERE
+        project_id = #{projectId}
+        and is_used=0
+        AND task_id IN (
+        SELECT
+        id
+        FROM
+        tc_reading_task
+        WHERE
+        audit_status = '1'
+        and
+        DATE_FORMAT(audit_end_time,'%Y-%m-%d') BETWEEN DATE_FORMAT(#{lastBillTime},'%Y-%m-%d') and
+        DATE_FORMAT(#{billTime},'%Y-%m-%d')
+        )
+        ) meterdate
+        WHERE
+        telect.CODE = meterdate.meter_code
+        and buil.building_code =telect.relation_building
+        and buil.project_id=#{projectId}
+        <if test="relationBuilding !=null">
+            and telect.relation_building=#{relationBuilding}
+        </if>
+        <if test="state !=null">
+            and telect.state=#{state}
+        </if>
+    </select>
+    <select id="findAllDatasByTaskId" parameterType="String" resultMap="BaseResultMap">
+        select * from tc_meter_data where task_id = #{0}
+    </select>
+</mapper>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<excel id="electricity_meter_chenck_data">
+    <sheet label="电表表信息">
+        <list>
+            <sql id="695d900e-57d5-11e8-99c4-0050568e00c5">
+                <![CDATA[
+                    SELECT t3.project_id projectId,
+                    t3.meter_code code,
+                    t4.electricitymeter_name electricitymeterName,
+                    t3.total_reading totalReading,
+                    t3.last_total_reading lastTotalReading,
+                    t3.use_count useCount, 
+                    t3.last_use_count lastUseCount,
+                    (case when t4.is_billing=0 then '是' when 1 then '否' end) as isBilling,
+                    t3.project_name projectName
+                    from (
+SELECT  t1.use_count,t2.last_use_count,t1.meter_code,t1.total_reading,t1.last_total_reading,t1.id,t1.project_id,t1.meter_type,t1.project_name from (SELECT * from tc_meter_data where task_id in (
+
+
+SELECT id from tc_reading_task where status = 2 and schedule_id in (
+
+SELECT id  from tc_reading_schedule 
+)
+and audit_status=0 
+)
+and is_used=0
+and ex_status=3
+)t1,(SELECT (use_count) as last_use_count , meter_code from tc_meter_data where task_id in (
+
+ select id from (SELECT (last_task_id) as id   from tc_reading_task where status = 2 and schedule_id in (
+
+SELECT id  from tc_reading_schedule 
+)
+and audit_status=0) t
+ 
+
+)
+and is_used=0
+and ex_status=1
+)t2
+
+where t1.meter_code=t2.meter_code)t3,
+
+(SELECT  is_billing,code,electricitymeter_name from tc_electricity_meter
+) t4  
+where t3.meter_code = t4.code
+		
+		
+		<#if projectId??>
+			and t3.project_id = '${projectId}'
+		</#if>
+		<#if meterType??>
+			and t3.meter_type = '${meterType}'
+		</#if>
+		
+	
+                ]]>
+            </sql>
+            <!-- 查询结果字段和excel表头标题的映射，column的值一定要和SQL语句的AS别名一致 -->
+             <field column="code" label="电表编号" type="String"></field>
+             <field column="electricitymeterName" label="电表名称" type="String"></field>
+			 <field column="totalReading" label="本次读数" type="Double" format="#.00" ></field>
+			 <field column="useCount" label="本次用量" type="Double" format="#.00" ></field>
+			 <field column="lastTotalReading" label="上次读数" type="Double" format="#.00" ></field>
+			 <field column="lastUseCount" label="上次用量" type="Double" format="#.00" ></field>
+			 <field column="isBilling" label="是否计费" type="String"></field>	 
+			 <field column="projectName" label="项目名称" type="String"></field>	 
+			 <field column="projectId" label="项目id" type="String"></field>	 
+        </list>
+    </sheet>
+</excel>

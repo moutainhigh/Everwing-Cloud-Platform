@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.sys.TSysResourceMapper" >
+  	<resultMap id="BaseResultMap" type="TSysResource" >
+    	<id column="src_id" property="srcId"/>
+    	<result column="menu_id" property="menuId"/>
+    	<result column="src_name" property="srcName"/>
+		<result column="src_desc" property="srcDesc"/>
+    	<result column="src_permission" property="srcPermission"/>
+    	<result column="src_url" property="srcUrl"/>
+	  	<result property="createrId" column="creater_id"/>
+	  	<result property="createrName" column="creater_name"/>
+	  	<result property="createTime" column="create_time"/>
+	  	<result property="modifyId" column="modify_id"/>
+	  	<result property="modifyName" column="modify_name"/>
+	  	<result property="modifyTime" column="modify_time"/>
+  	</resultMap>
+
+	<!-- 批量添加资源 -->
+	<insert id="batchInsert" parameterType="java.util.List">
+	  		insert into t_sys_resource(src_id ,
+	  							   menu_id,
+	  							   src_name,
+	  							   src_desc,
+	  							   src_permission,
+	  							   src_url,
+	  							   create_id,
+	  							   create_time,
+	  							   modify_id,
+	  							   modify_time
+	  							  )
+					values
+		<foreach collection="list" index="index" item="item" separator=",">
+					(
+						#{item.srcId},
+						#{item.menuId},
+						#{item.srcName},
+						#{item.srcDesc},
+						#{item.srcPermission},
+						#{item.srcUrl},
+						#{item.createrId},
+						SYSDATE(),
+						#{item.modifyId},
+						SYSDATE()
+					)
+		</foreach>
+	</insert>
+
+	<!-- 清空资源 -->
+  	<delete id="clearResource">
+  		delete from t_sys_resource
+  	</delete>
+
+	<select id="findByCondition" parameterType="TSysResourceSearch" resultMap="BaseResultMap">
+		SELECT * FROM t_sys_resource sr WHERE 1=1
+		<if test="srcUrl != null and srcUrl != ''">
+			<![CDATA[ AND sr.src_url LIKE CONCAT('%',#{srcUrl},'%')]]>
+		</if>
+	</select>
+
+
+	<!-- 超级管理员：获取非白名单资源权限 -->
+	<select id="findAllResources4SystemAdmin" parameterType="String" resultMap="BaseResultMap">
+		SELECT
+			sr.src_id,
+			sr.src_name,
+			sr.src_desc,
+			sr.src_permission,
+			sr.src_url,
+			sr.menu_id
+		FROM t_sys_resource sr
+		WHERE sr.src_permission != 'anon'
+	</select>
+
+	<!-- 超级管理员：获取白名单资源权限 -->
+	<select id="findAllAnonResources4SystemAdmin" parameterType="String" resultMap="BaseResultMap">
+		SELECT
+			sr.src_id,
+			sr.src_name,
+			sr.src_desc,
+			sr.src_permission,
+			sr.src_url
+		FROM t_sys_resource sr
+		WHERE sr.src_permission = 'anon'
+	</select>
+
+	<!-- 获取非超级管理员非白名单资源权限 -->
+  	<select id="findResources" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT
+			DISTINCT
+			sr.src_id,
+			sr.src_name,
+			sr.src_desc,
+			sr.src_permission,
+			sr.src_url,
+			sr.menu_id
+		FROM t_sys_role_resource srr,t_sys_resource sr
+		WHERE srr.src_id = sr.src_id
+		AND sr.src_permission != 'anon'
+		AND srr.src_type='r'
+		<if test="roleIds != null and roleIds.size != 0">
+			AND srr.role_id IN
+			<foreach collection="roleIds" item="roleId" index="index" open="(" close=")" separator=",">
+				#{roleId}
+			</foreach>
+		</if>
+  	</select>
+
+	<!-- 获取非超级管理员白名单资源权限 -->
+	<select id="findAnonResources" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT
+			DISTINCT
+			sr.src_id,
+			sr.src_name,
+			sr.src_desc,
+			sr.src_permission,
+			sr.src_url
+		FROM t_sys_role_resource srr,t_sys_resource sr
+		WHERE srr.src_id = sr.src_id
+		AND sr.src_permission = 'anon'
+		AND srr.src_type='r'
+		<if test="roleIds != null and roleIds.size != 0">
+			AND srr.role_id IN
+			<foreach collection="roleIds" item="roleId" index="index" open="(" close=")" separator=",">
+				#{roleId}
+			</foreach>
+		</if>
+	</select>
+
+
+	<!-- 获取指定菜单下面的白名单集合 -->
+  	<select id="findAnonResourcesByMenuId" parameterType="String" resultMap="BaseResultMap">
+  		SELECT
+			sr.src_id,
+			sr.src_name,
+			sr.src_desc,
+			sr.src_permission,
+			sr.src_url
+		FROM t_sys_resource sr
+		WHERE sr.src_permission = 'anon' AND sr.menu_id = #{0}
+  	</select>
+
+
+	<!-- 获取全局白名资源单集合 -->
+	<select id="findCommonAnonResources" resultMap="BaseResultMap">
+		SELECT
+			sr.src_id,
+			sr.src_name,
+			sr.src_desc,
+			sr.src_permission,
+			sr.src_url
+		FROM t_sys_resource sr,t_sys_menu m WHERE sr.menu_id = m.menu_id AND m.menu_permission = 'anon'
+	</select>
+</mapper>

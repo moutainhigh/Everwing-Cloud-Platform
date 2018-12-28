@@ -1,0 +1,69 @@
+<?xml version="1.0" standalone="yes"?>
+<RECORDS>
+    <RECORD lookup_id="0621d942-580e-4ed6-8f7e-9fddd6dbed2f" code="houseProperty" name="房屋属性" description="房屋属性" item_order="0"/>
+    <RECORD lookup_id="10ebabea-8c97-11e7-80c8-0050568e00c5" code="preferentialType" name="车位优惠卡类型" description="车位优惠卡类型" item_order=""/>
+    <RECORD lookup_id="1b149558-2c08-11e8-9c0c-0050568e0e15" code="propertyRightType" name="产权类型" description="产权类型" item_order=""/>
+    <RECORD lookup_id="2f16e417-a592-11e7-80c8-0050568e00c5" code="productOrderState" name="订单状态" description="订单状态" item_order=""/>
+    <RECORD lookup_id="331b489e-6c33-11e7-80c8-0050568e00c5" code="stationType" name="车位类型" description="车位类型" item_order=""/>
+    <RECORD lookup_id="37189454-8c82-11e7-80c8-0050568e00c5" code="valuationType" name="计价方式" description="计价方式" item_order=""/>
+    <RECORD lookup_id="42b12ded-36de-11e7-bdf4-0050568e00c5" code="importExportState" name="导入导出状态" description="导入导出状态" item_order="0"/>
+    <RECORD lookup_id="453d8cb2-5020-4468-97e5-15b01daa77ff" code="houseType" name="户型" description="户型" item_order="0"/>
+    <RECORD lookup_id="4afa5870-ae2e-11e7-80c8-0050568e00c5" code="customerPropertyRelation" name="客户与资产关系" description="客户与资产关系" item_order=""/>
+    <RECORD lookup_id="4e731040-16a7-11e7-bcf9-0050568e00c5" code="marketState" name="销售状态" description="销售状态" item_order="0"/>
+    <RECORD lookup_id="4ea009fb-b541-11e7-80c8-0050568e00c5" code="payType" name="支付类型" description="支付类型" item_order=""/>
+    <RECORD lookup_id="535c7fbc-2c0b-11e8-9c0c-0050568e0e15" code="propertyUsage" name="资产用途" description="资产用途" item_order=""/>
+    <RECORD lookup_id="55622d25-8edb-11e7-80c8-0050568e00c5" code="productState" name="产品状态" description="产品状态" item_order="0"/>
+    <RECORD lookup_id="57689915-8c60-11e7-80c8-0050568e00c5" code="productType" name="产品类型" description="产品类型" item_order=""/>
+    <RECORD lookup_id="586d0609-bab6-11e7-80c8-0050568e00c5" code="productUnit" name="产品单位" description="产品单位" item_order=""/>
+    <RECORD lookup_id="5aa36a09-28bd-11e7-bcf9-0050568e00c5" code="yesNo" name="是或否" description="是或否" item_order="0"/>
+    <RECORD lookup_id="60bd3942-50aa-11e7-bdf4-0050568e00c5" code="sex" name="性别" description="性别" item_order="0"/>
+    <RECORD lookup_id="75aea594-2331-11e7-bcf9-0050568e00c5" code="enableDisable " name="启用/禁用" description="启用/禁用" item_order="0"/>
+    <RECORD lookup_id="7981c064-2c0c-11e8-9c0c-0050568e0e15" code="publicBuildingType" name="公建类型" description="公建类型" item_order=""/>
+    <RECORD lookup_id="7d3e9f29-6062-11e7-bdf4-0050568e00c5" code="card_type" name="证件类型" description="证件类型" item_order="0"/>
+    <RECORD lookup_id="83a5fc5d-8ec5-11e7-80c8-0050568e00c5" code="collectionType" name="托收类型" description="托收类型" item_order=""/>
+    <RECORD lookup_id="8515fbb9-28bd-11e7-bcf9-0050568e00c5" code="stationProperty" name="车位属性" description="车位属性" item_order="0"/>
+    <RECORD lookup_id="8f5c4783-6520-11e7-80c8-0050568e00c5" code="accountOrder" name="账户优先级" description="账户优先级" item_order=""/>
+    <RECORD lookup_id="af9829b8-5168-11e7-bdf4-0050568e00c5" code="staffType" name="员工类型" description="员工类型" item_order="0"/>
+    <RECORD lookup_id="b55be09e-ae23-11e7-80c8-0050568e00c5" code="customerType" name="客户类型" description="客户类型" item_order=""/>
+    <RECORD lookup_id="bbb87257-bde7-11e7-80c8-0050568e00c5" code="decorationServiceObject" name="装修服务对象" description="装修服务对象" item_order=""/>
+    <RECORD lookup_id="be782361-ca9b-11e7-80c8-0050568e00c5" code="buildingAreaType" name="建筑面积类型" description="" item_order=""/>
+    <RECORD lookup_id="bf808307-943b-11e7-80c8-0050568e00c5" code="unionBankNo" name="银联托收银行行号" description="银联托收银行行号" item_order=""/>
+    <RECORD lookup_id="cbe77adc-548d-11e7-bdf4-0050568e00c5" code="oganizationType" name="组织类型" description="组织类型" item_order=""/>
+    <RECORD lookup_id="cc49a036-50d9-11e7-bdf4-0050568e00c5" code="documentType" name="证件类型" description="证件类型" item_order="0"/>
+    <RECORD lookup_id="d668bcc7-23ff-11e7-bcf9-0050568e00c5" code="propertyType" name="资产类型" description="资产类型" item_order="0"/>
+    <RECORD lookup_id="e8e9cb80-f669-11e7-80c8-0050568e00c5" code="depositState" name="押金状态" description="押金状态" item_order=""/>
+    <RECORD lookup_id="ee4ec6c3-50a0-11e7-bdf4-0050568e00c5" code="staffState" name="员工状态" description="员工状态" item_order="0"/>
+    <RECORD lookup_id="ef1d1a71-b3b3-11e7-80c8-0050568e00c5" code="timeUnit" name="时间单位" description="时间单位" item_order=""/>
+    <RECORD lookup_id="f5225686-2343-11e7-bcf9-0050568e00c5" code="buildingType" name="建筑结构类型" description="建筑结构类型" item_order="0"/>
+    <RECORD lookup_id="f5225686-2343-11e7-bcf9-0050568e00c6" code="011" name="持续天数" description="持续天数" item_order="0"/>
+    <RECORD lookup_id="f5225686-2343-11e7-bcf9-0050568e00c7" code="012" name="持续月数" description="持续月数" item_order="0"/>
+    <RECORD lookup_id="fe824deb-3f89-11e7-bdf4-0050568e00c5" code="storeType" name="商铺类型" description="商铺类型" item_order="0"/>
+    <RECORD lookup_id="fe824deb-3f89-11e7-bdf4-0050568e00c6" code="013" name="完成工单异常原因" description="完成工单异常原因" item_order="0"/>
+    <RECORD lookup_id="505090d8-8325-11e8-af29-0050568e0e15" code="placeAttribute" name="位置属性" description="位置属性" item_order="0"/>
+    <RECORD lookup_id="8c0e5754-8339-11e8-af29-0050568e0e15" code="propertyAttributes" name="产权属性" description="产权属性" item_order="0"/>
+    <RECORD lookup_id="30f7c3ed-8be8-11e8-af29-0050568e0e15" code="billingStatus" name="计费状态" description="计费状态" item_order="0"/>
+    <RECORD lookup_id="9868bddc-8be8-11e8-af29-0050568e0e15" code="company" name="单位" description="单位" item_order="0"/>
+    <RECORD lookup_id="27dfe138-8bff-11e8-af29-0050568e0e15" code="type" name="类型" description="类型" item_order="0"/>
+    <RECORD lookup_id="423f4dd4-8e25-11e8-af29-0050568e0e15" code="meterReadingMethod" name="抄表方式" description="抄表方式" item_order="0"/>
+    <RECORD lookup_id="8536fa35-8e25-11e8-af29-0050568e0e15" code="useProperty" name="使用性质" description="使用性质" item_order="0"/>
+    <RECORD lookup_id="9cc93052-8e25-11e8-af29-0050568e0e15" code="waterMeterState" name="水表状态" description="水表状态" item_order="0"/>
+    <RECORD lookup_id="a4531bac-8e25-11e8-af29-0050568e0e15" code="waterMeterLevel" name="水表级别" description="水表级别" item_order="0"/>
+    <RECORD lookup_id="0bdcfe10-a99e-11e8-8fb4-0050568e0e15" code="constructionState" name="工程施工状态" description="工程施工状态" item_order="0"/>
+
+    <RECORD lookup_id="486551eb-dc1c-11e8-8fb4-0050568e0e15" code = "location" name = "位置" description="公共施工" item_order="0"/>
+    <RECORD lookup_id="55a7b52f-dc1c-11e8-8fb4-0050568e0e15" code = "holdpurpose" name = "用途(自持)" description="公共施工" item_order="0"/>
+    <RECORD lookup_id="58d038e0-dc1c-11e8-8fb4-0050568e0e15" code = "purpose" name = "用途(非自持)" description="公共施工" item_order="0"/>
+
+    <RECORD lookup_id="c4050806-fc4f-11e8-8a9e-0050568e63cd" code = "relation" name = "企业委托人" description="公共施工" item_order="0"/>
+
+    <RECORD lookup_id="4f13bda6-f2a4-11e8-8fb4-0050568e0e15" code = "fixedCarParkSalesStatus" name = "固定车位销售状态" description="固定车位销售状态" item_order="0"/>
+
+    <RECORD lookup_id="2f875b0d-033d-11e9-8a9e-0050568e63cd" code = "mqOperationType" name = "MQ同步类型" description="MQ同步类型" item_order="0"/>
+
+    <RECORD lookup_id="4926b0e3-033e-11e9-8a9e-0050568e63cd" code = "mqSyncPriorityLevel" name = "MQ同步优先级" description="MQ同步优先级" item_order="0"/>
+
+    <RECORD lookup_id="4e3aac44-033e-11e9-8a9e-0050568e63cd" code = "mqSyncState" name = "MQ同步数据状态" description="MQ同步数据状态" item_order="0"/>
+
+    <!-- demo -->
+    <RECORD lookup_id="c1b71a29-8b19-11e8-af29-0050568e0e15" code="demo" name="示例" description="示例" item_order="0"/>
+</RECORDS>

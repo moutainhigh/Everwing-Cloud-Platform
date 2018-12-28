@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+	<mapper namespace="com.everwing.coreservice.wy.dao.mapper.business.electmeter.TcElectMeterMapper">
+		
+		<resultMap type="ElectMeter" id="electResultMap">
+			<id column="id" property="electmeterId"/>
+			<result column="code" property="code"/>
+			<result column="position" property="location"/>
+			<result column="position_name" property="locationName"/>
+			<result column="relation_building" property="relationbuilding"/>
+			<result column="relation_building_name" property="relationbuildingName"/>
+			<result column="company_code" property="companycode"/>
+			<result column="init_amount" property="initamount"/>
+			<result column="min_amount" property="minamount"/>
+			<result column="max_amount" property="maxamount"/>
+			<result column="electricitymeter_type" property="electricitymeterType"/>
+			<result column="is_circle" property="iscycle"/>
+			<result column="state" property="state"/>
+			<result column="type" property="type"/>
+			<result column="parent_code" property="parentcode"/>
+			<result column="master_code" property="mastercode"/>
+			<result column="user_type" property="usertype"/>
+			<result column="is_billing" property="isbilling"/>
+			<result column="is_public" property="ispublic"/>
+			<result column="asset_no" property="assetno"/>
+			<result column="brand" property="brand"/>
+			<result column="specs" property="specs"/>
+			<result column="provider" property="provider"/>
+			<result column="provider_phone" property="providerphone"/>
+			<result column="assemble_person" property="assembleperson"/>
+			<result column="assemble_person_id" property="assemblepersonId"/>
+			<result column="assemble_time" property="assembletime"/>
+			<result column="create_id" property="createid"/>
+			<result column="create_time" property="createtime"/>
+			<result column="modify_id" property="modifyid"/>
+			<result column="modify_time" property="modifytime"/>
+			<result column="init_peak_value" property="initpeakvalue"/>
+			<result column="init_valley_value" property="initvalleyvalue"/>
+			<result column="init_average_value" property="initaveragevalue"/>
+			
+			<result column="max_peak_value" property="maxPeakValue"/>
+			<result column="max_valley_value" property="maxValleyValue"/>
+			<result column="max_average_value" property="maxAverageValue"/>
+			
+			<result column="electricitymeter_name" property="electricitymetername"/>
+			<result column="rate" property="rate"/>
+			<result column="project_id" property="projectId"/> 
+			<result column="project_name" property="projectName"/>
+			<result column="meter_level" property="meterLevel"/>
+		</resultMap>
+		
+		<sql id="sqlfield">
+			id,code,position,position_name,relation_building,relation_building_name,company_code,init_amount,
+	            min_amount,max_amount,electricitymeter_type,is_circle,state,
+	            type,parent_code,master_code,user_type,is_billing,is_public,
+				asset_no,brand,specs,provider,provider_phone,assemble_person,assemble_person_id,assemble_time,
+				create_id,create_time,modify_id,modify_time,init_peak_value,init_valley_value,
+				max_peak_value,max_valley_value,max_average_value,
+				init_average_value,electricitymeter_name,rate,project_id,project_name,meter_level
+		</sql>
+		
+		<sql id="sqlwhere">
+			<trim prefix="where" prefixOverrides="and || or">
+				<if test="code !='' and code != null"> code =#{code}</if>
+				<if test="location !='' and location != null"> and position like concat(concat('%',#{location}),'%')</if>
+				<if test="relationbuilding !='' and relationbuilding != null"> and relation_building like concat(concat('%',#{relationbuilding}),'%')</if>
+				<if test="companycode !='' and companycode != null"> and company_code=#{companycode}</if>
+				<if test="initamount !='' and initamount != null"> and init_amount=#{initamount}</if>
+				<if test="minamount !='' and minamount != null"> and min_amount=#{minamount}</if>
+				<if test="maxamount !='' and maxamount != null"> and max_amount=#{maxamount}</if>
+				<if test="electricitymeterType !='' and electricitymeterType != null"> and electricitymeter_type=#{electricitymeterType}</if>
+				<if test="iscycle !='' and iscycle !=null"> and is_circle =#{iscycle} </if>
+				<if test="state !=null"> and state =#{state}</if>
+				<if test="type !='' and type != null"> and type =#{type}</if>
+				<if test="parentcode !='' and parentcode != null"> and parent_code=#{parentcode}</if>
+				<if test="mastercode !='' and mastercode != null"> and master_code=#{mastercode}</if>
+				<if test="usertype !='' and usertype != null"> and user_type =#{usertype}</if>
+				<if test="isbilling !='' and isbilling !=null"> and is_billing =#{isbilling}</if>
+				<if test="ispublic !='' and ispublic != null"> and is_public =#{ispublic}</if>
+				<if test="assetno !='' and assetno != null"> and asset_no =#{assetno}</if>
+				<if test="brand !='' and brand != null"> and brand =#{brand}</if>
+				<if test="specs !='' and specs != null"> and specs =#{specs}</if>
+				<if test="provider !='' and provider !=null"> and provider =#{provider}</if>
+				<if test="providerphone !='' and providerphone != null"> and provider_phone=#{providerphone}</if>
+				<if test="assembleperson !='' and assembleperson != null"> and assemble_person=#{assembleperson}</if>
+				<if test="assembletime !='' and assembletime != null"> and assemble_time=#{assembletime}</if>
+				<if test="createid !='' and createid !=null"> and create_id=#{createid}</if>
+				<if test="createtime !='' and createtime !=null">and create_time=#{createtime}</if>
+				<if test="modifyid !='' and modifyid != null"> and modify_id=#{modifyid}</if>
+				<if test="modifytime !='' and modifytime != null"> and modify_time=#{modifytime}</if>
+				<if test="initpeakvalue !='' and initpeakvalue !=null"> and init_peak_value=#{initpeakvalue}</if>
+				<if test="initvalleyvalue !='' and initvalleyvalue !=null"> and init_valley_value=#{initvalleyvalue}</if>
+				<if test="initaveragevalue !='' and initaveragevalue != null"> and init_average_value=#{initaveragevalue}</if>
+				<if test="electricitymetername !='' and electricitymetername !=null"> and electricitymeter_name like concat(concat('%',#{electricitymetername}),'%')</if>
+				<if test="rate != '' and rate != null"> and rate =#{rate}</if>
+				<if test="locationName !='' and locationName !=null">and position_name like concat(concat('%',#{locationName}),'%')</if>
+				<if test="relationbuildingName !='' and relationbuildingName !=null"> and relation_building_name like concat(concat('%',#{relationbuildingName}),'%')</if>
+				<if test="assemblepersonId !='' and assemblepersonId !=null"> and assemble_person_id =#{assemblepersonId}</if>
+				<if test="projectId !='' and projectId !=null"> and project_id=#{projectId}</if>
+				<if test="projectName != '' and projectName != null"> and project_name like concat(concat('%',#{projectName}),'%')</if>
+				<if test="meterLevel !=null">and  meter_level=#{meterLevel}</if>
+				<if test="queryParam != null and queryParam != '' ">
+					AND (
+					      CODE LIKE CONCAT('%',#{queryParam},'%') 
+					OR asset_no LIKE CONCAT('%',#{queryParam},'%') 
+					OR electricitymeter_name LIKE CONCAT('%',#{queryParam},'%') 
+					OR relation_building_name LIKE CONCAT('%',#{queryParam},'%') 
+					OR position_name LIKE CONCAT('%',#{queryParam},'%') 
+					<if test="queryParam=='普通表'">
+					OR electricitymeter_type=0
+					</if>
+					<if test="queryParam=='分时表'">
+					OR electricitymeter_type=1
+					</if>
+					<if test="queryParam=='已启用'">
+					OR state=0
+					</if>
+					<if test="queryParam=='已停用'">
+					OR state=1
+					</if>
+					)
+		     </if>
+			</trim>
+		</sql>
+		
+		<!-- 查询 -->
+		<select id="listPageElectmeterByCompany" parameterType="ElectMeterSearch" resultMap="electResultMap">
+			select 
+			<include refid="sqlfield" />
+			from tc_electricity_meter
+			<include refid="sqlwhere"></include>
+		</select>
+		
+		<!-- 单个新增 -->
+		<insert id="addelectmeter" parameterType="ElectMeter">
+			insert into tc_electricity_meter (
+				id,CODE,position,position_name,relation_building,relation_building_name,company_code,init_amount,
+	            min_amount,max_amount,electricitymeter_type,is_circle,state,
+	            type,parent_code,master_code,user_type,is_billing,is_public,
+				asset_no,brand,specs,provider,provider_phone,assemble_person,assemble_person_id,assemble_time,
+				create_id,create_time,modify_id,modify_time,init_peak_value,init_valley_value,
+				max_peak_value,max_valley_value,max_average_value,
+				init_average_value,electricitymeter_name,rate,project_id,project_name,meter_level
+			    )values(
+			    	UPPER(UUID()),#{code},#{location},#{locationName},#{relationbuilding},#{relationbuildingName},#{companycode},#{initamount},
+			    	#{minamount},#{maxamount},#{electricitymeterType},#{iscycle},#{state},
+			    	#{type},#{parentcode},#{mastercode},#{usertype},#{isbilling},#{ispublic},
+			    	#{assetno},#{brand},#{specs},#{provider},#{providerphone},#{assembleperson},#{assemblepersonId},#{assembletime},
+			    	#{createid},#{createtime},#{modifyid},#{modifytime},#{initpeakvalue},#{initvalleyvalue},#{initaveragevalue},
+			    	#{maxPeakValue},#{maxValleyValue},#{maxAverageValue},
+			    	#{electricitymetername},#{rate},#{projectId},#{projectName},#{meterLevel}
+			    )
+		</insert>
+		
+		<sql id="updateset">
+			<if test="relationbuilding !='' and relationbuilding != null">,relation_building=#{relationbuilding}</if>
+			<if test="initamount !='' and initamount !=null">,init_amount=#{initamount}</if>
+			<if test="minamount !='' and minamount !=null">,min_amount=#{minamount}</if>
+			<if test="maxamount !='' and maxamount !=null">,max_amount=#{maxamount}</if>
+			<if test="electricitymeterType !=null">,electricitymeter_type=#{electricitymeterType}</if>
+			<if test="iscycle !=null">,is_circle=#{iscycle}</if>
+			<if test="state !=null">,state=#{state}</if>
+			<if test="type !=null">,type=#{type}</if>
+			<if test="parentcode !=null and parentcode !=''">,parent_code=#{parentcode}</if>
+			<if test="mastercode !='' and mastercode !=null">,master_code=#{mastercode}</if>
+			<if test="usertype !=null">,user_type=#{usertype}</if>
+			<if test="isbilling !=null">,is_billing=#{isbilling}</if>
+			<if test="ispublic !=null">,is_public=#{ispublic}</if>
+			<if test="assetno !='' and assetno !=null">,asset_no=#{assetno}</if>
+			<if test="brand !='' and brand !=null">,brand=#{brand}</if>
+			<if test="specs !='' and specs !=null">,specs=#{specs}</if>
+			<if test="provider !='' and provider !=null">,provider=#{provider}</if>
+			<if test="providerphone !='' and providerphone !=null">,provider_phone=#{providerphone}</if>
+			<if test="assembleperson !='' and assembleperson !=null">,assemble_person=#{assembleperson}</if>
+			<if test="assembletime !='' and assembletime !=null">,assemble_time=#{assembletime}</if>
+			<if test="modifyid !='' and modifyid !=null">,modify_id=#{modifyid}</if>
+			<if test="modifytime !='' and modifytime !=null">,modify_time=#{modifytime}</if>
+			<if test="initpeakvalue !=null">,init_peak_value=#{initpeakvalue}</if>
+			<if test="initvalleyvalue !=null">,init_valley_value=#{initvalleyvalue}</if>
+			<if test="initaveragevalue != null">,init_average_value=#{initaveragevalue}</if>
+			
+			<if test="maxPeakValue != null">,max_peak_value=#{maxPeakValue}</if>
+			<if test="maxValleyValue != null">,max_valley_value=#{maxValleyValue}</if>
+			<if test="maxAverageValue != null">,max_average_value=#{maxAverageValue}</if>
+			
+			<if test="electricitymetername !=null and electricitymetername !=''">,electricitymeter_name=#{electricitymetername}</if>
+			<if test="rate !='' and rate !=null">,rate=#{rate}</if>
+			<if test="locationName !='' and locationName !=null">,position_name=#{locationName}</if>
+			<if test="relationbuildingName !='' and relationbuildingName !=null">,relation_building_name=#{relationbuildingName}</if>
+			<if test="assemblepersonId !='' and assemblepersonId !=null">,assemble_person_id=#{assemblepersonId}</if>
+			<if test="projectId !='' and projectId != null">, project_id=#{projectId}</if>
+			<if test="projectName !='' and projectName !=null">,project_name=#{projectName}</if>
+			<if test="meterLevel !=null">,meter_level=#{meterLevel}</if>
+		</sql>
+		
+		<!-- 单个修改更新 -->
+		<update id="editSave" parameterType="ElectMeter">
+			update tc_electricity_meter set position=#{location}
+			<include refid="updateset"></include>
+											where code=#{code}
+		</update>
+<!-- 		<update id="editSave" parameterType="ElectMeter"> -->
+<!-- 			update tc_electricity_meter set position=#{location},relation_building=#{relationbuilding},init_amount=#{initamount}, -->
+<!-- 											min_amount=#{minamount},max_amount=#{maxamount},electricitymeter_type=#{electricitymeterType},is_circle=#{iscycle},state=#{state}, -->
+<!-- 											type=#{type},parent_code=#{parentcode},master_code=#{mastercode},user_type=#{usertype},is_billing=#{isbilling},is_public=#{ispublic}, -->
+<!-- 											asset_no=#{assetno},brand=#{brand},specs=#{specs},provider=#{provider},provider_phone=#{providerphone},assemble_person=#{assembleperson},assemble_time=#{assembletime}, -->
+<!-- 											modify_id=#{modifyid},modify_time=#{modifytime},init_peak_value=#{initpeakvalue},init_valley_value=#{initvalleyvalue}, -->
+<!-- 											init_average_value=#{initaveragevalue},electricitymeter_name=#{electricitymetername},rate=#{rate} -->
+<!-- 											where code=#{code} -->
+<!-- 		</update> -->
+		<!-- 批量启停更新 -->
+		<update id="startOrstopElectMeter" parameterType="java.util.Map">
+		  	update tc_electricity_meter set state=#{state},modify_id=#{modifyId},modify_time=#{modifytime} where code in 
+			<foreach collection="codes" separator="," item="code" index="index" open="(" close=")">
+				(#{code})
+			</foreach>
+		</update>
+		<!-- 根据编码查询 -->
+		<select id="getElectMeterByCode" parameterType="java.lang.String" resultMap="electResultMap">
+			select <include refid="sqlfield" /> from tc_electricity_meter where code=#{0} and project_id=#{1}
+		</select>
+		
+		<!-- 删除 -->
+		<delete id="delElect" parameterType="java.util.List">
+			delete from tc_electricity_meter where project_id =#{projectId} and code in 
+			<foreach collection="list" separator="," item="code" index="index" open="(" close=")">
+				(#{code})
+			</foreach> 
+		</delete>
+		
+		<!-- 批量新增 针对导入-->
+		<insert id="batchadd" parameterType="ElectMeterImport">
+			insert into tc_electricity_meter(
+			    id,code,position,position_name,relation_building,relation_building_name,company_code,init_amount,
+	            min_amount,max_amount,electricitymeter_type,is_circle,state,
+	            type,parent_code,master_code,user_type,is_billing,is_public,
+				asset_no,brand,specs,provider,provider_phone,assemble_person,assemble_person_id,assemble_time,
+				create_id,create_time,modify_id,modify_time,init_peak_value,init_valley_value,
+				init_average_value,electricitymeter_name,rate,project_id,project_name,meter_level,
+				max_peak_value,max_valley_value,max_average_value
+			)values
+			<foreach collection="list" separator="," item="items">
+			(UPPER(UUID()),#{items.code},#{items.location},#{items.locationName},
+			#{items.relationbuilding},#{items.relationbuildingName},#{items.companyId},#{items.initamount},#{items.minamount},#{items.maxamount},
+			#{items.electricitymeterType},#{items.iscycle},#{items.state},#{items.type},
+			#{items.parentcode},#{items.mastercode},#{items.usertype},#{items.isbilling},
+			#{items.ispublic},#{items.assetno},#{items.brand},#{items.specs},#{items.provider},
+			#{items.providerphone},#{items.assembleperson},#{items.assemblepersonId},now(),#{items.createrId},#{items.createTime},#{items.modifyId},
+			#{items.modifyTime},#{items.initpeakvalue},#{items.initvalleyvalue},#{items.initaveragevalue},
+			#{items.electricitymetername},#{items.rate},#{items.projectCode},#{items.projectName},#{items.meterLevel},
+			#{items.maxPeakValue},#{items.maxValleyValue},#{items.maxAverageValue})
+			</foreach>
+		</insert>
+		
+		<sql id="batchupdateField">
+			<if test="item.brand !='' and item.brand != null">,brand=#{item.brand}</if>
+			<if test="item.specs !='' and item.specs != null">,specs=#{item.specs}</if>
+			<if test="item.provider !='' and item.provider !=null">,provider=#{item.provider}</if>
+			<if test="item.providerphone !='' and item.providerphone !=null">,provider_phone=#{item.providerphone}</if>
+			<if test="item.parentcode !='' and item.parentcode !=null">,parent_code=#{item.parentcode}</if>
+			<if test="item.mastercode !='' and item.mastercode !=null">,master_code=#{item.mastercode}</if>
+		</sql>
+		
+		<!-- 批量修改 针对导入-->
+		<update id="batchupdate" parameterType="ElectMeterImport">
+			<foreach collection="list" separator=";" item="item" index="index">
+				update tc_electricity_meter set electricitymeter_name=#{item.electricitymetername},
+				position=#{item.location},position_name=#{item.locationName},state=#{item.state},electricitymeter_type=#{item.electricitymeterType},
+				is_circle=#{item.iscycle},type=#{item.type},user_type=#{item.usertype},is_billing=#{item.isbilling},is_public=#{item.ispublic},
+				min_amount=#{item.minamount},max_amount=#{item.maxamount},init_amount=#{item.initamount},init_peak_value=#{item.initpeakvalue},
+				init_valley_value=#{item.initvalleyvalue},init_average_value=#{item.initaveragevalue},
+				asset_no=#{item.assetno},rate=#{item.rate},project_id=#{item.projectCode},project_name=#{item.projectName},
+				relation_building=#{item.relationbuilding},relation_building_name=#{item.relationbuildingName},
+				assemble_person=#{item.assembleperson},assemble_person_id=#{item.assemblepersonId},meter_level=#{item.meterLevel},max_peak_value=#{item.maxPeakValue},max_valley_value=#{item.maxValleyValue},max_average_value=#{item.maxAverageValue} 
+				<include refid="batchupdateField"></include>
+				where code=#{item.code}
+			</foreach>
+		</update>
+		
+		<!-- 针对根据电表编号查询是否存在-->
+		<select id="getElectByCodes" parameterType="java.util.List" resultType="java.lang.String">
+			select code from tc_electricity_meter where code in
+			<foreach collection="list" separator="," item="code" index="index" open="(" close=")">
+				(#{code})
+			</foreach> 
+		</select>
+		
+		<!-- 根据位置组来查询电表过滤掉M级的虚拟总表 -->
+		<select id="findMetersByPositions" parameterType="java.util.List" resultMap="electResultMap">
+			select * from tc_electricity_meter 
+			where position in 
+		<foreach collection="list" open="(" separator="," item="position" close=")">
+			#{position}
+		</foreach>
+		and state = 0
+		and meter_level != 11
+	</select>
+	
+	<resultMap type="java.util.Map" id="countResultMap">
+		<result property="meterLevel" column="meter_level" jdbcType="VARCHAR"/>
+		<result property="num" column="num" jdbcType="INTEGER"/>
+		<result property="completeNum" column="complete_num" jdbcType="INTEGER"/>
+	</resultMap>
+	<!-- 统计电表 -->
+	<!-- AND t2.status = 1 是否只看本月的执行中任务,这样只有抄表那几天可以看到数据 -->
+	<select id="countMeters" parameterType="ElectMeter" resultMap="countResultMap">
+						SELECT * FROM (
+									SELECT COUNT(0) AS num ,"totalCount" AS meter_level , 0 AS complete_num FROM tc_water_meter
+									WHERE meter_level IS NOT NULL
+									<if test="null != projectId">
+										AND project_id = #{projectId}
+									</if>
+						) t1
+			UNION ALL
+						SELECT * FROM (
+									SELECT COUNT(t1.meter_level) AS num ,CONCAT(t1.meter_level,"级") AS meter_level, COUNT(t2.meter_code) AS complete_count
+									  FROM tc_electricity_meter t1, tc_meter_data t2, tc_reading_task t3, tc_reading_schedule t4
+									WHERE t1.code = t2.meter_code
+									   AND t2.task_id = t3.id
+									   AND t3.schedule_id = t4.id
+									   AND t4.status = 1
+									<if test="null != projectId">
+										AND t1.project_id = #{projectId}
+									</if>
+									   AND t2.meter_type = 1
+									   AND t2.is_used = 0
+									   AND t2.reading_time IS NOT NULL
+									   AND DATE_FORMAT(t3.start_time,"%Y-%m") = DATE_FORMAT(CURDATE(),"%Y-%m")
+									   AND t1.meter_level IS NOT NULL
+									GROUP BY t1.meter_level
+						) t2
+	</select>
+	
+	
+		<!-- 收费对象和表是一对一的关系，一个收费对象现在不允许有多个表 -->
+		<!-- 根据收费对象编号个和项目编号查询 -->
+		<select id="getElectMeterByReationId" parameterType="String" resultMap="electResultMap">
+			select 
+			<include refid="sqlfield"/>
+			from tc_electricity_meter
+			where project_id=#{0}
+			and relation_building=#{1}
+			and state=0
+		</select>
+		
+		<!-- 根据表编号和项目编码查找M等级表 -->
+		<select id="getElectMeterByCodeAndM" parameterType="String" resultMap="electResultMap">
+			select <include refid="sqlfield" /> from tc_electricity_meter where code=#{0} and project_id=#{1} and meter_level=11
+		</select>
+		
+		<!-- 根据父表编号和项目编号查询 -->
+		<select id="findByparentCodeAndProjectId" parameterType="String" resultType="java.lang.String">
+			select code from tc_electricity_meter
+			where project_id=#{1}
+			and parent_code=#{0}
+		</select>
+		  <!--根据父表编号和项目编号查找收费对象ID得到收费对象ID-->
+	    <select id="findRelationIdByparentCode" parameterType="String" resultType="java.lang.String">
+	    	select relation_building from tc_electricity_meter
+			where project_id=#{1}
+			and parent_code=#{0}
+	    </select>
+		<!-- 通过C级表关联起来查M级表,且一个C级表有且仅有一个对应的M级表-->
+		<select id="findMByCCodeAndProjectId" parameterType="String" resultMap="electResultMap">
+			SELECT
+				t2.*
+			FROM
+				tc_electricity_meter t1,
+			    tc_electricity_meter t2
+			where t1.parent_code=t2.`code`
+			and t1.`code`= #{0}
+			and t1.project_id= #{1}
+			and t1.meter_level=12
+		</select>
+	
+		<!-- 收费对象和表是一对一的关系，一个收费对象现在不允许有多个表 ,根据收费对象查找M级表-->
+		<select id="findMByBuildCodeAndProjectId" parameterType="String" resultMap="electResultMap">
+				select 
+				<include refid="sqlfield"/>
+				from tc_electricity_meter
+				where project_id=#{0}
+				and relation_building=#{1}
+				and meter_level=11
+		</select>
+		<select id="findsByBuildingCode" resultMap="electResultMap">
+		select code,electricitymeter_name from tc_electricity_meter 
+		 where relation_building = #{buildingCode}
+	</select>
+    <select id="listPageElectMeterByBuildingCode" resultMap="electResultMap">
+		select  te.elect_code,tc.building_full_name relationbuilding,te.position,te.state,te.init_amount from tc_electricity_meter te
+		LEFT JOIN tc_public_asset tc on te.relation_building = tc.building_code
+		where 1 = 1
+		<if test="relationbuilding != null and relationbuilding != ''">
+			and te.relation_building = #{relationbuilding}
+		</if>
+	</select>
+</mapper>

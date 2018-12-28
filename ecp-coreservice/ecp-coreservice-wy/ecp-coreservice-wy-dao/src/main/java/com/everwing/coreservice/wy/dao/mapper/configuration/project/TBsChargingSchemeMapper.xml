@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.configuration.project.TBsChargingSchemeMapper">
+	<resultMap type="TBsChargingScheme" id="BaseResultMap">
+		<result property="id" column="id" jdbcType="VARCHAR"/>
+		<result property="schemeName" column="scheme_name"  jdbcType="VARCHAR"/>
+		<result property="isUsed" column="is_used"  jdbcType="TINYINT"/>
+		<result property="startUsingDate" column="start_using_date"  jdbcType="TIMESTAMP"/>
+		<result property="endUsingDate" column="end_using_date"  jdbcType="TIMESTAMP"/>
+		<result property="chargingType" column="charging_type"  jdbcType="TINYINT"/>
+		<result property="proportion" column="proportion"  jdbcType="DOUBLE"/>
+		<result property="overdueStartDates" column="overdue_start_dates"  jdbcType="TIMESTAMP"/>
+		<result property="calculationType" column="calculation_type"  jdbcType="TINYINT"/>
+		<result property="schemeType" column="scheme_type"  jdbcType="TINYINT"/>
+		<result property="frequency" column="frequency" jdbcType="INTEGER"/>
+		<result property="chargingArea" column="charging_area" jdbcType="INTEGER"/>
+		<result property="chargeData" column="charge_data"  jdbcType="INTEGER"/>
+		<result property="isEffective" column="is_effective"  jdbcType="TINYINT"/>
+		<result property="projectId" column="project_id"  jdbcType="VARCHAR"/>
+		<result property="projectName" column="project_name"  jdbcType="VARCHAR"/>
+		<result property="taxRate" column="tax_rate" jdbcType="DOUBLE"/>
+		<result property="createTime" column="create_time"  jdbcType="TIMESTAMP"/>
+		<result property="createBy" column="create_by"  jdbcType="VARCHAR"/>
+		<result property="createName" column="create_name"  jdbcType="VARCHAR"/>
+		<result property="updateTime" column="update_time"  jdbcType="TIMESTAMP"/>
+		<result property="updateBy" column="update_by"  jdbcType="VARCHAR"/>
+		<result property="updateName" column="update_name"  jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<select id="listPageSchemes" parameterType="TBsChargingScheme" resultMap="BaseResultMap">
+			SELECT 
+			  	t.id,
+				t.scheme_name,
+				t.is_used,
+				t.start_using_date,
+				t.end_using_date,
+				t.charging_type,
+				t.proportion,
+				t.overdue_start_dates,
+				t.calculation_type,
+				t.scheme_type,
+				t.frequency,
+				t.charging_area,
+				t.charge_data,
+				t.is_effective,
+				t.project_id,
+				t.project_name,
+				t.create_time,
+				t.tax_rate,
+				(select staff_name from t_sys_user where user_id = t.create_by) as create_by,
+				t.update_time,
+				(select staff_name from t_sys_user where user_id = t.update_by) as update_by
+			FROM
+			  t_bs_charging_scheme t
+			WHERE 1 = 1
+			 <if test="id !=null">
+			 	and t.id = #{id}
+			 </if>
+			  <if test="null != projectId">
+			  	 and t.project_id = #{projectId}
+			  </if>
+			  <if test="null != isEffective">
+			  	and t.is_effective = #{isEffective}
+			  </if>
+			  <if test="null != schemeType">
+			  	and t.scheme_type = #{schemeType}
+			  </if>
+			  <if test="null == searchCode or '' == searchCode ">
+				  <if test="null != chargingType">
+				  	and t.charging_type = #{chargingType}
+				  </if>
+				  <if test="null != isUsed">
+				  	and t.is_used = #{isUsed}
+				  </if>
+			  </if>
+			  <if test="null != searchCode and '' != searchCode">
+			  	  		<if test="null == chargingType and null == isUsed ">
+						  	 and t.scheme_name like CONCAT('%',#{searchCode},'%')
+			  	  		</if>
+					    <if test="null != chargingType">
+						  	 and t.charging_type = #{chargingType}
+					    </if>
+					    <if test="null != isUsed">
+						  	 and t.is_used = #{isUsed}
+					    </if>
+			  </if>
+			  ORDER BY t.create_time DESC
+	</select>
+
+	<!-- 插入方案基础信息表数据 -->
+	<insert id="insert" parameterType="TBsChargingScheme">
+		INSERT INTO t_bs_charging_scheme
+		(
+			id,
+			scheme_name,
+			is_used,
+			start_using_date,
+			end_using_date,
+			charging_type,
+			proportion,
+			overdue_start_dates,
+			calculation_type,
+			scheme_type,
+			frequency,
+			charging_area,
+			charge_data,
+			is_effective,
+			project_id,
+			project_name,
+			tax_rate,
+			create_time,
+			create_by,
+			create_name,
+			update_time,
+			update_by,
+			update_name
+		)
+		values(
+				UPPER(UUID()),
+				#{schemeName},
+				#{isUsed},
+				#{startUsingDate},
+				#{endUsingDate},
+				#{chargingType},
+				#{proportion},
+				#{overdueStartDates},
+				#{calculationType},
+				#{schemeType},
+				#{frequency},
+				#{chargingArea},
+				#{chargeData},
+				#{isEffective},
+				#{projectId},
+				#{projectName},
+				#{taxRate},
+				NOW(),
+				#{createBy},
+				#{createName},
+				#{updateTime},
+				#{updateBy},
+				#{updateName}
+		)
+	</insert>
+
+	<insert id="batchInsert"  parameterType="java.util.List">
+		INSERT INTO t_bs_charging_scheme
+		VALUES
+		<foreach collection="list" item="item" index="index" separator="," >
+			(
+				UPPER(UUID()),
+				#{schemeName},
+				#{isUsed},
+				#{startUsingDate},
+				#{endUsingDate},
+				#{chargingType},
+				#{proportion},
+				#{overdueStartDates},
+				#{calculationType},
+				#{schemeType},
+				#{frequency},
+				#{chargingArea},
+				#{chargeData},
+				#{isEffective},
+				#{projectId},
+				#{projectName},
+				#{taxRate},
+				NOW(),
+				#{createBy},
+				#{updateTime},
+				#{updateBy}
+		)
+		</foreach>
+	</insert>
+
+	<!-- 根据方案类型查询当前使用的方案详情 -->
+	<select id="selectSchemeInfo" parameterType="TBsChargingScheme" resultMap="BaseResultMap">
+		SELECT 
+		  	t.id,
+			t.scheme_name,
+			t.is_used,
+			t.start_using_date,
+			t.end_using_date,
+			t.charging_type,
+			t.proportion,
+			t.overdue_start_dates,
+			t.calculation_type,
+			t.scheme_type,
+			t.frequency,
+			t.charging_area,
+			t.charge_data,
+			t.is_effective,
+			t.project_id,
+			t.project_name,
+			t.create_time,
+			t.tax_rate,
+			(select staff_name from t_sys_user where user_id = t.create_by) as create_by,
+			t.update_time,
+			(select staff_name from t_sys_user where user_id = t.update_by) as update_by
+		FROM
+		  t_bs_charging_scheme t
+		WHERE 1 = 1
+		  <if test="null != id">
+		  	 and t.id = #{id}
+		  </if>
+		  <if test="null != projectId">
+		  	 and t.project_id = #{projectId}
+		  </if>
+		  <if test="null != chargingType">
+		  	and t.charging_type = #{chargingType}
+		  </if>
+		  <if test="null != isEffective">
+		  	and t.is_effective = #{isEffective}
+		  </if>
+		  <if test="null != schemeType">
+		  	and t.scheme_type = #{schemeType}
+		  </if>
+		  <if test="null != isUsed">
+		  	and t.is_used = #{isUsed}
+		  </if>
+		  <if test="null == searchCode or '' == searchCode ">
+			  <![CDATA[
+				  AND t.start_using_date <= NOW() 
+				  AND t.end_using_date > NOW()
+			  ]]>
+		  </if>
+		  <if test="null != searchCode and '' != searchCode">
+		  	  and t.scheme_name like CONCAT('%',#{searchCode},'%')
+		  </if>
+		  ORDER BY t.create_time DESC
+	</select>
+	
+	<select id="listPageSchemeInfos" parameterType="TBsChargingScheme" resultMap="BaseResultMap">
+		SELECT 
+		  * 
+		FROM
+		  t_bs_charging_scheme 
+		WHERE charging_type = #{schemeType} 
+		<if test="null != queryStr and '' != queryStr">
+		  AND scheme_name LIKE CONCAT('%',#{queryStr},'%') 
+		</if>
+		ORDER BY create_time DESC
+	</select>
+
+	<!-- 修改sql片段 -->
+	<sql id="sqlForUpdate">
+		 <if test=" null != schemeName  and '' != schemeName ">
+	        scheme_name = #{schemeName},
+	     </if>
+	     <if test=" null != startUsingDate and '' != startUsingDate">
+	        start_using_date = #{startUsingDate},
+	      </if>
+	     <if test=" null != endUsingDate and '' != endUsingDate ">
+	         end_using_date = #{endUsingDate},
+	      </if>
+	      <if test=" null != chargingType">
+	         charging_type = #{chargingType},
+	      </if>
+	      <if test=" null != proportion">        
+	      	 proportion = #{proportion},
+	      </if>
+	      <if test="null != overdueStartDates" >     
+	      	overdue_start_dates = #{overdueStartDates},
+	      </if>
+	      <if test="null != frequency">
+	      	frequency = #{frequency},
+	      </if>
+	      <if test="null != chargingArea" >     
+	      	charging_area = #{chargingArea},
+	      </if>
+	      <if test="null != calculationType">
+	      	  calculation_type = #{calculationType},
+	      </if>
+	      <if test=" null != isUsed">
+	      	  is_used = #{isUsed},
+	      </if>
+	      <if test="null != taxRate">
+	      	  tax_rate = #{taxRate},
+	      </if>
+	      <if test=" null != schemeType">
+	      	  scheme_type = #{schemeType},
+	      </if>
+	      <if test="chargeData != null">
+	      	charge_data = #{chargeData},
+	      </if>
+	      update_by=#{updateBy},
+	      update_name=#{updateName},
+	      update_time = sysdate()
+	</sql>
+	
+	<!-- 适用于修改相关的操作，失效操作 -->
+	<update id="updateSchemeInfo" parameterType="TBsChargingScheme">
+		UPDATE t_bs_charging_scheme 
+		<set>
+			<include refid="sqlForUpdate"></include>
+	    </set>
+		    WHERE  id = #{id}
+	</update>
+
+	
+	<sql id="fieldSql">
+		id,scheme_name,is_used,start_using_date,end_using_date,charging_type,proportion,overdue_start_dates,
+		calculation_type,scheme_type,frequency,charging_area,charge_data,is_effective,project_id,project_name,tax_rate,
+		create_time,create_by,create_name,update_time,update_by,update_name
+	
+	</sql>
+	<!-- 根据项目编号和方案类型查找未失效，且已经开启的方案 -->
+	<select id="getChargSchByTypeAndProjectId" parameterType="String" resultMap="BaseResultMap">
+		select 
+		<include refid="fieldSql" />
+		from t_bs_charging_scheme
+		where is_used=0
+		  and is_effective=0
+		  and scheme_type=#{0}
+		  and project_id=#{1}
+		  <![CDATA[
+			and start_using_date <= SYSDATE()
+			and end_using_date >= SYSDATE()
+		]]>
+	</select>
+
+	
+	
+	<!-- 获取可用scheme -->
+	<select id="findUsingScheme" parameterType="TBsChargingScheme" resultMap="BaseResultMap">
+		select 
+			t.id,
+			t.scheme_name,
+			t.is_used,
+			t.start_using_date,
+			t.end_using_date,
+			t.charging_type,
+			t.proportion,
+			t.overdue_start_dates,
+			t.calculation_type,
+			t.scheme_type,
+			t.frequency,
+			t.charging_area,
+			t.charge_data,
+			t.is_effective,
+			t.project_id,
+			t.project_name,
+			t.create_time,
+			t.tax_rate,
+			(select staff_name from t_sys_user where user_id = t.create_by) as create_by,
+			t.update_time,
+			(select staff_name from t_sys_user where user_id = t.update_by) as update_by 
+		from t_bs_charging_scheme t
+		where t.is_used = 0
+		and t.is_effective = 0
+		and t.scheme_type = #{schemeType}
+		<![CDATA[
+			and t.start_using_date <= SYSDATE()
+			and t.end_using_date >= SYSDATE()
+		]]>
+		and t.project_id = #{projectId}
+		<if test="chargingType==0">
+			and t.charge_data  = DATE_FORMAT(SYSDATE(),'%d')
+		</if>
+		
+	</select>
+	
+	<update id="stopSchemes" parameterType="java.util.List">
+		update t_bs_charging_scheme set is_effective = 1 ,is_used=1
+		where id in 
+			<foreach collection="list" item="item" open="(" separator="," close=")">
+				#{item.id}
+			</foreach> 
+	</update>	
+	
+	<select id="findConfilcScheme" parameterType="TBsChargingScheme" resultMap="BaseResultMap">
+		  SELECT * 
+			FROM t_bs_charging_scheme 
+		   WHERE is_used = #{isUsed}
+			 <if test="null != id">
+			 	and id != #{id}
+			 </if>
+			 <if test="null != projectId">
+			 	and project_id = #{projectId}
+			 </if>
+			 AND scheme_type = #{schemeType}
+			 AND 
+			(
+			    #{startUsingDate} BETWEEN start_using_date AND end_using_date
+			   
+			OR
+			    
+			    #{endUsingDate} BETWEEN start_using_date AND end_using_date
+			)
+		   
+	</select>
+	
+	<select id="selectByTotalId" parameterType="String" resultMap="BaseResultMap">
+		select t1.* 
+		  from t_bs_charging_scheme t1,
+		  	   t_bs_charge_bill_total t2
+		 where t1.id = t2.scheme_id
+		   and t2.id = #{0}
+	</select>
+	
+	<select id="findCurrentRate" parameterType="String" resultType="java.util.Map">
+		SELECT
+		      CASE scheme_type WHEN 1 THEN 'wy' WHEN 2 THEN 'bt' WHEN 3 THEN 'water' WHEN 4 THEN 'elect' ELSE "null" END AS schemeType,
+		      tax_rate AS taxRate
+		 FROM t_bs_charging_scheme t1,
+		      t_bs_project t2,
+		      t_bs_charge_bill_total t3
+		WHERE t1.project_id = t2.project_id
+		  AND t3.project_id = t2.project_id
+		  AND DATE_FORMAT(t3.billing_time,'%Y-%m') = DATE_FORMAT(t2.billing_time,"%Y-%m")
+		  AND t3.scheme_id = t1.id
+		  AND t2.project_id = #{projectId}
+		  AND t1.is_used = 0
+		GROUP BY t1.id
+	</select>
+
+	<update id="autoStopScheme">
+		UPDATE t_bs_charging_scheme SET is_used = 1 WHERE SYSDATE() > end_using_date
+	</update>
+	
+	<!-- 通过id查询 -->
+	<select id="findById" parameterType="String" resultMap="BaseResultMap">
+		select * from t_bs_charging_scheme where id=#{0}
+	</select>
+	
+	<select id="findTaxRate" resultType="Double">
+		SELECT IFNULL(t1.tax_rate,0.00) AS tax_rate 
+		  FROM t_bs_charging_scheme t1,tc_building t2 
+		 WHERE t1.is_used = 0 
+		   AND t1.scheme_type = #{schemeType} 
+		   AND t1.project_id = t2.project_id
+		   AND t2.building_code = #{buildingCode}
+	</select>
+	
+	<!-- 查询一个项目的水电物业本体税率 -->
+	<select id="getTaxRateByProject" parameterType="String" resultType="java.util.Map">
+		SELECT 
+			(CASE scheme_type WHEN 1 THEN "wy"  WHEN 2 THEN "bt" WHEN 3 THEN "water" WHEN 4 THEN "elect" ELSE "未知类型" END) schemeType,
+		tax_rate taxTate FROM `t_bs_charging_scheme` WHERE project_id=#{projectId} AND is_used = 0
+	</select>
+	
+</mapper>

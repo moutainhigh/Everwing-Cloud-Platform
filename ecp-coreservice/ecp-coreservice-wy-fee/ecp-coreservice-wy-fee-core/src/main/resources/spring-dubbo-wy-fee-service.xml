@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+
+
+
+
+	http://code.alibabatech.com/schema/dubbo
+	http://code.alibabatech.com/schema/dubbo/dubbo.xsd"
+       default-lazy-init="false">
+
+    <dubbo:protocol name="${wy-coreservice-fee.dubbo.protocol.name}"
+                    port="${wy-coreservice-fee.dubbo.protocol.port}"/>
+
+    <dubbo:application name="${wy-coreservice-fee.dubbo.application.name}" />
+
+    <dubbo:registry address="${wy-coreservice-fee.dubbo.registry.address}" check="false" protocol="zookeeper" file="${catalina.home}/dubbo-registry/dubbo-registry.properties"/>
+
+    <dubbo:annotation package="com.everwing.coreservice.wy.fee.core.service.impl"/>
+
+    <dubbo:service interface="com.everwing.coreservice.common.wy.fee.service.AcWxBindingService"
+                   ref="acWxBindingServiceImpl"/>
+</beans>

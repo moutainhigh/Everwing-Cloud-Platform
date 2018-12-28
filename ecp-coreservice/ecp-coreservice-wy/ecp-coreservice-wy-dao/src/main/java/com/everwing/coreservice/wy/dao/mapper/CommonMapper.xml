@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.CommonMapper">
+    <resultMap id="ListResultCustMap" type="CustomerList">
+        <result column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="cust_from" property="custFrom" jdbcType="VARCHAR"/>
+        <result column="card_type_name" property="cardTypeName" jdbcType="VARCHAR"/>
+        <result column="card_num" property="cardNum" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="ListResultBuildingMap" type="TcBuildingList">
+        <result column="project_id" property="projectId" jdbcType="VARCHAR" />
+        <result column="project_name" property="projectName" jdbcType="VARCHAR" />
+        <result column="id" property="id" jdbcType="VARCHAR" />
+        <result column="building_code" property="buildingCode" jdbcType="VARCHAR" />
+        <result property="buildingArea" column="building_area"/>
+        <result property="usableArea" column="usable_area"/>
+        <result column="building_full_name" property="buildingFullName" jdbcType="VARCHAR" />
+        <result column="building_type_name" property="buildingTypeName" jdbcType="VARCHAR" />
+    </resultMap>
+
+
+    <resultMap id="CustomerSelectListMap" type="CustomerSelectList">
+        <result column="id" property="customerId"/>
+        <result column="customer_name" property="customerName"/>
+    </resultMap>
+
+    <resultMap id="AssetSelectListMap" type="AssetSelectList">
+        <result column="house_code" property="houseCode"/>
+        <result column="house_code_new" property="houseCodeNew"/>
+        <result column="building_full_name" property="buildingFullName"/>
+        <result column="property_addr" property="assetAddress"/>
+        <result column="building_area" property="buildingArea"/>
+        <result column="usable_area" property="usableArea"/>
+    </resultMap>
+
+    <resultMap id="VehicleSelectListMap" type="VehicleSelectList">
+        <result column="vehicle_number" property="vehicleNumber"/>
+    </resultMap>
+
+    <!-- 分页查询客户信息 -->
+    <select id="listPageCustomer" resultMap="ListResultCustMap" parameterType="CustomerSearch">
+        SELECT * FROM
+        (
+            SELECT
+                DISTINCT
+                pc.cust_id AS id,
+                pc.`name` AS name,
+                (SELECT li.`name` FROM t_sys_lookup_item li WHERE li.parent_code = 'documentType' AND li.`code` = pc.card_type) AS card_type_name,
+                pc.card_num,
+                'person' AS cust_from,
+                pc.project_id,
+                pc.register_phone AS phone
+            FROM tc_person_cust pc
+            UNION
+            SELECT
+                DISTINCT
+                ec.enterprise_id AS id,
+                ec.enterprise_name AS name,
+                '企业资质证书' AS card_type_name,
+                ec.trading_number AS card_num,
+                'enterprise' AS cust_from,
+                ec.project_id,
+                ec.office_phone AS phone
+            FROM tc_enterprise_cust ec
+        )t WHERE 1=1
+        <if test="name != null and name != ''">
+            AND t.name LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test="projectCode != null and projectCode != ''">
+            AND t.project_id =#{projectCode}
+        </if>
+        <if test="customerType != null and customerType != ''">
+            AND t.cust_from =#{customerType}
+        </if>
+        ORDER BY cust_from DESC,name ASC
+    </select>
+
+
+
+
+    <!-- 分页查询资产信息 -->
+    <select id="listPageBuilding" resultMap="ListResultBuildingMap" parameterType="TcBuildingSearch">
+        SELECT
+            b.project_id,
+            p.`name` AS project_name,
+            b.id,
+            b.building_code,
+            b.building_full_name,
+            b.building_area,
+            b.usable_area,
+            (SELECT li.`name` FROM t_sys_lookup_item li WHERE li.parent_code = 'buildingType' AND li.`code` = b.building_type) as building_type_name
+        FROM
+            tc_building b,
+            t_sys_project p
+        WHERE
+            b.project_id = p.`code`
+        <if test="buildingTypeList != null">
+            AND b.building_type IN
+            <foreach collection="buildingTypeList" item="item" index="index" open="(" close=")" separator=",">
+                '${item}'
+            </foreach>
+        </if>
+        <if test="projectName != null and projectName != ''">
+            AND p.name  LIKE CONCAT('%',#{projectName},'%')
+        </if>
+        <if test="buildingFullName != null and buildingFullName != ''">
+            AND b.building_full_name LIKE CONCAT('%',#{buildingFullName},'%')
+        </if>
+        <if test="customerType == 'person'">
+            AND b.id IN(SELECT pb.building_id FROM tc_person_building pb WHERE pb.cust_id= #{customerId})
+        </if>
+        <if test="customerType == 'enterprise'">
+            AND b.id IN(SELECT pb.building_id FROM tc_person_building pb WHERE pb.enterprise_id=#{customerId}))
+        </if>
+
+        ORDER BY
+            b.project_id,
+            b.building_full_name
+    </select>
+    
+     <select id="listPageAgentCode" resultType="map" resultMap="com.everwing.coreservice.wy.dao.mapper.other.TcAgentCodeMapper.BaseResultMap">
+		SELECT * FROM tc_agent_code ac
+		<where>
+			<if test="@com.everwing.coreservice.common.utils.CommonUtils@notBlank(agentCode)">
+	            AND ac.agent_code = #{agentCode}
+	        </if>
+		</where>
+		ORDER BY ac.create_time DESC
+    </select>
+    
+    
+    <!-- 按条件分页列出客服账号 -->
+    <select id="listPageCC" resultType="map" parameterType="com.everwing.coreservice.common.wy.entity.other.AgentCodeSearch">
+		SELECT
+			u1.user_id userId,
+			u1.login_name loginName,
+			u1.staff_name staffName,
+			r1.role_name roleName,
+			ac.agent_code_id agentCodeId,
+			ac.agent_code agentCode
+		FROM
+			t_sys_organization o1
+		JOIN t_sys_user u1 ON o1.`code` = u1.staff_number
+		JOIN t_sys_organization op ON o1.pid = op.organization_id
+		JOIN t_sys_role r1 ON op.`code` = r1.role_id
+		LEFT JOIN tc_agent_code_and_sys_user ac_su ON u1.user_id = ac_su.sys_user_id
+		LEFT JOIN tc_agent_code ac ON ac_su.agent_code_id = ac.agent_code_id
+		<where>
+				o1.pid IN (
+					SELECT
+						o.organization_id
+					FROM
+						t_sys_role r
+					JOIN t_sys_organization o ON o.`code` = r.role_id
+					WHERE
+						o.type = 'role'
+					AND r.role_name LIKE '客服%'
+				)
+			<if test="@com.everwing.coreservice.common.utils.CommonUtils@notBlank(loginName)">
+	            AND u1.login_name LIKE CONCAT('%',#{loginName},'%')
+	        </if>
+			<if test="@com.everwing.coreservice.common.utils.CommonUtils@notBlank(agentCode)">
+	            AND ac.agent_code LIKE CONCAT('%',#{agentCode},'%')
+	        </if>
+			<if test="@com.everwing.coreservice.common.utils.CommonUtils@notBlank(staffName)">
+	            AND u1.staff_name LIKE CONCAT('%',#{staffName},'%')
+	        </if>
+		</where>
+		ORDER BY op.create_time DESC,u1.create_time DESC
+    </select>
+    
+    <select id="sumDepositByCust" resultType="java.math.BigDecimal" >
+		SELECT IFNULL(SUM(t.total_amount),0) FROM t_deposit t
+		<where>
+			<foreach collection="personCustList" item="personCust"  separator="or">
+				(t.status = 'draft'
+                <if test="personCust.name != null and personCust.name != ''">
+					AND t.deposit_person LIKE '%${personCust.name}%'
+				</if>
+				<if test="personCust.registerPhone != null and personCust.registerPhone != ''">
+					AND t.deposit_person LIKE '%${personCust.registerPhone}%' 
+				</if>)
+	        </foreach>
+	        <foreach collection="entCustList" item="entCust"   separator="or">
+				(t.status = 'draft'
+				<if test="entCust.enterpriseName != null and entCust.enterpriseName != ''">
+					AND t.deposit_person LIKE '%${entCust.enterpriseName}%' 
+				</if>
+				<if test="entCust.officePhone != null and entCust.officePhone != ''">
+					AND t.deposit_person LIKE '%${entCust.officePhone}%' 
+				</if>)
+	        </foreach>
+		</where>
+	</select>
+    
+    <select id="getPersonCustById" resultMap="com.everwing.coreservice.wy.dao.mapper.cust.person.PersonCustNewMapper.BaseResultMap">
+		 SELECT * FROM tc_person_cust pc WHERE pc.cust_id=#{custId}
+	</select>
+    
+    <select id="getEntCustById" resultMap="com.everwing.coreservice.wy.dao.mapper.cust.enterprisecust.EnterpriseCustNewMapper.BaseResultMap">
+		 SELECT * FROM tc_enterprise_cust ec WHERE ec.enterprise_id=#{entId}
+	</select>
+    <select id="selectJsonListByBuildingCode" resultType="java.lang.String">
+        SELECT od.product_common
+        FROM t_deposit d LEFT JOIN t_product_order o ON d.order_batch_no = o.batch_no
+        LEFT JOIN t_product_order_detail od ON o.id=od.order_id
+        WHERE product_common LIKE CONCAT('%',#{buildingCode},'%') ;
+    </select>
+
+
+
+    <!-- 公共组件：客户下拉选择框 -->
+    <select id="findCustomerSelect" parameterType="CustomerSelectSearch" resultMap="CustomerSelectListMap">
+        <if test="customerType == 'person'">
+            SELECT pc.cust_id AS id,pc.name AS customer_name  FROM tc_person_cust pc WHERE 1=1
+            <if test="name != null and name != ''">
+                AND pc.name LIKE CONCAT(#{name},'%')
+            </if>
+            <if test="idCard != null and idCard != ''">
+                OR pc.card_num LIKE CONCAT(#{idCard},'%')
+            </if>
+            <if test="registerPhone != null and registerPhone != ''">
+                OR pc.register_phone LIKE CONCAT(#{registerPhone},'%')
+            </if>
+            LIMIT 0,10
+        </if>
+        <if test="customerType == 'enterprise'">
+            SELECT ec.enterprise_id AS id,ec.enterprise_name AS customer_name FROM tc_enterprise_cust ec WHERE 1=1
+            <if test="name != null and name != ''">
+                AND ec.enterprise_name LIKE CONCAT(#{name},'%')
+            </if>
+            <if test="officePhone != null and officePhone != ''">
+                OR ec.office_phone LIKE CONCAT(#{officePhone},'%')
+            </if>
+            LIMIT 0,10
+        </if>
+        <if test="customerType == null or customerType == ''">
+            SELECT pc.cust_id AS id,pc.`name` AS customer_name  FROM tc_person_cust pc WHERE 1=1
+            <if test="name != null and name != ''">
+                AND pc.name LIKE CONCAT(#{name},'%')
+            </if>
+            <if test="idCard != null and idCard != ''">
+                OR pc.card_num LIKE CONCAT(#{idCard},'%')
+            </if>
+            <if test="registerPhone != null and registerPhone != ''">
+                OR pc.register_phone LIKE CONCAT(#{registerPhone},'%')
+            </if>
+
+            UNION ALL
+
+            SELECT ec.enterprise_id AS id,ec.enterprise_name AS customer_name FROM tc_enterprise_cust ec WHERE 1=1
+            <if test="name != null and name != ''">
+                AND ec.enterprise_name LIKE CONCAT(#{name},'%')
+            </if>
+            <if test="officePhone != null and officePhone != ''">
+                OR ec.office_phone LIKE CONCAT(#{officePhone},'%')
+            </if>
+            LIMIT 0,10
+        </if>
+    </select>
+
+
+    <!-- 公共组件：资产下拉选择框 -->
+    <select id="findAssetSelect" parameterType="AssetSelectSearch" resultMap="AssetSelectListMap">
+        SELECT
+            b.house_code,
+            b.house_code_new,
+            b.building_full_name,
+            b.property_addr,
+            b.building_area,
+            b.usable_area
+        FROM
+            tc_building b,tc_person_building pb
+        WHERE 1=1
+        AND b.id = pb.building_id
+        AND b.building_type IN('house','store','parkspace')
+        <if test="customerId != null and customerId != ''">
+            AND (pb.cust_id = #{customerId} OR pb.enterprise_id = #{customerId})
+        </if>
+
+        <if test="houseCode != null and houseCode != ''">
+            AND
+            (
+                b.house_code LIKE CONCAT(#{houseCode},'%')
+                <if test="houseCodeNew != null and houseCodeNew != ''">
+                    OR b.house_code_new LIKE CONCAT(#{houseCodeNew},'%')
+                </if>
+                <if test="name != null and name != ''">
+                    OR b.building_full_name LIKE CONCAT(#{name},'%')
+                </if>
+            )
+        </if>
+        <if test="houseCodeNew != null and houseCodeNew != ''">
+            AND
+            (
+                b.house_code_new LIKE CONCAT(#{houseCodeNew},'%')
+                <if test="name != null and name != ''">
+                    OR b.building_full_name LIKE CONCAT(#{name},'%')
+                </if>
+            )
+        </if>
+        <if test="name != null and name != ''">
+            AND b.building_full_name LIKE CONCAT(#{name},'%')
+        </if>
+        LIMIT 0,10
+    </select>
+
+    <!-- 公共组件：车辆下拉选择框 -->
+    <select id="findVehicleSelect" parameterType="VehicleSelectSearch" resultMap="VehicleSelectListMap">
+        SELECT vehicle_number FROM t_vehicle t WHERE 1=1
+        <if test="customerId != null and customerId != ''">
+            AND t.customer_id = #{customerId}
+        </if>
+    </select>
+</mapper>

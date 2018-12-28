@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.charge.dao.mapper.TJfAssetsChargingDetailInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.charging.entity.TJfAssetsChargingDetailInfo" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="charging_total_id" property="chargingTotalId" jdbcType="VARCHAR" />
+    <result column="charging_type" property="chargingType" jdbcType="INTEGER" />
+    <result column="house_code" property="houseCode" jdbcType="VARCHAR" />
+    <result column="building_name" property="buildingName" jdbcType="VARCHAR" />
+    <result column="current_charging_fee" property="currentChargingFee" jdbcType="DECIMAL" />
+    <result column="last_charging_id" property="lastChargingId" jdbcType="VARCHAR" />
+    <result column="charging_status" property="chargingStatus" jdbcType="INTEGER" />
+    <result column="charging_detail" property="chargingDetail" jdbcType="VARCHAR" />
+    <result column="audit_status" property="auditStatus" jdbcType="INTEGER" />
+    <result column="deductible_status" property="deductibleStatus" jdbcType="INTEGER" />
+    <result column="charging_time" property="chargingTime" jdbcType="TIMESTAMP" />
+    <result column="is_create_bill" property="isCreateBill" jdbcType="INTEGER" />
+    <result column="current_share_fee" property="currentShareFee" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_od" property="createOd" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_jf_assets_charging_detail_info
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.everwing.coreservice.common.wy.charging.entity.TJfAssetsChargingDetailInfo" >
+    <selectKey resultType="java.lang.String" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_jf_assets_charging_detail_info (charging_total_id, charging_type, house_code, 
+      building_name, current_charging_fee, last_charging_id, 
+      charging_status, charging_detail, audit_status, 
+      deductible_status, charging_time, is_create_bill, 
+      current_share_fee, create_time, create_od
+      )
+    values (#{chargingTotalId,jdbcType=VARCHAR}, #{chargingType,jdbcType=INTEGER}, #{houseCode,jdbcType=VARCHAR}, 
+      #{buildingName,jdbcType=VARCHAR}, #{currentChargingFee,jdbcType=DECIMAL}, #{lastChargingId,jdbcType=VARCHAR}, 
+      #{chargingStatus,jdbcType=INTEGER}, #{chargingDetail,jdbcType=VARCHAR}, #{auditStatus,jdbcType=INTEGER}, 
+      #{deductibleStatus,jdbcType=INTEGER}, #{chargingTime,jdbcType=TIMESTAMP}, #{isCreateBill,jdbcType=INTEGER}, 
+      #{currentShareFee,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, #{createOd,jdbcType=VARCHAR}
+      )
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="com.everwing.coreservice.common.wy.charging.entity.TJfAssetsChargingDetailInfo" >
+    update t_jf_assets_charging_detail_info
+    set charging_total_id = #{chargingTotalId,jdbcType=VARCHAR},
+      charging_type = #{chargingType,jdbcType=INTEGER},
+      house_code = #{houseCode,jdbcType=VARCHAR},
+      building_name = #{buildingName,jdbcType=VARCHAR},
+      current_charging_fee = #{currentChargingFee,jdbcType=DECIMAL},
+      last_charging_id = #{lastChargingId,jdbcType=VARCHAR},
+      charging_status = #{chargingStatus,jdbcType=INTEGER},
+      charging_detail = #{chargingDetail,jdbcType=VARCHAR},
+      audit_status = #{auditStatus,jdbcType=INTEGER},
+      deductible_status = #{deductibleStatus,jdbcType=INTEGER},
+      charging_time = #{chargingTime,jdbcType=TIMESTAMP},
+      is_create_bill = #{isCreateBill,jdbcType=INTEGER},
+      current_share_fee = #{currentShareFee,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_od = #{createOd,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select id, charging_total_id, charging_type, house_code, building_name, current_charging_fee, 
+    last_charging_id, charging_status, charging_detail, audit_status, deductible_status, 
+    charging_time, is_create_bill, current_share_fee, create_time, create_od
+    from t_jf_assets_charging_detail_info
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, charging_total_id, charging_type, house_code, building_name, current_charging_fee, 
+    last_charging_id, charging_status, charging_detail, audit_status, deductible_status, 
+    charging_time, is_create_bill, current_share_fee, create_time, create_od
+    from t_jf_assets_charging_detail_info
+  </select>
+</mapper>

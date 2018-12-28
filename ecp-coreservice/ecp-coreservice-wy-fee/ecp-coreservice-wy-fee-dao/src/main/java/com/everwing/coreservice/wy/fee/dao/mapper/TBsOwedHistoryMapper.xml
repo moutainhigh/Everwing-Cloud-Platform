@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.fee.dao.mapper.TBsOwedHistoryMapper">
+	<resultMap type="com.everwing.coreservice.common.wy.entity.configuration.owed.TBsOwedHistory" id="BaseResultMap">
+		<result property="id" column="id" jdbcType="VARCHAR"/>
+		<result property="projectId" column="project_id" jdbcType="VARCHAR"/>
+		<result property="owedAmount" column="owed_amount" jdbcType="DOUBLE"/>
+		<result property="accountId" column="account_id" jdbcType="VARCHAR"/>
+		<result property="owedTime" column="owed_time" jdbcType="TIMESTAMP"/>
+		<result property="owedEndTime" column="owed_end_time" jdbcType="TIMESTAMP"/>
+		<result property="isUsed" column="is_used" jdbcType="TINYINT"/>
+		<result property="totalLateFee" column="total_late_fee" jdbcType="DOUBLE"/>
+		<result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+		<result property="createId" column="create_id" jdbcType="VARCHAR"/>
+		<result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+		<result property="modifyId" column="modify_id" jdbcType="VARCHAR"/>
+	</resultMap>
+
+
+	<update id="update" parameterType="com.everwing.coreservice.common.wy.entity.configuration.owed.TBsOwedHistory">
+		update t_bs_owed_history
+		<set>
+			<if test="null != projectId">
+				project_id = #{projectId},
+			</if>
+			<if test="null != owedAmount">
+				owed_amount = #{owedAmount},
+			</if>
+			<if test="null != accountId">
+				account_id = #{accountId},
+			</if>
+			<if test="null != owedTime">
+				owed_time = #{owedTime},
+			</if>
+			<if test="null != owedEndTime">
+				owed_end_time = #{owedEndTime},
+			</if>
+			<if test="null == owedEndTime">
+				owed_end_time = null,
+			</if>
+			<if test="null != isUsed">
+				is_used = #{isUsed},
+			</if>
+			<if test="null != totalLateFee">
+				total_late_fee = #{totalLateFee},
+			</if>
+			<if test="null != modifyId">
+				modify_id = #{modifyId},
+			</if>
+			modify_time = sysdate()
+		</set>
+		where id = #{id}
+	</update>
+	<select id="findAllByAccountId" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select *
+		from t_bs_owed_history
+		where account_id = #{0}
+		and is_used = 0
+		order by create_time asc
+	</select>
+</mapper>

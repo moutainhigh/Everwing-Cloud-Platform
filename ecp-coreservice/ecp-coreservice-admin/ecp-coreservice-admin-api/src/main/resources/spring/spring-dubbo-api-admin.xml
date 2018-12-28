@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+
+
+
+
+	http://code.alibabatech.com/schema/dubbo
+	http://code.alibabatech.com/schema/dubbo/dubbo.xsd"
+       default-lazy-init="false">
+
+	<dubbo:registry address="${admin-api.dubbo.registry.address}" protocol="zookeeper"  file="${catalina.home}/dubbo-registry/dubbo-registry.properties"/>
+
+	<dubbo:reference id="adminTest"
+		interface="com.everwing.coreservice.common.admin.service.AdminTest" check="false" />
+
+	<dubbo:reference id="commonAdminService"
+		interface="com.everwing.coreservice.common.admin.service.CommonAdminService" check="false" />
+
+	<dubbo:reference id="uploadFileService"
+		interface="com.everwing.coreservice.common.admin.service.UploadFileService" check="false" />
+
+	<!-- <dubbo:reference id="companyService"
+		interface="com.everwing.coreservice.common.admin.service.CompanyService" check="false" /> -->
+
+</beans>

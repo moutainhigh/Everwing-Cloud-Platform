@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.sys.TSysRoleMapper" >
+  	<resultMap id="BaseResultMap" type="TSysRole" >
+		<id column="role_id" property="roleId"/>
+		<result column="code" property="code"/>
+	    <result column="role_name" property="roleName"/>
+	    <result column="role_desc" property="roleDesc"/>
+	    <result column="status" property="status"/>
+		<result property="createrId" column="creater_id"/>
+		<result property="createrName" column="creater_name"/>
+		<result property="createTime" column="create_time"/>
+		<result property="modifyId" column="modify_id"/>
+		<result property="modifyName" column="modify_name"/>
+		<result property="modifyTime" column="modify_time"/>
+  	</resultMap>
+  
+  	<resultMap id="ListResultMap" type="TSysRoleList" extends="BaseResultMap">
+		<result column="status_name" property="statusName"/>
+  	</resultMap>
+  	
+  	<resultMap id="MenuTreeMap" type="TSysMenuTree" >
+	    <result column="menu_id" property="menuId"/>
+	    <result column="menu_name" property="menuName"/>
+	    <result column="pid" property="pId"/>
+	    <result column="menu_desc" property="menuDesc"/>
+	    <result column="menu_level" property="menuLevel"/>
+	    <result column="checked" property="checked"/>
+	    <result column="nocheck" property="nocheck"/>
+  	</resultMap>
+  	
+  	<resultMap id="ResourceTreeMap" type="ResourceTreeMap" >
+	    <result column="src_id" property="srcId"/>
+	    <result column="src_name" property="srcName"/>
+	    <result column="src_desc" property="srcDesc"/>
+	    <result column="menu_id" property="menuId"/>
+	    <result column="checked" property="checked"/>
+	    <result column="nocheck" property="nocheck"/>
+  	</resultMap>
+  
+  
+   	<!-- 查询角色列表 -->
+  	<select id="listPageRole" parameterType="TSysRoleSearch" resultMap="ListResultMap">
+		SELECT
+			t.role_id,
+			t.code,
+			t.role_name,
+			t.role_desc,
+			t.`status`,
+			(SELECT li.`name` FROM t_sys_lookup l,t_sys_lookup_item li WHERE l.`code` = li.parent_code and l.`code` = '${@com.everwing.coreservice.common.wy.common.enums.LookupEnum@enableDisable.name()}' AND li.`code` = t.status) as status_name,
+			t.creater_id,
+			t.creater_name,
+			t.create_time,
+			t.modify_id,
+			t.modify_name,
+			t.modify_time
+		FROM t_sys_role t WHERE 1=1
+		<if test="roleIdList != null">
+			AND t.role_id IN
+			<foreach collection="roleIdList" item="item" index="index" open="(" close=")" separator=",">
+				'${item}'
+			</foreach>
+		</if>
+		<if test="code != null and code !=  ''">
+			AND t.code = #{code}
+		</if>
+		ORDER BY t.role_name
+  	</select>
+  
+  	<select id="findByCondition" parameterType="TSysRoleSearch" resultMap="ListResultMap">
+  		select 
+			t.role_id,
+			t.code,
+			t.role_name,
+			t.role_desc,
+			t.`status`,
+			(SELECT li.`name` FROM t_sys_lookup l,t_sys_lookup_item li WHERE l.`code` = li.parent_code and l.`code` = '${@com.everwing.coreservice.common.wy.common.enums.LookupEnum@enableDisable.name()}' AND li.`code` = t.status) as status_name,
+			t.creater_id,
+			t.creater_name,
+			t.create_time,
+			t.modify_id,
+		  	t.modify_name,
+		  	t.modify_time
+		from t_sys_role t where 1=1
+  		<if test="null != roleName">
+  			and role_name = #{roleName}
+  		</if>
+  		<if test="null != roleId">
+  			and role_id = #{roleId}
+  		</if>
+		<if test="null != code">
+			and code = #{code}
+		</if>
+		ORDER BY t.role_name
+  	</select>
+  
+  	<insert id="insert" parameterType="TSysRole" >
+    	insert into t_sys_role
+		(
+			role_id,
+			code,
+			role_name,
+			role_desc,
+			status,
+			creater_id,
+			creater_name,
+			create_time
+		)
+    	values
+		(
+			#{roleId},
+			#{code},
+			#{roleName},
+			#{roleDesc},
+			#{status},
+			#{createrId},
+			#{createrName},
+			sysdate()
+		)
+  	</insert>
+  
+  	<update id="modify" parameterType="TSysRole">
+  		update t_sys_role 
+  			<set>
+  				<if test="roleName != null">
+  					role_name = #{roleName},
+  				</if>
+  				<if test="roleDesc != null">
+  					role_desc = #{roleDesc},
+  				</if>
+  				<if test="modifyId != null">
+  					modify_id = #{modifyId},
+  				</if>
+  				<if test="status != null">
+  					status = #{status},
+  				</if>
+  				modify_time = sysdate()
+  			</set>
+  		where role_name != 'su_admin' and role_id = #{roleId}
+  	</update>
+	
+  
+	<delete id="deleteRoleByRoleIds" parameterType="java.util.List">
+		<![CDATA[  
+	       delete from t_sys_role where role_name != 'su_admin' and role_id in
+	    ]]>  
+	    <foreach collection="list" item = "roleId" open="(" separator="," close=")">
+	  		#{roleId }  
+	    </foreach> 
+	</delete>
+	
+	<!-- 获取菜单树 -->
+  	<select id="findMenuTreeByRoleId" parameterType="String" resultMap="MenuTreeMap">
+		SELECT
+			DISTINCT
+			m.menu_id,
+			m.menu_name,
+			m.menu_desc,
+			m.menu_level,
+			m.pid,
+			IF(toRole.src_id IS NULL,'false','true') AS checked
+		FROM t_sys_menu m
+		LEFT JOIN (SELECT srs.src_id FROM t_sys_role_resource srs WHERE srs.src_type='m' AND srs.role_id = #{0}) toRole
+		ON m.menu_id = toRole.src_id
+		WHERE m.menu_permission != 'anon'
+		ORDER BY m.menu_order ASC
+	</select>
+	
+	<!-- 获取资源树 -->
+  	<select id="findResourceTreeByRoleId" parameterType="String" resultMap="ResourceTreeMap">
+		SELECT
+			DISTINCT
+			r.src_id,
+			r.src_name,
+			r.src_desc,
+			r.menu_id,
+			IF(toRole.src_id IS NULL,'false','true') AS checked
+		FROM t_sys_resource r
+		LEFT JOIN (SELECT srs.src_id FROM t_sys_role_resource srs WHERE srs.src_type='r' AND srs.role_id = #{0}) toRole
+		ON r.src_id = toRole.src_id
+		WHERE r.src_permission != 'anon'
+		ORDER BY r.src_name ASC
+	</select>
+</mapper>

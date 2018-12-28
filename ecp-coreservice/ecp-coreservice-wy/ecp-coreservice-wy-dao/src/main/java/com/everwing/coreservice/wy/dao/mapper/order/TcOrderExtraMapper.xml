@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.order.TcOrderExtraMapper">
+  <resultMap type="java.util.Map" id="OrderResultMap" extends="com.everwing.coreservice.wy.dao.mapper.order.TcOrderMapper.BaseResultMap"></resultMap>
+    <update id="updatePrinciplePersonByOrderCode">
+		UPDATE tc_order SET
+			update_time=now(),
+			<if test="principalSysUserId!=null">
+				principal_sys_user_id=#{principalSysUserId},
+			</if>
+		    <if test="callbackContent!=null">
+				callback_content=#{callbackContent},
+			</if>
+			update_by=#{updateBy}
+		WHERE order_code=#{orderCode}
+	</update>
+
+    <select id="listPageDatas" resultMap="OrderResultMap">
+	SELECT
+		o.*, 
+		b.building_full_name AS buildingFullName,
+		pc.register_phone AS custPhoneNum,
+		pc.`name` AS custName,
+		su.staff_name AS principalName,
+	    csu.staff_name AS createUser,
+		ot1.`name` AS typeName1,
+		ot2.`name` AS typeName2,
+		ot3.`name` AS typeName3
+	FROM
+		tc_order o
+	left JOIN tc_order_type ot1 ON o.order_type_id_1 = ot1.tc_order_type_id
+	left JOIN tc_order_type ot2 ON o.order_type_id_2 = ot2.tc_order_type_id
+	left JOIN tc_order_type ot3 ON o.order_type_id_3 = ot3.tc_order_type_id
+	left JOIN tc_building b ON o.building_code = b.building_code
+	left JOIN tc_person_cust pc ON pc.cust_id = o.cust_id
+	left JOIN t_sys_user su ON o.principal_sys_user_id = su.user_id
+	left JOIN t_sys_user csu on o.create_by=csu.user_id
+	<where>
+		<if test="null != buildingCode">
+			and o.building_code = #{buildingCode}
+		</if>
+		<if test="null != projectId">
+			and b.project_id = #{projectId}
+		</if>
+		<if test="null != custId">
+			and o.cust_id = #{custId}
+		</if>
+		<if test="null != orderTypeId1">
+			and o.order_type_id_1 = #{orderTypeId1}
+		</if>
+		<if test="null != searchDataProjectId">
+			and b.project_id = #{searchDataProjectId}
+		</if>
+		<if test="null != status">
+			and o.status = #{status}
+		</if>
+		<if test="null != searchDataStartTime and null != searchDataEndTime">
+			and (o.create_time &gt;= #{searchDataStartTime} and o.create_time &lt;= #{searchDataEndTime})
+		</if>
+		<if test="null != description">
+			and o.description like CONCAT("%",TRIM(#{description}),"%")
+		</if>
+		<if test="null != registerPhone">
+			AND pc.register_phone like CONCAT("%",TRIM(#{registerPhone}),"%")
+		</if>
+		<if test="null != houseCode">
+			AND b.house_code = #{hoseCode}
+		</if>
+		<if test="null != createBy">
+			AND csu.user_id = #{createBy}
+		</if>
+		<if test="null != deptId">
+			AND su.staff_number in (SELECT code FROM t_sys_organization WHERE pid in (
+			SELECT organization_id FROM t_sys_organization WHERE pid=#{deptId}))
+		</if>
+	</where>
+	ORDER BY o.create_time desc
+
+  </select>
+</mapper>

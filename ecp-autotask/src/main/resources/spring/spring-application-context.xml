@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/context      http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/beans      http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/tx      http://www.springframework.org/schema/tx/spring-tx.xsd
+
+
+
+    http://www.springframework.org/schema/aop      http://www.springframework.org/schema/aop/spring-aop.xsd
+
+    http://code.alibabatech.com/schema/dubbo    http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <context:component-scan base-package="com.everwing.autotask.core"/>
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <array>
+                <value>file:/app/server/autotask/config.properties</value>
+                <value>file:/app/server/autotask/mq-config.properties</value>
+                <value>file:/app/server/autotask/thread-pool.properties</value>
+                <value>file:/app/server/autotask/xxl-job-executor.properties</value>
+            </array>
+        </property>
+        <property name="ignoreResourceNotFound" value="true"/>
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+        <property name="properties" ref="defaultWyServerServiceProperties"/>
+    </bean>
+
+    <bean name="defaultWyServerServiceProperties"
+          class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <array>
+                <value>classpath:config/config.properties</value>
+                <value>classpath:config/mq-config.properties</value>
+                <value>classpath:config/thread-pool.properties</value>
+                <value>classpath:xxl-job-executor.properties</value>
+            </array>
+        </property>
+    </bean>
+
+    <bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          init-method="init" destroy-method="close">
+        <property name="driverClassName" value="" />
+        <property name="url" value="${db_url}" />
+        <property name="username" value="${db_username}" />
+        <property name="password" value="${db_password}" />
+        <property name="initialSize" value="10" />
+        <property name="maxActive" value="20" />
+        <property name="minIdle" value="1" />
+        <property name="maxWait" value="60000" />
+        <property name="poolPreparedStatements" value="true" />
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="33" />
+        <property name="validationQuery" value="select 1" />
+        <property name="testOnBorrow" value="false" />
+        <property name="testOnReturn" value="false" />
+        <property name="testWhileIdle" value="true" />
+        <property name="timeBetweenEvictionRunsMillis" value="60000" />
+        <property name="minEvictableIdleTimeMillis" value="25200000" />
+        <property name="removeAbandoned" value="true" />
+        <property name="removeAbandonedTimeout" value="1800" />
+        <property name="logAbandoned" value="true" />
+        <property name="useGlobalDataSourceStat" value="true" />
+        <property name="filters" value="stat,wall,log4j2" />
+        <property name="connectionProperties" value="druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000" />
+        <property name="proxyFilters">
+            <list>
+                <ref bean="wall-filter"/>
+            </list>
+        </property>
+    </bean>
+    <bean id="wall-filter" class="com.alibaba.druid.wall.WallFilter">
+        <property name="config" ref="wall-config" />
+    </bean>
+
+    <bean id="wall-config" class="com.alibaba.druid.wall.WallConfig">
+        <property name="multiStatementAllow" value="true" />
+        <property name="noneBaseStatementAllow" value="true" />
+    </bean>
+
+    <bean id="druid-stat-interceptor"
+          class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor">
+    </bean>
+
+    <bean id="druid-stat-pointcut" class="org.springframework.aop.support.JdkRegexpMethodPointcut"
+          scope="prototype">
+        <property name="patterns">
+            <list>
+                <value>com.everwing.autotask.core.service.*</value>
+                <value>com.everwing.autotask.core.dao.*</value>
+            </list>
+        </property>
+    </bean>
+
+    <aop:config>
+        <aop:advisor advice-ref="druid-stat-interceptor" pointcut-ref="druid-stat-pointcut"/>
+    </aop:config>
+
+    <bean id="dynamicDataSource" class="com.everwing.autotask.core.datasource.MultipleDataSource">
+        <property name="defaultTargetDataSource" ref="dataSource"></property>
+        <property name="targetDataSources">
+            <map></map>
+        </property>
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="configLocation" value="classpath:mybatis/mybatis.xml" />
+        <property name="dataSource" ref="dynamicDataSource" />
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.everwing.autotask.core.dao" />
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+    </bean>
+
+    <bean name="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dynamicDataSource"/>
+        <property name="globalRollbackOnParticipationFailure" value="false" />
+    </bean>
+
+	<!-- 6, 配置通知-->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<!-- 所有以query开头的方法是只读的 -->
+			<tx:method name="query*" read-only="true"/>
+			<tx:method name="select*" read-only="true"/>
+			<tx:method name="list*" read-only="true"/>
+			<!-- 其他方法使用默认的事务设置 -->
+			<tx:method name="*" />
+		</tx:attributes>
+	</tx:advice>
+
+	<!-- 7, 启用以上的事务通知-->
+	<aop:config>
+		<!-- 运行被定义在Impl包下的任意方法 -->
+		<aop:pointcut expression="execution(* com.everwing.autotask.core.service.impl.*.*(..))" id="aopCut"/>
+		<!-- 将切入点与通知编织在一起 -->
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="aopCut"/>
+	</aop:config>
+
+	<tx:annotation-driven  transaction-manager="transactionManager" />
+    
+    
+    <aop:aspectj-autoproxy proxy-target-class="true" />
+    <context:annotation-config />
+    <import resource="classpath:spring/spring-application-redis.xml" />
+    <import resource="spring-job.xml" />
+    <import resource="spring-rabbitmq.xml" />
+    <import resource="spring-mvc.xml" />
+    <bean class="com.everwing.coreservice.common.utils.SpringContextHolder" lazy-init="false" />
+    <import resource="classpath:spring/spring-thread-pool.xml"/>
+</beans>

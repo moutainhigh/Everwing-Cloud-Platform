@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.coreservice.wy.fee.dao.mapper.ProjectFineDetailMapper">
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.fee.entity.ProjectFineDetail">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="project_account_id" jdbcType="VARCHAR" property="projectAccountId" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="business_opera_detail_id" jdbcType="VARCHAR" property="businessOperaDetailId" />
+  </resultMap>
+
+  <resultMap id="hasScheduleInfoResultMap" extends="BaseResultMap" type="com.everwing.coreservice.common.wy.fee.entity.AccountAddFineDetailParameter">
+
+    <result column="countId" jdbcType="INTEGER" property="countId" />
+    <result column="accountMoney" jdbcType="DECIMAL" property="accountMoney" />
+
+
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, project_account_id, amount, create_time, create_by, order_id, business_opera_detail_id
+  </sql>
+
+  <select id="listPageSelectProjectFineDetail"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_project_fine_detail
+    where project_account_id = (
+    select id from t_project_account
+    where  company_id=#{companyId} and project_id=#{projectId}
+    )
+  <if test="startTime != null and startTime != ''">
+    AND  DATE_FORMAT(#{startTime},'%Y-%m-%d %H:%i:%S') <![CDATA[ <= ]]>  DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%S')
+  </if>
+  <if test="endTime != null and endTime != ''">
+    AND  DATE_FORMAT(#{endTime},'%Y-%m-%d %H:%i:%S') <![CDATA[ >= ]]>  DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%S')
+  </if>
+
+  </select>
+
+
+  <select id="countProjectFineDetail"  resultMap="hasScheduleInfoResultMap">
+    select  count(id)countId ,ifnull(sum(amount),0)accountMoney from t_project_fine_detail
+    where project_account_id = (
+    select id from t_project_account
+    where  company_id=#{companyId} and project_id=#{projectId}
+    )
+    <if test="startTime != null and startTime != ''">
+      AND  DATE_FORMAT(#{startTime},'%Y-%m-%d %H:%i:%S') <![CDATA[ <= ]]>  DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%S')
+    </if>
+    <if test="endTime != null and endTime != ''">
+      AND  DATE_FORMAT(#{endTime},'%Y-%m-%d %H:%i:%S') <![CDATA[ >= ]]>  DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%S')
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  select
+    <include refid="Base_Column_List" />
+    from t_project_fine_detail
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_project_fine_detail
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="ProjectFineDetail">
+    insert into t_project_fine_detail (id, project_account_id, amount, 
+      create_time, create_by, order_id, 
+      business_opera_detail_id)
+    values (#{id,jdbcType=VARCHAR}, #{projectAccountId,jdbcType=VARCHAR}, #{amount,jdbcType=DECIMAL}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, 
+      #{businessOperaDetailId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="ProjectFineDetail">
+    insert into t_project_fine_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="projectAccountId != null">
+        project_account_id,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="businessOperaDetailId != null">
+        business_opera_detail_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="projectAccountId != null">
+        #{projectAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="businessOperaDetailId != null">
+        #{businessOperaDetailId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="ProjectFineDetail">
+    update t_project_fine_detail
+    <set>
+      <if test="projectAccountId != null">
+        project_account_id = #{projectAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="businessOperaDetailId != null">
+        business_opera_detail_id = #{businessOperaDetailId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="ProjectFineDetail">
+    update t_project_fine_detail
+    set project_account_id = #{projectAccountId,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      order_id = #{orderId,jdbcType=VARCHAR},
+      business_opera_detail_id = #{businessOperaDetailId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

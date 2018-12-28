@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.autotask.core.dao.AcCurrentChargeDetailMapper">
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.fee.entity.AcCurrentChargeDetail">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="house_code_new" jdbcType="VARCHAR" property="houseCodeNew" />
+    <result column="charge_amount" jdbcType="DECIMAL" property="chargeAmount" />
+    <result column="account_id" jdbcType="VARCHAR" property="accountId" />
+    <result column="account_type" jdbcType="SMALLINT" property="accountType" />
+    <result column="charge_time" jdbcType="TIMESTAMP" property="chargeTime" />
+    <result column="audit_time" jdbcType="TIMESTAMP" property="auditTime" />
+    <result column="last_charge_id" jdbcType="VARCHAR" property="lastChargeId" />
+    <result column="charge_detail" jdbcType="VARCHAR" property="chargeDetail" />
+    <result column="common_dikou" jdbcType="DECIMAL" property="commonDikou" />
+    <result column="special_dikou" jdbcType="DECIMAL" property="specialDikou" />
+    <result column="project_id" jdbcType="VARCHAR" property="projectId" />
+    <result column="project_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="create_id" jdbcType="VARCHAR" property="createId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="payed_amount" jdbcType="DECIMAL" property="payedAmount" />
+    <result column="assign_amount" jdbcType="DECIMAL" property="assignAmount" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="payable_amount" jdbcType="DECIMAL" property="payableAmount" />
+    <result column="currenct_arreas" jdbcType="DECIMAL" property="currenctArreas" />
+    <result column="opera_id" jdbcType="VARCHAR" property="operaId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, house_code_new, charge_amount, account_id, account_type, charge_time, audit_time, 
+    last_charge_id, charge_detail, common_dikou, special_dikou, project_id, project_name, 
+    create_id, create_time, payed_amount, assign_amount, arrears_amount, update_time, 
+    payable_amount, total_history_arrears, opera_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_ac_current_charge_detail
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.everwing.coreservice.common.wy.fee.entity.AcCurrentChargeDetail">
+    update t_ac_current_charge_detail
+    <set>
+      <if test="houseCodeNew != null">
+        house_code_new = #{houseCodeNew,jdbcType=VARCHAR},
+      </if>
+      <if test="chargeAmount != null">
+        charge_amount = #{chargeAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="accountId != null">
+        account_id = #{accountId,jdbcType=VARCHAR},
+      </if>
+      <if test="accountType != null">
+        account_type = #{accountType,jdbcType=SMALLINT},
+      </if>
+      <if test="chargeTime != null">
+        charge_time = #{chargeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditTime != null">
+        audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastChargeId != null">
+        last_charge_id = #{lastChargeId,jdbcType=VARCHAR},
+      </if>
+      <if test="chargeDetail != null">
+        charge_detail = #{chargeDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="commonDikou != null">
+        common_dikou = #{commonDikou,jdbcType=DECIMAL},
+      </if>
+      <if test="specialDikou != null">
+        special_dikou = #{specialDikou,jdbcType=DECIMAL},
+      </if>
+      <if test="projectId != null">
+        project_id = #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        project_name = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null">
+        create_id = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payedAmount != null">
+        payed_amount = #{payedAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="assignAmount != null">
+        assign_amount = #{assignAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="arrearsAmount != null">
+        arrears_amount = #{arrearsAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payableAmount != null">
+        payable_amount = #{payableAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="totalHistoryArrears != null">
+        total_history_arrears = #{totalHistoryArrears,jdbcType=DECIMAL},
+      </if>
+      <if test="operaId != null">
+        opera_id = #{operaId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  
+  <update id="updateByPrimaryKey" parameterType="com.everwing.coreservice.common.wy.fee.entity.AcCurrentChargeDetail">
+    update t_ac_current_charge_detail
+    set house_code_new = #{houseCodeNew,jdbcType=VARCHAR},
+      charge_amount = #{chargeAmount,jdbcType=DECIMAL},
+      account_id = #{accountId,jdbcType=VARCHAR},
+      account_type = #{accountType,jdbcType=SMALLINT},
+      charge_time = #{chargeTime,jdbcType=TIMESTAMP},
+      audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      last_charge_id = #{lastChargeId,jdbcType=VARCHAR},
+      charge_detail = #{chargeDetail,jdbcType=VARCHAR},
+      common_dikou = #{commonDikou,jdbcType=DECIMAL},
+      special_dikou = #{specialDikou,jdbcType=DECIMAL},
+      project_id = #{projectId,jdbcType=VARCHAR},
+      project_name = #{projectName,jdbcType=VARCHAR},
+      create_id = #{createId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      payed_amount = #{payedAmount,jdbcType=DECIMAL},
+      assign_amount = #{assignAmount,jdbcType=DECIMAL},
+      arrears_amount = #{arrearsAmount,jdbcType=DECIMAL},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      payable_amount = #{payableAmount,jdbcType=DECIMAL},
+      total_history_arrears = #{totalHistoryArrears,jdbcType=DECIMAL},
+      opera_id = #{operaId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+    
+  <!-- 根据房号查询最新一条 -->
+  <select id="selectNewestChargeDetail" resultMap="BaseResultMap">
+		SELECT
+			*
+		FROM
+			t_ac_current_charge_detail
+		WHERE house_code_new = #{houseCodeNew}  account_type = #{accountType}
+			and DATE_FORMAT(audit_time, '%Y-%m') = DATE_FORMAT(SYSDATE(), '%Y-%m')
+		ORDER BY
+			create_time DESC
+		LIMIT 1
+  </select>
+  
+  <!-- 根据房号和应该计算违约金日期查询现在可以计算违约金的收费明细表 -->
+  <select id="selectChargeAmountForLateFee" resultType ="java.lang.Double">
+		SELECT
+			IFNULL(SUM(IFNULL(charge_amount, 0)),0.0)
+		FROM
+			t_ac_current_charge_detail
+		WHERE
+			create_time IN (
+				SELECT
+					MAX(create_time)
+				FROM
+					t_ac_current_charge_detail
+				WHERE
+					house_code_new = #{houseCodeNew}
+				AND DATE_FORMAT(audit_time, '%Y-%m-%d') &lt;= #{dateStr}
+				AND account_type = #{accountType}
+				GROUP BY
+					audit_time
+			)
+		AND house_code_new = #{houseCodeNew}
+		AND account_type = #{accountType}
+  </select>
+  
+</mapper>

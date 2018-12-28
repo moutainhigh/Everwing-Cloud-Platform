@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.coreservice.wy.fee.dao.mapper.ProjectRefundDetailMapper">
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.fee.entity.ProjectRefundDetail">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="project_account_id" jdbcType="VARCHAR" property="projectAccountId" />
+    <result column="refund_type" jdbcType="INTEGER" property="refundType" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="account_type" jdbcType="INTEGER" property="accountType" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="business_opera_detail_id" jdbcType="VARCHAR" property="businessOperaDetailId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, project_account_id, refund_type, amount, create_time, create_by, account_type,
+    order_id, business_opera_detail_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_project_refund_detail
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_project_refund_detail
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="ProjectRefundDetail">
+    insert into t_project_refund_detail (id, project_account_id, refund_type,
+      amount, create_time, create_by,
+      account_type, order_id, business_opera_detail_id
+      )
+    values (#{id,jdbcType=VARCHAR}, #{projectAccountId,jdbcType=VARCHAR}, #{refundType,jdbcType=INTEGER},
+      #{amount,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR},
+      #{accountType,jdbcType=INTEGER}, #{orderId,jdbcType=VARCHAR}, #{businessOperaDetailId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="ProjectRefundDetail">
+    insert into t_project_refund_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="projectAccountId != null">
+        project_account_id,
+      </if>
+      <if test="refundType != null">
+        refund_type,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="accountType != null">
+        account_type,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="businessOperaDetailId != null">
+        business_opera_detail_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="projectAccountId != null">
+        #{projectAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="refundType != null">
+        #{refundType,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="accountType != null">
+        #{accountType,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="businessOperaDetailId != null">
+        #{businessOperaDetailId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="ProjectRefundDetail">
+    update t_project_refund_detail
+    <set>
+      <if test="projectAccountId != null">
+        project_account_id = #{projectAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="refundType != null">
+        refund_type = #{refundType,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="accountType != null">
+        account_type = #{accountType,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="businessOperaDetailId != null">
+        business_opera_detail_id = #{businessOperaDetailId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="ProjectRefundDetail">
+    update t_project_refund_detail
+    set project_account_id = #{projectAccountId,jdbcType=VARCHAR},
+      refund_type = #{refundType,jdbcType=INTEGER},
+      amount = #{amount,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      account_type = #{accountType,jdbcType=INTEGER},
+      order_id = #{orderId,jdbcType=VARCHAR},
+      business_opera_detail_id = #{businessOperaDetailId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

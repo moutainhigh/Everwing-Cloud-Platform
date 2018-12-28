@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.autotask.core.dao.TBcCollectionMapper">
+    <resultMap type="TBcCollectionTotal" id="BaseResultMap">
+        <result property="id" 					column="id"					jdbcType="VARCHAR"/>
+        <result property="projectId" 			column="project_id"			jdbcType="VARCHAR"/>
+        <result property="collectionType" 		column="collection_type"	jdbcType="TINYINT"/>
+        <result property="familyCount" 			column="family_count"		jdbcType="INTEGER"/>
+        <result property="totalAmount" 			column="total_amount"		jdbcType="DOUBLE"/>
+        <result property="completeCount" 		column="complete_count"		jdbcType="INTEGER"/>
+        <result property="completeAmount" 		column="complete_amount"	jdbcType="DOUBLE"/>
+        <result property="collectionStatus" 	column="collection_status"	jdbcType="TINYINT"/>
+        <result property="collectionTime" 		column="collection_time"	jdbcType="TIMESTAMP"/>
+        <result property="backTime" 			column="back_time"			jdbcType="TIMESTAMP"/>
+        <result property="createId" 			column="create_id"			jdbcType="VARCHAR"/>
+        <result property="createTime" 			column="create_time"		jdbcType="TIMESTAMP"/>
+        <result property="modifyId" 			column="modify_id"			jdbcType="VARCHAR"/>
+        <result property="modifyTime" 			column="modify_time"		jdbcType="TIMESTAMP"/>
+        <result property="isWaitBack"			column="is_wait_back"		jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="findRecentTotal" resultMap="BaseResultMap">
+        select * from t_bc_collection_total
+        where project_id = #{projectId}
+        and collection_type = #{collectionType}
+        order by create_time desc
+        limit 0,1
+    </select>
+</mapper>

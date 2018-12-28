@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.dynamicreports.dao.mapper.system.datasource.TSysDataSourceMapper">
+    <resultMap type="TSysDataSource" id="TSysDataSourceResultMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="lookupId" column="lookup_id"/>
+        <result property="createrId" column="creater_id"/>
+        <result property="createrName" column="creater_name"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <select id="findByCondition" resultMap="TSysDataSourceResultMap" parameterType="TSysDataSource">
+        SELECT * FROM t_sys_data_source t WHERE 1=1
+        <if test="id != null and id != ''">
+            AND id = #{id}
+        </if>
+        <if test="userId != null and userId != ''">
+            AND user_id = #{userId}
+        </if>
+        <if test="lookupId != null and lookupId != ''">
+            AND lookup_id = #{lookupId}
+        </if>
+    </select>
+
+    <insert id="insert" parameterType="TSysDataSource">
+        insert into t_sys_data_source
+        (
+            id,
+            user_id,
+            lookup_id,
+            creater_id,
+            creater_name,
+            create_time
+        )
+        values
+        (
+            UUID(),
+            #{userId},
+            #{lookupId},
+            #{createrId},
+            sysdate()
+        )
+    </insert>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        insert into t_sys_data_source
+        (
+            id,
+            user_id,
+            lookup_id,
+            creater_id,
+            creater_name,
+            create_time
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+        (
+            UUID(),
+            #{item.userId},
+            #{item.lookupId},
+            #{item.createrId},
+            sysdate()
+        )
+        </foreach>
+    </insert>
+
+    <delete id="delete" parameterType="String">
+        DELETE FROM t_sys_data_source t WHERE t.id = #{0}
+    </delete>
+
+    <delete id="batchDelete" parameterType="List">
+        DELETE FROM t_sys_data_source t WHERE t.id IN
+        <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="deleteByUserId" parameterType="String">
+        DELETE FROM t_sys_data_source t WHERE t.user_id = #{0}
+    </delete>
+
+    <delete id="deleteByLookupId" parameterType="String">
+        DELETE FROM t_sys_data_source t WHERE t.lookup_id = #{0}
+    </delete>
+</mapper>

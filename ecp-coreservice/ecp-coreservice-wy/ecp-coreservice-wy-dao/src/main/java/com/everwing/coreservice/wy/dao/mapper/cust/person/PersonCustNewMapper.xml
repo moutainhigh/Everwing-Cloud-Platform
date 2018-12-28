@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.cust.person.PersonCustNewMapper" >
+	<resultMap id="BaseResultMap" type="PersonCustNew" >
+		<result column="cust_id" property="custId" jdbcType="VARCHAR" />
+		<result column="cust_code" property="custCode" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="sex" property="sex" jdbcType="VARCHAR" />
+		<result column="native_place" property="nativePlace" jdbcType="VARCHAR" />
+		<result column="census" property="census" jdbcType="VARCHAR" />
+		<result column="birthday" property="birthday" jdbcType="DATE" />
+		<result column="card_type" property="cardType" jdbcType="VARCHAR" />
+		<result column="card_num" property="cardNum" jdbcType="VARCHAR" />
+		<result column="jiajia_num" property="jiajiaNum" jdbcType="VARCHAR" />
+		<result column="weixin_num" property="weixinNum" jdbcType="VARCHAR" />
+		<result column="work_units" property="workUnits" jdbcType="VARCHAR" />
+		<result column="marrie_state" property="marrieState" jdbcType="TINYINT" />
+		<result column="is_enterprise" property="isEnterprise" jdbcType="TINYINT" />
+		<result column="urgent_contact_person" property="urgentContactPerson" jdbcType="VARCHAR" />
+		<result column="urgent_contact_phone" property="urgentContactPhone" jdbcType="VARCHAR" />
+		<result column="upload_image" property="uploadImage" jdbcType="VARCHAR" />
+		<result column="phone_num" property="phoneNum" jdbcType="VARCHAR" />
+		<result column="register_phone" property="registerPhone" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="nation" property="nation" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="national" property="national" jdbcType="VARCHAR" />
+		<result column="company_id" property="companyId" jdbcType="VARCHAR" />
+		<result property="createId" column="create_id"/>
+		<result property="createName" column="create_name"/>
+		<result property="createTime" column="create_time"/>
+		<result property="modifyId" column="modify_id"/>
+		<result property="modifyName" column="modify_name"/>
+		<result property="modifyTime" column="modify_time"/>
+	</resultMap>
+
+
+	<resultMap type="PersonCustNew" extends="BaseResultMap" id="AllResultMap">
+		<association property="personCustRelation" column="custId"
+					 javaType="PersonCustRelation" select="com.everwing.coreservice.wy.dao.mapper.cust.person.relation.PersonCustRelationMapper.getPersonCustRelationByID" />
+		<collection property="annexs" select="com.everwing.coreservice.wy.dao.mapper.annex.AnnexMapper.getAnnexbyRelationId" ofType="Annex" column="cust_id">
+			<result column="annex_address" property="annexAddress" jdbcType="VARCHAR" />
+		</collection>
+	</resultMap>
+
+
+	<select id="listPagePersonCustNewBySearch" parameterType="PersonCustNewSearch" resultMap="AllResultMap">
+		select * from (
+		SELECT t1.*
+		from tc_person_cust t1
+		LEFT JOIN tc_person_building t2 on t1.cust_id = t2.cust_id
+		LEFT JOIN tc_building t3 on t2.building_id = id
+		where 1 = 1 and t1.is_delete = 0
+		<if test="null != name and '' != name">
+			and t1.name like CONCAT('%',#{name},'%')
+		</if>
+		<if test="cardType != null and cardType !='' ">
+			and t1.card_type = #{cardType,jdbcType=VARCHAR}
+		</if>
+		<if test="cardNum != null and cardNum!='' " >
+			and t1.card_num like CONCAT('%',#{cardNum},'%')
+		</if>
+		<if test="registerPhone!= null and registerPhone!='' " >
+			and t1.register_phone like CONCAT('%',#{registerPhone},'%')
+		</if>
+		<if test="phoneNum != null and phoneNum!='' " >
+			and t1.phone_num like CONCAT('%',#{phoneNum},'%')
+		</if>
+		<if test="sex!= null and sex!='' " >
+			and t1.sex like CONCAT('%',#{sex},'%')
+		</if>
+		<if test="urgentContactPerson!= null and urgentContactPerson!='' " >
+			and t1.urgent_contact_person like CONCAT('%',#{urgentContactPerson},'%')
+		</if>
+		<if test="urgentContactPhone!= null and urgentContactPhone!='' " >
+			and t1.urgent_contact_phone  like CONCAT('%',#{urgentContactPhone},'%')
+		</if>
+		<if test="null != companyId">
+			and t1.company_id = #{companyId}
+		</if>
+		<if test="null != houseCodeNew">
+			and t3.house_code_new = #{houseCodeNew}
+		</if>
+		<if test="null != propertyAddr">
+			and t3.property_addr = #{propertyAddr}
+		</if>
+		group by t1.cust_id
+		) t
+		order by t.cust_code
+	</select>
+
+
+	<!-- 根据编号或名称查询是否数据库中已有相同名称数据除自己的id -->
+	<select id="getCountByNoOrPhoneById" parameterType="PersonCustNew" resultType="int">
+		select count(*) from tc_person_cust
+		where 1=1
+		<if test="custId!= null and custId != ''">
+			and cust_id!=#{custId,jdbcType=VARCHAR}#
+		</if>
+
+		<if test="cardNum!= null and cardNum != ''">
+			and card_num=#{cardNum,jdbcType=VARCHAR}
+		</if>
+		<if test="registerPhone!= null and registerPhone!= ''">
+			and  register_phone=#{registerPhone,jdbcType=VARCHAR}
+		</if>
+	</select>
+
+	<!-- 查询表中 编号最大的数据 -->
+	<select id="selectCustCode" resultType="string">
+		select ifnull(max(SUBSTR(cust_code FROM 2 FOR 5)),'0')   from tc_person_cust
+	</select>
+
+
+
+	<!-- 新增vip客户（不自动生成uuid）-->
+	<insert id="insertPersonCustNew" parameterType="PersonCustNew"  useGeneratedKeys="true" keyProperty="custId">
+		insert into tc_person_cust
+		(cust_id,
+		cust_code,
+		name,
+		sex,
+		native_place,
+		census,
+		birthday,
+		card_type,
+		card_num,
+		jiajia_num,
+		weixin_num,
+		work_units,
+		marrie_state,
+		is_enterprise,
+		urgent_contact_person,
+		urgent_contact_phone,
+		upload_image,
+		phone_num,
+		register_phone,
+		email,
+		nation,
+		remark,
+		`national`,
+		company_id,
+		create_id,
+		create_name,
+		create_time,
+		is_delete
+		)
+		values (
+		#{custId},
+		#{custCode},
+		#{name},
+		#{sex},
+		#{nativePlace},
+		#{census},
+		#{birthday},
+		#{cardType},
+		#{cardNum},
+		#{jiajiaNum},
+		#{weixinNum},
+		#{workUnits},
+		#{marrieState},
+		#{isEnterprise},
+		#{urgentContactPerson},
+		#{urgentContactPhone},
+		#{uploadImage},
+		#{phoneNum},
+		#{registerPhone},
+		#{email},
+		#{nation},
+		#{remark},
+		#{national},
+		#{companyId},
+		#{createId},
+		#{createName},
+		sysdate(),
+		0
+		)
+	</insert>
+	<insert id="batchInsert" parameterType="java.util.List">
+		insert into tc_person_cust
+		(cust_id,
+		cust_code,
+		name,
+		sex,
+		native_place,
+		census,
+		birthday,
+		card_type,
+		card_num,
+		jiajia_num,
+		weixin_num,
+		work_units,
+		marrie_state,
+		is_enterprise,
+		urgent_contact_person,
+		urgent_contact_phone,
+		upload_image,
+		phone_num,
+		register_phone,
+		email,
+		nation,
+		remark,
+		`national`,
+		company_id,
+		create_id,
+		create_name,
+		create_time
+		)
+		values
+		<foreach collection="list" index="index" item="item" separator=",">
+			(UUID(),
+			#{item.custCode},
+			#{item.name},
+			#{item.sex},
+			#{item.nativePlace},
+			#{item.census},
+			#{item.birthday},
+			#{item.cardType},
+			#{item.cardNum},
+			#{item.jiajiaNum},
+			#{item.weixinNum},
+			#{item.workUnits},
+			#{item.marrieState},
+			#{item.isEnterprise},
+			#{item.urgentContactPerson},
+			#{item.urgentContactPhone},
+			#{item.uploadImage},
+			#{item.phoneNum},
+			#{item.registerPhone},
+			#{item.email},
+			#{item.nation},
+			#{item.remark},
+			#{item.national},
+			#{item.companyId},
+			#{item.createId},
+			#{item.createName},
+			sysdate()
+			)
+		</foreach>
+	</insert>
+
+
+	<!-- 修改个人客户信息 -->
+	<update id="updatePersonCustNew" parameterType="PersonCustNew" >
+		update tc_person_cust
+		<set>
+			<if test="custCode != null" >
+				cust_code = #{custCode,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null" >
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="sex != null" >
+				sex = #{sex,jdbcType=VARCHAR},
+			</if>
+			<if test="nativePlace != null" >
+				native_place = #{nativePlace,jdbcType=VARCHAR},
+			</if>
+			<if test="census != null" >
+				census = #{census,jdbcType=VARCHAR},
+			</if>
+			<if test="birthday != null" >
+				birthday = #{birthday,jdbcType=DATE},
+			</if>
+			<if test="cardType != null" >
+				card_type = #{cardType,jdbcType=VARCHAR},
+			</if>
+			<if test="cardNum != null" >
+				card_num = #{cardNum,jdbcType=VARCHAR},
+			</if>
+			<if test="jiajiaNum != null" >
+				jiajia_num = #{jiajiaNum,jdbcType=VARCHAR},
+			</if>
+			<if test="weixinNum != null" >
+				weixin_num = #{weixinNum,jdbcType=VARCHAR},
+			</if>
+			<if test="workUnits != null" >
+				work_units = #{workUnits,jdbcType=VARCHAR},
+			</if>
+			<if test="marrieState != null" >
+				marrie_state = #{marrieState,jdbcType=TINYINT},
+			</if>
+			<if test="isEnterprise != null" >
+				is_enterprise = #{isEnterprise,jdbcType=TINYINT},
+			</if>
+			<if test="urgentContactPerson != null" >
+				urgent_contact_person = #{urgentContactPerson,jdbcType=VARCHAR},
+			</if>
+			<if test="urgentContactPhone != null" >
+				urgent_contact_phone = #{urgentContactPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="uploadImage != null" >
+				upload_image = #{uploadImage,jdbcType=VARCHAR},
+			</if>
+			<if test="phoneNum != null" >
+				phone_num = #{phoneNum,jdbcType=VARCHAR},
+			</if>
+			<if test="registerPhone != null" >
+				register_phone=#{registerPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null" >
+				email=#{email,jdbcType=VARCHAR},
+			</if>
+			<if test="nation!= null" >
+				nation = #{nation,jdbcType=VARCHAR},
+			</if>
+			<if test="null != remark">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="null != `national`">
+				`national` = #{national,jdbcType=VARCHAR},
+			</if>
+			<if test="null != companyId">
+				company_id = #{companyId},
+			</if>
+			<if test="null != modifyId">
+				modify_id = #{modifyId},
+			</if>
+			<if test="null != modifyName">
+				modify_name = #{modifyName},
+			</if>
+			modify_time = sysdate()
+		</set>
+		where  cust_id = #{custId,jdbcType=VARCHAR}
+	</update>
+
+
+	<select id="getPersonCustNewByName" parameterType="PersonCustNew" resultMap="BaseResultMap">
+		select * from tc_person_cust t
+		where 1 = 1
+		<if test="cardNum!= null and cardNum != ''">
+			and card_num like CONCAT('%',#{cardNum},'%')
+		</if>
+		<if test="name!= null and name != ''">
+			and name like CONCAT('%',#{name},'%')
+		</if>
+		<if test="registerPhone!= null and registerPhone != ''">
+			and register_phone like CONCAT('%',#{registerPhone},'%')
+		</if>
+		limit 0,10
+	</select>
+
+	<!--  删除vip客户 -->
+
+	<update id="deletePersonCustNew"  parameterType="string" >
+		update tc_person_cust set is_delete = 1 where cust_id = #{custId,jdbcType=VARCHAR}
+	</update>
+
+
+	<!--                                                                别的地方调用                                                           -->
+	<select id="listAllPersonCustNew" resultMap="BaseResultMap">
+		select * from tc_person_cust
+	</select>
+
+	<select id="findBySomeParams" resultMap="BaseResultMap">
+		select * from tc_person_cust t
+		where t.name = #{name}
+		and t.card_num in (#{numStr}, CONCAT(#{numStr},'S'))
+		order by cust_code desc
+		limit 0,1
+	</select>
+
+	<select id="findNamesByBuildingCode" parameterType="string" resultMap="BaseResultMap">
+		SELECT  IFNULL(GROUP_CONCAT(t.name),"无") AS `name`,
+		IFNULL(GROUP_CONCAT(t.cust_code),"无") AS `cust_code`
+		FROM
+		(
+		SELECT t1.name,t1.cust_code
+		FROM tc_person_cust t1,
+		tc_person_building t2
+		WHERE t1.cust_id = t2.cust_id
+		AND t2.building_code = #{0}
+		GROUP BY t1.name
+
+		UNION ALL
+
+		SELECT t3.enterprise_name AS NAME,
+		t3.unit_number AS cust_code
+		FROM tc_enterprise_cust t3,
+		tc_person_building t4
+		WHERE t3.enterprise_id = t4.enterprise_id
+		AND t4.building_code = #{0}
+		GROUP BY t3.enterprise_name
+
+		) t
+	</select>
+
+	<select id="searchAllPersonCustNewByCompanyId" parameterType="string" resultMap="BaseResultMap">
+		SELECT * FROM tc_person_cust a
+		<where>
+			<if test="_parameter !=null and _parameter !=''">company_Id=#{0}</if>
+		</where>
+	</select>
+
+	<!-- 根据客户id查询客户信息 -->
+	<select id="getPersonCustById" parameterType="string" resultMap="BaseResultMap">
+		select pc.cust_id,pc.name,pc.sex,pc.phone_num,pc.card_type,pc.card_num,pc.birthday,pc.cust_code,pc.register_phone
+		from tc_person_cust pc
+		where pc.cust_id=#{custId,jdbcType=VARCHAR}
+	</select>
+
+
+	<select id="getPersonCustNewById" parameterType="string" resultMap="AllResultMap">
+		select a.cust_id,a.cust_code, a.name,
+		a.sex, a.native_place, a.census,
+		a.birthday, a.card_type, a.card_num,
+		a.jiajia_num, a.weixin_num, a.work_units,
+		a.marrie_state,a.email,a.register_phone,
+		a.urgent_contact_person,
+		a.urgent_contact_phone,a.phone_num ,a.upload_image,a.remark
+		from tc_person_cust a
+		where cust_id = #{0}
+	</select>
+	<select id="SeachIdByName" resultType="string" parameterType="string">
+		select cust_id from tc_person_cust where name = #{Name} limit 0,1
+	</select>
+	<select id="queryCustAccountInfoById" resultType="com.everwing.coreservice.common.wy.dto.CustAccountDto">
+		SELECT
+			pc.name,pc.register_phone registerPhone,pc.card_num cardNum,count(pb.person_building_id) buildingCount,
+			GROUP_CONCAT(pb.cust_type separator ',') custNature,sum(ppd.amount) deposit,sum(aa.last_arrears_amount) totalMoney
+		FROM
+			tc_person_cust pc
+		LEFT JOIN
+			tc_person_building pb on
+			pc.cust_id=pb.cust_id
+		LEFT JOIN
+			tc_building	b on pb.building_id=b.id
+		LEFT JOIN
+			t_project_prestore_detail ppd on (b.house_code_new=ppd.house_code_new AND ppd.type=6)
+		LEFT JOIN
+		  t_ac_account aa on b.house_code_new=aa.house_code_new
+		WHERE
+			pc.cust_id = #{id}
+		GROUP BY pb.person_building_id
+	</select>
+
+</mapper>

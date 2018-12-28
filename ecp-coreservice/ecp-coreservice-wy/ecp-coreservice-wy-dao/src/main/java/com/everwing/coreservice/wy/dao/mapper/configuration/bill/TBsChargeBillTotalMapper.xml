@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.configuration.bill.TBsChargeBillTotalMapper">
+		<resultMap type="TBsChargeBillTotal" id="BaseResultMap">
+			<result property="id" column="id" jdbcType="VARCHAR"/>
+			<result property="projectId" column="project_id" jdbcType="VARCHAR"/>
+			<result property="lastTotalId" column="last_total_id" jdbcType="VARCHAR"/>
+			<result property="type" column="type" jdbcType="TINYINT"/>
+			<result property="schemeId" column="scheme_id" jdbcType="VARCHAR"/>
+			<result property="billingTime" column="billing_time" jdbcType="DOUBLE"/>
+			<result property="currentFee" column="current_fee" jdbcType="DOUBLE"/>
+			<result property="lastOwedFee" column="last_owed_fee" jdbcType="DOUBLE"/>
+			<result property="totalFee" column="total_fee" jdbcType="DOUBLE"/>
+			<result property="chargingType" column="charging_type" jdbcType="TINYINT"/>
+			<result property="isRebilling" column="is_rebilling" jdbcType="TINYINT"/>
+			<result property="auditStatus" column="audit_status" jdbcType="TINYINT"/>
+			<result property="cmacIsBilling" column="cmac_is_billing" jdbcType="TINYINT"/>
+			<result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+			<result property="createId" column="create_id" jdbcType="VARCHAR"/>
+			<result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+			<result property="modifyId" column="modify_id" jdbcType="VARCHAR"/>
+			<result property="billStatus" column="bill_status" jdbcType="TINYINT"/>
+			<result property="sunStatus" column="sun_status" jdbcType="TINYINT"/>
+		</resultMap>
+		
+		
+		<resultMap type="java.util.Map" id="dataResultMap">
+			<result property="columnName" column="column_name" jdbcType="VARCHAR"/>
+		</resultMap>
+		
+		<update id="update" parameterType="TBsChargeBillTotal">
+			update t_bs_charge_bill_total
+			<set>
+				<if test="null != schemeId">
+					scheme_id = #{schemeId},
+				</if>
+				<if test="null != billingTime">
+					billing_time = #{billingTime},
+				</if>
+				<if test="null != currentFee">
+					current_fee = #{currentFee},
+				</if>
+				<if test="null != lastOwedFee">
+					last_owed_fee = #{lastOwedFee},
+				</if>
+				<if test="null != totalFee">
+					total_fee = #{totalFee},
+				</if>
+				<if test="null != chargingType">
+					charging_type = #{chargingType},
+				</if>
+				<if test="null != isRebilling">
+					is_rebilling = #{isRebilling},
+				</if>
+				<if test="null != auditStatus">
+					audit_status = #{auditStatus},
+				</if>
+				<if test="null != cmacIsBilling">
+					cmac_is_billing = #{cmacIsBilling},
+				</if>
+				<if test="null != modifyId">
+					modify_id = #{modifyId},
+				</if>
+				<if test="billStatus !=null">
+					bill_status=#{billStatus},
+				</if>
+				<if test="sunStatus !=null">
+					sun_status = #{sunStatus},
+				</if>
+				modify_time=sysdate()
+			</set>
+			
+			where id = #{id}
+		</update>
+		
+		
+		<select id="selectCurrentFeePerYear" parameterType="TBsChargeBillTotal" resultMap="dataResultMap">
+			SELECT 
+				"本期金额(元)" AS "column_name",
+				MAX(IF(month_str = "01", IFNULL(current_fee,0),"")) AS January,
+				MAX(IF(month_str = "02", IFNULL(current_fee,0),"")) AS February,
+				MAX(IF(month_str = "03", IFNULL(current_fee,0),"")) AS March,
+				MAX(IF(month_str = "04", IFNULL(current_fee,0),"")) AS April,
+				MAX(IF(month_str = "05", IFNULL(current_fee,0),"")) AS May,
+				MAX(IF(month_str = "06", IFNULL(current_fee,0),"")) AS June,
+				MAX(IF(month_str = "07", IFNULL(current_fee,0),"")) AS July,
+				MAX(IF(month_str = "08", IFNULL(current_fee,0),"")) AS August,
+				MAX(IF(month_str = "09", IFNULL(current_fee,0),"")) AS September,
+				MAX(IF(month_str = "10", IFNULL(current_fee,0),"")) AS October,
+				MAX(IF(month_str = "11", IFNULL(current_fee,0),"")) AS November,
+				MAX(IF(month_str = "12", IFNULL(current_fee,0),"")) AS December
+				
+			FROM 
+			( 
+				SELECT *, DATE_FORMAT(billing_time,'%m') AS month_str
+				FROM t_bs_charge_bill_total 
+				WHERE DATE_FORMAT(billing_time,'%Y') = #{searchTime}
+				AND `type` = #{type}
+				and project_id = #{projectId}
+				GROUP BY month_str
+			) t
+		</select>
+		
+		<select id="selectIdPerYear" parameterType="TBsChargeBillTotal" resultMap="dataResultMap">
+			SELECT 
+				"id" AS "column_name",
+				MAX(IF(month_str = "01", IFNULL(id,0),"")) AS January,
+				MAX(IF(month_str = "02", IFNULL(id,0),"")) AS February,
+				MAX(IF(month_str = "03", IFNULL(id,0),"")) AS March,
+				MAX(IF(month_str = "04", IFNULL(id,0),"")) AS April,
+				MAX(IF(month_str = "05", IFNULL(id,0),"")) AS May,
+				MAX(IF(month_str = "06", IFNULL(id,0),"")) AS June,
+				MAX(IF(month_str = "07", IFNULL(id,0),"")) AS July,
+				MAX(IF(month_str = "08", IFNULL(id,0),"")) AS August,
+				MAX(IF(month_str = "09", IFNULL(id,0),"")) AS September,
+				MAX(IF(month_str = "10", IFNULL(id,0),"")) AS October,
+				MAX(IF(month_str = "11", IFNULL(id,0),"")) AS November,
+				MAX(IF(month_str = "12", IFNULL(id,0),"")) AS December
+			FROM 
+			( 
+				SELECT *, DATE_FORMAT(billing_time,'%m') AS month_str
+				FROM t_bs_charge_bill_total 
+				WHERE DATE_FORMAT(billing_time,'%Y') = #{searchTime}
+				and project_id = #{projectId}
+				AND `type` = #{type}
+				GROUP BY month_str
+			) t
+		</select>
+		
+		<select id="selectBillingTimePerYear" parameterType="TBsChargeBillTotal" resultMap="dataResultMap">
+			SELECT 
+				"计费时间" AS "column_name",
+				MAX(IF(month_str = "01", IFNULL(billing_time,0),"")) AS January,
+				MAX(IF(month_str = "02", IFNULL(billing_time,0),"")) AS February,
+				MAX(IF(month_str = "03", IFNULL(billing_time,0),"")) AS March,
+				MAX(IF(month_str = "04", IFNULL(billing_time,0),"")) AS April,
+				MAX(IF(month_str = "05", IFNULL(billing_time,0),"")) AS May,
+				MAX(IF(month_str = "06", IFNULL(billing_time,0),"")) AS June,
+				MAX(IF(month_str = "07", IFNULL(billing_time,0),"")) AS July,
+				MAX(IF(month_str = "08", IFNULL(billing_time,0),"")) AS August,
+				MAX(IF(month_str = "09", IFNULL(billing_time,0),"")) AS September,
+				MAX(IF(month_str = "10", IFNULL(billing_time,0),"")) AS October,
+				MAX(IF(month_str = "11", IFNULL(billing_time,0),"")) AS November,
+				MAX(IF(month_str = "12", IFNULL(billing_time,0),"")) AS December
+			FROM 
+			( 
+				SELECT *, DATE_FORMAT(billing_time,'%m') AS month_str
+				FROM t_bs_charge_bill_total 
+				WHERE DATE_FORMAT(billing_time,'%Y') = #{searchTime}
+				AND `type` = #{type}
+				and project_id = #{projectId}
+				GROUP BY month_str
+			) t
+		</select>
+		
+		<select id="selectLastOwedFeePerYear" parameterType="TBsChargeBillTotal" resultMap="dataResultMap">
+			SELECT 
+				"上期未交金额(元)" AS "column_name",
+				MAX(IF(month_str = "01", IFNULL(last_owed_fee,0),"")) AS January,
+				MAX(IF(month_str = "02", IFNULL(last_owed_fee,0),"")) AS February,
+				MAX(IF(month_str = "03", IFNULL(last_owed_fee,0),"")) AS March,
+				MAX(IF(month_str = "04", IFNULL(last_owed_fee,0),"")) AS April,
+				MAX(IF(month_str = "05", IFNULL(last_owed_fee,0),"")) AS May,
+				MAX(IF(month_str = "06", IFNULL(last_owed_fee,0),"")) AS June,
+				MAX(IF(month_str = "07", IFNULL(last_owed_fee,0),"")) AS July,
+				MAX(IF(month_str = "08", IFNULL(last_owed_fee,0),"")) AS August,
+				MAX(IF(month_str = "09", IFNULL(last_owed_fee,0),"")) AS September,
+				MAX(IF(month_str = "10", IFNULL(last_owed_fee,0),"")) AS October,
+				MAX(IF(month_str = "11", IFNULL(last_owed_fee,0),"")) AS November,
+				MAX(IF(month_str = "12", IFNULL(last_owed_fee,0),"")) AS December
+			FROM 
+			( 
+				SELECT *, DATE_FORMAT(billing_time,'%m') AS month_str
+				FROM t_bs_charge_bill_total 
+				WHERE DATE_FORMAT(billing_time,'%Y') = #{searchTime}
+				AND `type` = #{type}
+				and project_id = #{projectId}
+				GROUP BY month_str
+			) t
+		</select>
+		
+		<select id="selectTotalFeePerYear" parameterType="TBsChargeBillTotal" resultMap="dataResultMap">
+			SELECT 
+				"总金额(元)" AS "column_name",
+				MAX(IF(month_str = "01", IFNULL(total_fee,0),"")) AS January,
+				MAX(IF(month_str = "02", IFNULL(total_fee,0),"")) AS February,
+				MAX(IF(month_str = "03", IFNULL(total_fee,0),"")) AS March,
+				MAX(IF(month_str = "04", IFNULL(total_fee,0),"")) AS April,
+				MAX(IF(month_str = "05", IFNULL(total_fee,0),"")) AS May,
+				MAX(IF(month_str = "06", IFNULL(total_fee,0),"")) AS June,
+				MAX(IF(month_str = "07", IFNULL(total_fee,0),"")) AS July,
+				MAX(IF(month_str = "08", IFNULL(total_fee,0),"")) AS August,
+				MAX(IF(month_str = "09", IFNULL(total_fee,0),"")) AS September,
+				MAX(IF(month_str = "10", IFNULL(total_fee,0),"")) AS October,
+				MAX(IF(month_str = "11", IFNULL(total_fee,0),"")) AS November,
+				MAX(IF(month_str = "12", IFNULL(total_fee,0),"")) AS December
+			FROM 
+			( 
+				SELECT *, DATE_FORMAT(billing_time,'%m') AS month_str
+				FROM t_bs_charge_bill_total 
+				WHERE DATE_FORMAT(billing_time,'%Y') = #{searchTime}
+				AND `type` = #{type}
+				and project_id = #{projectId}
+				GROUP BY month_str
+			) t
+		</select>
+		
+		<select id="selectChargeTypePerYear" parameterType="TBsChargeBillTotal" resultMap="dataResultMap">
+			SELECT 
+				"计费方式" AS "column_name",
+				MAX(IF(month_str = "01", if(IFNULL(charging_type,0) = 0 , "自动","手动"),"")) AS January,
+				MAX(IF(month_str = "02", if(IFNULL(charging_type,0) = 0 , "自动","手动"),"")) AS February,
+				MAX(IF(month_str = "03", if(IFNULL(charging_type,0) = 0 , "自动","手动"),"")) AS March,
+				MAX(IF(month_str = "04", if(IFNULL(charging_type,0) = 0 , "自动","手动"),"")) AS April,
+				MAX(IF(month_str = "05", if(IFNULL(charging_type,0) = 0 , "自动","手动"),"")) AS May,
+				MAX(IF(month_str = "06", if(IFNULL(charging_type,0) = 0 , "自动","手动"),"")) AS June,
+				MAX(IF(month_str = "07", if(IFNULL(charging_type,0) = 0 , "自动","手动"),"")) AS July,
+				MAX(IF(month_str = "08", if(IFNULL(charging_type,0) = 0 , "自动","手动"),"")) AS August,
+				MAX(IF(month_str = "09", if(IFNULL(charging_type,0) = 0 , "自动","手动"),"")) AS September,
+				MAX(IF(month_str = "10", if(IFNULL(charging_type,0) = 0 , "自动","手动"),"")) AS October,
+				MAX(IF(month_str = "11", if(IFNULL(charging_type,0) = 0 , "自动","手动"),"")) AS November,
+				MAX(IF(month_str = "12", if(IFNULL(charging_type,0) = 0 , "自动","手动"),"")) AS December
+			FROM 
+			( 
+				SELECT *, DATE_FORMAT(billing_time,'%m') AS month_str
+				FROM t_bs_charge_bill_total 
+				WHERE DATE_FORMAT(billing_time,'%Y') = #{searchTime}
+				AND `type` = #{type}
+				and project_id = #{projectId}
+				GROUP BY month_str
+			) t
+		</select>
+		
+		<select id="selectIsRebillingPerYear" parameterType="TBsChargeBillTotal" resultMap="dataResultMap">
+			SELECT 
+				"是否重新计费" AS "column_name",
+				MAX(IF(month_str = "01", IF(IFNULL(is_rebilling,0) = 0 , "是","否"),"")) AS January,
+				MAX(IF(month_str = "02", IF(IFNULL(is_rebilling,0) = 0 , "是","否"),"")) AS February,
+				MAX(IF(month_str = "03", IF(IFNULL(is_rebilling,0) = 0 , "是","否"),"")) AS March,
+				MAX(IF(month_str = "04", IF(IFNULL(is_rebilling,0) = 0 , "是","否"),"")) AS April,
+				MAX(IF(month_str = "05", IF(IFNULL(is_rebilling,0) = 0 , "是","否"),"")) AS May,
+				MAX(IF(month_str = "06", IF(IFNULL(is_rebilling,0) = 0 , "是","否"),"")) AS June,
+				MAX(IF(month_str = "07", IF(IFNULL(is_rebilling,0) = 0 , "是","否"),"")) AS July,
+				MAX(IF(month_str = "08", IF(IFNULL(is_rebilling,0) = 0 , "是","否"),"")) AS August,
+				MAX(IF(month_str = "09", IF(IFNULL(is_rebilling,0) = 0 , "是","否"),"")) AS September,
+				MAX(IF(month_str = "10", IF(IFNULL(is_rebilling,0) = 0 , "是","否"),"")) AS October,
+				MAX(IF(month_str = "11", IF(IFNULL(is_rebilling,0) = 0 , "是","否"),"")) AS November,
+				MAX(IF(month_str = "12", IF(IFNULL(is_rebilling,0) = 0 , "是","否"),"")) AS December
+			FROM 
+			( 
+				SELECT *, DATE_FORMAT(billing_time,'%m') AS month_str
+				FROM t_bs_charge_bill_total 
+				WHERE DATE_FORMAT(billing_time,'%Y') = #{searchTime}
+				AND `type` = #{type}
+				and project_id = #{projectId}
+				GROUP BY month_str
+			) t
+		</select>
+		
+		<select id="selectAuditStatusPerYear" parameterType="TBsChargeBillTotal" resultMap="dataResultMap">
+			SELECT 
+				"审核状态" AS "column_name",
+				MAX(IF(month_str = "01", CASE IFNULL(audit_status,0) WHEN 0 THEN "待审核" WHEN  1 THEN "审核完成" WHEN  3 THEN "部分审核完成"   ELSE "不通过" END,"")) AS January,
+				MAX(IF(month_str = "02", CASE IFNULL(audit_status,0) WHEN 0 THEN "待审核" WHEN  1 THEN "审核完成" WHEN  3 THEN "部分审核完成"  ELSE "不通过" END,"")) AS February,
+				MAX(IF(month_str = "03", CASE IFNULL(audit_status,0) WHEN 0 THEN "待审核" WHEN  1 THEN "审核完成" WHEN  3 THEN "部分审核完成"  ELSE "不通过" END,"")) AS March,
+				MAX(IF(month_str = "04", CASE IFNULL(audit_status,0) WHEN 0 THEN "待审核" WHEN  1 THEN "审核完成" WHEN  3 THEN "部分审核完成" ELSE "不通过" END,"")) AS April,
+				MAX(IF(month_str = "05", CASE IFNULL(audit_status,0) WHEN 0 THEN "待审核" WHEN  1 THEN "审核完成" WHEN  3 THEN "部分审核完成" ELSE "不通过" END,"")) AS May,
+				MAX(IF(month_str = "06", CASE IFNULL(audit_status,0) WHEN 0 THEN "待审核" WHEN  1 THEN "审核完成" WHEN  3 THEN "部分审核完成" ELSE "不通过" END,"")) AS June,
+				MAX(IF(month_str = "07", CASE IFNULL(audit_status,0) WHEN 0 THEN "待审核" WHEN  1 THEN "审核完成" WHEN  3 THEN "部分审核完成" ELSE "不通过" END,"")) AS July,
+				MAX(IF(month_str = "08", CASE IFNULL(audit_status,0) WHEN 0 THEN "待审核" WHEN  1 THEN "审核完成" WHEN  3 THEN "部分审核完成" ELSE "不通过" END,"")) AS August,
+				MAX(IF(month_str = "09", CASE IFNULL(audit_status,0) WHEN 0 THEN "待审核" WHEN  1 THEN "审核完成" WHEN  3 THEN "部分审核完成" ELSE "不通过" END,"")) AS September,
+				MAX(IF(month_str = "10", CASE IFNULL(audit_status,0) WHEN 0 THEN "待审核" WHEN  1 THEN "审核完成" WHEN  3 THEN "部分审核完成" ELSE "不通过" END,"")) AS October,
+				MAX(IF(month_str = "11", CASE IFNULL(audit_status,0) WHEN 0 THEN "待审核" WHEN  1 THEN "审核完成" WHEN  3 THEN "部分审核完成" ELSE "不通过" END,"")) AS November,
+				MAX(IF(month_str = "12", CASE IFNULL(audit_status,0) WHEN 0 THEN "待审核" WHEN  1 THEN "审核完成" WHEN  3 THEN "部分审核完成" ELSE "不通过" END,"")) AS December
+			FROM 
+			( 
+				SELECT *, DATE_FORMAT(billing_time,'%m') AS month_str
+				FROM t_bs_charge_bill_total 
+				WHERE DATE_FORMAT(billing_time,'%Y') = #{searchTime}
+				AND `type` = #{type}
+				and project_id = #{projectId}
+				GROUP BY month_str
+			) t
+		</select>
+		
+		<!-- 根据项目id，账户类型，查询总  每期计费总计表信息  待审核的数据只能有一条或没有-->
+		<select id="selectChargeBillByType" parameterType="java.lang.String" resultMap="BaseResultMap">
+			SELECT 
+			  * 
+			FROM
+			  t_bs_charge_bill_total 
+			WHERE project_id = #{0}
+			  AND TYPE = #{1} 
+			  AND audit_status = 0 
+			   <![CDATA[
+			   AND billing_time<NOW()
+			   ]]>
+			   ORDER BY billing_time DESC LIMIT 1
+		</select>
+		
+		<select id="getNoAuditByProjectIdAndType" parameterType="String" resultMap="BaseResultMap">
+			SELECT 
+			  * 
+			FROM
+			  t_bs_charge_bill_total 
+			WHERE project_id = #{0}
+			  AND TYPE = #{1} 
+			  AND (audit_status = 0 or audit_status=3) 
+			   <![CDATA[
+			  AND billing_time<NOW()
+			   ]]>
+			  ORDER BY billing_time DESC
+		</select>
+		
+		<insert id="insertChargeBillTotal" parameterType="TBsChargeBillTotal">
+			INSERT INTO t_bs_charge_bill_total
+				(
+					id,
+					project_id,
+					last_total_id,
+					`type`,
+					scheme_id,
+					billing_time,
+					current_fee,
+					last_owed_fee,
+					total_fee,
+					charging_type,
+					is_rebilling,
+					audit_status,
+					cmac_is_billing,
+					create_time,
+					create_id,
+					modify_time,
+					modify_id,
+					bill_status,
+					sun_status
+				)
+				values(
+						#{id},
+			  			#{projectId},
+			  			#{lastTotalId},
+						#{type},
+						#{schemeId},
+						#{billingTime},
+						#{currentFee},
+						#{lastOwedFee},
+						#{totalFee},
+						#{chargingType},
+						#{isRebilling},
+						#{auditStatus},
+						#{cmacIsBilling},
+						#{createTime},
+						#{createId},
+						#{modifyTime},
+						#{modifyId},
+						#{billStatus},
+						#{sunStatus}
+				)
+		</insert>
+		
+		<!-- 获取本期的总账单数据 -->
+		<select id="findCurrentBillTotal" parameterType="TBsChargeBillTotal" resultMap="BaseResultMap">
+			SELECT * 
+			  FROM t_bs_charge_bill_total
+			 WHERE project_id = #{projectId}
+			   AND `type`=#{type}
+			   <if test="null != chargingType">
+				   and charging_type = #{chargingType}
+			   </if>
+			   AND (billing_time IS NULL or (bill_status !=1))
+		</select>
+		
+		<!-- 获取本期的计费未完成的总账单数据   (当前月份)分摊用-->
+		<select id="findCurrentBillTotalForShare" parameterType="TBsChargeBillTotal" resultMap="BaseResultMap">
+			SELECT * 
+			  FROM t_bs_charge_bill_total
+			 WHERE project_id = #{projectId}
+			   AND type=#{type}
+			   AND billing_time IS NULL
+			   ORDER BY create_time DESC LIMIT 1
+		</select>
+		
+		<!-- 根据id获取总账单 -->
+		<select id="selectById" parameterType="String" resultMap="BaseResultMap">
+			select * from t_bs_charge_bill_total where id = #{0}
+		</select>
+		
+		<!-- 获取下期总账单 -->
+		<select id="findNextBillTotal" parameterType="String" resultMap="BaseResultMap">
+			select * from t_bs_charge_bill_total where last_total_id = #{0}
+		</select>
+		
+		<select id="findCmacCanbilling" parameterType="TBsChargeBillTotal" resultMap="BaseResultMap">
+			SELECT * 
+			  FROM t_bs_charge_bill_total 
+			 WHERE DATE_FORMAT(billing_time,'%Y-%m') = DATE_FORMAT(#{billingTime},'%Y-%m')
+			   AND project_id = #{projectId}
+			   AND cmac_is_billing = 0
+			   and audit_status = 1
+			   <if test="null != type">
+			   		and `type` = #{type}
+			   </if>
+		</select>
+		
+		<select id="findBilledTotal" parameterType="TBsChargeBillTotal" resultMap="BaseResultMap">
+			select *
+			  from t_bs_charge_bill_total
+			 where 1 = 1
+			 <if test="null != type">
+			 	and `type` = #{type}
+			 </if>
+			 <if test="null != projectId">
+			 	and project_id = #{projectId}
+			 </if>
+			 <if test="null != billingTime">
+			 	and DATE_FORMAT(billing_time,'%Y-%m') = DATE_FORMAT(#{billingTime},'%Y-%m')
+			 </if>
+			 ORDER BY create_time DESC
+			 LIMIT 0,1
+		</select>
+		
+		<select id="selectRebillingTotalByIds" parameterType="java.util.List" resultMap="BaseResultMap">
+			 SELECT * FROM t_bs_charge_bill_total
+			  WHERE audit_status = 1
+			  AND id in 
+			  <foreach collection="list" item="id" open="(" separator="," close=")">
+			  	    #{id}
+			  </foreach>
+			  and billing_time is not null
+			  order by billing_time asc
+		</select>
+		
+		<select id="selectAllFee" parameterType="TBsChargeBillTotal" resultType="java.util.Map">
+			SELECT t2.id,
+				   SUM(t1.current_fee) as currentFee,
+				   SUM(t1.current_bill_fee) as currentBillFee, 
+				   SUM(common_desummoney) + SUM(no_common_desummoney) as currPayed
+			FROM t_bs_charge_bill_history t1,  
+			     t_bs_charge_bill_total t2
+			WHERE DATE_FORMAT(t1.billing_time,'%Y-%m') = DATE_FORMAT(#{billingTime},'%Y-%m')
+			AND t1.charge_total_id = t2.id
+			AND t1.is_used = 0
+			AND t1.project_id = #{projectId}
+			and t2.type = #{type}
+		</select>
+		
+		<!-- 根据主键ID获取 -->
+		<select id="findTbsTotalbyId" parameterType="String" resultMap="BaseResultMap">
+			SELECT * from t_bs_charge_bill_total where id=#{0}
+		</select>
+		
+		<!-- 根据lastTotalId查找 -->
+		<select id="findTbsTotalBylastTotalId" parameterType="String" resultMap="BaseResultMap">
+			SELECT * from t_bs_charge_bill_total where last_total_id=#{0}
+		</select>
+		
+		<!-- 根据totalId进行聚合 -->
+		<update id="sumLastPayed" parameterType="String">
+			 UPDATE t_bs_charge_bill_total t
+				SET t.last_owed_fee = (
+									   SELECT SUM(last_payed) 
+								  		 FROM t_bs_charge_bill_history 
+								  		WHERE charge_total_id = t.id
+								  	  )
+				WHERE t.last_total_id = #{0}
+		</update>
+		
+		<!-- 根据项目查找审核状态不为'审核完成'的总单   1表示审核完成 ,汇总状态0，表示未汇总状态-->
+		<select id="findNoAduitByProjectId" parameterType="String" resultMap="BaseResultMap">
+			select * 
+			from 
+			t_bs_charge_bill_total 
+			where project_id=#{0}
+			and audit_status !=1
+			and (type=3 or type=4)
+			and billing_time is not null
+			and sun_status =0
+		</select>
+		
+		<select id="getAuditedCountByProjectIdAndTypes" resultType="Integer">
+			SELECT COUNT(id)
+			  FROM t_bs_charge_bill_total
+			 WHERE project_id = #{projectId}
+			   AND audit_status = 1
+			   AND DATE_FORMAT(billing_time,'%Y-%m') = DATE_FORMAT(SYSDATE(),'%Y-%m')
+			   AND TYPE IN 
+			   <foreach collection="types" item="type" open="(" close=")" separator=",">
+			   		#{type}
+			   </foreach>
+		</select>
+		
+		<select id="findByObj" parameterType="TBsChargeBillTotal" resultMap="BaseResultMap">
+			SELECT * 
+			  FROM t_bs_charge_bill_total 
+			 WHERE DATE_FORMAT(billing_time,'%Y-%m') = DATE_FORMAT(#{billingTime},'%Y-%m')
+			   AND project_id = #{projectId}
+		</select>
+</mapper>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<systems>
+	<subsystem id="20356848-80a5-4ecb-945e-964242c368c5" name="Everwing Tech" desc="翔恒科技物业云平台">
+		<!-- 需要忽略校验的公共模块的URL请统一放在这里  -->
+		<modulegroup id="35ce0d97-f123-4715-b4e0-cb14c0292a31" name="anon" permission="anon" desc="公共模块白名单集合">
+			<path path = "permissions/xml/module_anon.xml"/>
+		</modulegroup>
+
+		<modulegroup id="bdad6783-f6f9-48b1-9325-a8a7c3b77eb9" name="Customer Management" desc="客户管理" order="5" url="./welcomeModule" img="icon3">
+			<path path = "permissions/xml/module_customerManagement.xml"/>
+		</modulegroup>
+
+		<modulegroup id="47003b7e-8f9e-475a-b76b-dae2e2efb558" name="Order Management" desc="工单管理" order="7" url="./orderManagementModule" img="icon2">
+			<path path = "permissions/xml/module_orderManagement.xml"/>
+		</modulegroup>
+
+		<modulegroup id="62df70ab-2825-4c92-a123-bdea62bec705" name="Product Management" desc="产品管理" order="9" url="./productManagementModule" img="icon4">
+			<path path = "permissions/xml/module_productManagement.xml"/>
+		</modulegroup>
+
+		<modulegroup id="9de493a4-4f23-45fb-905e-b9c6f2db5edf" name="Project Management" desc="项目管理" order="11" url="./projectManagementModule" img="icon6">
+			<path path = "permissions/xml/module_projectManagement.xml"/>
+		</modulegroup>
+
+		<modulegroup id="dc2e2406-76e6-436e-abe3-144fa1608d78" name="Business Management" desc="应用管理" order="13" url="./applyManagementModule" img="icon7">
+			<path path = "permissions/xml/module_applyManagement.xml"/>
+		</modulegroup>
+
+		<modulegroup id="1a6debab-f513-4b3f-9d21-2b5249c3ec11" name="Base Setting" desc="基础配置" order="15" url="./baseSettingModule" img="icon8">
+			<path path = "permissions/xml/module_baseSetting.xml"/>
+		</modulegroup>
+	</subsystem>
+</systems>

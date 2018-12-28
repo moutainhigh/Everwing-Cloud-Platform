@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.coreservice.wy.fee.dao.mapper.AcLastBillFeeInfoMapper">
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.fee.entity.AcLastBillFeeInfo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="house_code_new" jdbcType="VARCHAR" property="houseCodeNew" />
+    <result column="last_bill_fee" jdbcType="DECIMAL" property="lastBillFee" />
+    <result column="account_id" jdbcType="VARCHAR" property="accountId" />
+    <result column="project_id" jdbcType="VARCHAR" property="projectId" />
+    <result column="project_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="create_id" jdbcType="VARCHAR" property="createId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_id" jdbcType="VARCHAR" property="modifyId" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="account_type" jdbcType="INTEGER" property="accountType" />
+    <result column="signature" jdbcType="VARCHAR" property="signature" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, house_code_new, last_bill_fee, account_id, project_id, project_name, create_id, 
+    create_time, modify_id, modify_time, account_type, signature
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_ac_last_bill_fee_info
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByCodeAccountIdAndType" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_ac_last_bill_fee_info
+    where house_code_new = #{houseCodeNew,jdbcType=VARCHAR} and account_id=#{acAccountId} and account_type=#{type}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_ac_last_bill_fee_info
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="AcLastBillFeeInfo">
+    insert into t_ac_last_bill_fee_info (id, house_code_new, last_bill_fee, 
+      account_id, project_id, project_name, 
+      create_id, create_time, modify_id, 
+      modify_time, account_type, signature)
+    values (#{id,jdbcType=VARCHAR}, #{houseCodeNew,jdbcType=VARCHAR}, #{lastBillFee,jdbcType=DECIMAL}, 
+      #{accountId,jdbcType=VARCHAR}, #{projectId,jdbcType=VARCHAR}, #{projectName,jdbcType=VARCHAR}, 
+      #{createId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyId,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{accountType,jdbcType=INTEGER}, #{signature,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="AcLastBillFeeInfo">
+    insert into t_ac_last_bill_fee_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="houseCodeNew != null">
+        house_code_new,
+      </if>
+      <if test="lastBillFee != null">
+        last_bill_fee,
+      </if>
+      <if test="accountId != null">
+        account_id,
+      </if>
+      <if test="projectId != null">
+        project_id,
+      </if>
+      <if test="projectName != null">
+        project_name,
+      </if>
+      <if test="createId != null">
+        create_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifyId != null">
+        modify_id,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+      <if test="accountType != null">
+        account_type,
+      </if>
+      <if test="signature != null">
+        signature,
+      </if>
+
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="houseCodeNew != null">
+        #{houseCodeNew,jdbcType=VARCHAR},
+      </if>
+      <if test="lastBillFee != null">
+        #{lastBillFee,jdbcType=DECIMAL},
+      </if>
+      <if test="accountId != null">
+        #{accountId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectId != null">
+        #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null">
+        #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyId != null">
+        #{modifyId,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accountType != null">
+        #{accountType,jdbcType=INTEGER},
+      </if>
+      <if test="signature != null">
+        #{signature,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="AcLastBillFeeInfo">
+    update t_ac_last_bill_fee_info
+    <set>
+      <if test="houseCodeNew != null">
+        house_code_new = #{houseCodeNew,jdbcType=VARCHAR},
+      </if>
+      <if test="lastBillFee != null">
+        last_bill_fee = #{lastBillFee,jdbcType=DECIMAL},
+      </if>
+      <if test="accountId != null">
+        account_id = #{accountId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectId != null">
+        project_id = #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        project_name = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null">
+        create_id = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyId != null">
+        modify_id = #{modifyId,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="signature != null">
+        signature = #{signature,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="AcLastBillFeeInfo">
+    update t_ac_last_bill_fee_info
+    set house_code_new = #{houseCodeNew,jdbcType=VARCHAR},
+      last_bill_fee = #{lastBillFee,jdbcType=DECIMAL},
+      account_id = #{accountId,jdbcType=VARCHAR},
+      project_id = #{projectId,jdbcType=VARCHAR},
+      project_name = #{projectName,jdbcType=VARCHAR},
+      create_id = #{createId,jdbcType=VARCHAR},
+      modify_id = #{modifyId,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      account_type = #{accountType,jdbcType=INTEGER},
+      signature = #{signature,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateByPrimaryKeyForLastBill" parameterType="AcLastBillFeeInfo">
+  		update t_ac_last_bill_fee_info set last_bill_fee = last_bill_fee + #{lastBillFee ,jdbcType=DECIMAL}  where id = #{id}
+  </update>
+
+  <select id="selectByHouseCodeNew" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_ac_last_bill_fee_info
+    where house_code_new = #{houseCodeNew,jdbcType=VARCHAR}
+  </select>
+
+  <update id="updateByHouseCodeAndAccountId" parameterType="AcLastBillFeeInfo">
+    update t_ac_last_bill_fee_info set last_bill_fee = last_bill_fee - #{lastBillFee ,jdbcType=DECIMAL}  where house_code_new=#{houseCodeNew} and account_id=#{accountId}
+  </update>
+
+
+  <update id="updateByHouseCodeAndAccountType" parameterType="AcLastBillFeeInfo">
+    update t_ac_last_bill_fee_info set last_bill_fee = last_bill_fee - #{lastBillFee ,jdbcType=DECIMAL}  where house_code_new=#{houseCodeNew} and account_id =#{accountId}
+    and account_type=#{accountType}
+  </update>
+  <select id="selectByHouseCodeAndType" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_ac_last_bill_fee_info
+    where house_code_new = #{houseCodeNew,jdbcType=VARCHAR}  and account_type=#{type}
+  </select>
+  <update id="updateAmount" parameterType="AcLastBillFeeInfo">
+  update t_ac_last_bill_fee_info
+  SET last_bill_fee=#{amount}
+  where id=#{id}
+  </update>
+</mapper>

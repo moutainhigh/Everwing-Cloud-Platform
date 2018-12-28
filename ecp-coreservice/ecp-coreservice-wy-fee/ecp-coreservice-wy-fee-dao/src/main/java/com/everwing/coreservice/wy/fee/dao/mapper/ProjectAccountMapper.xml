@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.coreservice.wy.fee.dao.mapper.ProjectAccountMapper">
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.fee.entity.ProjectAccount">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="project_id" jdbcType="VARCHAR" property="projectId" />
+    <result column="company_id" jdbcType="VARCHAR" property="companyId" />
+    <result column="project_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+    <result column="signature" jdbcType="VARCHAR" property="signature" />
+    <result column="total_amount" jdbcType="DECIMAL" property="totalAmount" />
+    <result column="cycle_amount" jdbcType="DECIMAL" property="cycleAmount" />
+    <result column="product_amount" jdbcType="DECIMAL" property="productAmount" />
+    <result column="late_amount" jdbcType="DECIMAL" property="lateAmount" />
+    <result column="fine_amount" jdbcType="DECIMAL" property="fineAmount" />
+    <result column="predeposit_amount" jdbcType="DECIMAL" property="predepositAmount" />
+    <result column="refund_amount" jdbcType="DECIMAL" property="refundAmount" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, project_id, company_id, project_name, company_name, create_time, update_time, 
+    version, signature, total_amount, cycle_amount, product_amount, late_amount, fine_amount, 
+    predeposit_amount, refund_amount
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_project_account
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 根据项目id查询项目账户的信息 -->
+   <select id="selectByProjectId" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List" />
+      from t_project_account
+      WHERE   1=1 
+      <if test="null != projectId and 'all' != companyId">
+      	project_id=#{projectId}
+      </if>
+   </select>
+  
+  
+    <select id="selectByCompanyIdAndProjectId" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List" />
+      from t_project_account
+      WHERE company_id=#{companyId} and project_id=#{projectId}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_project_account
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="ProjectAccount">
+    insert into t_project_account (id, project_id, company_id, 
+      project_name, company_name, create_time, 
+      update_time, version, signature, 
+      total_amount, cycle_amount, product_amount, 
+      late_amount, fine_amount, predeposit_amount, 
+      refund_amount)
+    values (#{id,jdbcType=VARCHAR}, #{projectId,jdbcType=VARCHAR}, #{companyId,jdbcType=VARCHAR}, 
+      #{projectName,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER}, #{signature,jdbcType=VARCHAR},
+      #{totalAmount,jdbcType=DECIMAL}, #{cycleAmount,jdbcType=DECIMAL}, #{productAmount,jdbcType=DECIMAL}, 
+      #{lateAmount,jdbcType=DECIMAL}, #{fineAmount,jdbcType=DECIMAL}, #{predepositAmount,jdbcType=DECIMAL}, 
+      #{refundAmount,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="ProjectAccount">
+    insert into t_project_account
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="projectId != null">
+        project_id,
+      </if>
+      <if test="companyId != null">
+        company_id,
+      </if>
+      <if test="projectName != null">
+        project_name,
+      </if>
+      <if test="companyName != null">
+        company_name,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="version != null">
+        version,
+      </if>
+      <if test="signature != null">
+        signature,
+      </if>
+      <if test="totalAmount != null">
+        total_amount,
+      </if>
+      <if test="cycleAmount != null">
+        cycle_amount,
+      </if>
+      <if test="productAmount != null">
+        product_amount,
+      </if>
+      <if test="lateAmount != null">
+        late_amount,
+      </if>
+      <if test="fineAmount != null">
+        fine_amount,
+      </if>
+      <if test="predepositAmount != null">
+        predeposit_amount,
+      </if>
+      <if test="refundAmount != null">
+        refund_amount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="projectId != null">
+        #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=INTEGER},
+      </if>
+      <if test="signature != null">
+        #{signature,jdbcType=VARCHAR},
+      </if>
+      <if test="totalAmount != null">
+        #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="cycleAmount != null">
+        #{cycleAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="productAmount != null">
+        #{productAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="lateAmount != null">
+        #{lateAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="fineAmount != null">
+        #{fineAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="predepositAmount != null">
+        #{predepositAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="refundAmount != null">
+        #{refundAmount,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="ProjectAccount">
+    update t_project_account
+    <set>
+      <if test="projectId != null">
+        project_id = #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        company_id = #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        project_name = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="version != null">
+        version = #{version,jdbcType=INTEGER},
+      </if>
+      <if test="signature != null">
+        signature = #{signature,jdbcType=VARCHAR},
+      </if>
+      <if test="totalAmount != null">
+        total_amount = #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="cycleAmount != null">
+        cycle_amount = #{cycleAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="productAmount != null">
+        product_amount = #{productAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="lateAmount != null">
+        late_amount = #{lateAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="fineAmount != null">
+        fine_amount = #{fineAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="predepositAmount != null">
+        predeposit_amount = #{predepositAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="refundAmount != null">
+        refund_amount = #{refundAmount,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="ProjectAccount">
+    update t_project_account
+    set project_id = #{projectId,jdbcType=VARCHAR},
+      company_id = #{companyId,jdbcType=VARCHAR},
+      project_name = #{projectName,jdbcType=VARCHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      version = #{version,jdbcType=INTEGER},
+      signature = #{signature,jdbcType=VARCHAR},
+      total_amount = #{totalAmount,jdbcType=DECIMAL},
+      cycle_amount = #{cycleAmount,jdbcType=DECIMAL},
+      product_amount = #{productAmount,jdbcType=DECIMAL},
+      late_amount = #{lateAmount,jdbcType=DECIMAL},
+      fine_amount = #{fineAmount,jdbcType=DECIMAL},
+      predeposit_amount = #{predepositAmount,jdbcType=DECIMAL},
+      refund_amount = #{refundAmount,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByIdAndVersion">
+    update t_project_account
+    <set>
+      <if test="projectId != null">
+        project_id = #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        company_id = #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        project_name = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="version != null">
+        version = #{version,jdbcType=INTEGER}+1,
+      </if>
+      <if test="signature != null">
+        signature = #{signature,jdbcType=VARCHAR},
+      </if>
+      <if test="totalAmount != null">
+        total_amount = #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="cycleAmount != null">
+        cycle_amount = #{cycleAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="productAmount != null">
+        product_amount = #{productAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="lateAmount != null">
+        late_amount = #{lateAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="fineAmount != null">
+        fine_amount = #{fineAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="predepositAmount != null">
+        predeposit_amount = #{predepositAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="refundAmount != null">
+        refund_amount = #{refundAmount,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR} and version=#{version}
+  </update>
+  <select id="selectProject"  parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    t1.id, t1.project_id, t1.company_id, t2.name as project_name, t1.company_name, t1.create_time, t1.update_time,
+    t1.version, t1.signature, t1.total_amount, t1.cycle_amount, t1.product_amount, t1.late_amount,t1.fine_amount,
+    t1.predeposit_amount, t1.refund_amount
+    from t_project_account t1,t_sys_project t2
+    WHERE   t1.project_id=t2.code
+    and  t1.project_id IN
+    <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+        '${item}'
+    </foreach>
+  </select>
+
+  <select id="selectProjectById"  parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    t1.id, t1.project_id, t1.company_id, t2.name as project_name, t1.company_name, t1.create_time, t1.update_time,
+    t1.version, t1.signature, t1.total_amount, t1.cycle_amount, t1.product_amount, t1.late_amount,t1.fine_amount,
+    t1.predeposit_amount, t1.refund_amount
+    from t_project_account t1,t_sys_project t2
+    WHERE   t1.project_id=t2.code
+
+      <if test="projectId != null">
+        and t1.project_id=#{projectId}
+      </if>
+
+  </select>
+  <select id="getProjectAccountById"  parameterType="java.lang.String" resultMap="BaseResultMap">
+
+    SELECT * from t_project_account where project_id=#{projectId}
+
+  </select>
+</mapper>

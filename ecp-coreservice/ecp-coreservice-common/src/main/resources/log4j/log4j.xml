@@ -1,0 +1,47 @@
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration>
+	<!-- 控制台 -->
+	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="    [%d{yyyy/dd/MM HH:mm:ss}] %-4p %C.%M(%L) - ⤵ -️ \n%m%n"></param>
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<!-- 输出最低级别 -->
+			<param name="LevelMin" value="debug" />
+			<!-- 输出的最大级别 -->
+			<param name="LevelMax" value="error" />
+		</filter>
+	</appender>
+
+	<!-- 输出日志到文件，文件大小到达指定大小的时候产生一个新的文件 -->
+	<appender name="railyFile" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${log4jOutputPath}"></param>
+		<param name="ImmediateFlush" value="true" />
+		<param name="Threshold" value="info"></param>
+		<param name="Append" value="true"></param>
+		<param name="MaxFileSize" value="10240KB"></param>
+		<param name="MaxBackupIndex" value="100"></param>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="    [%d{yyyy/dd/MM HH:mm:ss}] %-4p %C.%M(%L) - ⤵ -️ \n%m%n"></param>
+		</layout>
+	</appender>
+
+	<!-- mybatis sql日志的配置 -->
+	<logger name="com.everwing.coreservice.platform.dao.mapper" additivity="true">
+		<level value="debug" />
+	</logger>
+	<logger name="com.everwing.coreservice.admin.dao.mapper" additivity="true">
+		<level value="debug" />
+	</logger>
+	<logger name="com.everwing.coreservice.wy.dao.mapper" additivity="true">
+		<level value="debug" />
+	</logger>
+
+	<root>
+		<priority value="info" />
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="railyFile" />
+	</root>
+</log4j:configuration>

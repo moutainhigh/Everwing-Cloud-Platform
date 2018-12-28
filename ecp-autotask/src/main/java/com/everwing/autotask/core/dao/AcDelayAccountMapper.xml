@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.autotask.core.dao.AcDelayAccountMapper">
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.fee.entity.AcDelayAccount">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="account_id" jdbcType="VARCHAR" property="accountId" />
+    <result column="project_id" jdbcType="VARCHAR" property="projectId" />
+    <result column="project_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="create_id" jdbcType="VARCHAR" property="createId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_id" jdbcType="VARCHAR" property="modifyId" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="account_type" jdbcType="SMALLINT" property="accountType" />
+    <result column="house_code_new" jdbcType="VARCHAR" property="houseCodeNew" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, amount, account_id, project_id, project_name, create_id, create_time, modify_id, 
+    modify_time, account_type, house_code_new
+  </sql>
+  
+   <insert id="insert" parameterType="com.everwing.coreservice.common.wy.fee.entity.AcDelayAccount">
+    insert into t_ac_delay_account (id, amount, account_id, 
+      project_id, project_name, create_id, 
+      create_time, modify_id, modify_time, 
+      account_type, house_code_new)
+    values (#{id,jdbcType=VARCHAR}, #{amount,jdbcType=DECIMAL}, #{accountId,jdbcType=VARCHAR}, 
+      #{projectId,jdbcType=VARCHAR}, #{projectName,jdbcType=VARCHAR}, #{createId,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyId,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, 
+      #{accountType,jdbcType=SMALLINT}, #{houseCodeNew,jdbcType=VARCHAR})
+  </insert>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_ac_delay_account
+    where account_id = #{acAccountId} and account_type=#{type}
+  </select>
+  
+  <!-- 根据项目id进行查询 -->
+   <select id="selectByProjectAndAccountType" resultMap="BaseResultMap">
+   		select id,amount,house_code_new from t_ac_delay_account 
+   		where project_id = #{projectId} and account_type = #{accountType} and house_code_new = #{houseCodeNew} limit 1
+  </select>
+  
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.everwing.coreservice.common.wy.fee.entity.AcDelayAccount">
+    	update t_ac_delay_account
+       	set amount = amount + #{amount,jdbcType=DECIMAL}
+    	where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  
+</mapper>

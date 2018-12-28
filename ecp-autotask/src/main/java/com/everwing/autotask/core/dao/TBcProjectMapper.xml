@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.autotask.core.dao.TBcProjectMapper">
+    <resultMap type="TBcProject" id="BaseResultMap">
+        <result property="id" 			column="id" 			jdbcType="VARCHAR"/>
+        <result property="projectId" 	column="project_id"		jdbcType="VARCHAR"/>
+        <result property="projectName" 	column="project_name"	jdbcType="VARCHAR"/>
+        <result property="wyType" 		column="wy_type"		jdbcType="TINYINT"/>
+        <result property="btType" 		column="bt_type"		jdbcType="TINYINT"/>
+        <result property="waterType" 	column="water_type"		jdbcType="TINYINT"/>
+        <result property="electType" 	column="elect_type"		jdbcType="TINYINT"/>
+        <result property="wyStatus" 	column="wy_status"		jdbcType="TINYINT"/>
+        <result property="btStatus" 	column="bt_status"		jdbcType="TINYINT"/>
+        <result property="waterStatus" 	column="water_status"	jdbcType="TINYINT"/>
+        <result property="electStatus" 	column="elect_status"	jdbcType="TINYINT"/>
+        <result property="status" 		column="status"			jdbcType="TINYINT"/>
+        <result property="shopNum" 		column="shop_num"		jdbcType="VARCHAR"/>
+        <result property="unionPrivateZone" column="union_private_zone" jdbcType="VARCHAR"/>
+        <result property="enterpriseNo" column="enterprise_no"	jdbcType="VARCHAR"/>
+        <result property="unionCount" 	column="union_count"	jdbcType="INTEGER"/>
+        <result property="jrlCount" 	column="jrl_count"		jdbcType="INTEGER"/>
+        <result property="createId" 	column="create_id"		jdbcType="VARCHAR"/>
+        <result property="createTime" 	column="create_time"	jdbcType="TIMESTAMP"/>
+        <result property="modifyId" 	column="modify_id"		jdbcType="VARCHAR"/>
+        <result property="modifyTime" 	column="modify_time"	jdbcType="TIMESTAMP"/>
+        <result property="jrlWaitBankNo"	column="jrl_wait_bank_no"	jdbcType="VARCHAR"/>
+    </resultMap>
+    <select id="findByProjectId" parameterType="String" resultMap="BaseResultMap">
+        select * from t_bc_project where project_id = #{projectId}
+    </select>
+</mapper>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.charge.dao.mapper.TJfChargingItemBaseInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.charging.entity.TJfChargingItemBaseInfo" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="charging_item_name" property="chargingItemName" jdbcType="VARCHAR" />
+    <result column="charging_type" property="chargingType" jdbcType="INTEGER" />
+    <result column="is_used" property="isUsed" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="start_used_time" property="startUsedTime" jdbcType="TIMESTAMP" />
+    <result column="stop_time" property="stopTime" jdbcType="TIMESTAMP" />
+    <result column="create_id" property="createId" jdbcType="VARCHAR" />
+    <result column="project_id" property="projectId" jdbcType="VARCHAR" />
+    <result column="project_name" property="projectName" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_jf_charging_item_base_info
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.everwing.coreservice.common.wy.charging.entity.TJfChargingItemBaseInfo" >
+    <selectKey resultType="java.lang.String" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_jf_charging_item_base_info (charging_item_name, charging_type, is_used, 
+      create_time, start_used_time, stop_time, 
+      create_id, project_id, project_name
+      )
+    values (#{chargingItemName,jdbcType=VARCHAR}, #{chargingType,jdbcType=INTEGER}, #{isUsed,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{startUsedTime,jdbcType=TIMESTAMP}, #{stopTime,jdbcType=TIMESTAMP}, 
+      #{createId,jdbcType=VARCHAR}, #{projectId,jdbcType=VARCHAR}, #{projectName,jdbcType=VARCHAR}
+      )
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="com.everwing.coreservice.common.wy.charging.entity.TJfChargingItemBaseInfo" >
+    update t_jf_charging_item_base_info
+    set charging_item_name = #{chargingItemName,jdbcType=VARCHAR},
+      charging_type = #{chargingType,jdbcType=INTEGER},
+      is_used = #{isUsed,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      start_used_time = #{startUsedTime,jdbcType=TIMESTAMP},
+      stop_time = #{stopTime,jdbcType=TIMESTAMP},
+      create_id = #{createId,jdbcType=VARCHAR},
+      project_id = #{projectId,jdbcType=VARCHAR},
+      project_name = #{projectName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select id, charging_item_name, charging_type, is_used, create_time, start_used_time, 
+    stop_time, create_id, project_id, project_name
+    from t_jf_charging_item_base_info
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, charging_item_name, charging_type, is_used, create_time, start_used_time, 
+    stop_time, create_id, project_id, project_name
+    from t_jf_charging_item_base_info
+  </select>
+</mapper>

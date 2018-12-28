@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<excel id="basedata_building">
+    <sheet label="资产信息">
+        <list>
+            <sql id="20f49248-4193-48cf-b8b9-d4d2a1b1c8e7">
+                <![CDATA[
+                    SELECT
+                        qi.building_name AS firstNode,
+                        qu.building_name AS secondNode,
+                        dongzuo.building_name AS thirdNode,
+                        danyuanrukou.building_name AS fourthNode,
+                        ceng.building_name AS fifthNode,
+                        leaf.building_name AS sixthNode,
+                        leaf.building_type,
+                        leaf.house_code_new,
+                        leaf.house_code,
+                        leaf.property_name,
+                        leaf.property_addr,
+                        leaf.property_right_flag,
+                        leaf.building_certificate,
+                        leaf.property_right_type,
+                        leaf.property_attributes,
+                        CASE leaf.building_type
+                            WHEN 'house' THEN 'houseType'
+                            WHEN 'store' THEN 'storeType'
+                            WHEN 'parkspace' THEN 'stationProperty'
+                            ELSE '未知'
+                        END AS asset_attributes_lookup_item_key,
+                        leaf.asset_attributes,
+                        leaf.building_area,
+                        leaf.usable_area,
+                        leaf.share_area,
+                        leaf.finish_date,
+                        leaf.market_state,
+                        leaf.join_flag,
+                        leaf.asset_usage,
+                        leaf.place_attribute,
+                        leaf.building_height,
+                        leaf.parking_space_type,
+                        leaf.associated_parking_spaces,
+                        leaf.unit_wy_price,
+                        leaf.unit_bt_price,
+                        leaf.is_charge_obj,
+                        leaf.bill_address
+                FROM
+                    tc_building root
+                            LEFT JOIN tc_building qi ON root.building_code = qi.pid
+                            LEFT JOIN tc_building qu ON qi.building_code = qu.pid
+                            LEFT JOIN tc_building dongzuo ON qu.building_code = dongzuo.pid
+                            LEFT JOIN tc_building danyuanrukou ON dongzuo.building_code = danyuanrukou.pid
+                            LEFT JOIN tc_building ceng ON danyuanrukou.building_code = ceng.pid
+                            LEFT JOIN tc_building leaf ON ceng.building_code = leaf.pid
+                    WHERE
+                            qi.building_type = 'qi'
+                            AND qu.building_type = 'qu'
+                            AND dongzuo.building_type = 'dongzuo'
+                            AND danyuanrukou.building_type = 'danyuanrukou'
+                            AND ceng.building_type = 'ceng'
+                            <#if projectId??>
+                                AND leaf.project_id = '${projectId}'
+                            </#if>
+                ORDER BY leaf.building_full_name
+                ]]>
+            </sql>
+            <field column="firstNode" label="期"></field>
+            <field column="secondNode" label="区"></field>
+            <field column="thirdNode" label="栋/座"></field>
+            <field column="fourthNode" label="单元/入口"></field>
+            <field column="fifthNode" label="层"></field>
+            <field column="sixthNode" label="流水码"></field>
+            <field column="building_type" label="资产类型" type="LookupItem" lookupCode="buildingType"></field>
+            <field column="house_code_new" label="资产编码（新）"></field>
+            <field column="house_code" label="资产编码（旧）"></field>
+            <field column="property_name" label="资产名称"></field>
+            <field column="property_addr" label="资产地址"></field>
+            <field column="property_right_flag" label="是否有房产证" type="LookupItem" lookupCode="yesNo"></field>
+            <field column="building_certificate" label="房产证号"></field>
+            <field column="property_right_type" label="产权类型" type="LookupItem" lookupCode="propertyRightType"></field>
+            <field column="property_attributes" label="产权属性" type="LookupItem" lookupCode="propertyAttributes"></field>
+            <field column="asset_attributes" label="资产属性" type="LookupItem" lookupCode="${asset_attributes_lookup_item_key}"></field>
+            <field column="building_area" label="建筑面积（平米）" type="Double" format="0.00"></field>
+            <field column="usable_area" label="套内面积（平米）" type="Double" format="0.00"></field>
+            <field column="share_area" label="公摊面积（平米）" type="Double" format="0.00"></field>
+            <field column="finish_date" label="竣工日期" type="Date" format="yyyy-MM-dd"></field>
+            <field column="market_state" label="销售状态" type="LookupItem" lookupCode="marketState"></field>
+            <field column="join_flag" label="是否已入伙" type="LookupItem" lookupCode="yesNo"></field>
+            <field column="asset_usage" label="使用方式" type="LookupItem" lookupCode="propertyUsage"></field>
+            <field column="place_attribute" label="位置属性" type="LookupItem" lookupCode="placeAttribute"></field>
+            <field column="building_height" label="建筑高度" type="LookupItem" lookupCode="houseProperty"></field>
+            <field column="parking_space_type" label="车位类型" type="LookupItem" lookupCode="stationType"></field>
+            <field column="associated_parking_spaces" label="关联车位"></field>
+            <field column="unit_wy_price" label="物业管理费单价" type="Double" format="0.00"></field>
+            <field column="unit_bt_price" label="本体基金费用单价" type="Double" format="0.00"></field>
+            <field column="is_charge_obj" label="是否计费" type="LookupItem" lookupCode="yesNo"></field>
+            <field column="bill_address" label="账单地址"></field>
+        </list>
+    </sheet>
+</excel>

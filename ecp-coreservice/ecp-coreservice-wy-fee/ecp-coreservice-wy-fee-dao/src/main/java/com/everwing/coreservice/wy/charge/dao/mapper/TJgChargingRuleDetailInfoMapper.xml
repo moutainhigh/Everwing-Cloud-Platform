@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.charge.dao.mapper.TJgChargingRuleDetailInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.charging.entity.TJgChargingRuleDetailInfo" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="scheme_id" property="schemeId" jdbcType="VARCHAR" />
+    <result column="rule_name" property="ruleName" jdbcType="VARCHAR" />
+    <result column="rule_type" property="ruleType" jdbcType="INTEGER" />
+    <result column="is_ladder" property="isLadder" jdbcType="INTEGER" />
+    <result column="unit_price" property="unitPrice" jdbcType="DECIMAL" />
+    <result column="cricitcal_value" property="cricitcalValue" jdbcType="DECIMAL" />
+    <result column="standard_formula" property="standardFormula" jdbcType="VARCHAR" />
+    <result column="formula_description" property="formulaDescription" jdbcType="VARCHAR" />
+    <result column="coefficient1" property="coefficient1" jdbcType="DECIMAL" />
+    <result column="coefficient2" property="coefficient2" jdbcType="DECIMAL" />
+    <result column="coefficient3" property="coefficient3" jdbcType="DECIMAL" />
+    <result column="create_id" property="createId" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_jg_charging_rule_detail_info
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.everwing.coreservice.common.wy.charging.entity.TJgChargingRuleDetailInfo" >
+    <selectKey resultType="java.lang.String" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_jg_charging_rule_detail_info (scheme_id, rule_name, rule_type, 
+      is_ladder, unit_price, cricitcal_value, 
+      standard_formula, formula_description, coefficient1, 
+      coefficient2, coefficient3, create_id, 
+      create_time, update_by, update_time
+      )
+    values (#{schemeId,jdbcType=VARCHAR}, #{ruleName,jdbcType=VARCHAR}, #{ruleType,jdbcType=INTEGER}, 
+      #{isLadder,jdbcType=INTEGER}, #{unitPrice,jdbcType=DECIMAL}, #{cricitcalValue,jdbcType=DECIMAL}, 
+      #{standardFormula,jdbcType=VARCHAR}, #{formulaDescription,jdbcType=VARCHAR}, #{coefficient1,jdbcType=DECIMAL}, 
+      #{coefficient2,jdbcType=DECIMAL}, #{coefficient3,jdbcType=DECIMAL}, #{createId,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="com.everwing.coreservice.common.wy.charging.entity.TJgChargingRuleDetailInfo" >
+    update t_jg_charging_rule_detail_info
+    set scheme_id = #{schemeId,jdbcType=VARCHAR},
+      rule_name = #{ruleName,jdbcType=VARCHAR},
+      rule_type = #{ruleType,jdbcType=INTEGER},
+      is_ladder = #{isLadder,jdbcType=INTEGER},
+      unit_price = #{unitPrice,jdbcType=DECIMAL},
+      cricitcal_value = #{cricitcalValue,jdbcType=DECIMAL},
+      standard_formula = #{standardFormula,jdbcType=VARCHAR},
+      formula_description = #{formulaDescription,jdbcType=VARCHAR},
+      coefficient1 = #{coefficient1,jdbcType=DECIMAL},
+      coefficient2 = #{coefficient2,jdbcType=DECIMAL},
+      coefficient3 = #{coefficient3,jdbcType=DECIMAL},
+      create_id = #{createId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select id, scheme_id, rule_name, rule_type, is_ladder, unit_price, cricitcal_value, 
+    standard_formula, formula_description, coefficient1, coefficient2, coefficient3, 
+    create_id, create_time, update_by, update_time
+    from t_jg_charging_rule_detail_info
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, scheme_id, rule_name, rule_type, is_ladder, unit_price, cricitcal_value, 
+    standard_formula, formula_description, coefficient1, coefficient2, coefficient3, 
+    create_id, create_time, update_by, update_time
+    from t_jg_charging_rule_detail_info
+  </select>
+</mapper>

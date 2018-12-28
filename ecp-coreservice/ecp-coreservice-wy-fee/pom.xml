@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>ecp-coreservice</artifactId>
+        <groupId>com.everwing</groupId>
+        <version>1.0.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>ecp-coreservice-wy-fee</artifactId>
+    <packaging>pom</packaging>
+
+    <description>收费计费账单模块</description>
+    <modules>
+        <module>ecp-coreservice-wy-fee-dao</module>
+        <module>ecp-coreservice-wy-fee-core</module>
+        <module>ecp-coreservice-wy-fee-api</module>
+        <module>ecp-coreservice-wy-fee-order-api</module>
+    </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.everwing</groupId>
+            <artifactId>ecp-coreservice-common</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+    </dependencies>
+</project>

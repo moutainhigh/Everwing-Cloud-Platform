@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.sys.TSysDepartmentMapper">
+    <resultMap id="baseResultMap" type="TSysDepartment">
+        <result property="departmentId" column="department_id"/>
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+        <result property="description" column="description"/>
+        <result property="leader" column="leader"/>
+        <result property="createrId" column="creater_id"/>
+        <result property="createrName" column="creater_name"/>
+        <result property="modifyId" column="modify_id"/>
+        <result property="modifyName" column="modify_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+
+    <resultMap id="listResultMap" type="TSysDepartmentList" extends="baseResultMap">
+    </resultMap>
+
+    <select id="listPage" parameterType="TSysDepartmentSearch" resultMap="listResultMap">
+        SELECT t.* FROM t_sys_department t WHERE 1=1
+        <if test="code != null and code !=  ''">
+            AND t.code = #{code}
+        </if>
+        <if test="departmentIdList != null">
+            AND t.department_id IN
+            <foreach collection="departmentIdList" item="item" index="index" open="(" close=")" separator=",">
+                '${item}'
+            </foreach>
+        </if>
+        ORDER BY t.name
+    </select>
+
+    <select id="findByCondition" parameterType="TSysDepartmentSearch" resultMap="listResultMap">
+        SELECT * FROM t_sys_department t WHERE 1=1
+        <if test="departmentId != null and departmentId !=  ''">
+            AND t.department_id = #{departmentId}
+        </if>
+        <if test="code != null and code !=  ''">
+            AND t.code = #{code}
+        </if>
+        <if test="name != null and name != ''">
+            AND t.name = #{name}
+        </if>
+        ORDER BY t.name
+    </select>
+
+    <insert id="insert" parameterType="TSysDepartment">
+        INSERT INTO t_sys_department (
+            department_id,
+            code,
+            name,
+            description,
+            leader,
+            creater_id,
+            creater_name,
+            create_time
+        )
+        VALUES (
+            #{departmentId},
+            #{code},
+            #{name},
+            #{description},
+            #{leader},
+            #{createrId},
+            #{createrName},
+            sysdate()
+        )
+    </insert>
+
+    <update id="modify" parameterType="TSysDepartment">
+        UPDATE t_sys_department
+        <set>
+            name = #{name},
+            description = #{description},
+            leader = #{leader},
+            modify_id = #{modifyId},
+            modify_name = #{modifyName},
+            modify_time = sysdate()
+        </set>
+        WHERE department_id = #{departmentId}
+    </update>
+
+    <delete id="delete" parameterType="TSysDepartment">
+        DELETE FROM t_sys_department WHERE department_id = #{departmentId}
+    </delete>
+</mapper>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.gating.WhiteListMapper" >
+    <insert id="batchInsert" parameterType="java.util.List">
+        insert into t_whitelist(id,user_id,gating_code,company_id,project_id,create_by) VALUES
+        <foreach collection="whiteLists" item="whitelist" index="index" separator=",">
+            (#{whitelist.id},#{whitelist.userId},#{whitelist.gatingCode},#{whitelist.companyId},#{whitelist.projectId},#{whitelist.createBy})
+        </foreach>
+    </insert>
+
+    <select id="selectByCPG" resultType="Map">
+      SELECT u.staff_number accountNam,u.staff_number password
+      FROM t_whitelist t
+      LEFT JOIN tb_gating g ON t.gating_code = g.gating_code
+      LEFT JOIN t_sys_user u ON t.user_id=u.user_id
+      WHERE g.id = #{gatingId} AND t.company_id = #{companyId} AND t.project_id = #{projectId}
+    </select>
+</mapper>

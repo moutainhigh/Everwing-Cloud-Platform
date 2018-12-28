@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.account.AccountMapper" >
+  <resultMap id="BaseResultMap" type="Account" >
+    <id column="account_id" property="accountId" jdbcType="VARCHAR" />
+    <result column="account_num" property="accountNum" jdbcType="VARCHAR" />
+    <result column="is_bank_card" property="isBankCard" jdbcType="TINYINT" />
+    <result column="project_id" property="projectId" jdbcType="VARCHAR" />
+    <result column="disposable_balance" property="disposableBalance" jdbcType="DOUBLE" />
+    <result column="total_balance" property="totalBalance" jdbcType="DOUBLE" />
+    <result column="cust_id" property="custId" jdbcType="VARCHAR" />
+    <result column="enterprise_id" property="enterpriseId" jdbcType="VARCHAR" />
+    
+    <!-- 附加字段 数据表中无 -->
+    <result column="project_name" property="projectName" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  
+  <insert id="insertAccount" parameterType="Account" >
+    insert into tc_account (account_id, account_num, is_bank_card, 
+      project_id, disposable_balance, total_balance, 
+      cust_id, enterprise_id)
+    values (#{accountId,jdbcType=VARCHAR}, #{accountNum,jdbcType=VARCHAR}, #{isBankCard,jdbcType=TINYINT}, 
+      #{projectId,jdbcType=VARCHAR}, #{disposableBalance,jdbcType=DOUBLE}, #{totalBalance,jdbcType=DOUBLE}, 
+      #{custId,jdbcType=VARCHAR}, #{enterpriseId,jdbcType=VARCHAR})
+  </insert>
+ 
+ <select id="getAccountByCustId" parameterType="String" resultMap="BaseResultMap">
+ 	select a.*,p.project_name from tc_account a
+ 	left join t_project p on a.project_id = p.project_id
+ 	where a.cust_id=#{0}
+ </select>
+ 
+  <update id="updateAccount" parameterType="Account" >
+    update tc_account
+    <set >
+      <if test="accountNum != null" >
+        account_num = #{accountNum,jdbcType=VARCHAR},
+      </if>
+      <if test="isBankCard != null" >
+        is_bank_card = #{isBankCard,jdbcType=TINYINT},
+      </if>
+      <if test="project_id != null" >
+        project_id = #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="disposableBalance != null" >
+        disposable_balance = #{disposableBalance,jdbcType=DOUBLE},
+      </if>
+      <if test="totalBalance != null" >
+        total_balance = #{totalBalance,jdbcType=DOUBLE},
+      </if>
+      <if test="custId != null" >
+        cust_id = #{custId,jdbcType=VARCHAR},
+      </if>
+      <if test="enterpriseId != null" >
+        enterprise_id = #{enterpriseId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where account_id = #{accountId,jdbcType=VARCHAR}
+  </update>
+  
+	<select id="getAccountAndRelationByCustId" parameterType="String" resultMap="BaseResultMap">
+		select * from tc_account where cust_id = #{0}
+	</select>
+
+	<delete id="deleteAccountByCustId" parameterType="java.lang.String">
+		delete from tc_account where cust_id = #{custId,jdbcType=VARCHAR}
+	</delete>
+ 
+</mapper>

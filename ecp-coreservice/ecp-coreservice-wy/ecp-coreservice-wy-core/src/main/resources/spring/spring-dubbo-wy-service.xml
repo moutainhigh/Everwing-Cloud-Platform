@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+
+
+
+
+	http://code.alibabatech.com/schema/dubbo
+	http://code.alibabatech.com/schema/dubbo/dubbo.xsd"
+       default-lazy-init="false">
+
+    <dubbo:protocol name="${wy-coreservice.dubbo.protocol.name}"
+                    port="${wy-coreservice.dubbo.protocol.port}"/>
+
+    <dubbo:application name="${wy-coreservice.dubbo.application.name}"/>
+
+    <dubbo:registry address="${wy-coreservice.dubbo.registry.address}" protocol="zookeeper" check="false" file="${catalina.home}/dubbo-registry/dubbo-registry.properties"/>
+
+
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.building.TcBuildingService"
+                   ref="tcBuildingServiceImpl"/>
+
+    <!-- 公共资产 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.TcPublicAsset.TcPublicAssetService"
+                   ref="tcPublicAssetServiceImpl"/>
+
+
+    <!-- 操作日志 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.operation.OperationService"
+                   ref="OperationServiceImpl"/>
+
+
+    <!-- 工程施工操作日志 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.engineeringlog.EngineeringlogService"
+                   ref="engineeringlogServiceImpl"/>
+
+    <!-- 水表操作日志 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.Waterlog.WaterlogService"
+                   ref="waterlogServiceImpl"/>
+    <!-- 电表操作日志 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.Electlog.ElectlogService"
+                   ref="electlogServiceImpl"/>
+
+    <!-- 工程施工 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.TcConstruction.TcConstructionService"
+                   ref="tcConstructionServiceImpl"/>
+
+    <!-- 水表 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.TcSurfaceWater.TcSurfaceWaterService"
+                   ref="tcSurfaceWaterSericeImpl"/>
+    <!-- 电表 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.TcSurfaceElectService.TcSurfaceElectService"
+                   ref="tcSurfaceElectSericeImpl"/>
+
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.cust.person.relation.PersonCustRelationService"
+                   ref="PersonCustRelationServiceImpl"/>
+
+    <!-- 公共 S -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.sys.TSysLookupService"
+                   ref="tSysLookupServiceImpl"/>
+
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.sys.TSysUserService"
+                   ref="tSysUserServiceImpl"/>
+
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.sys.TSysRoleService"
+                   ref="tSysRoleServiceImpl"/>
+
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.sys.TSysImportExportService"
+                   ref="tSysImportExportServiceImpl"/>
+
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.sys.TSysOperationLogService"
+                   ref="tSysOperationLogServiceImpl"/>
+
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.sys.TSysCompanyService"
+                   ref="tSysCompanyServiceImpl"/>
+
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.sys.TSysDepartmentService"
+                   ref="tSysDepartmentServiceImpl"/>
+
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.sys.TSysOrganizationService"
+                   ref="tSysOrganizationServiceImpl"/>
+
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.sys.TSysProjectService"
+                   ref="tSysProjectServiceImpl"/>
+
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.sys.TSysAreasService"
+                   ref="tSysAreasServiceImpl"/>
+
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.sys.TSysCodeService"
+                   ref="tSysCodeServiceImpl"/>
+
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.common.TFieldsService"
+                   ref="tFieldsServiceImpl"/>
+
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.common.AttachmentService"
+                   ref="attachmentServiceImpl"/>
+
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.common.SynchrodataService"
+                   ref="synchrodataServiceImpl"/>
+    <!-- 公共 E-->
+
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.cust.person.PersonCustService"
+                   ref="personCustService"/>
+
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.cust.person.PersonCustImportService"
+                   ref="personCustImportServiceImpl"/>
+
+
+
+    <dubbo:service
+            interface="com.everwing.coreservice.common.wy.service.cust.enterprise.staff.EnterpriseCustStaffService"
+            ref="enterpriseCustStaffService"/>
+
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.cust.enterprise.EnterpriseCustService"
+                   ref="enterpriseCustService"/>
+
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.cust.enterprise.EnterpriseCustImportService"
+                   ref="enterpriseCustServiceImportImpl"/>
+
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.personbuilding.PersonbuildingService"
+                   ref="personbuildingService"/>
+
+    <!-- 门控机 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.gating.GatingService" ref="gatingService"/>
+
+    <!-- 物业业务 -->
+    <!-- 水表 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.business.watermeter.TcWaterMeterService"
+                   ref="tcWaterMeterServiceImpl"/>
+
+    <!-- 电表 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.business.electmeter.TcElectMeterService"
+                   ref="tcElectMeterServiceImpl"/>
+
+    <!-- 抄表计划 -->
+    <dubbo:service
+            interface="com.everwing.coreservice.common.wy.service.business.readingSchedule.TcReadingScheduleService"
+            ref="tcReadingScheduleService"/>
+
+    <!-- 抄表任务 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.business.readingtask.TcReadingTaskService"
+                   ref="tcReadingTaskService"/>
+
+    <!-- 抄表数据 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.business.meterdata.TcMeterDataService"
+                   ref="tcMeterDataService"/>
+    <!-- 附件 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.annex.AnnexService" ref="annexServiceImpl"/>
+
+    <!-- 工单 start -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.order.TcOrderCompleteService"
+                   ref="tcOrderCompleteServiceImpl"/>    <!-- 完成工单 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.order.TcOrderComplaintService"
+                   ref="tcOrderComplaintServiceImpl"/>    <!-- 投诉工单 -->
+    <!-- 工单 end -->
+
+    <!-- 收费计费 start -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.configuration.project.TBsProjectService"
+                   ref="tBsProjectService"/>
+    <!-- 收费计费    水费 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.configuration.project.TBsWaterSchemeService"
+                   ref="tBsWaterSchemeServiceImpl"/>
+    <!-- 水电费收费  公用的收费类型，收费关联建筑信息等 -->
+    <dubbo:service
+            interface="com.everwing.coreservice.common.wy.service.configuration.project.TBsWaterElectBillingService"
+            ref="tBsWaterElectBillingServiceImpl"/>
+    <!-- 收费方案 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.configuration.project.TBsChargingSchemeService"
+                   ref="tBsChargingSchemeServiceImpl"/>
+    <!-- 分摊 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.configuration.project.TBsShareBasicService"
+                   ref="tBsShareBasicServiceImpl"/>
+    <dubbo:service
+            interface="com.everwing.coreservice.common.wy.service.configuration.project.TBsShareRelatedTaskService"
+            ref="tBsShareRelatedTaskServiceImpl"/>
+
+    <!-- 收费计费 -> 每期计费总额 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.configuration.bill.TBsBillTotalService"
+                   ref="tBsBillTotalService"/>
+    <!-- 收费计费 -> 每期计费详情 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.configuration.bill.TBsBillHistoryService"
+                   ref="tBsBillHistoryService"/>
+    <!-- 计费常量设置 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.configuration.bsconstant.TBsConstantService"
+                   ref="tBsConstantServiceImpl"/>
+    <!-- 费用类型 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.configuration.project.TBsChargingTypeService"
+                   ref="tBsChargingTypeServiceImpl"/>
+    <!-- 账单生成 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.configuration.billmgr.BillMgrService"
+                   ref="billMgrService"/>
+    <!-- 计费任务  start-->
+    <!-- 物业计费任务  手动 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.configuration.task.WyBillingTaskService"
+                   ref="wyBillingTaskService"/>
+    <!--水电费手动计费 -->
+    <dubbo:service
+            interface="com.everwing.coreservice.common.wy.service.configuration.task.WaterAndElectBillingTaskService"
+            ref="electFeeBillingTaskServiceImpl"/>
+
+    <!-- 水电费的分摊计费-->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.configuration.task.WaterElectShareTaskService"
+                   ref="waterElectShareTaskServiceImpl"/>
+    <!-- 物业管理费、水费、电费、本体基金账户 -->
+    <dubbo:service
+            interface="com.everwing.coreservice.common.wy.service.configuration.tbcassetacount.TBsAssetAccountServie"
+            ref="tBsAssetAccountServieImpl"/>
+            
+    <!-- 缴费 -->      
+    <dubbo:service
+            interface="com.everwing.coreservice.common.wy.service.business.pay.TBsPayInfoService"
+            ref="tBsPayInfoService"/>  
+            
+    <!-- 账户流水 -->
+    <dubbo:service
+            interface="com.everwing.coreservice.common.wy.service.configuration.tbcassetacount.TBsAssetAccountStreamService"
+            ref="tBsAssetAccountStreamService"/>  	
+            
+    <!-- 收费计费 end -->
+
+    <!-- 定时任务 start-->
+    <!-- 抄表任务 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.quartz.business.MeterDataTaskService"
+                   ref="meterDataTaskService"/>
+    <!-- 计费项目历史数据  tBsProject -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.configuration.task.TBsProjectTaskService"
+                   ref="tBsProjectTaskService"/>
+    <!-- 通用账户自动扣取 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.configuration.cmac.CmacBillingService"
+                   ref="cmacBillingService"/>
+    <!-- 物业管理费通用账户扣取 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.configuration.cmac.service.CmacWyService"
+                   ref="cmacWyService"/>
+    <!-- 本体基金通用账户扣取 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.configuration.cmac.service.CmacBtService"
+                   ref="cmacBtService"/>
+    <!-- 水费通用账户扣取 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.configuration.cmac.service.CmacWaterService"
+                   ref="cmacWaterService"/>
+    <!-- 电费通用账户扣取 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.configuration.cmac.service.CmacElectService"
+                   ref="cmacElectService"/>
+    <!-- 违约金计算 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.configuration.latefee.LateFeeService"
+                   ref="lateFeeService"/>
+    <!-- 水费电费的重新计费 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.configuration.task.WaterElectRebillingService"
+                   ref="waterElectRebillingServiceImpl"/>
+    <!-- 物业管理费/本体基金重新计费 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.configuration.rebilling.TBsRebillingInfoService"
+                   ref="tBsRebillingInfoService"/>
+    
+    <!-- 为财务推送业主交费数据 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.configuration.payinfo.PushPayInfoToFinanceService"
+                   ref="pushPayInfoToFinanceServiceImpl"/>               
+                   
+    <!-- 定时任务 end-->
+
+
+    <!-- 银账交割S -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.delivery.TJgAccountReceivableService"
+                   ref="tJgAccountReceivableServiceImpl"/>
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.delivery.TJgDepositReceiptService"
+                   ref="tJgDepositReceiptServiceImple"/>
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.delivery.TJgGiveAccountDetailService"
+                   ref="tJgGiveAccountDetailServiceImpl"/>
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.delivery.TJgStaffGropService"
+                   ref="tJgStaffGropServiceImpl"/>
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.delivery.TJgTotalCalculationService"
+                   ref="tJgTotalCalculationServiceImpl"/>
+    <!-- 银账交割E -->
+
+    <!-- 导入 S -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.building.TcBuildingImportService"
+                   ref="tcBuildingImportServiceImpl" group="importBuilding"/>
+
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.business.electmeter.TcElectMeterImportService"
+                   ref="tcElectMeterImportServiceImpl"/>
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.business.watermeter.TcWaterMeterImportService"
+                   ref="tcWaterMeterImportServiceImpl"/>
+    <dubbo:service
+            interface="com.everwing.coreservice.common.wy.service.business.meterdata.TcWaterMeterReadingImportService"
+            ref="tcWaterMeterReadingImportServiceImpl"/>
+    <dubbo:service
+            interface="com.everwing.coreservice.common.wy.service.business.meterdata.TcElectMeterReadingImportService"
+            ref="tcElectMeterReadingImportServiceImpl"/>
+    <!-- 导入 E -->
+
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.business.vehicle.TBsVehicleService"
+                   ref="tBsVehicleServiceImpl"/>
+
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.building.PropertyService"
+                   ref="propertyServiceImpl"/>
+
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.product.TProductService"
+                   ref="tProductServiceImpl"/>
+
+
+
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.product.TProductPaymentService"
+                   ref="tProductPaymentServiceImpl"/>
+
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.product.TProductOrderService"
+                   ref="tProductOrderServiceImpl"/>
+
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.product.TDepositService"
+                   ref="tDepositServiceImpl"/>
+
+    <!-- 托收 S-->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.configuration.bc.project.TBcProjectService"
+                   ref="tBcProjectService"/>
+    <dubbo:service
+            interface="com.everwing.coreservice.common.wy.service.configuration.bc.collection.TBcCollectionService"
+            ref="tBcCollectionService"/>
+    <dubbo:service
+            interface="com.everwing.coreservice.common.wy.service.cust.CollectionService"
+            ref="collectionService"/>
+    <!-- 托收 E-->
+
+    <dubbo:service
+            interface="com.everwing.coreservice.common.wy.service.common.WyCommonService"
+            ref="wyCommonServiceImpl"/>
+
+    <dubbo:service
+            interface="com.everwing.coreservice.common.wy.service.other.WyOtherService"
+            ref="wyOtherServiceImpl"/>
+     <!-- 汇总M级表的费用 -->
+    <dubbo:service interface="com.everwing.coreservice.common.wy.service.configuration.project.SumMmeterBillToProjectService" 
+    ref="sumMmeterBillToProjectServiceImpl"/>
+
+
+    <!-- 导出复杂报表组件 -->
+    <dubbo:service id="complexReportExportDemoService" interface="com.everwing.coreservice.common.wy.service.common.ComplexReportExportService"
+                   ref="complexReportExportDemoServiceImpl"/>
+
+    <dubbo:service id="quillEditorService" interface="com.everwing.coreservice.common.wy.service.common.QuillEditorService"
+                   ref="quillEditorServiceImpl"/>
+</beans>

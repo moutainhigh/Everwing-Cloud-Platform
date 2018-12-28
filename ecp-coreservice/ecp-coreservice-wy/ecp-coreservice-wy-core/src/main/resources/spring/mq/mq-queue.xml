@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/rabbit
+            http://www.springframework.org/schema/rabbit/spring-rabbit-1.0.xsd">
+
+	<!-- 此处可声明不同的queue, 指定queue_key以及是否持久化 -->
+   	<!-- 个人客户数据发送至admin -->
+   	<rabbit:queue id="wyPersonCust2Admin" name="${queue.personCust.name}"
+   				durable="${queue.personCust.declare}" auto-delete="${queue.personCust.autoDelete}" exclusive="${queue.personCust.exclusive}" />
+   				
+   	<!-- 客户资产绑定数据发送至admin -->			
+   	<rabbit:queue id="wyPersonBuilding2Admin" name="${queue.personBuilding.name}"
+				durable="${queue.personBuilding.declare}" auto-delete="${queue.personBuilding.autoDelete}" exclusive="${queue.personBuilding.exclusive}"/>
+	
+	<!-- 门控机数据发送至admin -->
+	<rabbit:queue id="wyGating2Admin" name="${queue.gating.name}"
+				durable="${queue.gating.declare}" auto-delete="${queue.gating.autoDelete}" exclusive="${queue.gating.exclusive}"/>
+				
+	<!-- 门控机-房屋绑定书发送至admin -->
+	<rabbit:queue id="wyBuildingGate2Admin" name="${queue.buildingGate.name}"
+				durable="${queue.buildingGate.declare}" auto-delete="${queue.buildingGate.autoDelete}" exclusive="${queue.buildingGate.exclusive}"/>
+
+	<!-- 建筑结构数据发送到平台 -->
+	<rabbit:queue id="wy2platform4building" name="${queue.wy2platform.building.name}"
+				  durable="${queue.wy2platform.building.declare}" auto-delete="${queue.wy2platform.building.autoDelete}" exclusive="${queue.wy2platform.building.exclusive}"/>
+</beans>

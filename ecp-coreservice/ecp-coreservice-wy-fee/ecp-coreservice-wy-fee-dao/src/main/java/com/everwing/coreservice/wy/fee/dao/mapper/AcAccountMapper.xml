@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.coreservice.wy.fee.dao.mapper.AcAccountMapper">
+  <resultMap id="BaseResultMap" type="com.everwing.coreservice.common.wy.fee.entity.AcAccount">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="house_code_new" jdbcType="VARCHAR" property="houseCodeNew" />
+    <result column="common_deposit_amount" jdbcType="DECIMAL" property="commonDepositAmount" />
+    <result column="special_deposit_amount" jdbcType="DECIMAL" property="specialDepositAmount" />
+    <result column="late_fee_amount" jdbcType="DECIMAL" property="lateFeeAmount" />
+    <result column="current_charging_amount" jdbcType="DECIMAL" property="currentChargingAmount" />
+    <result column="last_arrears_amount" jdbcType="DECIMAL" property="lastArrearsAmount" />
+    <result column="current_bill_amount" jdbcType="DECIMAL" property="currentBillAmount" />
+    <result column="project_id" jdbcType="VARCHAR" property="projectId" />
+    <result column="project_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_id" jdbcType="VARCHAR" property="createId" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="modify_id" jdbcType="VARCHAR" property="modifyId" />
+    <result column="signature" jdbcType="VARCHAR" property="signature" />
+    <result column="charging_month" jdbcType="VARCHAR" property="chargingMonth" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, house_code_new, common_deposit_amount, special_deposit_amount,
+    late_fee_amount, current_charging_amount, last_arrears_amount, current_bill_amount,
+    project_id, project_name, create_time, create_id, modify_time, modify_id, signature,
+    charging_month
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_ac_account
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByHouseCodeNew" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_ac_account
+    where house_code_new = #{houseCodeNew,jdbcType=VARCHAR}
+  </select>
+  <select id="listPageBuildingInfo" resultType="com.everwing.coreservice.common.wy.fee.dto.BuildingInfoDto">
+    select x.id,x.houseCode,x.address,x.buildingCode,x.common,max(x.wy) wy,max(x.bt)bt,max(x.water)water,max(x.elect) elect,sum(x.total) total
+    FROM(SELECT b.id,b.house_code_new houseCode,b.building_full_name address,b.building_code buildingCode,lbfi.account_type type,aa.common_deposit_amount common,
+    if(lbfi.account_type=1,concat(lbfi.last_bill_fee,'+',da.amount),0) wy,
+    if(lbfi.account_type=2,concat(lbfi.last_bill_fee,'+',da.amount),0) bt,
+    if(lbfi.account_type=3,concat(lbfi.last_bill_fee,'+',da.amount),0) water,
+    if(lbfi.account_type=4,concat(lbfi.last_bill_fee,'+',da.amount),0) elect,
+    lbfi.last_bill_fee+da.amount as total
+    FROM tc_building b,t_ac_last_bill_fee_info lbfi,t_ac_delay_account da,t_ac_account aa
+    where b.house_code_new=#{houseCode} AND b.house_code_new=lbfi.house_code_new AND b.house_code_new=aa.house_code_new
+    AND b.house_code_new=da.house_code_new AND da.account_type=lbfi.account_type
+    GROUP BY lbfi.account_type) x GROUP BY x.houseCode
+    order by x.houseCode desc
+  </select>
+  <select id="listPageBuildingInfoByCustId" resultType="com.everwing.coreservice.common.wy.fee.dto.BuildingInfoDto">
+    SELECT x.id,x.houseCode,x.address,x.buildingCode,max(x.wy) wy,max(x.bt)bt,max(x.water)water,max(x.elect) elect,sum(x.total) total
+    from (SELECT f.id,f.house_code houseCode,f.building_full_name address,f.building_code buildingCode,
+                      if(g.account_type=1 ,concat(g.last_bill_fee,'+',g.amount),0) wy,
+                      if(g.account_type=2 ,concat(g.last_bill_fee,'+',g.amount),0) bt,
+                      if(g.account_type=3 ,concat(g.last_bill_fee,'+',g.amount),0) water,
+                      if(g.account_type=4 ,concat(g.last_bill_fee,'+',g.amount),0) elect,
+                      g.last_bill_fee+g.amount as total
+          FROM (SELECT lbfi.*,da.amount from t_ac_last_bill_fee_info lbfi,t_ac_delay_account da where lbfi.house_code_new=da.house_code_new and lbfi.account_type=da.account_type and lbfi.house_code_new in
+               (SELECT house_code from tc_building where id in (select building_id from tc_person_building where cust_id=#{custId}) )) g LEFT JOIN tc_building f on g.house_code_new=f.house_code
+          GROUP BY g.account_type,g.house_code_new) x GROUP BY x.houseCode
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_ac_account
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="AcAccount">
+    insert into t_ac_account (id, house_code_new,
+    common_deposit_amount, special_deposit_amount,
+    late_fee_amount, current_charging_amount, last_arrears_amount,
+    current_bill_amount, project_id, project_name,
+    create_time, create_id, modify_time,
+    modify_id, signature, charging_month
+    )
+    values (#{id,jdbcType=VARCHAR}, #{houseCodeNew,jdbcType=VARCHAR},
+    #{commonDepositAmount,jdbcType=DECIMAL}, #{specialDepositAmount,jdbcType=DECIMAL},
+    #{lateFeeAmount,jdbcType=DECIMAL}, #{currentChargingAmount,jdbcType=DECIMAL}, #{lastArrearsAmount,jdbcType=DECIMAL},
+    #{currentBillAmount,jdbcType=DECIMAL}, #{projectId,jdbcType=VARCHAR}, #{projectName,jdbcType=VARCHAR},
+    #{createTime,jdbcType=TIMESTAMP}, #{createId,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP},
+    #{modifyId,jdbcType=VARCHAR}, #{signature,jdbcType=VARCHAR}, #{chargingMonth,jdbcType=VARCHAR}
+    )
+  </insert>
+  <insert id="insertSelective" parameterType="AcAccount">
+    insert into t_ac_account
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="houseCodeNew != null">
+        house_code_new,
+      </if>
+
+      <if test="commonDepositAmount != null">
+        common_deposit_amount,
+      </if>
+      <if test="specialDepositAmount != null">
+        special_deposit_amount,
+      </if>
+      <if test="lateFeeAmount != null">
+        late_fee_amount,
+      </if>
+      <if test="currentChargingAmount != null">
+        current_charging_amount,
+      </if>
+      <if test="lastArrearsAmount != null">
+        last_arrears_amount,
+      </if>
+      <if test="currentBillAmount != null">
+        current_bill_amount,
+      </if>
+      <if test="projectId != null">
+        project_id,
+      </if>
+      <if test="projectName != null">
+        project_name,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createId != null">
+        create_id,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+      <if test="modifyId != null">
+        modify_id,
+      </if>
+      <if test="signature != null">
+        signature,
+      </if>
+      <if test="chargingMonth != null">
+        charging_month,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="houseCodeNew != null">
+        #{houseCodeNew,jdbcType=VARCHAR},
+      </if>
+      <if test="commonDepositAmount != null">
+        #{commonDepositAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="specialDepositAmount != null">
+        #{specialDepositAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="lateFeeAmount != null">
+        #{lateFeeAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="currentChargingAmount != null">
+        #{currentChargingAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="lastArrearsAmount != null">
+        #{lastArrearsAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="currentBillAmount != null">
+        #{currentBillAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="projectId != null">
+        #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createId != null">
+        #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyId != null">
+        #{modifyId,jdbcType=VARCHAR},
+      </if>
+      <if test="signature != null">
+        #{signature,jdbcType=VARCHAR},
+      </if>
+      <if test="chargingMonth != null">
+        #{chargingMonth,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="AcAccount">
+    update t_ac_account
+    <set>
+      <if test="houseCodeNew != null">
+        house_code_new = #{houseCodeNew,jdbcType=VARCHAR},
+      </if>
+      <if test="commonDepositAmount != null">
+        common_deposit_amount = #{commonDepositAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="specialDepositAmount != null">
+        special_deposit_amount = #{specialDepositAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="lateFeeAmount != null">
+        late_fee_amount = #{lateFeeAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="currentChargingAmount != null">
+        current_charging_amount = #{currentChargingAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="lastArrearsAmount != null">
+        last_arrears_amount = #{lastArrearsAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="currentBillAmount != null">
+        current_bill_amount = #{currentBillAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="projectId != null">
+        project_id = #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        project_name = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createId != null">
+        create_id = #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyId != null">
+        modify_id = #{modifyId,jdbcType=VARCHAR},
+      </if>
+      <if test="signature != null">
+        signature = #{signature,jdbcType=VARCHAR},
+      </if>
+      <if test="chargingMonth != null">
+        charging_month = #{chargingMonth,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="AcAccount">
+    update t_ac_account
+    set house_code_new = #{houseCodeNew,jdbcType=VARCHAR},
+    common_deposit_amount = #{commonDepositAmount,jdbcType=DECIMAL},
+    special_deposit_amount = #{specialDepositAmount,jdbcType=DECIMAL},
+    late_fee_amount = #{lateFeeAmount,jdbcType=DECIMAL},
+    current_charging_amount = #{currentChargingAmount,jdbcType=DECIMAL},
+    last_arrears_amount = #{lastArrearsAmount,jdbcType=DECIMAL},
+    current_bill_amount = #{currentBillAmount,jdbcType=DECIMAL},
+    project_id = #{projectId,jdbcType=VARCHAR},
+    project_name = #{projectName,jdbcType=VARCHAR},
+    create_time = #{createTime,jdbcType=TIMESTAMP},
+    create_id = #{createId,jdbcType=VARCHAR},
+    modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+    modify_id = #{modifyId,jdbcType=VARCHAR},
+    signature = #{signature,jdbcType=VARCHAR},
+    charging_month = #{chargingMonth,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+
+  <update id="updateByPrimaryKeyForAmount" parameterType="AcAccount">
+    update t_ac_account set
+    <if test="null != commonDepositAmount">
+      common_deposit_amount = common_deposit_amount + #{commonDepositAmount,jdbcType=DECIMAL},
+    </if>
+    <if test="null != specialDepositAmount">
+      special_deposit_amount = special_deposit_amount + #{specialDepositAmount,jdbcType=DECIMAL},
+    </if>
+    <if test="null != lateFeeAmount">
+      late_fee_amount = late_fee_amount + #{lateFeeAmount,jdbcType=DECIMAL},
+    </if>
+    <if test="null != currentChargingAmount">
+      current_charging_amount = current_charging_amount + #{currentChargingAmount,jdbcType=DECIMAL},
+    </if>
+    <if test="null != lastArrearsAmount">
+      last_arrears_amount = last_arrears_amount + #{lastArrearsAmount,jdbcType=DECIMAL},
+    </if>
+    <if test="null != currentBillAmount">
+      current_bill_amount = current_bill_amount + #{currentBillAmount,jdbcType=DECIMAL},
+    </if>
+    modify_time = SYSDATE() where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+	<update id="updateCurrentBillByHouseCode" parameterType = "java.lang.String">
+		update t_ac_account set current_bill_amount = late_fee_amount + last_arrears_amount where house_code_new = #{houseCode}
+	</update>
+
+  <select id="selectAccountInfoByBuildingCode" resultType="java.util.Map">
+    SELECT b.house_code houseCode,b.building_full_name address,
+    a.common_deposit_amount+a.special_deposit_amount-a.last_arrears_amount-a.late_fee_amount total,a.late_fee_amount lateFee,a.common_deposit_amount+a.special_deposit_amount prestore
+    from (SELECT * FROM  tc_building WHERE building_code=#{buildingCode}) b
+    LEFT JOIN t_ac_account a on a.house_code_new=b.house_code
+  </select>
+  <select id="listPagePrestoreDetail" resultType="java.util.Map">
+    SELECT
+    ifnull(pi.pay_type,0)      payType,
+    cd.change_amount amount,
+    cd.dikou_type    reductionType,
+    cd.business_type businessType,
+    '通用账户'           accountType,
+    u.staff_name     creater,
+    cd.create_time    createTime
+    FROM (SELECT * from tc_building where building_code = #{buildingCode,jdbcType=VARCHAR}) b
+    LEFT JOIN t_ac_common_account_detail cd ON cd.house_code_new=b.house_code
+    LEFT JOIN  t_bs_pay_info pi ON cd.opera_id = pi.batch_no
+    LEFT JOIN t_sys_user u ON pi.create_id = u.user_id
+    WHERE date_format(cd.create_time, '%Y-%m') = #{yearMonth,jdbcType=VARCHAR}
+    <if test="payType!=null and payType!=''">
+      AND pi.pay_type=#{payType}
+    </if>
+    <if test="creater!=null and creater!=''">
+      AND u.staff_name=#{creater}
+    </if>
+    UNION SELECT
+    pi.pay_type,
+    sd.change_amount amount,
+    '专项账户'           reductionType,
+    sd.business_type businessType,
+    sa.account_type  accountType,
+    u.staff_name     creater,
+    sd.create_time    createTime
+    FROM (SELECT * from tc_building where building_code=#{buildingCode,jdbcType=VARCHAR}) b LEFT JOIN
+    t_ac_special_detail sd ON b.house_code=sd.house_code_new
+    LEFT JOIN t_ac_special_account sa  ON sd.special_id = sa.id
+    LEFT JOIN t_bs_pay_info pi ON sd.opera_id = pi.batch_no
+    LEFT JOIN t_sys_user u ON sd.create_id = u.user_id
+    WHERE  date_format(sa.create_time, '%Y-%m') = #{yearMonth,jdbcType=VARCHAR}
+    <if test="payType!=null and payType!=''">
+      AND pi.pay_type=#{payType}
+    </if>
+    <if test="creater!=null and creater!=''">
+      AND u.staff_name=#{creater}
+    </if>
+    <if test="accountType!=null and accountType!=''">
+      AND account_type=#{accountType}
+    </if>
+    order by createTime desc
+  </select>
+  <select id="listPageBuildingFinace"  parameterType="com.everwing.coreservice.common.wy.fee.entity.FinaceAccount"  resultType="com.everwing.coreservice.common.wy.fee.dto.BuildingInfoDto">
+    select x.id,x.houseCode,x.address,x.buildingCode,max(x.wy) wy,max(x.bt)bt,max(x.water)water,max(x.elect) elect,sum(x.total) total
+    FROM(SELECT b.id,b.house_code houseCode,b.building_full_name address,b.building_code buildingCode,lbfi.account_type type,
+    if(lbfi.account_type=1,concat(lbfi.last_bill_fee+da.amount),0) wy,
+    if(lbfi.account_type=2,concat(lbfi.last_bill_fee+da.amount),0) bt,
+    if(lbfi.account_type=3,concat(lbfi.last_bill_fee+da.amount),0) water,
+    if(lbfi.account_type=4,concat(lbfi.last_bill_fee+da.amount),0) elect,
+    lbfi.last_bill_fee+da.amount as total
+    FROM tc_building b,t_ac_last_bill_fee_info lbfi,t_ac_delay_account da
+    where  b.house_code=lbfi.house_code_new AND b.house_code=da.house_code_new AND da.account_type=lbfi.account_type
+    and  b.project_id in
+
+
+    <foreach collection="projectList" item="item" index="index" open="(" close=")" separator=",">
+      '${item}'
+    </foreach>
+
+
+    <if test="houseCode!=null and houseCode!=''">
+      AND b.house_code=#{houseCode}
+    </if>
+
+
+    <if test="buildingFullName!=null and buildingFullName!=''">
+      AND b.house_code in(select house_code FROM  tc_building WHERE building_full_name=#{buildingFullName})
+    </if>
+    <if test="userName!=null and userName!=''">
+      and b.building_code in
+      ( select building_code from tc_person_building where cust_id in
+      (select cust_id from tc_person_cust where name like CONCAT ('%',#{userName},'%')))
+    </if>
+
+    <if test="maxMoney!=null  and  maxMoney!=''">
+      and lbfi.last_bill_fee+da.amount <![CDATA[ <= ]]> #{maxMoney}
+    </if>
+    <if test="minMoney!=null  and  minMoney!=''">
+      and lbfi.last_bill_fee+da.amount <![CDATA[ >= ]]> #{minMoney}
+    </if>
+    ) x GROUP BY x.buildingCode
+  </select>
+
+  <select id="queryArrearsByHouseCodeNews" resultType="java.util.HashMap">
+    select IFNULL(last_arrears_amount+late_fee_amount,0)  amount,house_code_new from t_ac_account
+    where  project_id = #{projectId} and house_code_new  in
+    <foreach item="item" collection="houseCodeNews" separator="," open="(" close=")" index="">
+      #{item, jdbcType=VARCHAR}
+    </foreach>
+  </select>
+
+  <select id="queryArrearsByBuildingName" resultType="java.util.HashMap">
+    select IFNULL(ta.last_arrears_amount+ta.late_fee_amount,0)  amount,ta.house_code_new,tb.building_full_name ,tb.building_type
+    from t_ac_account ta INNER JOIN tc_building tb on ta.house_code_new = tb.house_code
+    where tb.building_full_name like CONCAT ('%',#{buildingName},'%') and tb.project_id = #{projectId}
+    and  tb.building_type = 'house'
+  </select>
+
+  <select id="queryArrearsByhouseCode" resultType="java.util.HashMap">
+    select IFNULL(ta.last_arrears_amount+ta.late_fee_amount,0)  arrears,ta.house_code_new houseCode,tb.building_full_name buildingFullName ,tb.building_type buildingType
+    from t_ac_account ta INNER JOIN tc_building tb on ta.house_code_new = tb.house_code
+    where ta.house_code_new = #{houseCode} and tb.project_id = #{projectId}
+  </select>
+
+  <resultMap id="payDetailDtoResultMap" type="com.everwing.coreservice.common.wy.fee.dto.PayDetailDto">
+    <result column="money" jdbcType="DECIMAL" property="money" />
+    <result column="lateFee" jdbcType="DECIMAL" property="lateFee" />
+    <result column="accountType" jdbcType="INTEGER" property="accountType" />
+  </resultMap>
+
+  <select id="queryCostByHouseCodeNew" resultMap="payDetailDtoResultMap">
+    select talbfi.account_type accountType,talbfi.last_bill_fee money ,tada.amount lateFee from t_ac_last_bill_fee_info talbfi
+    INNER JOIN t_ac_delay_account tada
+    ON talbfi.house_code_new = tada.house_code_new AND talbfi.account_type = tada.account_type
+    WHERE tada.house_code_new = #{houseCodeNew}
+    GROUP BY talbfi.account_type
+  </select>
+
+
+  <select id="queryBuildingDetailsByhouseCode" resultType="com.everwing.coreservice.common.wy.fee.dto.BuildingAndCustInfoDto">
+    select tb.building_code,tb.id buildId ,building_full_name buildingsAddress,building_type buildingType,tb.house_code houseCode,tb.building_area constructionArea,
+      tb.usable_area constructionArea,tb.unit_wy_price managementUnitPrice,tb.unit_bt_price maintenanceUnitPrice
+    from tc_building tb
+    where tb.house_code = #{houseCode} and project_id = #{projectId} ;
+
+  </select>
+
+  <select id="queryCustByBuildId" resultType="java.util.HashMap">
+    select name,register_phone from tc_person_cust
+    where project_id = #{projectId} and cust_id in
+     (select tc_person_building.cust_id
+     from tc_person_building
+     where building_id = #{buildId})
+  </select>
+
+  <select id="queryBillByhouseCodeAndYear" resultType="com.everwing.coreservice.common.wy.fee.dto.BillOfYearDto">
+    SELECT bill_amount billAmount,bill_month date ,id billNumber from t_ac_bill_detail
+    where house_code_new = #{houseCode} and YEAR (create_time) = '2018' and bill_invalid is null
+  </select>
+
+  <resultMap id="BuildingAndCustResuleMap" type="com.everwing.coreservice.common.wy.dto.BuildingAndCustDTO">
+    <result property="houseCode" jdbcType="VARCHAR" column="house_code"></result>
+    <result column="company_id" jdbcType="VARCHAR" property="companyId" />
+    <result column="project_id" jdbcType="VARCHAR" property="projectId" />
+    <result column="house_code" jdbcType="VARCHAR" property="houseCode" />
+    <result column="building_full_name" jdbcType="VARCHAR" property="buildingFullName" />
+    <result column="building_type" jdbcType="VARCHAR" property="buildType" />
+    <result column="id"            jdbcType="VARCHAR" property="buildingId" />
+    <result column="ownersName"    jdbcType="VARCHAR" property="ownersName" />
+    <result column="ownersMobile"  jdbcType="VARCHAR" property="ownersMobile" />
+  </resultMap>
+
+  <select id="queryByMobile" resultMap="BuildingAndCustResuleMap">
+    SELECT t.company_id,t.project_id, t.house_code, t.building_full_name ,
+    t.building_type,t.id,c.name as ownersName,c.register_phone as ownersMobile
+    from tc_building t left JOIN tc_person_building b on b.building_id = t.id
+    left JOIN tc_person_cust c ON c.cust_id = b.cust_id where c.register_phone = #{mobile} and t.project_id = #{projectId}
+  </select>
+
+
+
+
+  <update id="updateAcAccountByHouseCodeNew" parameterType="AcAccount">
+    update t_ac_account
+    set
+    late_fee_amount =  #{lateFeeAmount,jdbcType=DECIMAL},
+    last_arrears_amount = #{lastArrearsAmount,jdbcType=DECIMAL}
+    where house_code_new = #{houseCodeNew,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByLastArreasAmount" >
+    update t_ac_account
+    set common_deposit_amount = #{amount}
+    where house_code_new = #{houseCodeNew}
+  </update>
+
+
+
+</mapper>

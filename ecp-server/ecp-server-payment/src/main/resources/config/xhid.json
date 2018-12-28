@@ -1,0 +1,26 @@
+[
+  { "xhId":"xhwxxcx0000001",
+    "companyId":"09841dc0-204a-41f2-a175-20a6dcee0187",
+    "companyName":"深圳市桃源居物业管理有限公司",
+    "projectId":"2e0f42d7-d6ae-4f47-85bc-b0e77c9bfb4f" ,
+    "projectCode":"1013",
+    "projectName":"桃源居峰景园管理处" ,
+    "merchantNo":"1504332521",
+    "appId":"wx7663c8900a553155" ,
+    "appSecret":"23dfa77dd7407760e0fdba5a1c50da90",
+    "appKey":"W9YkugzqY7ViN98sjIsFPOMLNirFuMQN",
+    "notifyUrl":"http://aecafc40.ngrok.io/ecp-server-payment/api/miniprogram/v1.0/wxPaymentCallBack"
+  },
+  { "xhId":"xhwxxcx0000002",
+    "companyId":"09841dc0-204a-41f2-a175-20a6dcee0187",
+    "companyName":"深圳市桃源居物业管理有限公司",
+    "projectId":"351c6553-ee16-43c8-a301-6ec6de723413" ,
+    "projectCode":"1019",
+    "projectName":"桃源居世外桃源管理处" ,
+    "merchantNo":"1513486191",
+    "appId":"wxca9f64c57fb84e24" ,
+    "appSecret":"bff681f81469695f3023d9228e526876",
+    "appKey":"f5LwPDXE2mH5q67pIs51qsJPA4AmhJH9",
+    "notifyUrl":"http://aecafc40.ngrok.io/ecp-server-payment/api/miniprogram/v1.0/wxPaymentCallBack"
+  }
+]

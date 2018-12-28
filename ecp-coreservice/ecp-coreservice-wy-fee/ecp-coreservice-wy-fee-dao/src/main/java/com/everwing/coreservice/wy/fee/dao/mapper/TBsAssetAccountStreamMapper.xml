@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.fee.dao.mapper.TBsAssetAccountStreamMapper">
+	
+	<resultMap type="com.everwing.coreservice.common.wy.entity.configuration.assetaccount.stream.TBsAssetAccountStream" id="BaseResultMap">
+		<result column="id" property="id"/>
+		<result column="parent_id" property="parentId"/>
+		<result column="chang_money" property="changMoney"/>
+		<result column="occurrence_time" property="occurrenceTime"/>
+		<result column="create_id" property="createId"/>
+		<result column="create_name" property="createName"/>
+		<result column="purpose" property="purpose"/>
+	</resultMap>
+	
+
+	
+	<insert id="batchInsert" parameterType="com.everwing.coreservice.common.wy.entity.configuration.assetaccount.stream.TBsAssetAccountStream">
+			INSERT INTO t_bs_asset_account_stream 
+			(id, parent_id,chang_money,occurrence_time,create_id,create_name,purpose)
+			VALUES 
+			<foreach collection="list" item="item" open="" close="" separator=",">
+				(
+					#{item.id},
+					#{item.parentId},
+					#{item.changMoney},
+					NOW(),
+					#{item.createId},
+					#{item.createName},
+					#{item.purpose}
+				)
+			</foreach>
+	</insert>
+
+	<insert id="singleInsert" parameterType="com.everwing.coreservice.common.wy.entity.configuration.assetaccount.stream.TBsAssetAccountStream">
+		INSERT INTO t_bs_asset_account_stream
+		(
+		id, parent_id,chang_money,occurrence_time,create_id,create_name,purpose
+		)
+		VALUES (
+		UUID(),
+		#{parentId},
+		#{changMoney},
+		NOW(),
+		#{createId},
+		#{createName},
+		#{purpose}
+		)
+
+	</insert>
+
+	<insert id="insertAndAmountByBuildingCode" >
+		INSERT INTO t_bs_asset_account_stream
+		(
+		id, parent_id,chang_money,occurrence_time,create_id,create_name,purpose
+		)
+		VALUES (
+		UUID(),
+		(select id from t_bs_asset_account where building_code =
+		(select building_code from tc_building where house_code=#{houseCode})and type=#{type}),
+		#{changMoney},
+		NOW(),
+		#{createId},
+		#{createId},
+		#{purpose}
+		)
+
+	</insert>
+</mapper>

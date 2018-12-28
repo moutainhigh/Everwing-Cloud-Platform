@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.configuration.project.TBsChargingRulesMapper">
+	<resultMap type="TBsChargingRules" id="BaseResultMap">
+		<result property="id" column="id" jdbcType="VARCHAR"/>
+		<result property="ruleName" column="rule_name"  jdbcType="VARCHAR"/>
+		<result property="chargingSchemeId" column="charging_scheme_id"  jdbcType="VARCHAR"/>
+		<result property="createTime" column="create_time"  jdbcType="TIMESTAMP"/>
+		<result property="createBy" column="create_by"  jdbcType="VARCHAR"/>
+		<result property="updateTime" column="update_time"  jdbcType="TIMESTAMP"/>
+		<result property="updateBy" column="update_by"  jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	
+	<resultMap type="TBsChargingRules" id="ruleAndBuildMap">
+		<result property="id" column="id" jdbcType="VARCHAR"/>
+		<result property="ruleName" column="rule_name"  jdbcType="VARCHAR"/>
+		<result property="chargingSchemeId" column="charging_scheme_id"  jdbcType="VARCHAR"/>
+		<result property="createTime" column="create_time"  jdbcType="TIMESTAMP"/>
+		<result property="createBy" column="createBy"  jdbcType="VARCHAR"/>
+		<result property="updateTime" column="update_time"  jdbcType="TIMESTAMP"/>
+		<result property="updateBy" column="updateBy"  jdbcType="VARCHAR"/>
+		<!-- 嵌套结果，一对多查询 -->
+		<collection property="tBsRuleBuildingRelation" ofType="TBsRuleBuildingRelation">
+			<result column="charging_rule_id" property="chargingRuleId" jdbcType="VARCHAR"/>
+			<result column="relation_building_code" property="relationBuildingCode" jdbcType="VARCHAR"/>
+			<result column="relation_building_name" property="relationBuildingName" jdbcType="VARCHAR"/>
+			<result column="relation_building_pid" property="relationBuildingPid" jdbcType="VARCHAR"/>
+			<result column="relation_building_full_name" property="relatioBuildingFullName" jdbcType="VARCHAR"/>
+			<result column="relation_building_type" property="relationBuildingType" jdbcType="VARCHAR"/>
+		</collection>
+	</resultMap>
+	
+	<!-- 根据id查询规则和对应关联建筑 -->
+	<select id="getById" parameterType="String" resultMap="ruleAndBuildMap">
+		select t1.*,t2.*
+		    from t_bs_charging_rules t1,t_bs_rule_building_relation t2
+		    where t1.id=#{0} 
+		      and t1.id = t2.charging_rule_id
+	
+	</select>
+
+	<!-- 插入方案关联收费类型数据信息 -->
+	<insert id="insertRule" parameterType="TBsChargingRules">
+		INSERT INTO t_bs_charging_rules
+		(
+			id,
+			rule_name,
+			charging_scheme_id,
+			create_time,
+			create_by,
+			update_time,
+			update_by
+		)
+		values(
+				#{id},
+				#{ruleName},
+				#{chargingSchemeId},
+				NOW(),
+				#{createBy},
+				#{updateTime},
+				#{updateBy}
+		)
+	</insert>
+
+	<!-- 根据方案类型查询此方案的具体收费类型详情 -->
+	<select id="listPageRulesBySchemeId" parameterType="TBsChargingRules" resultMap="BaseResultMap">
+		SELECT 
+		  t.id AS id,
+		  t.rule_name AS ruleName,
+		  t.charging_scheme_id,
+		  (SELECT 
+		    staff_name 
+		  FROM
+		    t_sys_user 
+		  WHERE user_id = t.create_by) AS create_by,
+		  (SELECT 
+		    staff_name 
+		  FROM
+		    t_sys_user 
+		  WHERE user_id = t.update_by) AS update_by,
+		  t.create_time,
+		  t.update_time 
+		FROM
+		  t_bs_charging_rules t 
+		WHERE charging_scheme_id = #{chargingSchemeId}
+		<if test=" null != ruleName and '' != ruleName ">
+			AND rule_name = #{ruleName}
+		</if>
+		<if test="id != null and '' != id">
+			and  id = #{id}
+		</if>
+	</select>
+
+	<!-- 修改sql片段 -->
+	<sql id="sqlForUpdate">
+	     <if test=" null != ruleName and '' != ruleName ">
+	         rule_name = #{ruleName},
+	      </if>
+	      <if test=" null != updateBy and '' != updateBy ">
+	         update_by = #{updateBy},
+	      </if>
+	      update_time = sysdate()
+	</sql>
+
+	<update id="updateChargeRuleType" parameterType="TBsChargingRules">
+		UPDATE t_bs_charging_rules
+		<set>
+			<include refid="sqlForUpdate"></include>
+	    </set>
+		    WHERE  id = #{id}
+	</update>
+
+
+	<!-- 用户多选进行删除操作 -->
+	<delete id="batchDelRules" parameterType="java.util.List">
+		DELETE FROM t_bs_charging_rules WHERE id IN
+		<foreach collection="list" item="id" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<sql id="sqlField">
+		id,rule_name,charging_scheme_id,create_time,create_by,update_time,update_by
+	</sql>
+	<!-- 根据方案编号和规则名称来查找 -->
+	<select id="getByNameAndSchemId" parameterType="String" resultMap="BaseResultMap">
+		select 
+		<include refid="sqlField" />
+		from t_bs_charging_rules
+		where rule_name=#{0}
+		 and charging_scheme_id=#{1}
+	</select>
+	
+	<!-- 根据方案编号查找规则编号 -->
+	<select id="getTBsChargingRulesBySchemeId" parameterType="String" resultMap="BaseResultMap">
+		select 
+		<include refid="sqlField"/>
+		from t_bs_charging_rules
+		where charging_scheme_id=#{0}
+	</select>
+	
+	<!-- 过滤规则里已经有的建筑后查找建筑的结果-->
+	<resultMap type="java.util.Map" id="filterZeeTreeMap">
+		<result column="id" property="id"/>
+		<result column="building_code" property="buildingCode"/>
+		<result column="building_full_name" property="buildingFullName"/>
+		<result column="building_name" property="buildingName"/>
+		<result column="building_type" property="buildingType"/>
+		<result column="pid" property="pid"/>
+	</resultMap>
+	
+	<!--过滤规则里已经有的建筑后查找建筑  方案新增时，方案编号传"abc"以保证，新增方案能查询到所有的建筑-->
+<!-- 	<select id="getFilterZeeTree" parameterType="String" resultMap="filterZeeTreeMap"> -->
+<!-- 		SELECT -->
+<!-- 		  tcbuild.id, -->
+<!-- 			tcbuild.building_code, -->
+<!-- 			tcbuild.building_full_name, -->
+<!-- 			tcbuild.building_name, -->
+<!-- 			tcbuild.building_type, -->
+<!-- 			tcbuild.pid -->
+<!-- 		FROM -->
+<!-- 			tc_building tcbuild -->
+<!-- 		where tcbuild.building_code -->
+<!-- 		   not in( -->
+<!-- 				SELECT -->
+<!-- 			rela.relation_building_code  -->
+<!-- 		FROM -->
+<!-- 			t_bs_charging_rules rules, -->
+<!-- 			t_bs_rule_building_relation rela -->
+<!-- 		WHERE -->
+<!-- 			rules.id = rela.charging_rule_id -->
+			
+<!-- 			and rela.relation_building_type in ('house','store') -->
+		
+<!-- 		and rules.charging_scheme_id=#{0} -->
+<!-- 		) -->
+<!-- 		and tcbuild.project_id=#{1} -->
+<!-- 	</select> -->
+	<select id="getFilterZeeTree" parameterType="TBsGetRuleBuilding" resultMap="filterZeeTreeMap">
+		SELECT
+		   tcbuild.id,
+		   tcbuild.building_code,
+		   tcbuild.building_full_name,
+		   tcbuild.building_name,
+		   tcbuild.building_type,
+		   tcbuild.pid,
+		            a.relation_building_code
+		  FROM
+		   tc_building tcbuild
+		  left join (
+		    SELECT
+		   rela.relation_building_code 
+		  FROM
+		   t_bs_charging_rules rules,
+		   t_bs_rule_building_relation rela
+		  WHERE
+		   rules.id = rela.charging_rule_id
+		   
+		   and rela.relation_building_type in ('house','store')
+		  
+		  and rules.charging_scheme_id=#{chargingSchemeId}
+		  ) a on tcbuild.building_code = relation_building_code
+		        where tcbuild.project_id=#{projectId} and a.relation_building_code is null
+		        <if test="pId == null or pId==''">
+		          and (tcbuild.building_type ='qi')
+		        </if>
+		        <if test="pId !=null and pId !=''">
+		          and tcbuild.pid=#{pId}
+		        </if>
+		        <if test="buildCode !=null and buildCode !=''">
+		          and tcbuild.building_code=#{buildCode}
+		        </if>
+		        <if test="buildName !=null and buildName !=''">
+		        	and tcbuild.building_name like CONCAT('%',#{buildName},'%')
+		        </if>
+		        <if test="buildFullName !=null and buildFullName !=''">
+		        	and tcbuild.building_full_name like CONCAT('%',#{buildFullName},'%')
+		        </if>
+		        <if test="buildType !=null and buildType !=''">
+		        	and tcbuild.building_type=#{buildType}
+		        </if>
+		        
+	</select>
+	
+	<!-- 根据ID批量删除 -->
+	<delete id="delByRuleId" parameterType="java.util.List">
+		DELETE FROM t_bs_charging_rules WHERE id IN
+		<foreach collection="list" item="id" open="(" close=")" separator=",">
+			(#{id})
+		</foreach>
+	</delete>
+	
+	<select id="getChargeRuleById" parameterType="String" resultMap="BaseResultMap">
+		select * from t_bs_charging_rules where id=#{0}
+	</select>
+</mapper>

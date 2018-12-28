@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.property.TcPublicBuildingMapper">
+    <resultMap id="BaseResultMap" type="TcPublicBuilding">
+        <result property="id" column="id"/>
+        <result property="buildingCode" column="building_code"/>
+        <result property="name" column="name"/>
+        <result property="createrId" column="creater_id"/>
+        <result property="createrName" column="creater_name"/>
+        <result property="modifyId" column="modify_id"/>
+        <result property="modifyName" column="modify_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+
+    <resultMap id="ListResultMap" type="TcPublicBuildingList" extends="BaseResultMap">
+        <result property="fullName" column="building_full_name"/>
+        <result property="marketStateName" column="market_state_name"/>
+    </resultMap>
+
+    <select id="listPage" parameterType="TcPublicBuildingSearch" resultMap="ListResultMap">
+        SELECT
+            h.*,
+            b.building_full_name,
+            b.house_code AS house_code,
+            (SELECT li.`name` FROM t_sys_lookup_item li WHERE li.parent_code = '${@com.everwing.coreservice.common.wy.common.enums.LookupEnum@marketState.name()}' AND li.`code` = b.market_state) as market_state_name
+        FROM tc_building b LEFT JOIN tc_public_building h ON h.building_code = b.building_code WHERE 1 = 1
+        <if test="projectCode != null and projectCode != ''">
+            AND b.project_id = #{projectCode}
+        </if>
+        <if test="id != null and id != ''">
+            AND h.id = #{id}
+        </if>
+        <if test="buildingCode != null and buildingCode != ''">
+            AND b.building_code = #{buildingCode}
+        </if>
+        ORDER BY b.house_code ASC
+    </select>
+
+    <select id="findByCondition" parameterType="TcPublicBuildingSearch" resultMap="ListResultMap">
+        select
+            pb.id,
+            pb.building_code,
+            pb.name,
+            pb.creater_id,
+            pb.creater_name,
+            pb.modify_id,
+            pb.modify_name,
+            pb.create_time,
+            pb.modify_time
+        from tc_building b,tc_public_building pb where pb.building_code = b.building_code
+        <if test="projectCode != null and projectCode != ''">
+            AND b.project_id = #{projectCode}
+        </if>
+        <if test="id != null and id != ''">
+            AND pb.id = #{id}
+        </if>
+        <if test="buildingCode != null and buildingCode != ''">
+            AND b.building_code = #{buildingCode}
+        </if>
+        ORDER BY b.house_code ASC
+    </select>
+
+    <delete id="batchDelete" parameterType="java.util.List">
+        delete from tc_public_building where building_code IN
+        <foreach collection="list" item = "buildingCode" open="(" separator="," close=")">
+            #{buildingCode }
+        </foreach>
+    </delete>
+
+
+    <insert id="insert" parameterType="TcPublicBuilding">
+        insert into tc_public_building
+        (
+            id,
+            building_code,
+            name,
+            creater_id,
+            creater_name,
+            modify_id,
+            modify_name,
+            create_time,
+            modify_time
+        )
+        values
+        (
+            UUID(),
+            #{buildingCode},
+            #{name},
+            #{createrId},
+            #{createrName},
+            '',
+            '',
+            sysdate(),
+            sysdate()
+        )
+    </insert>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        insert into tc_public_building
+        (
+            id,
+            building_code,
+            name,
+            creater_id,
+            creater_name,
+            modify_id,
+            modify_name,
+            create_time,
+            modify_time
+        )
+        values
+        <foreach collection="list" index="index" item="item" separator=",">
+        (
+            UUID(),
+            #{item.buildingCode},
+            #{item.name},
+            #{item.createrId},
+            #{item.createrName},
+            '',
+            '',
+            sysdate(),
+            sysdate()
+        )
+        </foreach>
+    </insert>
+
+    <update id="modify"  parameterType="TcPublicBuilding">
+        update tc_public_building  set
+            building_code = #{buildingCode,jdbcType=VARCHAR},
+            name = #{name,jdbcType=VARCHAR},
+            modify_id = #{modifyId,jdbcType=VARCHAR},
+            modify_name = #{modifyName,jdbcType=VARCHAR},
+            modify_time = sysdate()
+        where 1=1
+        <if test="id != null and id != ''">
+            AND id = #{id}
+        </if>
+        <if test="buildingCode != null and buildingCode != ''">
+            AND building_code = #{buildingCode}
+        </if>
+    </update>
+
+    <update id="batchModify" parameterType="java.util.List">
+        <foreach collection="list" separator=";" index="index" item="item">
+            update tc_public_building  set
+                building_code = #{item.buildingCode,jdbcType=VARCHAR},
+                name = #{item.name,jdbcType=VARCHAR},
+                modify_id = #{item.modifyId,jdbcType=VARCHAR},
+                modify_name = #{item.modifyName,jdbcType=VARCHAR},
+                modify_time = sysdate()
+            where 1=1
+            <if test="item.id != null and item.id != ''">
+                AND id = #{item.id}
+            </if>
+            <if test="item.buildingCode != null and item.buildingCode != ''">
+                AND building_code = #{item.buildingCode}
+            </if>
+        </foreach>
+    </update>
+</mapper>

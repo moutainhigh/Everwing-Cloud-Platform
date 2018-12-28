@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd  
+    http://www.springframework.org/schema/beans  
+    http://www.springframework.org/schema/beans/spring-beans.xsd  
+
+
+
+
+
+
+    http://www.springframework.org/schema/aop  
+    http://www.springframework.org/schema/aop/spring-aop.xsd  
+
+
+
+
+	http://www.springframework.org/schema/task    
+	http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <array>
+                <value>file:/app/coreservice/dynamicreports/dubbo/coreservice-dynamicreports.properties</value>
+            </array>
+        </property>
+        <property name="ignoreResourceNotFound" value="true" />
+        <property name="ignoreUnresolvablePlaceholders" value="true" />
+        <property name="properties" ref="defaultDynamicreportsCoreServiceProperties" />
+    </bean>
+
+    <bean name="defaultDynamicreportsCoreServiceProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <array>
+                <value>classpath:config/coreservice-dynamicreports.properties</value>
+            </array>
+        </property>
+    </bean>
+
+	<aop:aspectj-autoproxy />
+	<task:annotation-driven/>    
+	<context:component-scan base-package="com.everwing.coreservice.dynamicreports.core" />
+	
+    <import resource="classpath:spring/spring-dubbo-dynamicreports-service.xml"/>
+	<import resource="classpath:spring/spring-application-context-dynamicreports-dao.xml"/>
+    <import resource="classpath:spring/dubbo-coreservice-platform-api-config.xml"/>
+</beans>

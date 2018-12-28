@@ -1,0 +1,571 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.everwing.coreservice.wy.dao.mapper.business.readingtask.TcReadingTaskMapper">
+	<resultMap id="BaseResultMap" type="TcReadingTask">
+		<result property="id" column="id" jdbcType="VARCHAR"/>
+		<result property="taskCode" column="task_code" jdbcType="VARCHAR"/>
+		<result property="scheduleCode" column="schedule_code" jdbcType="VARCHAR"/>
+		<result property="scheduleId" column="schedule_id" jdbcType="VARCHAR"/>
+		<result property="taskContent" column="task_content" jdbcType="VARCHAR"/>
+		<result property="scheduleContent" column="schedule_content" jdbcType="VARCHAR"/>
+		<result property="readingPosition" column="reading_position" jdbcType="VARCHAR"/>
+		<result property="readingPersonId" column="reading_person_id" jdbcType="VARCHAR"/>
+		<result property="readingPersonName" column="reading_person_name" jdbcType="VARCHAR"/>
+		<result property="totalMeterCount" column="total_meter_count" jdbcType="INTEGER"/>
+		<result property="completeMeterCount" column="complete_meter_count" jdbcType="INTEGER"/>
+		<result property="remainMeterCount" column="remain_meter_count" jdbcType="INTEGER"/>
+		<result property="meterType" column="meter_type" jdbcType="TINYINT"/>
+		<result property="status" column="status" jdbcType="TINYINT"/>
+		<result property="auditStatus" column="audit_status" jdbcType="TINYINT"/>
+		<result property="auditStartTime" column="audit_start_time" jdbcType="TIMESTAMP"/>
+		<result property="auditEndTime" column="audit_end_time" jdbcType="TIMESTAMP"/>
+		<result property="startTime" column="start_time" jdbcType="TIMESTAMP"/>
+		<result property="endTime" column="end_time" jdbcType="TIMESTAMP"/>
+		<result property="createId" column="create_id" jdbcType="VARCHAR"/>
+		<result property="modifyId" column="modify_id" jdbcType="VARCHAR"/>
+		<result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+		<result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+		<result property="lastTaskId" column="last_task_id" jdbcType="VARCHAR"/>
+		<result property="auditedMeterCount" column="audited_meter_count" jdbcType="INTEGER"/>
+	</resultMap>
+	
+	<resultMap id="hasScheduleInfoResultMap" extends="BaseResultMap" type="java.util.Map">
+		<result property="scheduleName" column="schedule_name" jdbcType="VARCHAR"/>
+		<result property="isCircle" column="is_circle" jdbcType="TINYINT"/>
+		<result property="execFreq" column="exec_freq" jdbcType="TINYINT"/>
+		<result property="auditDays" column="audit_days" jdbcType="INTEGER"/>
+		<result property="auditedMeterCount" column="audited_meter_count" jdbcType="INTEGER"/>
+	</resultMap>
+	
+	<!-- 含有抄表数据的map -->
+	<resultMap id="hasMeterDatasMap" extends="BaseResultMap" type="TcReadingTask" >
+		<collection property="meterDatas" column="id" select="com.everwing.coreservice.wy.dao.mapper.business.meterdata.TcMeterDataMapper.findAllDatasByTaskId"></collection>
+	</resultMap>
+	<!-- 含有建筑关联关系的map -->
+	<resultMap type="TcReadingTask" id="hasRelationResultMap" extends="BaseResultMap">
+		<collection property="relations" column="id" select="com.everwing.coreservice.wy.dao.mapper.business.meterrelation.TcMeterRelationMapper.getTaskRelationListByTaskId"></collection>
+	</resultMap>
+	<!-- 抄表数据以及建筑关联关系的map -->
+	<resultMap type="TcReadingTask" id="hasDatasAndRelationsMap" extends="BaseResultMap">
+		<collection property="meterDatas" column="id" select="com.everwing.coreservice.wy.dao.mapper.business.meterdata.TcMeterDataMapper.findAllDatasByTaskId"></collection>
+		<collection property="relations" column="id" select="com.everwing.coreservice.wy.dao.mapper.business.meterrelation.TcMeterRelationMapper.getTaskRelationListByTaskId"></collection>
+	</resultMap>
+
+    <select id="getWaterTaskDetailById" parameterType="String" resultMap="BaseResultMap">
+		select * from tc_reading_task where id = #{0}
+	</select>
+	
+	<!-- 审核页面分页查询使用 -->
+	<select id="listPageTasksToAudit" parameterType="TcReadingTask" resultMap="hasScheduleInfoResultMap">
+		SELECT * FROM (
+				SELECT t1.id,
+					   t2.schedule_name,
+				       t1.task_content,
+				       t2.is_circle,
+				       t2.exec_freq,
+				       t1.total_meter_count,
+				       t2.audit_days,
+				       t1.status,
+				       t1.complete_meter_count,
+				       t1.remain_meter_count,
+				       t1.audit_start_time,
+				       t1.create_time,
+				       t1.schedule_id,
+				       t1.audit_status,
+				       t1.start_time,
+				       t1.end_time,
+				       (SELECT COUNT(0) FROM tc_meter_data WHERE task_id = t1.id AND audit_status = 1) AS audited_meter_count,
+				       t1.audit_end_time
+				FROM tc_reading_task t1,tc_reading_schedule t2
+				WHERE t1.schedule_id = t2.id
+				and t2.status = 1
+				<if test="null != taskContent">
+					AND t1.task_content LIKE CONCAT('%',#{taskContent},'%')
+				</if>
+				<if test="null != startTime">
+					<![CDATA[
+						AND t1.create_time > #{startTime}
+					]]>
+				</if>
+				<if test="null != endTime">
+					<![CDATA[
+						AND t1.create_time < #{endTime}
+					]]>
+				</if>
+				<if test="null != meterType">
+					and t1.meter_type = #{meterType}
+				</if>
+				<if test="null != projectId">
+					and t2.project_id = #{projectId}
+				</if>
+		) t
+		order by t.create_time desc 
+	</select>
+	
+	<!-- 完成的任务状态不进行修改 -->
+	<update id="updateStatusByScheduleId" parameterType="TcReadingSchedule">
+		update tc_reading_task 
+		set status = #{status},
+		    modify_time = sysdate()
+		where schedule_id = #{id}
+		and status != 2
+	</update>
+	
+	<update id="update" parameterType="TcReadingTask">
+		update tc_reading_task
+		<set>
+			<if test="null != taskContent">
+				task_content = #{taskContent},
+			</if>
+			<if test="null != scheduleContent">
+				schedule_content = #{scheduleContent},
+			</if>
+			<if test="null != readingPosition">
+				reading_position = #{readingPosition},
+			</if>
+			<if test="null != readingPersonId">
+				reading_person_id = #{readingPersonId},
+			</if>
+			<if test="null != totalMeterCount and 0 != totalMeterCount">
+				total_meter_count = #{totalMeterCount},
+			</if>
+			<if test="null != completeMeterCount and 0 != completeMeterCount">
+				complete_meter_count = #{completeMeterCount},
+			</if>
+			<if test="null != remainMeterCount">
+				remain_meter_count = #{remainMeterCount},
+			</if>
+			<if test="null != meterType">
+				meter_type = #{meterType},
+			</if>
+			<if test="null != auditStartTime">
+				audit_start_time = #{auditStartTime},
+			</if>
+			<if test="null != auditEndTime">
+				audit_end_time = #{auditEndTime},
+			</if>
+			<if test="null != status">
+				status = #{status},
+			</if>
+			<if test="null != startTime">
+				start_Time = #{startTime},
+			</if>
+			<if test="null != endTime">
+				end_time = #{endTime},
+			</if>
+			<if test="null != modifyId">
+				modify_id = #{modifyId},
+			</if>
+			<if test="null != modifyTime">
+				modify_time = #{modifyTime},
+			</if>
+			<if test="null != lastTaskId">
+				last_task_id = #{lastTaskId},
+			</if>
+			<if test="null != auditStatus">
+				audit_status = #{auditStatus},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<insert id="batchAdd" parameterType="java.util.List">
+		insert into tc_reading_task(
+			id,
+			task_code,
+			schedule_code,
+			schedule_id,
+			task_content,
+			schedule_content,
+			reading_position,
+			reading_person_id,
+			total_meter_count,
+			complete_meter_count,
+			remain_meter_count,
+			meter_type,
+			audit_status,
+			audit_start_time,
+			audit_end_time,
+			status,
+			start_time,
+			end_time,
+			create_id,
+			modify_id,
+			create_time,
+			modify_time,
+			last_task_id
+		)
+		values
+		<foreach collection="list" item="item" separator=",">
+			(
+				#{item.id},
+				#{item.taskCode},
+				#{item.scheduleCode},
+				#{item.scheduleId},
+				#{item.taskContent},
+				#{item.scheduleContent},
+				#{item.readingPosition},
+				#{item.readingPersonId},
+				#{item.totalMeterCount},
+				#{item.completeMeterCount},
+				#{item.remainMeterCount},
+				#{item.meterType},
+				#{item.auditStatus},
+				#{item.auditStartTime},
+				#{item.auditEndTime},
+				#{item.status},
+				#{item.startTime},
+				#{item.endTime},
+				#{item.createId},
+				#{item.modifyId},
+				#{item.createTime},
+				#{item.modifyTime},
+				#{item.lastTaskId}
+			)
+		</foreach>	
+	</insert>
+	
+	<select id="getTasksByScheduleId" resultMap="hasRelationResultMap" parameterType="java.lang.String">
+		SELECT t1.id,
+			   t1.task_code,
+			   t1.schedule_code,
+			   t1.schedule_id,
+			   t1.task_content,
+			   GROUP_CONCAT(t.building_code SEPARATOR ',')  reading_position,
+			   t1.reading_person_id,
+			   t1.total_meter_count,
+			   t1.complete_meter_count,
+			   t1.remain_meter_count,
+			   t1.meter_type,
+			   t1.audit_status,
+			   t1.audit_start_time,
+			   t1.audit_end_time,
+			   t1.status,
+			   t1.start_time,
+			   t1.end_time,
+			   t1.create_time,
+			   t1.modify_id,
+			   t1.modify_time,
+			   t1.last_task_id,
+			   t2.staff_name AS create_id 
+		FROM tc_reading_task t1
+		inner join t_sys_user t2 on t2.user_id = t1.reading_person_id 
+		left join tc_meterfeeobj_relation t on t.relation_id = t1.id
+		WHERE t1.schedule_id = #{scheduleId}  
+		  AND t.TYPE = 3
+		group by t1.task_code
+		order by t1.create_time desc, t1.task_code desc
+	</select>
+	
+	<select id="getMaxTaskCode" resultType="java.util.Map">
+		SELECT IFNULL(SUBSTRING(task_code,5),"001") AS taskCode 
+		FROM tc_reading_task 
+		ORDER BY create_time DESC LIMIT 0,1
+	</select>
+	
+	<delete id="delByScheduleIds" parameterType="java.util.List">
+		DELETE FROM tc_reading_task
+		WHERE schedule_id in
+		<foreach collection="list" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<!-- 抄表结果页面分页查询用 -->
+	<select id="listPageSearchResult" parameterType="TcReadingTask" resultMap="BaseResultMap">
+		select t1.id,
+			   t1.task_code,
+			   t1.schedule_code,
+			   t1.schedule_id,
+			   t1.task_content,
+			   t1.schedule_content,
+			   t1.reading_position,
+			   t2.staff_name as reading_person_name,
+			   t1.reading_person_id,
+			   t1.total_meter_count,
+			   t1.complete_meter_count,
+			   t1.remain_meter_count,
+			   t1.meter_type,
+			   t1.`status`,
+			   t1.start_time,
+			   t1.end_time,
+			   t1.audit_status,
+			   t1.audit_start_time,
+			   t1.audit_end_time,
+			   t1.create_id,
+			   t1.create_time,
+			   t1.modify_id,
+			   t1.modify_time,
+			   t1.last_task_id,
+			   (SELECT COUNT(0) FROM tc_meter_data WHERE task_id = t1.id AND audit_status = 1) AS audited_meter_count
+		from tc_reading_task t1,
+			 t_sys_user t2
+		where t2.user_id = t1.reading_person_id
+		and t1.schedule_id in (
+								select 
+									id 
+								from tc_reading_schedule 
+								where status = 1
+								<if test="null != projectId">
+									and project_id = #{projectId}
+								</if>
+								group by id
+							)
+		<if test="null != taskCode and '' != taskCode">
+			and (
+					t1.task_code like CONCAT('%',#{taskCode},'%')
+				or
+					t1.task_content like CONCAT('%',#{taskCode},'%')	
+				or 
+					t1.schedule_content like CONCAT('%',#{taskCode},'%')
+				or
+					t1.schedule_code like CONCAT('%',#{taskCode},'%')
+			)
+		</if>
+		<if test="null != meterType">
+			and t1.meter_type = #{meterType}
+		</if>
+		<if test="null != status">
+			and t1.status = #{status}
+		</if>
+		<if test="null != auditStatus">
+			and t1.audit_status = #{auditStatus}
+		</if>
+		order by t1.create_time desc , t1.task_code desc
+	</select>
+	
+	<select id="getReadedMetersCount" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT COUNT(0) AS COUNT FROM tc_meter_data WHERE total_reading != 0 AND task_id = #{0} and ex_status = 1
+	</select>
+	
+	<insert id="insert" parameterType="TcReadingTask">
+		insert into tc_reading_task(
+			id,
+			task_code,
+			schedule_code,
+			schedule_id,
+			task_content,
+			schedule_content,
+			reading_position,
+			reading_person_id,
+			total_meter_count,
+			complete_meter_count,
+			remain_meter_count,
+			meter_type,
+			audit_status,
+			audit_start_time,
+			audit_end_time,
+			status,
+			start_time,
+			end_time,
+			create_id,
+			modify_id,
+			create_time,
+			modify_time,
+			last_task_id
+		)
+		values
+			(
+				#{id},
+				(SELECT * FROM (
+			  				SELECT CONCAT("TASK",LPAD(IFNULL(SUBSTRING(MAX(task_code),5),"00001")+1,5,"0")) 
+			  				FROM tc_reading_task 
+			  				ORDER BY task_code DESC 
+			  				LIMIT 0,1
+			  				) t
+  				),
+				#{scheduleCode},
+				#{scheduleId},
+				#{taskContent},
+				#{scheduleContent},
+				#{readingPosition},
+				#{readingPersonId},
+				#{totalMeterCount},
+				#{completeMeterCount},
+				#{remainMeterCount},
+				#{meterType},
+				#{auditStatus},
+				#{auditStartTime},
+				#{auditEndTime},
+				#{status},
+				#{startTime},
+				#{endTime},
+				#{createId},
+				#{modifyId},
+				#{createTime},
+				#{modifyTime},
+				#{lastTaskId}
+			)
+	</insert>
+	
+	<select id="findCompletedTaskByBuildingCode" parameterType="String" resultType="Integer">
+		select count(*)
+		from tc_reading_task t1,
+		     tc_reading_schedule t2,
+		     tc_water_meter t3,
+		     tc_meter_data t4
+		where t2.status = 1
+		  and t1.schedule_id = t2.id
+		  and t4.task_id = t1.id
+		  and t4.meter_code = t3.`code`
+		  and t4.meter_type = 0
+		  and t3.`relation_building` = #{0}
+		  and t1.status = 2
+		  <![CDATA[
+			  and t1.end_time < sysdate()
+		  ]]>
+	</select>
+	
+	<update id="batchStopNotExistsTasks" parameterType="java.util.Map">
+		update tc_reading_task set status = 3
+		where schedule_id = #{scheduleId}
+		and status = 1
+		<if test="null != tasks">
+			and id not in 
+			<foreach collection="tasks" open="(" close=")" separator="," item="item">
+				#{item.id}
+			</foreach>
+		</if>
+	</update>
+	
+	
+	<!-- ******************************************* 自动完成用 ******************************************* -->
+	<select id="findCanCompleteTasks" resultMap="hasMeterDatasMap">
+		select t1.* 
+		  from tc_reading_task t1,
+		 	   tc_reading_schedule t2
+		 where t1.schedule_id = t2.id
+		   and t2.status = 1
+		   and t1.audit_status = 0
+		   and t1.status = 1
+		   <![CDATA[
+			   and DATE(t1.end_time) <= sysdate()
+		   ]]>
+	</select>
+	
+	<!-- 舍弃 and t1.id not in (select last_task_id from tc_reading_task where schedule_id = t2.id group by last_task_id) -->
+	<select id="findCanCopyTasks" resultMap="hasDatasAndRelationsMap">
+		SELECT t1.* 
+		  FROM tc_reading_task t1,
+		 	   tc_reading_schedule t2
+		 WHERE t1.schedule_id = t2.id
+		   AND t2.status = 1
+		   AND t1.audit_status = 1
+		   AND t1.status = 2
+		   and t2.is_circle = 0
+		   AND t1.id NOT IN(
+		   			SELECT
+                       last_task_id
+                     FROM tc_reading_task 
+                     WHERE last_task_id IS NOT NULL
+                     AND id NOT IN (SELECT relation_id 
+                     				FROM tc_order_complaint 
+                     				GROUP BY relation_id
+                     			   )
+                     GROUP BY last_task_id)
+		   <![CDATA[
+			    and DATE(t2.reading_end_time) > date_add(sysdate(),INTERVAL t2.exec_freq MONTH)
+	   			and sysdate() between DATE(t1.audit_end_time)
+	   						  and date_add(DATE(t1.audit_end_time),INTERVAL t2.exec_freq MONTH)
+	   		]]>
+	</select>
+	
+	<select id="getNextTaskByCurrentId" parameterType="String" resultMap="BaseResultMap">
+		select * 
+		from tc_reading_task
+	    where last_task_id = #{0}
+		and id not in 
+						( 
+						  SELECT relation_id 
+           				  FROM tc_order_complaint WHERE relation_id IS NOT NULL
+           				  GROUP BY relation_id
+           				)
+	</select>
+	
+	<delete id="delByTaskId" parameterType="String">
+		delete from tc_reading_task where id = #{0}
+	</delete>
+	
+	<update id="startInitTasks">
+		UPDATE tc_reading_task 
+		SET `status` = 1 
+		WHERE `status` = 0
+		AND schedule_id IN (SELECT id FROM tc_reading_schedule WHERE `status` = 1)
+		AND curdate() between DATE_FORMAT(start_time,'%y-%m-%d') and date_format(end_time,'%y-%m-%d')
+	</update>
+	
+	<select id="findUsingTaskByScheduleId" parameterType="String" resultMap="BaseResultMap">
+		SELECT *
+		FROM tc_reading_task t
+		WHERE t.schedule_id = #{0}
+		    AND t.status = 1
+		ORDER BY t.start_time DESC
+		LIMIT 0,1
+	</select>
+
+
+    <select id="queryCurrentByAccountId" resultMap="BaseResultMap">
+        select id,create_time,start_time,end_time,status,task_content,reading_person_id from tc_reading_task
+        where MONTH(start_time) = MONTH(now()) and meter_type = #{meterType} and reading_person_id = #{accountId}  and `status`=1
+        order by start_time ,create_time
+        limit #{limit},#{pageSize}
+    </select>
+
+
+
+    <select id="queryHistoryByAccountId" resultMap="BaseResultMap">
+        select id,create_time,start_time,end_time,modify_time,status,task_content,reading_person_id from tc_reading_task
+        where MONTH(start_time) <![CDATA[ < ]]> MONTH(now()) and meter_type = #{meterType} and reading_person_id = #{accountId} and status=1
+        order by start_time ,create_time
+        limit #{limit},#{pageSize}
+    </select>
+
+	<!-- 根据lashTaskId查找 -->
+	<select id="findBylastTaskIdAndProjectId" parameterType="String" resultType="TcReadingTask">
+		select * from  tc_reading_task where last_task_id=#{0} and status !=4 and status !=5
+	</select>
+
+    <update id="updateTaskCount" >
+        UPDATE tc_reading_task trt set
+        complete_meter_count =
+        (select count(id) from tc_meter_data tmd where tmd.reading_time is not null  and tmd.task_id = trt.id),
+        remain_meter_count =
+        (select count(id) from tc_meter_data tmd where tmd.reading_time is  null  and tmd.task_id = trt.id)
+        where id = #{taskId}
+
+    </update>
+    
+    <select id="findStartInTodayTasks"  resultMap="BaseResultMap">
+    	SELECT t1.* 
+    	  FROM tc_reading_task t1, 
+    	       tc_reading_schedule t2
+		 WHERE t1.schedule_id = t2.id
+		  AND t2.status = 1
+		  AND t1.total_meter_count > 0
+		  AND t1.status = 1
+		  AND t1.audit_status = 0
+		  <![CDATA[
+		  	AND DATE(t1.start_time) = CURDATE()
+		  ]]>
+    </select>
+
+	<select id="findTaskIdsByScheduleId"  parameterType="java.lang.String" resultType="java.lang.String">
+    	 select id from tc_reading_task where schedule_id = #{scheduleId} and status=2  and audit_status=0
+    </select>
+
+    <select id="getlastTaskIdByTaskId"  parameterType="java.lang.String" resultType="java.lang.String">
+    	select last_task_id from tc_reading_task where id = #{taskId}
+    </select>
+
+	<select id="findAllDatasByTaskId" parameterType="String" resultMap="BaseResultMap">
+		select * from tc_meter_data where task_id = #{0}
+	</select>
+
+	<!-- 获取任务/建筑专用 -->
+	<select id="getTaskRelationListByTaskId" parameterType="String" resultMap="BaseResultMap">
+		select * from tc_meterfeeobj_relation
+		where relation_id = #{0}
+		and type = 3
+	</select>
+
+</mapper>

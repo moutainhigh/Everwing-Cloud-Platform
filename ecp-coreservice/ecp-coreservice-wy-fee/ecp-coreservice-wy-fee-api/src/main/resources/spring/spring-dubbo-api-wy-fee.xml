@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+
+
+
+
+	http://code.alibabatech.com/schema/dubbo
+	http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-3.1.xsd" default-lazy-init="false">
+    <dubbo:registry address="${wy-coreservice-api-fee.dubbo.registry.address}" check="false" protocol="zookeeper" file="${catalina.home}/dubbo-registry/dubbo-registry.properties"/>
+
+    <dubbo:annotation package="com.everwing.coreservice.wy.fee.api" />
+
+    <dubbo:consumer check="false" />
+
+    <context:component-scan base-package="com.everwing.coreservice.common.exception"/>
+
+    <!-- 公共 S -->
+    <dubbo:reference id="acWxBindingService"
+                     interface="com.everwing.coreservice.common.wy.fee.service.AcWxBindingService"
+                     check="false" timeout="50000" retries="0"/>
+
+    <dubbo:reference id="acAccountService"
+                     interface="com.everwing.coreservice.common.wy.fee.service.AcAccountService"
+                     check="false" timeout="50000" retries="0"/>
+</beans>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<excel id="elect_meter">
+    <sheet label="电表信息">
+        <list>
+            <sql id="9c286a4c-c589-42e0-8692-8be75c00db001">
+                <![CDATA[
+                    SELECT
+						t.CODE code,
+						t.electricitymeter_name electricitymeterName,
+						t.position_name postionName,
+						init_amount initAmount,
+						min_amount minAmount,
+					   max_amount maxAmount,
+						 (CASE WHEN t.electricitymeter_type=0 THEN '普通表' WHEN 1 THEN '分时表' END) AS electricitymeterType,
+						 (case when t.is_circle=0 then '是' when 1 then '否' end) as isCircle,
+						 (case when t.state=0 then '是' when 1 then '否' end) as state,
+						 (case when t.type=0 then '室内' when 1 then '室外' when 2 then '远程' end) as type,
+						 t.parent_code parentCode,
+						 t.master_code masterCode,
+						 (case when t.user_type=0 then '商用' when 1 then '民用' when 2 then '管理处' end) as userType,
+						(case when t.is_billing=0 then '是' when 1 then '否' end) as isBilling,
+						(case when t.is_public=0 then '是' when 1 then '否' end) as isPublic,
+						t.asset_no assetNo,
+						t.brand brand,
+						t.specs specs,
+						t.provider provider,
+						t.provider_phone providerPhone,
+						t.project_name projectName,
+						t.rate rate,
+						t.init_peak_value initPeakValue,
+						t.init_valley_value initValleyValue,
+						t.init_average_value initAverageValue,
+						t.assemble_person assemblePerson,
+						t.assemble_time assembleTime
+					FROM
+						tc_electricity_meter t
+					where 1=1
+					<#if projectId??>
+                        AND t.project_id = '${projectId}'
+                    </#if>
+                ]]>
+            </sql>
+            <!-- 查询结果字段和excel表头标题的映射，column的值一定要和SQL语句的AS别名一致 -->
+             <field column="code" label="电表编号" type="String"></field>
+             <field column="electricitymeterName" label="电表名称" type="String"></field>
+			 <field column="postionName" label="位置" type="String"></field>
+			 <field column="initAmount" label="初始读数" type="Double" format="#.00" ></field>
+			 <field column="minAmount" label="最小读数" type="Double" format="#.00" ></field>
+			 <field column="maxAmount" label="最大读数" type="Double" format="#.00" ></field>
+			 <field column="electricitymeterType" label="电表类型" type="String"></field>
+			 <field column="isCircle" label="是否循环使用" type="String"></field>
+			 <field column="state" label="状态" type="String"></field>
+			 <field column="type" label="抄表类型" type="String"></field>
+			 <field column="parentCode" label="父编码" type="String"></field>
+			 <field column="masterCode" label="主编码" type="String"></field>
+			 <field column="userType" label="使用类型" type="String"></field>
+			 <field column="isBilling" label="是否计费" type="String"></field>
+			 <field column="isPublic" label="是否公用" type="String"></field>
+			 <field column="assetNo" label="资产编号" type="String"></field>
+			 <field column="brand" label="品牌" type="String"></field>
+			 <field column="specs" label="规格型号" type="String"></field>
+			 <field column="provider" label="供应商" type="String"></field>
+			 <field column="providerPhone" label="供应商电话" type="String"></field>
+			 <field column="projectName" label="项目名称" type="String"></field>
+			 <field column="rate" label="倍率" type="Float" format="#.00"></field>
+			 <field column="initPeakValue" label="初始峰值" type="Float" format="#.00"></field>
+			 <field column="initValleyValue" label="初始谷值" type="Float" format="#.00"></field>
+			 <field column="initAverageValue" label="初始平值" type="Float" format="#.00"></field>
+			 <field column="assemblePerson" label="安装人" type="String"></field>
+			 <field column="assembleTime" label="安装时间" type="Date" format="yyyy-MM-dd"></field>
+			 
+        </list>
+    </sheet>
+</excel>

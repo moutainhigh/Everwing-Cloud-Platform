@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- modulegroup节点从main.xml里面复制过来的，id属性值要和main里面的一样，name和desc属性必须保留，但值可以空 -->
+<modulegroup id="1a6debab-f513-4b3f-9d21-2b5249c3ec11" name="" desc="">
+	<module id="6c73459c-fcd6-4fc8-b606-9dedc5d87c23" name="User Management" desc="员工列表" order="1" page="userList" url="./UserModule" img="">
+		<operation id="2f9112cb-de08-4622-9e65-72c35b7a827c" name="Add" desc="邀请入职" url="/system/TSysUserController/add"/>
+		<operation id="f40a4a64-3d2c-46d3-bd3a-10014f737e5c" name="Search" desc="查询用户列表" url="/system/TSysUserController/listPageUser"/>
+		<operation id="abb0e7f2-eb0f-408b-9502-457633b1a376" name="Enable" desc="离职" url="/system/TSysUserController/changeStatus"/>
+		<operation id="f989abe9-8459-42e1-acfb-47a60af1aaac" name="Search" desc="查询员工分配情况" url="/system/TSysUserController/listPageUserResourceList"/>
+		<operation id="545bea12-cba1-4db9-b93b-e552eddeb713" name="anon" desc="anon" permission="anon" url="/system/TSysUserController/getUserInfoByLoginName/*"/>
+		<operation id="a101e91f-1fb8-45eb-88dd-e91da6377f87" name="anon" desc="anon" permission="anon" url="/system/TSysUserController/getUserResourceListByStaffNumber/*"/>
+	</module>
+
+	<module id="b8c1fdb5-25cc-48e1-8e6b-00c9913ead98" name="Organization" desc="组织架构" order="5" page="organizationIndexComponent" url="./OrganizationModule" img="">
+		<operation id="b3de895d-8ba1-41fc-bb3c-262f939beb5b" name="SearchCompany" desc="查询公司" url="/system/TSysCompanyController/listPage"/>
+		<operation id="792d6d76-b6e9-4695-8892-c4b5efec650f" name="AddCompany" desc="新建公司" url="/system/TSysOrganizationController/save"/>
+		<operation id="9c2d5ba4-1662-49fa-a62f-1fda211191cd" name="DeleteCompany" desc="删除公司" url="/system/TSysCompanyController/delete/*"/>
+		<operation id="f84ab72c-526d-4b2f-982f-842abe7e8bac" name="ModifyCompany"  desc="编辑公司" url="/system/TSysOrganizationController/save"/>
+
+		<operation id="f767dc98-304f-4d52-a368-72da39bf4811" name="SearchDepartment" desc="查询部门" url="/system/TSysDepartmentController/listPage"/>
+		<operation id="394be362-735c-4292-b033-cddf5cb434c6" name="AddDepartment" desc="新建部门" url="/system/TSysOrganizationController/save"/>
+		<operation id="f80ed18a-b390-4eac-8367-696efe7e8945" name="DeleteDepartment" desc="删除部门" url="/system/TSysDepartmentController/delete/*"/>
+		<operation id="ead1424a-d193-4388-965c-31731d8ebe2a" name="ModifyDepartment"  desc="编辑部门" url="/system/TSysCompanyController/save"/>
+
+		<operation id="18cf1cdd-e910-4693-83ff-f7ddd98b2e18" name="SearchProject" desc="查询项目" url="/system/TSysProjectController/listPage"/>
+		<operation id="ab7c511b-744f-4208-9df9-0f55ad8a97d0" name="AddProject" desc="新建项目" url="/system/TSysOrganizationController/save"/>
+		<operation id="dc68e5b9-028d-4dc7-8f39-da5f04bfb232" name="DeleteProject" desc="删除项目" url="/system/TSysProjectController/delete/*"/>
+		<operation id="bc555fef-35fb-44c6-b336-1daf73a9efcf" name="ModifyProject"  desc="编辑项目" url="/system/TSysOrganizationController/save"/>
+		<operation id="4774f10d-e4e1-4b28-8ee6-db1cb0db2d2b" name="EnableProject" desc="启用项目" url="/system/TSysProjectController/changeState"/>
+		<operation id="c79d0062-8a39-4229-89a0-c476debd8ac6" name="DisableProject" desc="停用项目" url="/system/TSysProjectController/changeState"/>
+
+
+		<operation id="4fd981b3-f9f1-4598-9054-8a72971747d7" name="SearchRole" desc="查询岗位" url="/system/TSysRoleController/listPage"/>
+		<operation id="b4f49a4e-5778-42d1-a643-a63007a11b1d" name="AddRole" desc="新建岗位" url="/system/TSysOrganizationController/save"/>
+		<operation id="973383ca-cd2b-48f9-8098-8df448d31316" name="DeleteRole" desc="删除岗位" url="/system/TSysRoleController/delTSysRole/*"/>
+		<operation id="bdc9bd41-a0dd-4685-acde-7daf8a1150b1" name="ModifyRole"  desc="编辑岗位" url="/system/TSysOrganizationController/save"/>
+		<operation id="fed009b9-c373-4a2b-9889-57fafd80d2a2" name="EnableRole" desc="启用岗位" url="/system/TSysRoleController/changeState"/>
+		<operation id="2ba4ca68-2abb-40c7-a693-14fc7832f3b1" name="DisableRole" desc="停用岗位" url="/system/TSysRoleController/changeState"/>
+		<operation id="c61800f4-b923-4a4b-b75a-263248590f95" name="AuthorizeRole" desc="关联功能权限" url="/system/TSysRoleController/authorize"/>
+
+
+		<operation id="fd91bf91-82fb-4806-95ba-5ea7ce4fbf13" name="SearchUser" desc="查询员工" url="/system/TSysUserController/listPageUser"/>
+		<operation id="48514a98-0050-4c4f-a6e4-128e8f5baa80" name="AddUser" desc="添加员工" url="/system/TSysOrganizationController/save"/>
+		<operation id="54db781a-216d-44c1-ba1f-9f3741143df0" name="DeleteUser" desc="删除员工" url="/system/TSysOrganizationController/delete"/>
+		<operation id="f8b11e4b-efc4-4cd6-853d-78212ab2f288" name="EnableUser" desc="启用员工" url="/system/TSysUserController/changeState"/>
+		<operation id="98b5eac9-d53f-47fd-b533-a6338f6fd1fe" name="DisableUser" desc="停用员工" url="/system/TSysUserController/changeState"/>
+
+
+		<!-- 模块私有白名单，默认拥有访问白名单权限 -->
+		<operation id="ed7a7dcd-2268-48c1-865d-9a7d96a7b84b" name="anon" desc="anon" permission="anon" url="/system/TSysOrganizationController/findOrganizationByPid"/>
+		<operation id="bc8f5ba4-ec84-407f-98b9-3a266b7e13ff" name="anon" desc="anon" permission="anon" url="/system/TSysOrganizationController/findOrganizationTree/*"/>
+		<operation id="38608a86-87b2-4dab-bc66-7863dadb13f0" name="anon" desc="anon" permission="anon" url="/system/TSysProjectController/findParcelByCondtion"/>
+		<operation id="3ff676a7-a9ec-4b1f-bbd1-3360df560da8" name="anon" desc="anon" permission="anon" url="/system/TSysProjectController/saveParcel"/>
+		<operation id="3e41f160-140a-464c-855d-1e216460d7c3" name="anon" desc="anon" permission="anon" url="/system/TSysProjectController/deleteParcel/*"/>
+		<operation id="5f447610-1368-4719-a5a7-b4448091d7bb" name="anon" desc="anon" permission="anon" url="/system/TSysRoleController/findResourceTreeByRoleId/*"/>
+	</module>
+
+	<!--<module id="ab849b58-2113-46bc-b805-6287715ccaf5" name="Lookup" desc="属性设置" order="7" page="lookup" url="index.baseSetting.lookup" img="img/menu/shuxingshezhi.png">
+		<operation id="8b597cda-e463-4b52-8e4c-4d20eff0b942" name="Search"  desc="查询" url="/system/LookupController/listPageLookup"/>
+		<operation id="b6558c64-7cdc-40a4-9217-bf9dedd5f403" name="Add"  desc="新建" url="/system/LookupController/saveLookup"/>
+		<operation id="25d26a33-2a57-4bce-90f6-c712dd031d3c" name="Modify"  desc="编辑" url="/system/LookupController/saveLookup"/>
+		<operation id="e239a5c9-7708-42a6-afda-f21ab0763d57" name="Enable" desc="启用" url="/system/LookupController/saveLookup"/>
+		<operation id="0739fa5c-b0a1-4fd0-a672-38cbc0806519" name="Disable" desc="停用" url="/system/LookupController/saveLookup"/>
+
+		<operation id="becfa6ea-b9b9-4261-9b0f-9352c70c9b7e" name="anon" desc="anon" permission="anon" url="/system/LookupController/listPageLookupItem"/>
+		<operation id="813e7e12-b3f2-493a-a9d0-744beef2e320" name="anon" desc="anon" permission="anon" url="/system/LookupController/saveLookupItem"/>
+		<operation id="a50e7302-cb81-417e-99f9-4e7d639d973a" name="anon" desc="anon" permission="anon" url="/system/LookupController/findLookup"/>
+		<operation id="03e12137-e5f9-41d9-b15e-94869d14fd86" name="anon" desc="anon" permission="anon" url="/system/LookupController/findLookupItem"/>
+	</module>-->
+
+	<module id="ab849b58-2113-46bc-b805-6287715cca88" name="My Import and Export" desc="我的导入导出" order="9" page="importExport" url="./ImportExportModule" img="">
+		<operation id="d117241d-8ed1-43f3-937f-0a8529604050" name="anon" desc="anon" permission="anon" url="/system/ImportExportController/listPage"/>
+		<operation id="e02cb68f-a238-45fb-aefd-328f64dd27cf" name="anon" desc="anon" permission="anon" url="/system/ImportExportController/download"/>
+		<operation id="069d631a-0100-45a9-9956-d894bb98db01" name="anon" desc="anon" permission="anon" url="/system/ImportExportController/queryEnclosureFile"/>
+		<operation id="ff8e5bf0-2ae4-4336-aae2-7e2105caedaa" name="anon" desc="anon" permission="anon" url="/system/ImportExportController/deleteEnclosureFile"/>
+		<operation id="f8859809-c31f-43eb-977f-9e5f7ce4d5f5" name="anon" desc="anon" permission="anon" url="/system/ImportExportController/uploadFile"/>
+		<operation id="96cb9b73-1370-4c12-b13a-52bdfab515c7" name="anon" desc="anon" permission="anon" url="/system/ImportExportController/export"/>
+		<operation id="cf7764de-ec14-4ba3-a2cd-01bcb7603f8f" name="anon" desc="anon" permission="anon" url="/system/ImportExportController/downloadTemplate"/>
+	</module>
+
+	<!--<module id="1a133ce5-8977-4c82-9973-d134a002ecd2" name="Operation Log" desc="操作日志" order="11" page="operationLog" url="index.baseSetting.operationLog" img="img/menu/allserch.png">
+		<operation id="74d75958-1565-45ea-86d2-ab955f8be738" name="anon" desc="anon" permission="anon" url="/system/TSysOperationLogController/listPage"/>
+	</module>-->
+
+
+	<module id="0a97fe51-751b-11e8-af29-0050568e0e15" name="Menu" desc="菜单管理" order="18" page="menu" url="./MenuModule" img="">
+	</module>
+
+	<module id="c6ed0d1d-0338-11e9-8a9e-0050568e63cd" name="Synchrodata" desc="数据同步" order="21" page="SynchrodataListComponent" url="./SynchrodataModule" img="">
+	</module>
+</modulegroup>

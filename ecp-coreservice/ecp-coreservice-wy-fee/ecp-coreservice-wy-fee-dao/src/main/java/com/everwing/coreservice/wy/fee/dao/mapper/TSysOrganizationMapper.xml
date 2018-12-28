@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.everwing.coreservice.wy.fee.dao.mapper.TSysOrganizationMapper">
+    <select id="selectProjectId" parameterType="java.lang.String" resultType="java.lang.String">
+
+        SELECT
+ (
+  SELECT
+   t.`code`
+  FROM
+   t_sys_project t
+  WHERE
+   t.project_id = project.`code`
+ ) AS project_code
+FROM
+ t_sys_organization project
+LEFT JOIN t_sys_organization department ON project.organization_id = department.pid
+LEFT JOIN t_sys_organization role ON department.organization_id = role.pid
+LEFT JOIN t_sys_organization staff ON role.organization_id = staff.pid
+WHERE
+ project.type = 'project'
+AND staff.`code` = #{staffCode}
+GROUP BY
+ project_code;
+
+
+    </select>
+</mapper>
